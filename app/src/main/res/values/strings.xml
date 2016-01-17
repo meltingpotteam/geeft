@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Geeft</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- string needed by facebook sdk for app identification. -->
+    <string name="facebook_app_id">1537015443283612</string>
+    <!--app personal strings. -->
+    <string name="toast_fb_login_canc">Login con Facebook annullato</string>
+    <string name="toast_google_login_canc">Login con Google+ annullato</string>
+    <string name="toast_fb_login_err">Non è stato possibile effettuare il login con Facebook, riprova più tardi</string>
+    <string name="toast_google_login_err">Non è stato possibile effettuare il login con Google+, riprova più tardi</string>
+    <string name="skip">skip</string>
+    <string name="server_client_id">96076765659-n1f8ltnjf5p4nnmnj2r1qn7sj6n2mchm.apps.googleusercontent.com</string>
+
+    <string name="action_settings">Logout</string>
+
+    <string name="description">Prova</string>
+</resources>

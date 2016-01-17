@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:lib="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <com.github.glomadrian.loadingballs.BallView
+        android:layout_margin="30dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:foregroundGravity="center"
+        lib:balls="3"
+        lib:movement_cycle_time="1500"
+        lib:enable_size_animation="true"
+        lib:size_cycle_time="500"
+        lib:min_ball_size="5dp"
+        lib:max_ball_size="12dp"
+        lib:ball_colors="@array/colors"
+        lib:path="triangle"
+        android:layout_gravity="center"
+        />
+
+</FrameLayout>
