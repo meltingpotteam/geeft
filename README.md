@@ -27,6 +27,7 @@ Now he just have to wait for that person to come for taking it away, with the pr
 - Implementing the back-end to support signup with facebook and manage data stored (for UI and UX testing )
 - Pre-alpha version release for getting feedbacks by pre-alpha testers
 - Getting real users feedbacks by creating and maintaining pages on social networks
+- [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 
 ==============
 ###Milestone 2 - Release Candidate
