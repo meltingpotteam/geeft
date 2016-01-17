@@ -178,7 +178,10 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 //Store time of button click.
                 doneButtonClickTime = SystemClock.elapsedRealtime();
                 //disableButtons();
-                signIn();
+
+                //signIn(); ENABLE THIS WHEN G+ LOGIN WITH TOKEN IS FIXED
+                Toast.makeText(LoginActivity.this,"Non è stato possibile effettuare il login con G+, prova con Facebook o riprova più tardi",Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -276,6 +279,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         } else {
             // Signed out, show unauthenticated UI.
             Log.d(TAG, "Error when retrieved token");
+            //Toast.makeText(this,"Non è stato possibile effettuare il login con G+,prova con Facebook o riprova più tardi",Toast.LENGTH_LONG).show();
         }
     }
     // [END handleSignInResult]
