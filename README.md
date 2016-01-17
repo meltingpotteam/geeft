@@ -22,8 +22,9 @@ Now he just have to wait for that person to come for taking it away, with the pr
 ###Milestone 1 - Proof of Concept
 ######Work in progress
 
-- Implementing the front-end gift story tracking feature
-- Implementing the back-end gift story tracking feature, for testing UI and UX
+- Implementing the first part of front-end, the home screen;
+- Implementing a "skeleton" to add new geeft
+- Implementing the back-end to support signup with facebook and manage data stored (for UI and UX testing )
 - Pre-alpha version release for getting feedbacks by pre-alpha testers
 - Getting real users feedbacks by creating and maintaining pages on social networks
 
@@ -32,7 +33,7 @@ Now he just have to wait for that person to come for taking it away, with the pr
 ######Work in progress
 
 - Implementing the front-end for proximity search of gifts candidates or donors
-- Implementing the back-end for proximity  search and the algorithm or method for the gift assignment, for testing UI and UX
+- Implementing the back-end for proximity  search and the algorithm or method for the gift assignmen(for UI and UX testing)
 - Alpha version release, correcting pre-alpha version bugs
 - Possibly developing users prefered features based on surveys and feedbacks pages on social networks
 - Possibly sperimenting the alpha version UI and UX with real users
@@ -42,7 +43,9 @@ Now he just have to wait for that person to come for taking it away, with the pr
 ###Milestone 3 - Final
 ######Work in progress
 
-- Complete back-end and front-end development
+- Complete back-end and front-end development  to support the "Geeft Story " feature
+- Implement the "Geeft Story" feature and testing
+- Eventually correction of bugs of the previous release
 - New sperimental features
 - Beta version release
 - Promoting the product
