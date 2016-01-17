@@ -23,7 +23,7 @@ Now he just have to wait for that person to come for taking it away, with the pr
 ######Work in progress
 
 - Implementing the first part of front-end, the home screen;
-- Implementing a "skeleton" to add new geeft
+- Implementing the activity to add new geeft
 - Implementing the back-end to support signup with facebook and manage data stored (for UI and UX testing )
 - Pre-alpha version release for getting feedbacks by pre-alpha testers
 - Getting real users feedbacks by creating and maintaining pages on social networks
