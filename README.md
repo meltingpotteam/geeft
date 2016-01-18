@@ -11,6 +11,10 @@ Now, the question is: where?
 Obviously in this amazing new app that he heard from his friend, so he downloaded the app easily from the Google Playstore. Is so intuitive that in a few minutes he figured out how it works and made a post. In less than a day he recived a notification that someone out there have always dreamed with something like that, crazy!<br />
 Now he just have to wait for that person to come for taking it away, with the promise and the posibility of seeing what will happen to his old stuff in the hands of someone else. He feels really good for giving to someone something that he just don't need and, by the way, he now have a lot of free space to continue collecting more and more stuff.
 
+**How we got this idea?**
+In the social media Facebook as started a new tendence, a few groups has been created to allows members the possibility to give for free some object if a person goes an take it. So we decide that this is great opportunity to create an useful application that englobe all this all ready existing communities. Doing this we provide not only an easy way to connect all this users but also some improvements.
+
+
 ==============
 ####Preliminary idea
 
