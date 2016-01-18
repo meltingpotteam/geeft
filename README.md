@@ -35,6 +35,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Pre-alpha version release for getting feedbacks by pre-alpha testers
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
+- [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
 
 ==============
 ###Milestone 2 - Release Candidate
