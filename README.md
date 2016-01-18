@@ -14,6 +14,9 @@ Now he just have to wait for that person to come for taking it away, with the pr
 **How we got this idea?**
 In the social media Facebook as started a new tendence, a few groups has been created to allows members the possibility to give for free some object if a person goes an take it. So we decide that this is great opportunity to create an useful application that englobe all this all ready existing communities. Doing this we provide not only an easy way to connect all this users but also some improvements.
 
+**How are we different?**
+Beside the existing features we will provide the possibility, is not mandatory, to follow the route that the geeft do. This can be useful for young artist or for some handymans that want to show the world what an unused object can become. In the same time with Geeft will to create alerts on especific categories of objects. This will make this activity way more easy and efficient.
+
 
 ==============
 ####Preliminary idea
