@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -45,10 +44,11 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
 
     private GoogleApiClient mGoogleApiClient;
     // UI references.
-    private ImageButton mFbLoginButton;
-    private ImageButton mGoogleLoginButton;
+    private Button mFbLoginButton;
+    private Button mGoogleLoginButton;
     private CallbackManager callbackManager;
     private Animation mRotation;
+    private Animation mRotation2;
     private long doneButtonClickTime;
 
     @Override
@@ -57,7 +57,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         setContentView(R.layout.activity_login);
 
         //Default animation on social sign-in button press
-        mRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_rotate);
+        //mRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_expand_left);
+        //mRotation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_expand_right);
 
         //On click the rotation animation starts.
         // mGoogleLoginButton.startAnimation(mRotation);
@@ -97,7 +98,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
 
     private void setUpFacebookButton(){
         callbackManager = CallbackManager.Factory.create();
-        mFbLoginButton = (ImageButton) findViewById(R.id.fb_login_button);
+        mFbLoginButton = (Button) findViewById(R.id.fb_login_button);
+        //mFbLoginButton.startAnimation(mRotation);
         mFbLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +160,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
      * TO BE COMPLETED
      */
     private void setUpGoogleButton(){
-        mGoogleLoginButton = (ImageButton) findViewById(R.id.google_login_button);
+        mGoogleLoginButton = (Button) findViewById(R.id.google_login_button);
+        //mGoogleLoginButton.startAnimation(mRotation2);
+
         mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
