@@ -1,86 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="samurai.geeft.android.myapplication.MainActivity">
-
-
-    <include layout="@layout/loading_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_gravity="center"
-             android:id="@+id/loading"/>
-
+             android:layout_height="match_parent">
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"
+        />
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/content_main"/>
-    </LinearLayout>
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/floating_menu"
+        android:id="@+id/fragment_container"
+        android:layout_below="@+id/app_bar"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        fab:menu_buttonSpacing="7dp"
-        fab:menu_fab_size="normal"
-        fab:menu_colorNormal="@color/colorPrimaryDark"
-        fab:menu_colorPressed="@color/colorPrimary"
-        >
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_geeft_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_menu_camera_white"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_showAnimation="@anim/fab_slide_in_from_right"
-            fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-            fab:fab_label="Add Geeft"
-            fab:fab_size="mini"
-            />
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/geeft_around_me_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_location_on_white"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_showAnimation="@anim/fab_slide_in_from_right"
-            fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-            fab:fab_label="Geeft around me"
-            fab:fab_size="mini"
-            />
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/floating_button_c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_24dp"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_showAnimation="@anim/fab_slide_in_from_right"
-            fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-            fab:fab_label="Action C"
-            fab:fab_size="mini"
-            />
-    </com.github.clans.fab.FloatingActionMenu>
-</android.support.design.widget.CoordinatorLayout>
+        />
+
+</RelativeLayout>

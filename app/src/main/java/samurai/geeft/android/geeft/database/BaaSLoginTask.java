@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.db;
+package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,7 +9,6 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activity.MainActivity;
 
 /**
  * This task manages the social sign-in server-side using BaasBox.
@@ -112,7 +111,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
             //BYPASS G+ Login Problem
             //G+ User is logged,but not logged with BaasUser
             //@Ugo: I know,now it isn't modular.. Now it is need,but temporary :)
-            MainActivity.setIsGoogleUser(true);
+            //MainActivity.setIsGoogleUser(true);
             return true;
         }
         return false;

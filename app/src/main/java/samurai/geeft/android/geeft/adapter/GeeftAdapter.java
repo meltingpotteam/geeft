@@ -15,9 +15,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import samurai.geeft.android.geeft.util.ImageControllerGenerator;
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.data.FeedItem;
-import samurai.geeft.android.geeft.data.Geeft;
+import samurai.geeft.android.geeft.model.Geeft;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -27,6 +27,7 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
     private List<Geeft> mGeeftList;
     //card layout id
     private int layoutID;
+    //listen to click eventr
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mTimeStampTextView;
@@ -46,23 +47,24 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.txtTitle);
-            mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.txtStatusMsg);
+            mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.geeft_name);
+            mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
-            mUsernameTextView = (TextView) itemView.findViewById(R.id.name);
+            mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
 
-            mUserProfilePic = (SimpleDraweeView) itemView.findViewById(R.id.profilePic);
-            mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.feedImage1);
+            mUserProfilePic = (SimpleDraweeView) itemView.findViewById(R.id.geefter_profile_image);
+            mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.geeft_image);
 
-            mPrenoteButton = (ImageButton) itemView.findViewById(R.id.float_prenotation);
-            mLocationButton = (ImageButton) itemView.findViewById(R.id.float_location);
-            mShareButton = (ImageButton) itemView.findViewById(R.id.float_share);
+            mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
+            mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
+            mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
         }
 
+
         @Override
-        public void onClick(View view) {
-            // This will execute when the the card is clicked
+        public void onClick(View v) {
+
         }
     }
 
@@ -133,17 +135,5 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
     @Override
     public int getItemCount() {
         return mGeeftList.size();
-    }
-       
-    private void setTextVisibility(FeedItem item, TextView mStatus, TextView mTitle){
-        item.setIsVisibleDesc(!item.isVisibleDesc());
-        if(item.isVisibleDesc()) {
-            mStatus.setSingleLine(false);
-            mTitle.setSingleLine(false);
-        }
-        else {
-            mStatus.setSingleLine(true);
-            mTitle.setSingleLine(true);
-        }
     }
 }

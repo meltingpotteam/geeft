@@ -1,149 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_gravity="center"
-    android:layout_width="dp"
-    android:layout_height="200dp"
-    card_view:cardCornerRadius="4dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    cardView:cardCornerRadius="2dp"
+    cardView:cardElevation="4dp"
+    cardView:cardPreventCornerOverlap="true"
+    cardView:paddingEnd="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+    android:focusableInTouchMode="false"
+    android:focusable="false">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
 
-        android:layout_marginLeft="@dimen/feed_item_margin"
-        android:layout_marginRight="@dimen/feed_item_margin"
-        android:layout_marginTop="@dimen/feed_item_margin"
-        android:background="@drawable/bg_parent_rounded_corner"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/feed_item_padding_top_bottom"
-        android:paddingTop="@dimen/feed_item_padding_top_bottom" >
-
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/geefter_profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:color/darker_gray"
+        />
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/feed_item_padding_left_right"
-            android:paddingRight="@dimen/feed_item_padding_left_right"
-            android:paddingBottom="@dimen/feed_item_padding_top_bottom"
-            >
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:id="@+id/geefter">
 
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/profilePic"
-                android:layout_width="@dimen/feed_item_profile_pic"
-                android:layout_height="@dimen/feed_item_profile_pic"
-                android:scaleType="fitCenter" >
-            </com.android.volley.toolbox.NetworkImageView>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/geefter_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/feed_item_profile_info_padd" >
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/feed_item_timestamp" />
-                <TextView
-                    android:id="@+id/timestamp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/timestamp"
-                    android:textSize="@dimen/feed_item_timestamp" />
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/timestamp"
-                    android:textSize="@dimen/feed_item_timestamp"/>
-            </LinearLayout>
+                android:maxLines="1"
+                android:text="@string/user_name"
+                android:textColor="#666"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:text="timestamp"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:layout_height="wrap_content"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/location"
+                android:text="location"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:layout_height="wrap_content"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/geeft_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/geeft_image"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:background="@android:color/darker_gray"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/geeft_name"
+                android:text="Geeft name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:textColor="#222"
+                android:textStyle="bold"
+                android:textSize="@dimen/geeft_title_text_size" />
+
+
+
+            <TextView
+                android:id="@+id/geeft_description"
+                android:text="Geeft Description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:textColor="#666"
+                android:textSize="@dimen/geeft_description_text_size"
+                />
         </LinearLayout>
 
-        <samurai.geeft.android.geeft.FeedImageView
-            android:id="@+id/feedImage1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:scaleType="fitXY"
-            android:visibility="visible" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:text="@string/description"
-            android:textColor="#666"
-            android:textSize="20sp"
-            android:id="@+id/txtTitle"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:visibility="gone"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="10"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:text="@string/description"
-            android:textColor="#666"
-            android:textSize="14sp"
-            android:id="@+id/txtStatusMsg"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/txtUrl"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:linksClickable="true"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:textColorLink="@color/link" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/feed_item_padding_left_right"
-            android:paddingRight="@dimen/feed_item_padding_left_right"
-            android:paddingTop="@dimen/feed_item_padding_top_bottom">
-
-            <ImageButton android:id="@+id/float_prenotation"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp"
-                         android:background="@drawable/check_off"
-                         android:focusable="false"
-                         android:scaleType="fitXY"
-                         android:foreground="#a4ffffff"
-                         android:visibility="visible"
-                         android:layout_gravity="start"/>
-
-            <ImageButton android:id="@+id/float_location"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp"
-                         android:background="@drawable/location_press"
-                         android:focusable="false"
-                         android:scaleType="fitXY"
-                         android:foreground="#a4ffffff"
-                         android:visibility="visible"
-                         android:layout_gravity="center_horizontal"
-                />
-            <ImageButton android:id="@+id/float_share"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp"
-                         android:background="@drawable/share_press"
-                         android:focusable="false"
-                         android:scaleType="fitXY"
-                         android:foreground="#a4ffffff"
-                         android:visibility="visible"
-                         android:layout_gravity="end"
-                />
-        </FrameLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/geeft_detail">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/geeft_like_reservation_button"
+                android:background="@drawable/button_click_effect"
+                android:src="@drawable/ic_favorite_black_24dp"
+                android:clickable="true"
+                android:visibility="visible"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/geeft_share_button"
+                android:background="@drawable/button_click_effect"
+                android:src="@drawable/ic_menu_share_white"
+                android:padding="@dimen/activity_vertical_margin"
+                android:clickable="true"
+                android:visibility="visible"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/geeft_info_button"
+                android:background="@drawable/button_click_effect"
+                android:padding="@dimen/activity_vertical_margin"
+                android:clickable="true"
+                android:visibility="visible"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
+
 </android.support.v7.widget.CardView>

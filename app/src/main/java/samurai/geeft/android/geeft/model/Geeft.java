@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.data;
+package samurai.geeft.android.geeft.model;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -9,11 +9,14 @@ public class Geeft {
     private String username;
     private String geeftDescription;
     private String geeftTitle;
-    private String geeftImage;;
+    private String geeftImage;
+    private String id;
     private boolean isSelected;
     private String userProfilePic;
 
-    public Geeft(String geeftDescription, String geeftImage, String geeftTitle,
+    public Geeft(){};
+
+    public Geeft(String id,String geeftDescription, String geeftImage, String geeftTitle,
                  boolean isSelected, String timeStamp, String userLocation,
                  String username, String userProfilePic) {
         this.geeftDescription = geeftDescription;
@@ -24,6 +27,15 @@ public class Geeft {
         this.userLocation = userLocation;
         this.username = username;
         this.userProfilePic = userProfilePic;
+        this.id=id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getGeeftDescription() {
@@ -89,7 +101,4 @@ public class Geeft {
     public void setUserProfilePic(String userProfilePic) {
         this.userProfilePic = userProfilePic;
     }
-
-
-
 }
