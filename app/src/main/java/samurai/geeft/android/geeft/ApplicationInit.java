@@ -12,6 +12,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
  * NOT USED ANYMORE,REPLACED WITH APPCONTROLLER
  */
 public class ApplicationInit extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
