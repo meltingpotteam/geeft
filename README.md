@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ![logo motto shadow](http://meltingpotteam.altervista.org/logo_motto_shadow.png)
 ==============
 
@@ -67,6 +66,3 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Application release
 - Basic website development
 - Promoting the product
-=======
-# Geeft
->>>>>>> c61e287832e513ae1cae91d954f58f9ad54362cd
