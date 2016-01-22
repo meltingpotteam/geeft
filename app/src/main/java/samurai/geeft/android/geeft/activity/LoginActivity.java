@@ -1,8 +1,10 @@
 package samurai.geeft.android.geeft.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     private Animation mRotation;
     private Animation mRotation2;
     private long doneButtonClickTime;
-
+    private Vibrator vibe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         //Default animation on social sign-in button press
         //mRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_expand_left);
         //mRotation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_expand_right);
+
+        //Vibration feedback
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         //On click the rotation animation starts.
         // mGoogleLoginButton.startAnimation(mRotation);
@@ -109,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 if (SystemClock.elapsedRealtime() - doneButtonClickTime < 1000) {
                     return;
                 }
+                vibe.vibrate(50); // Vibrate for 50 ms
                 //Store time of button click.
                 doneButtonClickTime = SystemClock.elapsedRealtime();
                 disableButtons();
@@ -172,10 +178,14 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 if (SystemClock.elapsedRealtime() - doneButtonClickTime < 1000) {
                     return;
                 }
+                vibe.vibrate(50); // Vibrate for 50 ms
                 //Store time of button click.
                 doneButtonClickTime = SystemClock.elapsedRealtime();
                 //disableButtons();
-                signIn();
+
+                //signIn(); ENABLE THIS WHEN G+ LOGIN WITH TOKEN IS FIXED
+                Toast.makeText(LoginActivity.this,"Non è stato possibile effettuare il login con G+, prova con Facebook o riprova più tardi",Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -273,6 +283,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         } else {
             // Signed out, show unauthenticated UI.
             Log.d(TAG, "Error when retrieved token");
+            //Toast.makeText(this,"Non è stato possibile effettuare il login con G+,prova con Facebook o riprova più tardi",Toast.LENGTH_LONG).show();
         }
     }
     // [END handleSignInResult]
