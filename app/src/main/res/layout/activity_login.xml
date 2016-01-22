@@ -11,7 +11,6 @@
         android:textSize="50sp"
         android:layout_gravity="top|center"
         android:layout_marginTop="80dp"
-        android:textColor="@color/socialColorMid"
         android:text="geeft"/>
     <com.github.glomadrian.loadingballs.BallView
         android:id="@+id/ball_view"
@@ -69,7 +68,7 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:text="Dona e ricevi oggetti di ogni tipo gratuitamente."
-            android:textColor="@color/socialColorMid"/>
+            />
     </LinearLayout>
     <!-- Facebook login default button -->
 </FrameLayout>

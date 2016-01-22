@@ -29,4 +29,7 @@
     <string name="action_settings">Logout</string>
 
     <string name="description">Prova</string>
+    <string name="action_navigate">Next</string>
+    <string name="action_search">Search</string>
+    <string name="action_compose">Compose</string>
 </resources>
