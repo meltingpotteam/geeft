@@ -5,11 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-<<<<<<< HEAD
 import android.view.Menu;
 import android.view.MenuItem;
-=======
->>>>>>> 66d50033b0ce29e5f1da9a3b5378e0c299af3287
 
 import samurai.geeft.android.geeft.R;
 
@@ -23,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
 
         mToolbar = (Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
@@ -56,20 +52,5 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }*/
         return super.onOptionsItemSelected(item);
-=======
-
-        mToolbar = (Toolbar)findViewById(R.id.app_bar);
-        setSupportActionBar(mToolbar);
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment == null) {
-            fragment = new GeeftListFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
->>>>>>> 66d50033b0ce29e5f1da9a3b5378e0c299af3287
     }
 }
