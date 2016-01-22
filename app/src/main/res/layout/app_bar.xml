@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <app:android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                                    android:layout_width="match_parent"
                                    android:layout_height="wrap_content"
@@ -8,3 +9,11 @@
                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                    android:background="@color/colorPrimaryDark"/>
 
+=======
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+    android:background="#ccc">
+
+</android.support.v7.widget.Toolbar>
+>>>>>>> 66d50033b0ce29e5f1da9a3b5378e0c299af3287
