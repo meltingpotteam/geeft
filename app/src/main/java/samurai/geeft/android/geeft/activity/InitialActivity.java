@@ -17,7 +17,7 @@ public class InitialActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (BaasUser.current() != null) {
-            startMainActivity();
+            startLoginActivity();
         } else {
             startLoginActivity();
         }

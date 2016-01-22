@@ -24,6 +24,8 @@
     <string name="skip">skip</string>
     <string name="server_client_id">96076765659-n1f8ltnjf5p4nnmnj2r1qn7sj6n2mchm.apps.googleusercontent.com</string>
 
+    <string name="user_name">Name and Surname</string>
+
     <string name="action_settings">Logout</string>
 
     <string name="description">Prova</string>

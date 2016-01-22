@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.db;
+package samurai.geeft.android.geeft.database;
 
 /**
  * Created by ugookeadu on 17/01/16.

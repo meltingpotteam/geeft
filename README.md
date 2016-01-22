@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![logo motto shadow](http://meltingpotteam.altervista.org/logo_motto_shadow.png)
 ==============
 
@@ -54,3 +55,6 @@ Now he just have to wait for that person to come for taking it away, with the pr
 - Application release
 - Basic website development
 - Promoting the product
+=======
+# Geeft
+>>>>>>> c61e287832e513ae1cae91d954f58f9ad54362cd

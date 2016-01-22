@@ -30,8 +30,8 @@ import com.google.android.gms.common.api.Status;
 import java.util.Arrays;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.db.BaaSLoginTask;
-import samurai.geeft.android.geeft.db.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.database.BaaSLoginTask;
+import samurai.geeft.android.geeft.database.TaskCallbackBoolean;
 
 /**
  * A login screen that offers login via facebook/twitter/google+.
