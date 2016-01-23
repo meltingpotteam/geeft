@@ -29,6 +29,13 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
     private int layoutID;
     //listen to click eventr
 
+    //---------------
+    //Max number of prenotation for each users
+    private final int MAX_SELECT = 5;
+
+    private View mView; //Pecionata da togliere,solo per prova
+    //---------------
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mTimeStampTextView;
         public TextView mUserLocationTextView;
@@ -115,12 +122,12 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
                 item.getGeeftImage());
 
 
-        // Chcek for empty geeft title
+        // Check for empty geeft title
         if (!TextUtils.isEmpty(item.getGeeftTitle()))
             // status is empty, remove from view
             holder.mGeeftTitleTextView.setVisibility(View.GONE);
 
-        // Chcek for empty geeft description
+        // Check for empty geeft description
         if (TextUtils.isEmpty(item.getGeeftDescription()))
             // description is empty, remove from view
             holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
@@ -130,6 +137,8 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
             holder.mUserLocationTextView.setVisibility(View.GONE);
             holder.mLocationButton.setVisibility(View.GONE);
         }
+
+
     }
 
     @Override

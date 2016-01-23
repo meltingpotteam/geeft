@@ -1,5 +1,7 @@
 package samurai.geeft.android.geeft.model;
 
+import org.json.JSONObject;
+
 /**
  * Created by ugookeadu on 20/01/16.
  */
@@ -13,6 +15,7 @@ public class Geeft {
     private String id;
     private boolean isSelected;
     private String userProfilePic;
+    //private JSONObject [] link_array; //To store in local links
 
     public Geeft(){};
 
