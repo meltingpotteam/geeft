@@ -140,13 +140,14 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/geeft_share_button"
+                android:id="@+id/geeft_info_button"
                 android:background="@drawable/button_click_effect"
-                android:src="@drawable/ic_menu_share_white"
+                android:src="@drawable/ic_location_on_black_24dp"
                 android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"
                 android:visibility="visible"
                 />
+
 
         </LinearLayout>
         <LinearLayout
@@ -158,8 +159,9 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/geeft_info_button"
+                android:id="@+id/geeft_share_button"
                 android:background="@drawable/button_click_effect"
+                android:src="@drawable/ic_menu_share_white"
                 android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"
                 android:visibility="visible"

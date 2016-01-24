@@ -38,7 +38,7 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
         mRecyclerView.setHasFixedSize(true);
 
 
-        mAdapter = new GeeftAdapter(mGeeftList, R.layout.feed_item);
+        mAdapter = new GeeftAdapter(mGeeftList, R.layout.feed_item, this.getContext());
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
