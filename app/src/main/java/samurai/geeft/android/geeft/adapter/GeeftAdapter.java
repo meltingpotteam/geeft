@@ -29,7 +29,7 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
     private int layoutID;
     //listen to click eventr
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTimeStampTextView;
         public TextView mUserLocationTextView;
         public TextView mUsernameTextView;
@@ -46,7 +46,6 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
             mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.geeft_name);
             mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
@@ -57,15 +56,16 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
             mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.geeft_image);
 
             mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
+            mPrenoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
         }
 
-
-        @Override
-        public void onClick(View v) {
-
-        }
     }
 
     //costuctor
@@ -91,8 +91,8 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
          */
 
         //Inflate a new view hierarchy from the specified xml resource.
-        ViewHolder mViewHolder = new ViewHolder(mGeeftView);
-        return mViewHolder;
+
+        return new ViewHolder(mGeeftView);
     }
 
     //i need to specify the target because "getDrawable" is for lollipop build
