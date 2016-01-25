@@ -5,6 +5,7 @@ import android.app.Application;
 import com.baasbox.android.BaasBox;
 import com.facebook.FacebookSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.share.Sharer;
 
 /**
  * Created by ugookeadu on 13/01/16.
@@ -30,6 +31,7 @@ public class ApplicationInit extends Application {
          * Facebook sdk initialization
          */
         FacebookSdk.sdkInitialize(getApplicationContext());
+
 
         /**
          * Fresco sdk initialization

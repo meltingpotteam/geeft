@@ -2,19 +2,33 @@ package samurai.geeft.android.geeft.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
+import java.net.URLEncoder;
 import java.util.List;
 
+import samurai.geeft.android.geeft.activity.MainActivity;
 import samurai.geeft.android.geeft.util.ImageControllerGenerator;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.model.Geeft;
@@ -23,26 +37,31 @@ import samurai.geeft.android.geeft.model.Geeft;
  * Created by ugookeadu on 20/01/16.
  */
 public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
+
+    private final static String TAG ="GeeftAdapter";
     //list containing the geefts
     private List<Geeft> mGeeftList;
     //card layout id
     private int layoutID;
-    //listen to click eventr
+    //the cntext using the list
+    private static Context context;
 
     //---------------
     //Max number of prenotation for each users
     private final int MAX_SELECT = 5;
 
-    private View mView; //Pecionata da togliere,solo per prova
     //---------------
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    //OLD: public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTimeStampTextView;
         public TextView mUserLocationTextView;
         public TextView mUsernameTextView;
         public TextView mGeeftDescriptionTextView;
         public TextView mGeeftTitleTextView;
 
+        public Uri mUserProfilePicUri;
+        public Uri mGeeftImageUri;
         public SimpleDraweeView mUserProfilePic;
         public SimpleDraweeView mGeeftImage;
 
@@ -50,10 +69,11 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
 
+        private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+           // itemView.setOnClickListener(this);
             mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.geeft_name);
             mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
@@ -66,19 +86,59 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
             mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
             mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
+
+
+            mLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    try {
+                        String position = mUserLocationTextView.getText().toString();
+                        if( !position.equals("")) {
+                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+                                    URLEncoder.encode(position, "UTF-8"));
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            context.startActivity(mapIntent);
+                        }
+                        else
+                            Toast.makeText(context,
+                                    "Non ha fornito indirizzo",Toast.LENGTH_LONG);
+                    }catch (java.io.UnsupportedEncodingException e){
+                        Toast.makeText(context, "Non ha fornito indirizzo", Toast.LENGTH_LONG);
+                    }
+                }
+            });
+
+            mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d(TAG,"mShareButton onClickListener");
+                    Log.d(TAG,"position = " + getAdapterPosition());
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                                .setContentTitle(mGeeftTitleTextView.getText().toString())
+                                .setContentDescription(
+                                        "In questo momento è presente in regalo questo oggetto tramite Geeft,visita ora!")
+                                .setContentUrl(Uri.parse(app_url))
+                                .setImageUrl(mGeeftImageUri)
+                                .build();
+
+                        MainActivity.getShareDialog().show(linkContent);
+                    }
+
+                }
+            });
         }
 
-
-        @Override
-        public void onClick(View v) {
-
-        }
     }
 
     //costuctor
-    public GeeftAdapter(List<Geeft> geeftList, int layoutID) {
+    public GeeftAdapter(List<Geeft> geeftList, int layoutID, Context context) {
         this.mGeeftList = geeftList;
         this.layoutID = layoutID;
+        this.context = context;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -99,6 +159,7 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
 
         //Inflate a new view hierarchy from the specified xml resource.
         ViewHolder mViewHolder = new ViewHolder(mGeeftView);
+
         return mViewHolder;
     }
 
@@ -113,8 +174,16 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
         holder.mUsernameTextView.setText(item.getUsername());
         holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
-        holder.mTimeStampTextView.setText(item.getTimeStamp());
+        // Converting timestamp into x ago format
+        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+                Long.parseLong(item.getTimeStamp()),
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+        holder.mTimeStampTextView.setText(timeAgo);
         holder.mUserLocationTextView.setText(item.getUserLocation());
+
+        holder.mUserProfilePicUri = Uri.parse(item.getUserProfilePic());
+        holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
 
         ImageControllerGenerator.generateSimpleDrawee(holder.mUserProfilePic,
                 item.getUserProfilePic());
@@ -145,4 +214,6 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
     public int getItemCount() {
         return mGeeftList.size();
     }
+
+
 }
