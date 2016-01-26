@@ -35,7 +35,7 @@
                 android:layout_gravity="start"
                 android:id="@+id/navigation_drawer_fragment"
                 app:layout="@layout/fragment_navigation_drawer"
-                android:name="samurai.geeft.android.geeft.fragment.NavigationDrawerFragment"
+                android:name="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment"
                 tools:layout="@layout/fragment_navigation_drawer"/>
 
         </android.support.v4.widget.DrawerLayout>

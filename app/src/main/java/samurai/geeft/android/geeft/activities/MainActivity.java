@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.activity;
+package samurai.geeft.android.geeft.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragment.GeeftListFragment;
-import samurai.geeft.android.geeft.fragment.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
+import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (getSupportActionBar()!=null)
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         FragmentManager fm = getSupportFragmentManager();

@@ -1,10 +1,11 @@
-package samurai.geeft.android.geeft.activity;
+package samurai.geeft.android.geeft.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +34,7 @@ import java.util.Arrays;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSLoginTask;
-import samurai.geeft.android.geeft.database.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 
 /**
  * A login screen that offers login via facebook/twitter/google+.
@@ -184,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 //disableButtons();
 
                 //signIn(); ENABLE THIS WHEN G+ LOGIN WITH TOKEN IS FIXED
-                Toast.makeText(LoginActivity.this,"Non è stato possibile effettuare il login con G+, prova con Facebook o riprova più tardi",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Non è stato possibile effettuare il login con G+, prova con Facebook o riprova più tardi", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -198,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     public void done(boolean result){
         //enables all social buttons
         enableButtons();
-        if(result == true)
+        if(result)
             startMainActivity();
     }
 
@@ -235,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     }
 
     @Override //Overrided method for implement GoogleApiClient.OnConnectionFailedListener interface
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
@@ -262,7 +263,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
             //showProgressDialog();
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
+                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
                     //hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
@@ -276,7 +277,10 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d(TAG,"Google+ User is: " + acct.getDisplayName() + " with authCode: " + acct.getServerAuthCode());
+            if(acct.getDisplayName()!=null) {
+                Log.d(TAG, "Google+ User is: " + acct.getDisplayName() +
+                        " with authCode: " + acct.getServerAuthCode());
+            }
             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                     acct.getServerAuthCode(),
                     LoginActivity.this).execute();
@@ -301,7 +305,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@NonNull Status status) {
                         // [START_EXCLUDE]
                         //updateUI(false);
                         // [END_EXCLUDE]
@@ -315,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@NonNull Status status) {
                         // [START_EXCLUDE]
                         // updateUI(false);
                         // [END_EXCLUDE]

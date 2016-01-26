@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.fragment;
+package samurai.geeft.android.geeft.fragments;
 
 
 import android.content.Context;
@@ -10,21 +10,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.andexert.library.RippleView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.adapter.NavigationDrawerItemAdapter;
-import samurai.geeft.android.geeft.model.NavigationDrawerItem;
+import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
+import samurai.geeft.android.geeft.interfaces.ClickListener;
+import samurai.geeft.android.geeft.models.NavigationDrawerItem;
+import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,13 +35,12 @@ public class NavigationDrawerFragment extends Fragment {
             "uesr_learned_drawer";
 
 
-
+    //variables
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View mContainerView;
     private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
     private RecyclerView mRecyclerView;
-    private RippleView mRippleView;
 
     // indicates if user is aware that the NavigationBar exists
     private boolean mUserLearnedDrawer;
@@ -59,16 +56,15 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //checking if fragment is comming back from a rotation or restrting from onCreate
+        if(savedInstanceState!=null){
+            mFromSavedIstanceState = true;
+        }
 
         // reading if user knows of the drawer existence, by default is false
         // false means that user never opened the drawer
         mUserLearnedDrawer= Boolean.valueOf(readFromPreferences(getActivity(),
                KEY_USER_LEARNED_DRAWER,"false"));
-
-        //checking if fragment is comming back from a rotation or restrting from onCreate
-        if(savedInstanceState!=null){
-            mFromSavedIstanceState = true;
-        }
     }
 
     @Override
@@ -79,17 +75,21 @@ public class NavigationDrawerFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
         mRecyclerView.setHasFixedSize(false);
 
+        // Set adapter data
         mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
 
+        //set manager and adapter dor recycleview
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
+
+        //handle touch event of recycleview
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
                 //TODO complete the fragment to start
-                startPositionFragment(position);
+                startFragmentByPosition(position);
             }
 
             @Override
@@ -103,6 +103,7 @@ public class NavigationDrawerFragment extends Fragment {
         return rootView;
     }
 
+    //set up the Recyclerview on creation
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
         this.mDrawerLayout = drawerLayout;
         this.mContainerView = getActivity().findViewById(fragmentId);
@@ -130,7 +131,7 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                if(mUserLearnedDrawer==false) {
+                if(mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(),
                             KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
@@ -172,6 +173,7 @@ public class NavigationDrawerFragment extends Fragment {
         return sharedPreferences.getString(preferenceName,defaultValue);
     }
 
+    //retuns the navigation drawer element list
     public static List<NavigationDrawerItem> getData(){
         List<NavigationDrawerItem> navigationDrawerItems = new ArrayList<>();
         int icons[] = {R.drawable.profile,R.drawable.object_given, R.drawable.object_recieved,
@@ -192,62 +194,9 @@ public class NavigationDrawerFragment extends Fragment {
         return navigationDrawerItems;
     }
 
-    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
-        private GestureDetector mGestureDetector;
-        private Context mContext;
-        private RecyclerView mRecyclerView;
-        private ClickListener mClickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView,
-                                     final ClickListener clickListener){
-            this.mContext = context;
-            this.mRecyclerView= recyclerView;
-            this.mClickListener = clickListener;
-            mGestureDetector = new GestureDetector(context,
-                    new GestureDetector.SimpleOnGestureListener(){
-                        @Override
-                        public boolean onSingleTapUp(MotionEvent e) {
-                            return true;
-                        }
-
-                        @Override
-                        public void onLongPress(MotionEvent e) {
-                            View child = recyclerView.findChildViewUnder(e.getX(),e.getY());
-
-                            if(child!=null && clickListener!=null)
-                                clickListener.onLongClick(child,
-                                        recyclerView.getChildLayoutPosition(child));
-                        }
-                    });
-
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(),e.getY());
-            if(child!=null && mClickListener!=null && mGestureDetector.onTouchEvent(e))
-                mClickListener.onClick(child,rv.getChildLayoutPosition(child));
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
-
-    public interface ClickListener{
-        void onClick(View view, int position);
-        void onLongClick(View view, int position);
-    }
 
     //TODO put inside the case the corrispondent fragment to start
-    private void startPositionFragment(final int position){
+    private void startFragmentByPosition(final int position){
 
         switch (position){
             case 0:

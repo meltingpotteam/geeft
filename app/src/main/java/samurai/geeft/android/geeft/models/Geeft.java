@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.model;
+package samurai.geeft.android.geeft.models;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -14,7 +14,7 @@ public class Geeft {
     private boolean isSelected;
     private String userProfilePic;
 
-    public Geeft(){};
+    public Geeft(){}
 
     public Geeft(String id,String geeftDescription, String geeftImage, String geeftTitle,
                  boolean isSelected, String timeStamp, String userLocation,

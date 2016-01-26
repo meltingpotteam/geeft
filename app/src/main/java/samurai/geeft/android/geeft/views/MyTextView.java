@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.view;
+package samurai.geeft.android.geeft.views;
 
 import android.content.Context;
 import android.graphics.Typeface;

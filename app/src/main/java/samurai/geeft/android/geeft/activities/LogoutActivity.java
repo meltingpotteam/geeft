@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.activity;
+package samurai.geeft.android.geeft.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,7 +48,6 @@ public class LogoutActivity extends Activity {
     }
 
     public static Intent newIntent(Context packageContext) {
-        Intent i = new Intent(packageContext, LogoutActivity.class);
-        return i;
+        return new Intent(packageContext, LogoutActivity.class);
     }
 }

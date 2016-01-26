@@ -1,8 +1,6 @@
-package samurai.geeft.android.geeft.adapter;
+package samurai.geeft.android.geeft.adapters;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,21 +11,31 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.Collections;
 import java.util.List;
 
-import samurai.geeft.android.geeft.util.ImageControllerGenerator;
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.model.Geeft;
+import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
+ * adaptef for GeeftListFragment Recyclerview
  */
-public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
-    //list containing the geefts
-    private List<Geeft> mGeeftList;
-    //card layout id
-    private int layoutID;
-    //listen to click eventr
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>{
+
+    private final LayoutInflater inflater;
+
+    //list containing the geefts and avoiding null pointer exception
+    private List<Geeft> mGeeftList =
+            Collections.emptyList();
+
+
+    //costructor
+    public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
+        inflater = LayoutInflater.from(context);
+        this.mGeeftList = geeftList;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTimeStampTextView;
@@ -68,35 +76,20 @@ public class GeeftAdapter extends RecyclerView.Adapter<GeeftAdapter.ViewHolder>{
 
     }
 
-    //costuctor
-    public GeeftAdapter(List<Geeft> geeftList, int layoutID) {
-        this.mGeeftList = geeftList;
-        this.layoutID = layoutID;
-    }
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public GeeftAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // get the context calling the adapter
-        Context context = parent.getContext();
-
-        // create an LayoutInflater for the context
-        LayoutInflater inflater = LayoutInflater.from(context);
-
+    public GeeftItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // inflate the custom layout
-        View mGeeftView = inflater.inflate(layoutID, parent, false);
+        View mGeeftView = inflater.inflate(R.layout.geeft_list_item, parent, false);
 
         /** set the view's size, margins, paddings and layout parameters
          *
          */
 
         //Inflate a new view hierarchy from the specified xml resource.
-
         return new ViewHolder(mGeeftView);
     }
 
-    //i need to specify the target because "getDrawable" is for lollipop build
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element of the data model from list at this position

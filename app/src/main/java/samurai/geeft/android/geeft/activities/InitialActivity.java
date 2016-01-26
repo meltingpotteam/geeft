@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.activity;
+package samurai.geeft.android.geeft.activities;
 
 import android.app.Activity;
 import android.content.Intent;

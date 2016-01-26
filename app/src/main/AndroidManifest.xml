@@ -16,22 +16,22 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
                    android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".activity.InitialActivity">
-        </activity>
-
-        <activity
-            android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".activity.LogoutActivity"
-                  android:screenOrientation="portrait"/>
-
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activities.InitialActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.LogoutActivity"
+                  android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.MainActivity">
         </activity>
 
 

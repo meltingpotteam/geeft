@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.util;
+package samurai.geeft.android.geeft.utilities;
 
 import android.net.Uri;
 import android.view.ViewGroup;
@@ -12,12 +12,14 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 /**
  * Created by ugookeadu on 20/01/16.
+ * class that set the image default setting for SimpleDrawee
  */
+
 public class ImageControllerGenerator {
     public static void generateSimpleDrawee(SimpleDraweeView simpleDraweeView,
                                                         String uriString){
-        int width = 10;
-        int height = 10;
+        int width = 1;
+        int height = 1;
             ViewGroup.LayoutParams lp = simpleDraweeView.getLayoutParams();
             if (lp != null && lp.width > 0) {
                width = lp.width;

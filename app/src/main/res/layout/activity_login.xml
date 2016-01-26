@@ -4,9 +4,9 @@
               android:layout_height="match_parent"
               xmlns:lib="http://schemas.android.com/apk/res-auto"
               android:gravity="center_horizontal"
-              tools:context=".activity.LoginActivity">
+              tools:context=".activities.LoginActivity">
 
-    <samurai.geeft.android.geeft.view.MyTextView
+    <samurai.geeft.android.geeft.views.MyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="50sp"
@@ -66,7 +66,7 @@
             />
 
 
-        <samurai.geeft.android.geeft.view.MyTextView
+        <samurai.geeft.android.geeft.views.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

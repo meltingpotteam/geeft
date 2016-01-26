@@ -9,6 +9,7 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 
 /**
  * This task manages the social sign-in server-side using BaasBox.
@@ -81,7 +82,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
         /**
          * Variable storing the result of the sync BaaS social login
          */
-        if(mBaasProvider == "facebook") {
+        if(mBaasProvider.equals("facebook")) {
             //Bypassed google
             BaasResult<BaasUser> baasResult = BaasUser
                     .signupWithProviderSync(mBaasProvider, mToken, mSecret);
@@ -106,7 +107,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
             }
             return false;
         }
-        else if (mBaasProvider == "google"){
+        else if (mBaasProvider.equals("google")){
             //TO COMPLETED
             //BYPASS G+ Login Problem
             //G+ User is logged,but not logged with BaasUser

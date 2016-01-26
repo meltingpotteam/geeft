@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.model;
+package samurai.geeft.android.geeft.models;
 
 /**
  * Created by ugookeadu on 25/01/16.

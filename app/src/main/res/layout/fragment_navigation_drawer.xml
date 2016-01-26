@@ -3,8 +3,9 @@
                 android:id="@+id/navigation_drawer_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#EEE"
-                tools:context="samurai.geeft.android.geeft.fragment.NavigationDrawerFragment">
+                android:background="@android:color/background_light"
+                android:clickable="true"
+                tools:context="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment">
     <LinearLayout
         android:id="@+id/navigation_drawer_welcome"
         android:layout_width="match_parent"

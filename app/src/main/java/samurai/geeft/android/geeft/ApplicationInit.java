@@ -9,7 +9,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 /**
  * Created by ugookeadu on 13/01/16.
  * Class used for initializing all services
- * NOT USED ANYMORE,REPLACED WITH APPCONTROLLER
  */
 public class ApplicationInit extends Application {
 

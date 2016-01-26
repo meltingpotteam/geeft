@@ -11,10 +11,12 @@ import com.baasbox.android.BaasResult;
 
 import java.util.List;
 
-import samurai.geeft.android.geeft.model.Geeft;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 07/01/16.
+ * Task for populating GeeftItem cards
  */
 public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
     Context mContext;
@@ -34,12 +36,8 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                 .orderBy("_creation_date").criteria();
         BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
         if (baasResult.isSuccess()) {
-            Log.d("LOG", "Documents retrieved " + baasResult.toString());
-            String name;
             try {
                 for (BaasDocument e : baasResult.get()) {
-                    name = e.getString("name");
-                    Log.d("LOG", "Document retrieved " + name);
                     mGeeft = new Geeft();
                     mGeeft.setId(e.getId());
                     mGeeft.setUsername(e.getString("name"));
@@ -58,7 +56,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                 return false;
             }
         } else if (baasResult.isFailed()) {
-            Log.e("LOG", "Deal with error: " + baasResult.error());
+            Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
         }
         return false;
     }
