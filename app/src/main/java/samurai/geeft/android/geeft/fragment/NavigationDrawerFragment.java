@@ -7,12 +7,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.adapter.NavigationDrawerItemAdapter;
+import samurai.geeft.android.geeft.model.NavigationDrawerItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +34,8 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View mContainerView;
+    private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
+    private RecyclerView mRecyclerView;
 
     // indicates if user is aware that the NavigationBar exists
     private boolean mUserLearnedDrawer;
@@ -58,7 +67,17 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setHasFixedSize(false);
+
+        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
+
+        return rootView;
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
@@ -81,7 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
                 getActivity().supportInvalidateOptionsMenu();
             }
 
-            @Override
+           @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 if(slideOffset<0.6)
@@ -117,7 +136,7 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferenceName,preferenceValue);
+        editor.putString(preferenceName, preferenceValue);
 
         // using async method apply that's is faster
         editor.apply();
@@ -128,5 +147,25 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,
                 Context.MODE_PRIVATE);
         return sharedPreferences.getString(preferenceName,defaultValue);
+    }
+
+    public static List<NavigationDrawerItem> getData(){
+        List<NavigationDrawerItem> navigationDrawerItems = new ArrayList<>();
+        int icons[] = {R.drawable.account,R.drawable.gift, R.drawable.recycle,
+                R.drawable.settings, R.drawable.mail};
+
+        int titles[] = {R.string.account_title,R.string.gift_title,
+                R.string.recycle_title, R.string.settings_title, R.string.mail_title};
+
+        int descriptions[] = {R.string.account_description, R.string.gift_description,
+                R.string.recycle_description,R.string.settings_description,
+                R.string.mail_description};
+
+        for(int i=0;i<icons.length && i<titles.length && i<descriptions.length;i++){
+            NavigationDrawerItem item = new NavigationDrawerItem(titles[i],
+                    descriptions[i],icons[i]);
+            navigationDrawerItems.add(item);
+        }
+        return navigationDrawerItems;
     }
 }

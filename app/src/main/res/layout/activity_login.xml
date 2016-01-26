@@ -5,13 +5,16 @@
               xmlns:lib="http://schemas.android.com/apk/res-auto"
               android:gravity="center_horizontal"
               tools:context=".activity.LoginActivity">
+
     <samurai.geeft.android.geeft.view.MyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="50sp"
         android:layout_gravity="top|center"
         android:layout_marginTop="80dp"
-        android:text="geeft"/>
+        android:text="geeft"
+        />
+
     <com.github.glomadrian.loadingballs.BallView
         android:id="@+id/ball_view"
         android:layout_margin="30dp"
@@ -45,7 +48,8 @@
             android:background="#3b5998"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/abc_text_size_medium_material"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            />
 
         <Button
             android:layout_width="310dp"
@@ -58,7 +62,8 @@
             android:background="#dc4e41"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/abc_text_size_medium_material"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            />
 
 
         <samurai.geeft.android.geeft.view.MyTextView
@@ -70,5 +75,4 @@
             android:text="Dona e ricevi oggetti di ogni tipo gratuitamente."
             />
     </LinearLayout>
-    <!-- Facebook login default button -->
 </FrameLayout>

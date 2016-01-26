@@ -13,7 +13,7 @@
     <color name="colorPrimaryLight">#C5CAE9</color>
     <color name="colorAccent">#CDDC39</color>
     <color name="colorPrimaryText">#FFFFFF</color>
-    <color name="colorSecondaryText">#727272</color>
+    <color name="colorSecondaryText">#FFFFFF</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#B6B6B6</color>
 </resources>

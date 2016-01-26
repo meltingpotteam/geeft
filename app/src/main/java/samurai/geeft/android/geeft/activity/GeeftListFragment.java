@@ -33,8 +33,9 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recyclerview, container, false);
+        View rootView = inflater.inflate(R.layout.geeft_item_recyclerview, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
 
 

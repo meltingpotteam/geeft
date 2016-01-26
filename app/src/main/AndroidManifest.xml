@@ -17,11 +17,6 @@
                    android:value="@string/facebook_app_id"/>
 
         <activity android:name=".activity.InitialActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity
@@ -31,7 +26,13 @@
         <activity android:name=".activity.LogoutActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
 
         <activity android:name="com.facebook.FacebookActivity"
