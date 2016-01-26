@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.fragment.GeeftListFragment;
 import samurai.geeft.android.geeft.fragment.NavigationDrawerFragment;
 
 /**

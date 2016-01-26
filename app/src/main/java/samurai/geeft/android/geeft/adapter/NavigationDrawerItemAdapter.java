@@ -15,7 +15,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.model.NavigationDrawerItem;
 
 /**
- * Created by ugo okeadu on 25/01/16.
+ * Created by ugookeadu on 25/01/16.
  */
 public class NavigationDrawerItemAdapter extends
         RecyclerView.Adapter<NavigationDrawerItemAdapter.ViewHolder> {

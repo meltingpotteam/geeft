@@ -16,4 +16,6 @@
     <color name="colorSecondaryText">#FFFFFF</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#B6B6B6</color>
+
+    <color name="colorHighlight">@color/colorPrimaryLight</color>
 </resources>
