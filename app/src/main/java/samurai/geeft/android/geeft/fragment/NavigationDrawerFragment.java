@@ -37,6 +37,7 @@ public class NavigationDrawerFragment extends Fragment {
             "uesr_learned_drawer";
 
 
+
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View mContainerView;
@@ -113,11 +114,6 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 // if is the first time user is opening the app,then he learned it exists
-                if(mUserLearnedDrawer == false) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(),
-                            KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
-                }
                 getActivity().supportInvalidateOptionsMenu();
 
             }
@@ -134,6 +130,11 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                if(mUserLearnedDrawer==false) {
+                    mUserLearnedDrawer = true;
+                    saveToPreferences(getActivity(),
+                            KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
+                }
             }
         };
 
