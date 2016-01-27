@@ -26,6 +26,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
     private final LayoutInflater inflater;
 
+
     //list containing the geefts and avoiding null pointer exception
     private List<Geeft> mGeeftList =
             Collections.emptyList();
