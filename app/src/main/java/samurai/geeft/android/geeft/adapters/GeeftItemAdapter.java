@@ -1,12 +1,16 @@
 package samurai.geeft.android.geeft.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -20,7 +24,7 @@ import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
- * adaptef for GeeftListFragment Recyclerview
+ * adapter for GeeftListFragment Recyclerview
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>{
 
@@ -31,11 +35,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private List<Geeft> mGeeftList =
             Collections.emptyList();
 
+    private int lastSize = 0;
+    private Context mContext;
+
+    private LinearLayout mContainer;
 
     //costructor
     public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
         inflater = LayoutInflater.from(context);
         this.mGeeftList = geeftList;
+        this.mContext = context;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -52,9 +61,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
 
+        public CardView mContainer;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mContainer = (CardView) itemView.findViewById(R.id.card_view);
             mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.geeft_name);
             mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
@@ -124,10 +136,26 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mUserLocationTextView.setVisibility(View.GONE);
             holder.mLocationButton.setVisibility(View.GONE);
         }
+        setAnimation(holder.mContainer);
     }
 
     @Override
     public int getItemCount() {
         return mGeeftList.size();
+    }
+
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if ((mGeeftList.size()-lastSize)>0)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+            animation.setDuration(370);
+            viewToAnimate.startAnimation(animation);
+            lastSize++;
+        }
     }
 }

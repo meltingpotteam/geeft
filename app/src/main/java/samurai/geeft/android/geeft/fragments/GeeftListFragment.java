@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,12 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
 
 
         mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
         mRefreshLayout.setOnRefreshListener(this);
+        new BaaSFeedImageTask(getContext(),mGeeftList,mAdapter,this).execute();
 
         return rootView;
     }
@@ -53,18 +54,30 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeftList = new ArrayList<>();
-        new BaaSFeedImageTask(getContext(),mGeeftList,this).execute();
     }
 
     @Override
     public void onRefresh() {
-        Toast.makeText(getContext(), "On Refresh",Toast.LENGTH_LONG).show();
-        new BaaSFeedImageTask(getContext(),mGeeftList,this).execute();
+        new BaaSFeedImageTask(getContext(),mGeeftList,mAdapter,this).execute();
     }
 
     public void done(boolean result){
-        if(mRefreshLayout.isRefreshing())
+        if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
-        mAdapter.notifyDataSetChanged();
+            Toast toast;
+            if (result) {
+                toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            } else {
+                toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            }
+        }
+    }
+
+    public GeeftListFragment getInstance(){
+       return this;
     }
 }
