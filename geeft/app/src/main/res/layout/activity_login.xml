@@ -1,0 +1,77 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:lib="http://schemas.android.com/apk/res-auto"
+              android:gravity="center_horizontal"
+              tools:context=".activities.LoginActivity">
+
+    <samurai.geeft.android.geeft.views.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="80dp"
+        android:text="geeft"
+        />
+
+    <com.github.glomadrian.loadingballs.BallView
+        android:id="@+id/ball_view"
+        android:layout_margin="30dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        lib:balls="5"
+        lib:movement_cycle_time="1500"
+        lib:enable_size_animation="true"
+        lib:size_cycle_time="500"
+        lib:min_ball_size="5dp"
+        lib:max_ball_size="12dp"
+        lib:ball_colors="@array/colors"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <Button
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:text="Login con Facebook"
+            android:id="@+id/fb_login_button"
+            android:padding="4dp"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:background="#3b5998"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_margin="10dp"
+            />
+
+        <Button
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:text="Login con Google+"
+            android:id="@+id/google_login_button"
+            android:padding="4dp"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:background="#dc4e41"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_margin="10dp"
+            />
+
+        <samurai.geeft.android.geeft.views.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="Dona e ricevi oggetti di ogni tipo gratuitamente."
+            />
+    </LinearLayout>
+</FrameLayout>

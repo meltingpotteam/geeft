@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "geeft-3b08b",
+    "project_number": "96076765659",
+    "name": "Geeft"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96076765659:android:a6773b5865300d94",
+        "client_id": "android:samurai.geeft.android.geeft",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "samurai.geeft.android.geeft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96076765659-c5s9t0a6qvdude1850b4i5t21tu41gn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "samurai.geeft.android.geeft",
+            "certificate_hash": "4B15113C33BC5C9DA7F68FE61D9D53F1CCF122F6"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
