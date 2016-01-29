@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
-import samurai.geeft.android.geeft.tabs.SlidingTabLayout;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -23,7 +22,6 @@ import samurai.geeft.android.geeft.tabs.SlidingTabLayout;
 public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
