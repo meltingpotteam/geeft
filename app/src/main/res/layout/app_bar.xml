@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<app:android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="wrap_content"
-                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                   android:elevation="8dp"
-                                   android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                                   app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                                   android:background="@color/colorPrimaryDark"/>
+<app:android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:paddingTop="0dp"
+    android:elevation="8dp"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:background="@color/colorPrimary"/>
 

@@ -32,4 +32,25 @@
     <string name="action_navigate">Next</string>
     <string name="action_search">Search</string>
     <string name="action_compose">Compose</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_drawer_title">Benvenuto</string>
+    <string name="navigation_drawer_description">Benvenuto nel menù di Geeft.
+        Scegli un\'azione oppure premi la freccia in alto a sinistra per tornare alla home.
+        Altrimenti scorri la lista e seleziona un\'opzione.
+    </string>
+    <string name="account_title">Profilo</string>
+    <string name="gift_title">Regalati</string>
+    <string name="recycle_title">Ricevuti</string>
+    <string name="settings_title">Impostazioni</string>
+    <string name="mail_title">Contattaci</string>
+    <string name="account_description">Visualizza il tuo profilo</string>
+    <string name="gift_description">Visualizza oggetti regalati</string>
+    <string name="settings_description">Modifica le tue impostazioni</string>
+    <string name="mail_description">Contattaci per qualsiasi cosa</string>
+    <string name="recycle_description">Visualizza oggetti ricevuti</string>
 </resources>
