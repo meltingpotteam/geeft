@@ -53,4 +53,10 @@
     <string name="settings_description">Modifica le tue impostazioni</string>
     <string name="mail_description">Contattaci per qualsiasi cosa</string>
     <string name="recycle_description">Visualizza oggetti ricevuti</string>
+
+
+    <string name="add_gift_name_hint">Name of your geeft</string>
+    <string name="add_geeft_description_hint">Something about the geeft</string>
+
+
 </resources>
