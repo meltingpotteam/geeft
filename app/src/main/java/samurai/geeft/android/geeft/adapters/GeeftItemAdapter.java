@@ -5,12 +5,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -38,7 +38,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private int lastSize = 0;
     private Context mContext;
 
-    private LinearLayout mContainer;
+    private boolean pressed;
 
     //costructor
     public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
@@ -104,7 +104,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element of the data model from list at this position
         Geeft item = mGeeftList.get(position);
 
@@ -137,6 +137,21 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mLocationButton.setVisibility(View.GONE);
         }
         setAnimation(holder.mContainer);
+        holder.mPrenoteButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    pressed = !holder.mPrenoteButton.isPressed();
+                    holder.mPrenoteButton.setPressed(pressed);
+                    if (pressed)
+                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
+                    else
+                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle);
+                }
+                return true;
+            }
+
+        });
     }
 
     @Override

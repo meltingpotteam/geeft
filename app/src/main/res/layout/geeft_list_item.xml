@@ -124,8 +124,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/geeft_like_reservation_button"
-                android:background="@drawable/button_click_effect"
-                android:src="@drawable/ic_favorite_black_24dp"
+                android:background="@null"
+                android:src="@drawable/checkbox_marked_circle"
                 android:clickable="true"
                 android:visibility="visible"
                 />
