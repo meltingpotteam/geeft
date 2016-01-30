@@ -96,10 +96,11 @@ public class MainActivity extends AppCompatActivity {
         drawerFragment.setUp(R.id.navigation_drawer_fragment,
                 (DrawerLayout)findViewById(R.id.drawer_layout),mToolbar);
 
-        //This is the floating menu button section; the button , when clicked, open a submenu
-        // that give the possibility to select the action that the user wat to do (the action button)
-        // clicked will start the associated activity.
 
+        /**This is the floating menu button section; the button , when clicked, open a submenu
+         that give the possibility to select the action that the user wat to do (the action button)
+         clicked will start the associated activity.
+        **/
 //        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
         FloatingActionButton actionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
         actionNewGeeft.setOnClickListener(new View.OnClickListener() {
@@ -117,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Activity to 'Geeft around me' started", Toast.LENGTH_SHORT).show();
             }
         });
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
+        /**
+         * End implementation
+         */
     }
 
     @Override

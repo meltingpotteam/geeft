@@ -17,5 +17,8 @@
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#B6B6B6</color>
 
+    <color name="card_icons_color">#919191</color>
+
+
     <color name="colorHighlight">@color/colorPrimaryLight</color>
 </resources>
