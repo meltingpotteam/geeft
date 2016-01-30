@@ -24,6 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Implementation of share button -->
+        <activity android:name="com.facebook.FacebookActivity"
+                  android:configChanges=
+                      "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1537015443283612"
+                  android:name="com.facebook.FacebookContentProvider"
+                  android:exported="true"/>
 
         <activity
             android:name=".activities.LoginActivity"
@@ -34,7 +44,6 @@
 
         <activity android:name=".activities.MainActivity">
         </activity>
-
 
         <activity android:name="com.facebook.FacebookActivity"
                   android:configChanges=

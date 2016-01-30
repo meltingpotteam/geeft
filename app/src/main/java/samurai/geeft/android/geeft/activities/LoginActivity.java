@@ -275,6 +275,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+            //
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             if(acct.getDisplayName()!=null) {
