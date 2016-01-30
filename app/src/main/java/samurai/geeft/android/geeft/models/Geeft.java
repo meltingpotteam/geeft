@@ -5,6 +5,7 @@ package samurai.geeft.android.geeft.models;
  */
 public class Geeft {
     private String timeStamp;
+    private String deadLine;
     private String userLocation;
     private String username;
     private String geeftDescription;
@@ -13,12 +14,14 @@ public class Geeft {
     private String id;
     private boolean isSelected;
     private String userProfilePic;
+    private String linkId;
 
-    public Geeft(){}
+    public Geeft(){
+    }
 
-    public Geeft(String id,String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, String timeStamp, String userLocation,
-                 String username, String userProfilePic) {
+    public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
+                 boolean isSelected, String timeStamp, String deadLine, String userLocation,
+                 String username, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
@@ -28,6 +31,8 @@ public class Geeft {
         this.username = username;
         this.userProfilePic = userProfilePic;
         this.id=id;
+        this.deadLine = deadLine;
+        this.linkId = linkId;
     }
 
     public String getId() {
@@ -101,4 +106,10 @@ public class Geeft {
     public void setUserProfilePic(String userProfilePic) {
         this.userProfilePic = userProfilePic;
     }
+
+    public String getDeadLine(){return deadLine;}
+    public void setDeadLine(String deadLine){this.deadLine = deadLine;}
+
+    public String getLinkId(){ return linkId;}
+    public void setLinkId(String linkId){ this.linkId = linkId;}
 }

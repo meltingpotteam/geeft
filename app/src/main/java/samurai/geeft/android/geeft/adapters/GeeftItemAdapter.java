@@ -1,24 +1,34 @@
 package samurai.geeft.android.geeft.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
@@ -30,6 +40,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
     private final LayoutInflater inflater;
 
+    private final static String TAG ="GeeftAdapter";
 
     //list containing the geefts and avoiding null pointer exception
     private List<Geeft> mGeeftList =
@@ -62,6 +73,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mShareButton;
 
         public CardView mContainer;
+
+        public Uri mGeeftImageUri;
+        public Geeft mGeeft;
+        private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
+
+        //---------------
+        //Max number of prenotation for each users
+        private final int MAX_SELECT = 5;
+        private boolean isSelected = false;
+        //---------------
 
 
         public ViewHolder(View itemView) {
@@ -114,11 +135,18 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());
         holder.mUserLocationTextView.setText(item.getUserLocation());
+        holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
 
         ImageControllerGenerator.generateSimpleDrawee(holder.mUserProfilePic,
                 item.getUserProfilePic());
         ImageControllerGenerator.generateSimpleDrawee(holder.mGeeftImage,
                 item.getGeeftImage());
+        // Converting timestamp into x ago format
+        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+                Long.parseLong(item.getTimeStamp()),
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+        holder.mTimeStampTextView.setText(timeAgo);
 
 
         // Chcek for empty geeft title
@@ -137,20 +165,75 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mLocationButton.setVisibility(View.GONE);
         }
         setAnimation(holder.mContainer);
+        //--------------------------- Prenote button implementation
         holder.mPrenoteButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                /* TODO: Use this Asyntask to check if is pressed or not,and create or delete link
+                        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id");
+                        Log.d(TAG,"Doc id of user is: " + docId + " and item id is: " + mGeeft.getId());
+                        new BaaSRetrieveDoc(context,docId,mGeeft,GeeftAdapter.this).execute();*/
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     pressed = !holder.mPrenoteButton.isPressed();
                     holder.mPrenoteButton.setPressed(pressed);
-                    if (pressed)
-                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
+                    if (pressed) {
+                        holder.mPrenoteButton.setBackgroundResource
+                                (R.drawable.checkbox_marked_circle_pressed);
+
+                    }
                     else
                         holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle);
+                    Log.d("PREMUTO",""+pressed);
                 }
                 return true;
             }
 
+        });
+        //--------------------- Location Button implementation
+        final String location = holder.mUserLocationTextView.getText().toString();
+        holder.mLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    if( !location.equals("")) {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+                                URLEncoder.encode(location, "UTF-8"));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        mContext.startActivity(mapIntent);
+                    }
+                    else
+                        Toast.makeText(mContext,
+                                "Non ha fornito indirizzo", Toast.LENGTH_LONG);
+                }catch (java.io.UnsupportedEncodingException e){
+                    Toast.makeText(mContext, "Non ha fornito indirizzo", Toast.LENGTH_LONG);
+                }
+            }
+        });
+        //-------------------------- ShareButton implementation
+        final String title = holder.mGeeftTitleTextView.getText().toString();
+        final Uri app_url = Uri.parse(holder.app_url);
+        final Uri imageUrl = holder.mGeeftImageUri;
+        holder.mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(TAG, "mShareButton onClickListener");
+                //Log.d(TAG,"position = " + holder.mGeeftTitleTextView.getText().toString());
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentTitle(title)
+                            .setContentDescription(
+                                    "In questo momento è presente in regalo questo oggetto tramite Geeft,visita ora!")
+                            .setContentUrl(app_url)
+                            .setImageUrl(imageUrl)
+                            .build();
+
+                    MainActivity.getShareDialog().show(linkContent);
+                }
+
+            }
         });
     }
 
@@ -173,4 +256,15 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             lastSize++;
         }
     }
+    /*
+    //set prenoteButton is pressed
+    public void setPrenoteButtonPressed(Boolean isPressed){
+        if(isPressed){
+            holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
+        }
+        else{
+            mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle);
+        }
+
+    }*/
 }

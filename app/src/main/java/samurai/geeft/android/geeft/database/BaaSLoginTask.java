@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
@@ -15,7 +16,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
  * This task manages the social sign-in server-side using BaasBox.
  */
 public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
-
+    private static final String TAG = "BaaSLoginTask";
     /**
      * Strings used for confrontation and for deciding if signing in with
      * Facebook or Google+.
@@ -92,8 +93,36 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
              * In case of success it returns true if not it shows Toast text
              * and returns false
              */
-            if (baasResult.isSuccess())
-                return true;
+            if (baasResult.isSuccess()) {
+                //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id"));
+                BaasUser user = BaasUser.current();
+                String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                if(UserDocId == null || UserDocId.equals("")) {
+                    BaasDocument doc = new BaasDocument("linkable_users");
+                    BaasResult<BaasDocument> resDoc = doc.saveSync();
+                    if(resDoc.isSuccess()){
+                        Log.d(TAG, "Doc ID is: " + doc.getId());
+                        user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
+                        BaasResult<BaasUser> resUser = user.saveSync();
+                        if(resUser.isSuccess()){
+                            Log.d(TAG, "New user, document created");
+                            return true;
+                        }
+                        else{
+                            Log.e(TAG,"FATAL ERROR userScope not update");
+                            return false;
+                        }
+                    }
+                    else{
+                        Log.e(TAG,"FATAL ERROR document not created");
+                        return false;
+                    }
+                }
+                else{
+                    Log.d(TAG,"User already registered");
+                    return true;
+                }
+            }
             else if (baasResult.isCanceled()) {
                 if (mBaasProvider.equals(FACEBOOK))
                     this.publishProgress(R.string.toast_fb_login_canc);

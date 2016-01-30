@@ -12,6 +12,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.widget.ShareDialog;
+
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
@@ -20,8 +26,16 @@ import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
  * Created by ugookeadu on 20/01/16.
  */
 public class MainActivity extends AppCompatActivity {
+    private final String TAG ="MainActivity";
+
     private Toolbar mToolbar;
     private ViewPager mViewPager;
+
+    /**
+     * Facebook share button implementation..... If you make this better,make it!
+     */
+    CallbackManager mCallbackManager;
+    static ShareDialog mShareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,31 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
+        /**
+        * Facebook shareButton implementation
+        **/
+        mCallbackManager = CallbackManager.Factory.create();
+        mShareDialog = new ShareDialog(this);
+        // this part is optional
+        mShareDialog.registerCallback(mCallbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Log.d(TAG,"shareDialog success");
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG,"shareDialog cancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e(TAG, "shareDialog error");
+            }
+        });
+        /**
+         * End implementation
+         */
         if (fragment == null) {
             fragment = new GeeftListFragment();
             fm.beginTransaction()
@@ -87,4 +126,6 @@ public class MainActivity extends AppCompatActivity {
             return 0;
         }
     }
+
+    public static ShareDialog getShareDialog(){ return mShareDialog;}
 }
