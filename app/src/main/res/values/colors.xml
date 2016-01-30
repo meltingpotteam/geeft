@@ -13,11 +13,11 @@
     <color name="colorPrimaryLight">#cdc5e9</color>
     <color name="colorAccent">#453ff4</color>
     <color name="colorPrimaryText">#000000</color>
-    <color name="colorSecondaryText">#ffffff</color>
-    <color name="colorIcons">#FFFFFF</color>
+    <color name="colorSecondaryText">#404040</color>
+    <color name="colorIconsDark">#4b4b4b</color>
     <color name="colorDivider">#B6B6B6</color>
 
-    <color name="card_icons_color">#919191</color>
+    <color name="cardIconsColor">#919191</color>
 
 
     <color name="colorHighlight">@color/colorPrimaryLight</color>

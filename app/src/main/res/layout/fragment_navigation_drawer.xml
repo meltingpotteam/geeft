@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_drawer_title"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/white"
             />
         <TextView
             android:paddingTop="5dp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/navigation_drawer_description"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="@color/white"
            />
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
