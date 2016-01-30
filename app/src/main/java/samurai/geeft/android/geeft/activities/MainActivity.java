@@ -60,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
         //This is the floating menu button section; the button , when clicked, open a submenu
         // that give the possibility to select the action that the user wat to do (the action button)
         // clicked will start the associated activity.
-        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
+
+//        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
         FloatingActionButton actionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
         actionNewGeeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AddGeeft.class);
                 startActivity(intent);
             }

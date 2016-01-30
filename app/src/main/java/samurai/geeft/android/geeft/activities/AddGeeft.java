@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -136,12 +138,24 @@ public class AddGeeft extends AppCompatActivity{
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
                 mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
                 //                dialog.setMessage("Some information that we can take from the facebook shared one");
                 dialog.show();  //<-- See This!
                 //                Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
 
             }
         });
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Spinner for Location Selection////////////////////////////////////////////////////////////
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.planets_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
         ////////////////////////////////////////////////////////////////////////////////////////////
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
