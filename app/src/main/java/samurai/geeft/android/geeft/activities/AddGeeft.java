@@ -143,7 +143,6 @@ public class AddGeeft extends AppCompatActivity{
             }
         });
         ////////////////////////////////////////////////////////////////////////////////////////////
-
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == RESULT_OK) {
