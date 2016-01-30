@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -37,7 +39,7 @@ public class AddGeeft extends AppCompatActivity{
     private ImageButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
 
-    //field to fill with the edited parameters in the form fiel
+    //field to fill with the edited parameters in the form field
     private TextView mGeeftName;  //name of the object
     private TextView mGeeftDescription;   //description of the object
     private TextView mGeeftLocation;   //location of the geeft
@@ -62,9 +64,9 @@ public class AddGeeft extends AppCompatActivity{
             case R.id.fragment_add_geeft_ok_button:
                 Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
 
-                //Things TO-DO before close the activity//////////
+                //Things TODO before close the activity
 
-                //////////////////////////////////////////////////
+                ///////////////////////////////////////
 
                 finish();
                 return true;
@@ -86,7 +88,7 @@ public class AddGeeft extends AppCompatActivity{
         toolbar.setTitle("Add Geeft");
         setSupportActionBar(toolbar);
 
-        //TO-DO
+        //TODO
 
 
         this.mGeeftImageView = (ImageView) this.findViewById(R.id.geeft_add_photo_frame);
@@ -108,7 +110,7 @@ public class AddGeeft extends AppCompatActivity{
         ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        //Listener for te imageView: TO-DO image visualization in a dialog//////////////////////////
+        //Listener for te imageView: ///////////////////////////////////////////////////////////////
 
         mGeeftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +149,14 @@ public class AddGeeft extends AppCompatActivity{
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == RESULT_OK) {
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
 //            Picasso.with(this).load(file).into(mGeeftImageView);
-            Picasso.with(this).load(file).config(Bitmap.Config.RGB_565).fit().centerInside().into(mGeeftImageView);
+            mGeeftImageView.setImageDrawable(null);
+            Picasso.with(this).load(file)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)        //avoid the problem of the chached
+                    .networkPolicy(NetworkPolicy.NO_CACHE)      //image loading every time a new photo
+                    .config(Bitmap.Config.RGB_565)
+                    .fit()
+                    .centerInside()
+                    .into(mGeeftImageView);
         }
     }
 
