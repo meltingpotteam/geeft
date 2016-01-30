@@ -148,7 +148,7 @@ public class AddGeeft extends AppCompatActivity{
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         //Spinner for Location Selection////////////////////////////////////////////////////////////
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.form_field_location_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);

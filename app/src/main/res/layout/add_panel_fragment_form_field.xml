@@ -123,12 +123,12 @@
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="match_parent"-->
                         <!--android:hint="Where you want to consign the geeft"/>-->
-                    <android.support.v7.widget.AppCompatSpinner
+                    <Spinner
                         android:id="@+id/form_field_location_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent">
 
-                    </android.support.v7.widget.AppCompatSpinner>
+                    </Spinner>
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
