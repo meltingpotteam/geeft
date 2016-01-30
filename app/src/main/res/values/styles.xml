@@ -19,5 +19,14 @@
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
+
+    <!-- animation for the dialog in addGeeft-->
+    <style name="dialog_animation">
+
+        <item name="android:windowEnterAnimation">@anim/slide_in_left</item>
+
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+
+    </style>
 </resources>
 
