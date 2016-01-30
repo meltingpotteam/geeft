@@ -205,9 +205,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                     }
                     else
                         Toast.makeText(mContext,
-                                "Non ha fornito indirizzo", Toast.LENGTH_LONG);
+                                "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
                 }catch (java.io.UnsupportedEncodingException e){
-                    Toast.makeText(mContext, "Non ha fornito indirizzo", Toast.LENGTH_LONG);
+                    Toast.makeText(mContext, "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
                 }
             }
         });
