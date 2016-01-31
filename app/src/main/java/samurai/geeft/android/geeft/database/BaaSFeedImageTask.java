@@ -63,7 +63,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                 for (BaasDocument e : baasResult.get()) {
                     mGeeft = new Geeft();
                     mGeeft.setId(e.getId());
-                    mGeeft.setUsername(""+mGeeftList.size());
+                    mGeeft.setUsername(e.getString("name"));
                     mGeeft.setGeeftImage(e.getString("image"));
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
@@ -71,7 +71,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for(BaasLink l : links){
-                        if(l.in().getId() == e.getId()){
+                        if(l.in().getId().equals(e.getId())){
                             // SETTA PRENOTE BUTTON TRUE
                             mGeeft.setLinkId(l.getId());
                             Log.d(TAG,"link id is: " + l.getId());
