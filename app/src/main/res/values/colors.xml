@@ -20,5 +20,5 @@
     <color name="cardIconsColor">#919191</color>
 
 
-    <color name="colorHighlight">@color/colorPrimaryLight</color>
+    <color name="colorHighlight">@color/clickAccent</color>
 </resources>

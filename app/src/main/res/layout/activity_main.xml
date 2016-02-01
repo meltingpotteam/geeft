@@ -46,7 +46,6 @@
                 app:layout="@layout/fragment_navigation_drawer"
                 android:name="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment"
                 tools:layout="@layout/fragment_navigation_drawer"/>
-
         </android.support.v4.widget.DrawerLayout>
 
         <!-- floating action menu button: -->
@@ -67,7 +66,7 @@
                 android:id="@+id/add_geeft_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_camera_white"
+                android:src="@drawable/ic_menu_camera_white_24dp"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
@@ -79,7 +78,7 @@
                 android:id="@+id/geeft_around_me_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_location_on_white"
+                android:src="@drawable/ic_location_on_white_24dp"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"

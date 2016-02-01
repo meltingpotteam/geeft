@@ -176,8 +176,9 @@ public class NavigationDrawerFragment extends Fragment {
     //retuns the navigation drawer element list
     public static List<NavigationDrawerItem> getData(){
         List<NavigationDrawerItem> navigationDrawerItems = new ArrayList<>();
-        int icons[] = {R.drawable.profile,R.drawable.object_given, R.drawable.object_recieved,
-                R.drawable.settings, R.drawable.contact_us};
+        int icons[] = {R.drawable.ic_profile_24dp,R.drawable.ic_object_given_24dp,
+                R.drawable.ic_object_recieved_24dp, R.drawable.ic_settings_24dp,
+                R.drawable.ic_contact_us_24dp};
 
         int titles[] = {R.string.account_title,R.string.gift_title,
                 R.string.recycle_title, R.string.settings_title, R.string.mail_title};
