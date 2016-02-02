@@ -177,8 +177,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                     pressed = !holder.mPrenoteButton.isPressed();
                     holder.mPrenoteButton.setPressed(pressed);
                     if (pressed) {
-                        holder.mPrenoteButton.setBackgroundResource
-                                (R.drawable.checkbox_marked_circle_pressed);
+                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
 
                     }
                     else
