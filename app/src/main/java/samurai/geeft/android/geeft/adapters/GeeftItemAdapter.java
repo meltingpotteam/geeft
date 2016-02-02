@@ -1,8 +1,10 @@
 package samurai.geeft.android.geeft.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -61,6 +63,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
+
+        private final int MAX_SELECT = 5;//Max number of prenotation for each users
+        
         public TextView mTimeStampTextView;
         public TextView mUserLocationTextView;
         public TextView mUsernameTextView;
@@ -79,13 +84,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
-
-        //---------------
-        //Max number of prenotation for each users
-        private final int MAX_SELECT = 5;
-        private boolean isSelected = false;
-        //---------------
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -262,4 +260,36 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
 
     }
+    /*private void dialogShow(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,
+                R.style.AppCompatAlertDialogStyle)); //Read Update
+       alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            //the positive button should call the "logout method"
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                LOGOUT_METHOD
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            //cancel the intent
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                dialog.dismiss();
+            }
+        });
+        //On click, the user visualize can visualize some infos about the geefter
+        AlertDialog dialog = alertDialog.create();
+        //the context i had to use is the context of the dialog! not the context of the
+
+        //set the title
+        dialog.setTitle("TITLE OF THE DIALOG")
+        //if you don't want the title
+        //use this: dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        dialog.setMessage("MESSAGE YOU WANT TO RETURN TO THE USER");
+        dialog.show();  //<-- See This!
+    }*/
 }

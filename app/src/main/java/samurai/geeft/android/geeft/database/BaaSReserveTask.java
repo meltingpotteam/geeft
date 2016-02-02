@@ -10,6 +10,8 @@ import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestOptions;
+import com.baasbox.android.json.JsonArray;
+import com.baasbox.android.json.JsonObject;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -25,6 +27,8 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private Geeft mItem;
     private TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
+    private JsonArray mJSONUserLinks;
+
 
     public BaaSReserveTask(Context context, String docUserId, Geeft item, TaskCallbackBoolean callback) {
         mContext = context;
@@ -49,6 +53,8 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
             // to directly link to the user)
             Log.d(TAG, "resDoc is success");
             mDocUser = resDoc.value();
+            mJSONUserLinks = mDocUser.getArray("prenoteLinks");
+            //Log.d(TAG, "JSONDocUser is:" + mJSONUserLinks.toString());
         }
         else {
             Log.e(TAG, "Fatal error while retrieve DocUser");
@@ -63,12 +69,18 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                 if (resLink.isSuccess()) { //Link created
                     BaasLink value = resLink.value();
                     Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + mDocUser.getId());
-                    Log.d(TAG,"Link IN is: " + value.in().getId().equals(mItem.getId()) +
+                    Log.d(TAG, "Link IN is: " + value.in().getId().equals(mItem.getId()) +
                             " OUT is: " + value.out().getId().equals(mDocUser.getId()));
-                    mDocUser.put("link_id", value.getId()); //TO CHANGE WITH JSONObject Array to store all of the links
+                    //mDocUser.put("link_id", value.getId()); //TO CHANGE WITH JSONObject Array to store all of the links
+
+                    mJSONUserLinks.add(value.getId());
+                    //Log.d(TAG,mJSONUserLinks.toString());
+                    mDocUser.put("prenoteLinks",mJSONUserLinks);
                     BaasResult<BaasDocument> resResultSaved = mDocUser.saveSync();
                     if (resResultSaved.isSuccess()) { //linkId information stored in docUser
-                        Log.d(TAG, "Link Id saved in DocUser");
+                        Log.d(TAG, "Links Id saved in DocUser");
+                        mItem.setLinkId(value.getId()); //Set new link for referenced item
+                                                        // assumed is null
                         //Toast.makeText(mContext, "Ti sei prenotato con successo", Toast.LENGTH_LONG).show();
                         return true;
                     } else {
@@ -86,7 +98,8 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
             BaasResult<Void> resDelLink = BaasLink.withId(mItem.getLinkId()).deleteSync();
             if (resDelLink.isSuccess()) {
                 Log.d("TAG", "Link has been deleted");
-                BaasResult<BaasLink> resLink = BaasLink.createSync("wasReserved", mDocUser.getId(), mItem.getId());
+                mItem.setLinkId(""); //Link is null for referenced item
+                BaasResult<BaasLink> resLink = BaasLink.createSync("wasReserved", mItem.getId(), mDocUser.getId());
                 if (resLink.isSuccess()) { //Link created
                     Log.d(TAG, "Link cloned");
                     return true;
@@ -97,7 +110,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                 }
             }
             else{
-                Log.e(TAG, "Link NOT deleted");
+                Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
                 return false;
             }
         }
