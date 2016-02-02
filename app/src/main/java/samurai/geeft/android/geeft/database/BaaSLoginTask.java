@@ -14,6 +14,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 
 /**
  * This task manages the social sign-in server-side using BaasBox.
+ * Update by danybr-dev on 2/02/16
  */
 public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
     private static final String TAG = "BaaSLoginTask";

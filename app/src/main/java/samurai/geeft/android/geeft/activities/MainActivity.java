@@ -31,6 +31,7 @@ import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 /**
  * Created by ugookeadu on 20/01/16.
  * Updated by gabriel-dev on 29/01/16.
+ * Update by danybr-dev on 2/02/16
  */
 public class MainActivity extends AppCompatActivity {
     private final String TAG ="MainActivity";

@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasUser;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
@@ -27,14 +28,17 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.MainActivity;
+import samurai.geeft.android.geeft.database.BaaSReserveTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
  * adapter for GeeftListFragment Recyclerview
+ * Update by danybr-dev on 2/02/16
  */
-public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>{
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBoolean {
 
     private final LayoutInflater inflater;
 
@@ -158,25 +162,26 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mLocationButton.setVisibility(View.GONE);
         }
         setAnimation(holder.mContainer);
-        //--------------------------- Prenote button implementation
 
         if(item.isSelected())
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
         else
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
+        //--------------------------- Prenote button implementation
+        // TODO: Use this Asyntask to check if is pressed or not,and create or delete link
 
-        /* TODO: Use this Asyntask to check if is pressed or not,and create or delete link
-                    String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id");
-                    Log.d(TAG,"Doc id of user is: " + docId + " and item id is: " + mGeeft.getId());
-                    new BaaSRetrieveDoc(context,docId,mGeeft,GeeftAdapter.this).execute();*/
+
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
                 item.setIsSelected(!item.isSelected());
                 if (item.isSelected())
                     holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
                 else
                     holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
+                new BaaSReserveTask(mContext,docUserId,item,GeeftItemAdapter.this).execute();
 
             }
         });
@@ -249,5 +254,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             viewToAnimate.startAnimation(animation);
             lastSize++;
         }
+    }
+    public void done(boolean result){
+        //enables all social buttons
+        if(!result){
+            //Retry?!
+        }
+
     }
 }

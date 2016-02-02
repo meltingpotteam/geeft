@@ -24,6 +24,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 07/01/16.
  * Task for populating GeeftItem cards
+ * Update by danybr-dev on 17/01/16
  */
 public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
 
@@ -45,10 +46,12 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
     protected Boolean doInBackground(Void... arg0) {
         Geeft mGeeft;
         Log.d(TAG,"Lanciato");
+        Log.d(TAG,BaasUser.current().toString());
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
         //find all links with the doc_id (User id <--> doc id )
         Log.d(TAG,"Doc_id is: " + docId);
-        BaasQuery.Criteria query =BaasQuery.builder().where("out.id like '" + docId + "'" ).criteria();
+        //TODO: change when baasbox fix issue with BaasLink.create
+        BaasQuery.Criteria query =BaasQuery.builder().where("in.id like '" + docId + "'" ).criteria();
         BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
         List<BaasLink> links;
         if(resLinks.isSuccess()){
@@ -75,14 +78,17 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for(BaasLink l : links){
+                        //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+                        Log.d(TAG,"e id: "+ e.getId() + " inId: "+ l.in().getId());
+                        //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
                         if(l.in().getId().equals(e.getId())){
-                            // SETTA PRENOTE BUTTON TRUE
+                            mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                            // reserved)
                             mGeeft.setLinkId(l.getId());
                             Log.d(TAG,"link id is: " + l.getId());
                         }
                     }
                     mGeeftList.add(0,mGeeft);
-
                     result = true;
                 }
             } catch (com.baasbox.android.BaasException ex) {
