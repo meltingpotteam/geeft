@@ -9,4 +9,3 @@
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:background="@color/colorPrimary"/>
-

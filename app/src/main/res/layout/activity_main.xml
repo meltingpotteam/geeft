@@ -12,28 +12,30 @@
                     >
         <include
             android:id="@+id/main_app_bar"
-            layout="@layout/app_bar"
+            layout="@layout/tool_bar"
             />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
+        <samurai.geeft.android.geeft.utilities.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:layout_below="@id/main_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        </android.support.v4.view.ViewPager>
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:background="@color/colorPrimary"/>
+
 
         <android.support.v4.widget.DrawerLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/drawer_layout"
-            android:layout_below="@id/main_app_bar"
+            android:layout_below="@id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/fragment_container"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_below="@id/tabs"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
                 />
 
             <fragment
@@ -44,7 +46,6 @@
                 app:layout="@layout/fragment_navigation_drawer"
                 android:name="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment"
                 tools:layout="@layout/fragment_navigation_drawer"/>
-
         </android.support.v4.widget.DrawerLayout>
 
         <!-- floating action menu button: -->
@@ -65,7 +66,7 @@
                 android:id="@+id/add_geeft_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_camera_white"
+                android:src="@drawable/ic_menu_camera_white_24dp"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
@@ -77,24 +78,12 @@
                 android:id="@+id/geeft_around_me_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_location_on_white"
+                android:src="@drawable/ic_location_on_white_24dp"
                 fab:fab_colorNormal="@color/colorPrimary"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
                 fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
                 fab:fab_label="Geeft around me"
-                fab:fab_size="mini"
-                />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/floating_button_c"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp"
-                fab:fab_colorNormal="@color/colorPrimary"
-                fab:fab_colorPressed="@color/colorPrimaryDark"
-                fab:fab_showAnimation="@anim/fab_slide_in_from_right"
-                fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-                fab:fab_label="Action C"
                 fab:fab_size="mini"
                 />
         </com.github.clans.fab.FloatingActionMenu>

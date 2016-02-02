@@ -18,11 +18,7 @@
                    android:value="@string/facebook_app_id"/>
 
         <activity android:name=".activities.InitialActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <!-- Implementation of share button -->
         <activity android:name="com.facebook.FacebookActivity"
@@ -43,6 +39,11 @@
                   android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
 

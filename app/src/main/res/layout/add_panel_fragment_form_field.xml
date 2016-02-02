@@ -29,7 +29,7 @@
                 android:id="@+id/geeft_photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_camera_white"
+                android:src="@drawable/ic_menu_camera_white_24dp"
                 android:layout_gravity="end|end"
                 android:background="#00ffffff"
                 android:paddingRight="15dp"

@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,18 +16,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.widget.ShareDialog;
+import com.github.clans.fab.FloatingActionButton;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragments.GeeftListFragment;
+import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
+    private ViewPagerAdapter mViewPagerAdapter;
+    private SlidingTabLayout mSlidingTabLayoutTabs;
+    private CharSequence mTitles[]={"Profile","Geeft"};
+    private int mNumboftabs =2;
 
     /**
      * Facebook share button implementation..... If you make this better,make it!
@@ -55,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar()!=null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         /**
         * Facebook shareButton implementation
@@ -84,12 +85,6 @@ public class MainActivity extends AppCompatActivity {
         /**
          * End implementation
          */
-        if (fragment == null) {
-            fragment = new GeeftListFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
         NavigationDrawerFragment drawerFragment =  (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_fragment);
         Log.d("LOG",""+drawerFragment);
@@ -121,24 +116,54 @@ public class MainActivity extends AppCompatActivity {
         /**
          * End implementation
          */
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(),mTitles,mNumboftabs);
+
+        // Assigning ViewPager View and setting the adapter
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mViewPagerAdapter);
+
+        // Assiging the Sliding Tab Layout View
+        mSlidingTabLayoutTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        mSlidingTabLayoutTabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        mSlidingTabLayoutTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    return getResources().getColor(R.color.white,null);
+                }
+                else {
+                    return getResources().getColor(R.color.white);
+                }
+            }
+
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        mSlidingTabLayoutTabs.setViewPager(mViewPager);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        /*if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(),"Logout",Toast.LENGTH_LONG);
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
             return true;
-        }*/
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
