@@ -71,6 +71,7 @@
         android:orientation="vertical"
         >
 
+        <!-- TODO implement on click enlarge-->
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/geeft_image"
             android:layout_width="match_parent"

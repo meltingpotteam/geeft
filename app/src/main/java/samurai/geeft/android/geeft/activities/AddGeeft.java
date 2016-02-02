@@ -59,6 +59,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private Spinner mGeeftLocation;   //location of the geeft
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
+    private Boolean mEnlargable;
 
     private File mGeeftImage;
     //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
@@ -109,7 +110,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
         //TODO
 
-
+        this.mEnlargable = false;
         this.mGeeftImageView = (ImageView) this.findViewById(R.id.geeft_add_photo_frame);
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
@@ -130,7 +131,6 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
 
         //Listener for te imageView: ///////////////////////////////////////////////////////////////
-
         mGeeftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +175,9 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         spinner.setAdapter(adapter);
         ////////////////////////////////////////////////////////////////////////////////////////////
     }
+    /**
+     * positioning uploaded; it works now: the image fit the central part of the imageView in the form
+     **/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == RESULT_OK) {
             File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
@@ -183,7 +186,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             Picasso.with(this).load(file)
                     .memoryPolicy(MemoryPolicy.NO_CACHE)        //avoid the problem of the chached
                     .networkPolicy(NetworkPolicy.NO_CACHE)      //image loading every time a new photo
-                    .config(Bitmap.Config.RGB_565)
+//                    .config(Bitmap.Config.RGB_565)
                     .fit()
                     .centerInside()
                     .into(mGeeftImageView);
