@@ -59,7 +59,6 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private Spinner mGeeftLocation;   //location of the geeft
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
-    private Boolean mEnlargable;
 
     private File mGeeftImage;
     //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
@@ -110,7 +109,6 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
         //TODO
 
-        this.mEnlargable = false;
         this.mGeeftImageView = (ImageView) this.findViewById(R.id.geeft_add_photo_frame);
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
