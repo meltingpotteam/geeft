@@ -38,6 +38,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 
 /**
  * A login screen that offers login via facebook/twitter/google+.
+ * Update by danybr-dev on 21/01/16
  */
 public class LoginActivity extends AppCompatActivity implements TaskCallbackBoolean,GoogleApiClient.OnConnectionFailedListener {
 

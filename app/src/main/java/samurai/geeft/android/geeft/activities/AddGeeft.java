@@ -44,6 +44,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by gabriel-dev on 26/01/16.
+ * Update by danybr-dev on 1/02/16
  */
 
 public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {

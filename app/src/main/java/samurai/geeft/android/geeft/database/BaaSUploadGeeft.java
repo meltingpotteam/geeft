@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 /**
- * Created by daniele on 31/01/16.
+ * Created by danybr-dev on 31/01/16.
  */
 public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
 

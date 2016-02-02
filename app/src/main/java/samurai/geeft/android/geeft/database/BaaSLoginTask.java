@@ -8,12 +8,14 @@ import android.widget.Toast;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.json.JsonArray;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 
 /**
  * This task manages the social sign-in server-side using BaasBox.
+ * Update by danybr-dev on 2/02/16
  */
 public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
     private static final String TAG = "BaaSLoginTask";
@@ -99,6 +101,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                 if(UserDocId == null || UserDocId.equals("")) {
                     BaasDocument doc = new BaasDocument("linkable_users");
+                    JsonArray JSONUserLinks = new JsonArray();
+                    doc.put("prenoteLinks",JSONUserLinks);
                     BaasResult<BaasDocument> resDoc = doc.saveSync();
                     if(resDoc.isSuccess()){
                         Log.d(TAG, "Doc ID is: " + doc.getId());

@@ -29,8 +29,12 @@ public class LogoutActivity extends Activity {
             public void handle(BaasResult<Void> baasResult) {
                 if (baasResult.isSuccess())
                     setLogoutOk(true);
-                else
+                else if( baasResult.isFailed())
                     setLogoutOk(false);
+                else if( baasResult.isCanceled()) {
+                    Intent intent = new Intent();
+                    setResult(Activity.RESULT_CANCELED, intent);
+                }
                 finish();
             }
         });
@@ -42,9 +46,10 @@ public class LogoutActivity extends Activity {
     }
 
     private void setLogoutOk(boolean isLogoutOk) {
-        Intent data = new Intent();
-        data.putExtra(EXTRA_LOGOUT_OK, isLogoutOk);
-        setResult(RESULT_OK, data);
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_LOGOUT_OK, isLogoutOk);
+        setResult(Activity.RESULT_OK, intent);
+
     }
 
     public static Intent newIntent(Context packageContext) {

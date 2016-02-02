@@ -57,6 +57,8 @@
 
     <string name="add_gift_name_hint">Name of your geeft</string>
     <string name="add_geeft_description_hint">Something about the geeft</string>
+    <string name="logout_dialog_message">Sei sicuro di volerti disconnettere</string>
+    <string name="logout_dialog_title">Disconessione</string>
 
 
     <!-- Spinner Array For the Location-->
