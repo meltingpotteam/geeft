@@ -1,5 +1,7 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,6 +37,7 @@ import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
  */
 public class MainActivity extends AppCompatActivity {
     private final String TAG ="MainActivity";
+    private static final int REQUEST_CODE_LOGOUT = 0;
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
@@ -160,11 +164,64 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,
+                    R.style.AppCompatAlertDialogStyle); //Read Update
+
+            builder.setTitle(R.string.logout_dialog_title);
+            builder.setMessage(R.string.logout_dialog_message);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                //the positive button should call the "logout method"
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //here you can add functions
+                    Intent i = new Intent(getApplicationContext(), LogoutActivity.class);
+                    startActivityForResult(i, REQUEST_CODE_LOGOUT);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                //cancel the intent
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //here you can add functions
+                    dialog.dismiss();
+                }
+            });
+
+            //On click, the user visualize can visualize some infos about the geefter
+            AlertDialog dialog = builder.create();
+            //the context i had to use is the context of the dialog! not the context of the
+            dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+            dialog.show();  //<-- See This!
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE_LOGOUT) {
+            if(resultCode == Activity.RESULT_OK){
+                if(LogoutActivity.wasLogoutOk(data)) {
+                    startLoginActivity();
+                    finish();
+                }
+                else
+                    Toast.makeText(getApplicationContext(),
+                        "Logout non possibile, riprovare più tardi",Toast.LENGTH_LONG).show();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Toast.makeText(getApplicationContext(),
+                        "Logout cancellato",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void startLoginActivity() {
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter{
@@ -180,9 +237,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 0;
+            return mNumboftabs;
         }
     }
 
     public static ShareDialog getShareDialog(){ return mShareDialog;}
+
 }

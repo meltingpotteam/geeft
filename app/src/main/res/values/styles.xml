@@ -28,5 +28,11 @@
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>
 
     </style>
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:background">@color/white</item>
+    </style>
 </resources>
 
