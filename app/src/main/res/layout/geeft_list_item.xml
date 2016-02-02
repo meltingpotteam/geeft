@@ -121,15 +121,15 @@
             android:gravity="center"
             >
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/geeft_like_reservation_button"
-                android:background="@null"
-                android:src="@drawable/checkbox_marked_circle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_effect"
+                android:src="@drawable/ic_reserve_off_24dp"
+                android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"
                 android:visibility="visible"
-                android:scaleType="matrix"
-                />
+            />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -141,8 +141,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/geeft_share_button"
-                android:background="@drawable/button_click_effect"
-                android:src="@drawable/ic_menu_share_white"
+                android:background="@drawable/ripple_effect"
+                android:src="@drawable/ic_menu_share_white_24dp"
                 android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"
                 android:visibility="visible"
@@ -160,7 +160,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/geeft_info_button"
                 android:src="@drawable/ic_location_on_black_24dp"
-                android:background="@drawable/button_click_effect"
+                android:background="@drawable/ripple_effect"
                 android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"
                 android:visibility="visible"
