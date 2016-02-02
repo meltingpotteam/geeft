@@ -156,10 +156,31 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
         setAnimation(holder.mContainer);
         //--------------------------- Prenote button implementation
+
         if(item.isSelected())
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
         else
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
+        holder.mPrenoteButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                /* TODO: Use this Asyntask to check if is pressed or not,and create or delete link
+                        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id");
+                        Log.d(TAG,"Doc id of user is: " + docId + " and item id is: " + mGeeft.getId());
+                        new BaaSRetrieveDoc(context,docId,mGeeft,GeeftAdapter.this).execute();*/
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    pressed = !holder.mPrenoteButton.isPressed();
+                    holder.mPrenoteButton.setPressed(pressed);
+                    if (pressed) {
+                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
+
+                    }
+                    else
+                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle);
+                    Log.d("PREMUTO",""+pressed);
+                }
+                return true;
+            }
 
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +195,26 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         //--------------------- Location Button implementation
         final String location = holder.mUserLocationTextView.getText().toString();
+        holder.mLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    if( !location.equals("")) {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+                                URLEncoder.encode(location, "UTF-8"));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        mContext.startActivity(mapIntent);
+                    }
+                    else
+                        Toast.makeText(mContext,
+                                "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
+                }catch (java.io.UnsupportedEncodingException e){
+                    Toast.makeText(mContext, "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         //-------------------------- ShareButton implementation
         final String title = holder.mGeeftTitleTextView.getText().toString();
         final Uri app_url = Uri.parse(holder.app_url);

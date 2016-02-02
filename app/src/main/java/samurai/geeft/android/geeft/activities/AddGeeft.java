@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,13 +25,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasFile;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 
 
@@ -36,18 +46,21 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Created by gabriel-dev on 26/01/16.
  */
 
-public class AddGeeft extends AppCompatActivity{
+public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
+
+    private static final String TAG = "AddGeeft";
     private Geeft newGeft;
     private ImageButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
 
     //field to fill with the edited parameters in the form field
-    private TextView mGeeftName;  //name of the object
+    private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
-    private TextView mGeeftLocation;   //location of the geeft
+    private Spinner mGeeftLocation;   //location of the geeft
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
 
+    private File mGeeftImage;
     //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
 
     @Override
@@ -64,10 +77,14 @@ public class AddGeeft extends AppCompatActivity{
         super.onOptionsItemSelected(item);
         switch(item.getItemId()){
             case R.id.fragment_add_geeft_ok_button:
-                Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
 
                 //Things TODO before close the activity
-
+                String name = mGeeftTitle.getText().toString();
+                String description = mGeeftDescription.getText().toString();
+                String location = mGeeftLocation.getSelectedItem().toString();
+                Log.d(TAG,"name:" + name + " description: " + description + " location:" +  location);
+                uploadToBB(name, description, location, mGeeftImage);
                 ///////////////////////////////////////
 
                 finish();
@@ -94,9 +111,9 @@ public class AddGeeft extends AppCompatActivity{
 
 
         this.mGeeftImageView = (ImageView) this.findViewById(R.id.geeft_add_photo_frame);
-        this.mGeeftName = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
+        this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
-
+        this.mGeeftLocation = (Spinner) this.findViewById(R.id.form_field_location_spinner);
         //Listener for te imageButton///////////////////////////////////////////////////////////////
         cameraButton = (ImageButton) findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +121,8 @@ public class AddGeeft extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                 mGeeftImage = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
@@ -172,6 +189,37 @@ public class AddGeeft extends AppCompatActivity{
                     .into(mGeeftImageView);
         }
     }
+    public void uploadToBB(String name,String description,String location,File geeftImage){
+
+
+        Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
+        byte[] stream = getBytesFromBitmap(bitmap);
+        //Log.d("log", "creato stream byte");
+        if(mGeeftImage == null)
+            Log.e(TAG,"Fatal error while upload file");
+        else {
+            BaasFile file = new BaasFile();
+            new BaaSUploadGeeft(getApplicationContext(), name,description,location,stream,this).execute();
+        }
+    }
+
+    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        return stream.toByteArray();
+    }
+
+
+    public void done(boolean result){
+        //enables all social buttons
+        if(result){
+            Toast.makeText(getApplicationContext(),"Annuncio inserito con successo",Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"E' accaduto un errore",Toast.LENGTH_LONG).show();
+        }
+    }
+
 
 
 //    //Decoder an image from a saved picture to set it in an imageView //////////////////////////////

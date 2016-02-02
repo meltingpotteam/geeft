@@ -11,6 +11,10 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
@@ -56,7 +60,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
             return false; // Don't continue if we are in this case
         }
         BaasQuery.Criteria paginate = BaasQuery.builder()
-                .orderBy("_creation_date desc").criteria();
+                .orderBy("_creation_date asc").criteria();
         BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
         if (baasResult.isSuccess()) {
             try {
@@ -67,7 +71,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setGeeftImage(e.getString("image"));
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
-                    mGeeft.setTimeStamp(e.getString("timeStamp"));
+                    mGeeft.setTimeStamp(getCreationTimestamp(e));
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for(BaasLink l : links){
@@ -78,7 +82,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                         }
                     }
                     mGeeftList.add(0,mGeeft);
-                    mGeeftItemAdapter.notifyItemInserted(0);
+
                     result = true;
                 }
             } catch (com.baasbox.android.BaasException ex) {
@@ -90,6 +94,20 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
             Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
         }
         return result;
+    }
+
+    private static String getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+        String date = d.getCreationDate();
+        //Log.d(TAG,"_creation_date is:" + date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        try {
+            Date creation_date = dateFormat.parse(date);
+            return ""+creation_date.getTime(); //Convert timestamp in string
+        }catch (java.text.ParseException e){
+           Log.e(TAG,"ERRORE FATALE : " + e.toString());
+        }
+        return "";
+
     }
 
     @Override

@@ -75,6 +75,7 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
                 toast.show();
             }
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     public GeeftListFragment getInstance(){
