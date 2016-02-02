@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -166,23 +165,19 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         else
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
 
-        holder.mPrenoteButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch (View v, MotionEvent event){
-            /* TODO: Use this Asyntask to check if is pressed or not,and create or delete link
+        /* TODO: Use this Asyntask to check if is pressed or not,and create or delete link
                     String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id");
                     Log.d(TAG,"Doc id of user is: " + docId + " and item id is: " + mGeeft.getId());
                     new BaaSRetrieveDoc(context,docId,mGeeft,GeeftAdapter.this).execute();*/
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    pressed = !holder.mPrenoteButton.isPressed();
-                    holder.mPrenoteButton.setPressed(pressed);
-                    if (pressed) {
-                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle_pressed);
-                    } else
-                        holder.mPrenoteButton.setImageResource(R.drawable.checkbox_marked_circle);
-                    Log.d("PREMUTO", "" + pressed);
-                }
-                return true;
+        holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                item.setIsSelected(!item.isSelected());
+                if (item.isSelected())
+                    holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
+                else
+                    holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
+
             }
         });
 
