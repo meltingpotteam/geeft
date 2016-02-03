@@ -29,6 +29,8 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     String mTitle;
     String mDescription;
     String mLocation;
+    String mExpTime;
+    String mCategory;
     byte[] mImage;
     TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
@@ -36,12 +38,14 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     /**
      * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
      **/
-    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, TaskCallbackBoolean callback) {
+    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, String expTime, String category, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
         mDescription = description;
         mLocation = location;
         mImage = image;
+        mExpTime = expTime;
+        mCategory = category;
 
         mCallback = callback;
         Log.d(TAG, "Lanciato AsyncTask");

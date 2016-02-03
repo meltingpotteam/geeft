@@ -87,14 +87,15 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 String name = mGeeftTitle.getText().toString();
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
-                String exp_time = mGeeftExpirationTime.getSelectedItem().toString();
-                Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location + " expire time " + exp_time);
-                if(name.length() <= 1 || description.length() <= 1 || location == null || exp_time == null){
+                String expTime = mGeeftExpirationTime.getSelectedItem().toString();
+                String category = mGeeftCategory.getSelectedItem().toString();
+                Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location + " expire time: " + expTime + " category: " + category);
+                if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null || location == null || expTime == null){
                     Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{
-                    uploadToBB(name, description, location, mGeeftImage);
+                    uploadToBB(name, description, location, mGeeftImage, expTime, category);
                     finish();
                     return true;
                 }
@@ -129,7 +130,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                 mGeeftImage = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+                mGeeftImage = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
@@ -221,18 +222,17 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                     .into(mGeeftImageView);
         }
     }
-    public void uploadToBB(String name,String description,String location,File geeftImage){
-
-
+    public void uploadToBB(String name,String description,String location,File geeftImage, String expTime, String category){
+        //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
         Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
-        byte[] stream = getBytesFromBitmap(bitmap);
+        byte[] streamImage = getBytesFromBitmap(bitmap);
         //Log.d("log", "creato stream byte");
         if(mGeeftImage == null)
             Log.e(TAG,"Fatal error while upload file");
         else {
-            BaasFile file = new BaasFile();
+//            BaasFile file = new BaasFile();
             //TODO: add the field "expire time" and "category"
-            new BaaSUploadGeeft(getApplicationContext(), name,description,location,stream,this).execute();
+            new BaaSUploadGeeft(getApplicationContext(), name,description,location,streamImage, expTime, category, this).execute();
         }
     }
 
