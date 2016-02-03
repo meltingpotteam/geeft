@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 
@@ -25,6 +26,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     TaskCallbackBoolean mCallback;
     String mGeeftId;
     boolean result;
+    boolean stop = true;
 
     public BaaSGeeftHistoryArrayTask(Context context, List<Geeft> feedItems, String geeftId,
                                      TaskCallbackBoolean callback) {
@@ -52,19 +54,52 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
-                    mGeeftList.add(mGeeft);
+                    mGeeftList.add(0,mGeeft);
+                    createGeeftStoryArray(e,mGeeftId+"");
                     result = true;
             } catch (com.baasbox.android.BaasException ex) {
-                Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                 Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                 return false;
             }
         } else if (baasResult.isFailed()) {
-            Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+            Log.e("CLASS", "Deal with error: " + baasResult.error().getMessage());
         }
         return result;
     }
 
+    private void createGeeftStoryArray(BaasDocument e, String mPreviousGeeftId){
+        do {
+            BaasQuery.Criteria paginate = BaasQuery.builder().
+                    where("out.id like '" + mPreviousGeeftId+"'").criteria();
+            BaasResult<List<BaasLink>> baasResult = BaasLink.fetchAllSync("geeft_story", paginate);
+            if (baasResult.isSuccess()) {
+                try {
+                    List<BaasLink> list = baasResult.get();
+                    if (list.size() > 0) {
+                        BaasLink link = baasResult.get().get(0);
+                        BaasDocument doc = (BaasDocument) link.out();
+                        Geeft mGeeft = new Geeft();
+                        mGeeft.setId(e.getId());
+                        mGeeft.setUsername(e.getString("name"));
+                        mGeeft.setGeeftImage(e.getString("image"));
+                        mGeeft.setGeeftDescription(e.getString("description"));
+                        mGeeft.setUserProfilePic(e.getString("profilePic"));
+                        mGeeft.setUserLocation(e.getString("location"));
+                        mGeeft.setGeeftTitle(e.getString("title"));
+                        mGeeftList.add(mGeeft);
+                        mPreviousGeeftId = e.getId();
+                        stop = false;
+                    }
+                } catch (com.baasbox.android.BaasException ex) {
+                    Log.e("CLASS2", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                }
+            } else if (baasResult.isFailed()) {
+                Log.e("CLASS2", "Deal with error: " + baasResult.error().getMessage());
+            }
+        }while (!stop);
+    }
     @Override
     protected void onPostExecute(Boolean result) {
         mCallback.done(result);
