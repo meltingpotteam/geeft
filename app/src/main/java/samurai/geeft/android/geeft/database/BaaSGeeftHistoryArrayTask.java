@@ -38,6 +38,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         BaasQuery.Criteria paginate = BaasQuery.builder().where("id ="+mGeeftId).criteria();
+
         BaasResult<BaasDocument> baasResult = BaasDocument.fetchSync("geeft", mGeeftId);
         if (baasResult.isSuccess()) {
             try {
