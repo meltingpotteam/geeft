@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--personalized -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/customized_spinner_items"
+          style="?android:attr/spinnerItemStyle"
+          android:singleLine="true"
+          android:textColor="@color/colorPrimaryText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:textAlignment="inherit"/>

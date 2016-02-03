@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Geeft</string>
+          android:textColor="@color/colorPrimaryText"
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -55,14 +56,14 @@
     <string name="recycle_description">Visualizza oggetti ricevuti</string>
 
 
-    <string name="add_gift_name_hint">Name of your geeft</string>
-    <string name="add_geeft_description_hint">Something about the geeft</string>
+    <string name="add_gift_name_hint" translatable="true">Scrivi il nome del tuo Geeft</string>
+    <string name="add_geeft_description_hint" translatable="true">Scrivi una breve descrizione</string>
     <string name="logout_dialog_message">Sei sicuro di volerti disconnettere</string>
     <string name="logout_dialog_title">Disconessione</string>
 
 
     <!-- Spinner Array For the Location-->
-    <string-array name="planets_array">
+    <string-array name="cities_array">
         <item>Agrigento</item>
         <item>Alessandria</item>
         <item>Ancona</item>
@@ -137,7 +138,7 @@
         <item>Prato</item>
         <item>Ragusa</item>
         <item>Ravenna</item>
-        <item>Reggio di Calabria</item>
+        <item>Reggio Calabria</item>
         <item>Reggio Emilia</item>
         <item>Rieti</item>
         <item>Rimini</item>
@@ -166,5 +167,17 @@
         <item>Vibo Valentia</item>
         <item>Vicenza</item>
         <item>Viterbo</item>
+    </string-array>
+
+
+    <!-- Spinner Array For the Expiration Time-->
+    <string-array name="week_array">
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>4 days</item>
+        <item>5 days</item>
+        <item>6 days</item>
+        <item>7 days</item>
     </string-array>
 </resources>

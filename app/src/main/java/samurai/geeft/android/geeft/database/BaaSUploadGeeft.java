@@ -33,6 +33,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
 
+    /**
+     * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
+     **/
     public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
