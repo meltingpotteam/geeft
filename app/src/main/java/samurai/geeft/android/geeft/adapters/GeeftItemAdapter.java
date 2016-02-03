@@ -1,10 +1,8 @@
 package samurai.geeft.android.geeft.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -133,9 +131,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mUserLocationTextView.setText(item.getUserLocation());
         holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
 
-        ImageControllerGenerator.generateSimpleDrawee(holder.mUserProfilePic,
+        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mUserProfilePic,
                 item.getUserProfilePic());
-        ImageControllerGenerator.generateSimpleDrawee(holder.mGeeftImage,
+        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mGeeftImage,
                 item.getGeeftImage());
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(

@@ -30,7 +30,7 @@ public class GeeftStoryFragment extends Fragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_geeft_story, container, false);
         mDraweeView = (SimpleDraweeView)rootView.findViewById(R.id.geeft_story_view);
-        ImageControllerGenerator.generateSimpleDrawee(mDraweeView,
+        ImageControllerGenerator.generateSimpleDrawee(getContext(),mDraweeView,
                 mGeeft.getGeeftImage());
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();

@@ -78,59 +78,20 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setTimeStamp(getCreationTimestamp(e));
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
-                    for(BaasLink l : links){
+                    for (BaasLink l : links) {
                         //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-                        Log.d(TAG,"e id: "+ e.getId() + " inId: "+ l.in().getId());
+                        Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
                         //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
-                        if(l.in().getId().equals(e.getId())){
+                        if (l.in().getId().equals(e.getId())) {
                             mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
                             // reserved)
                             mGeeft.setLinkId(l.getId());
-                            Log.d(TAG,"link id is: " + l.getId());
+                            Log.d(TAG, "link id is: " + l.getId());
                         }
                     }
-                    mGeeftList.add(0,mGeeft);
+                    mGeeftList.add(0, mGeeft);
                     result = true;
-        if(BaasUser.current()!=null) {
-            String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
-            //find all links with the doc_id (User id <--> doc id )
-            Log.d(TAG, "Doc_id is: " + docId);
-            BaasQuery.Criteria query = BaasQuery.builder().where("out.id like '" + docId + "'").criteria();
-            BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
-            List<BaasLink> links;
-            if (resLinks.isSuccess()) {
-                links = resLinks.value();
-                Log.d(TAG, "Your links are here: " + links.size());
-            } else {
-                Log.e(TAG, "Error when retrieve links");
-                return false; // Don't continue if we are in this case
-            }
-            BaasQuery.Criteria paginate = BaasQuery.builder()
-                    .orderBy("_creation_date asc").criteria();
-            BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
-            if (baasResult.isSuccess()) {
-                try {
-                    for (BaasDocument e : baasResult.get()) {
-                        mGeeft = new Geeft();
-                        mGeeft.setId(e.getId());
-                        mGeeft.setUsername(e.getString("name"));
-                        mGeeft.setGeeftImage(e.getString("image"));
-                        mGeeft.setGeeftDescription(e.getString("description"));
-                        mGeeft.setUserProfilePic(e.getString("profilePic"));
-                        mGeeft.setTimeStamp(getCreationTimestamp(e));
-                        mGeeft.setUserLocation(e.getString("location"));
-                        mGeeft.setGeeftTitle(e.getString("title"));
-                        for (BaasLink l : links) {
-                            if (l.in().getId().equals(e.getId())) {
-                                // SETTA PRENOTE BUTTON TRUE
-                                mGeeft.setLinkId(l.getId());
-                                Log.d(TAG, "link id is: " + l.getId());
-                            }
-                        }
-                        mGeeftList.add(0, mGeeft);
-
-                        result = true;
-                    }
+                }
                 } catch (com.baasbox.android.BaasException ex) {
                     Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
@@ -139,7 +100,6 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
             } else if (baasResult.isFailed()) {
                 Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
             }
-        }
         return result;
     }
 

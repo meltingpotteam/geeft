@@ -2,6 +2,7 @@
 <android.support.v4.view.ViewPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_full_screen_view_pager"
+    android:background="@android:color/black"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
