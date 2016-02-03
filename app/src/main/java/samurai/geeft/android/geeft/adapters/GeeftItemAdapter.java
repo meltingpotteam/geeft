@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
@@ -118,7 +119,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
 
@@ -227,6 +228,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                     MainActivity.getShareDialog().show(linkContent);
                 }
 
+            }
+        });
+
+        holder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // launch full screen activity
+                Intent intent = FullScreenViewActivity.newIntent(mContext,
+                        item.getId());
+                mContext.startActivity(intent);
             }
         });
     }

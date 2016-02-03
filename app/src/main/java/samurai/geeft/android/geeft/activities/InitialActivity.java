@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.baasbox.android.BaasUser;
 
 /**
- * Created by Ugo Nnanna Okeadu on 14/01/16.
+ * Created by ugookeadu on 14/01/16.
  * Chooses first activity in base of if the user is signed in (MainActivity)
  * or not (LoginActivity)
  */
@@ -17,7 +17,7 @@ public class InitialActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (BaasUser.current() != null) {
-            startLoginActivity();
+            startMainActivity();
         } else {
             startLoginActivity();
         }

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class NavigationDrawerFragment extends Fragment {
     private View mContainerView;
     private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
     private RecyclerView mRecyclerView;
+    private LinearLayout mWelcomeLayout;
 
     // indicates if user is aware that the NavigationBar exists
     private boolean mUserLearnedDrawer;
@@ -74,7 +76,8 @@ public class NavigationDrawerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
         mRecyclerView.setHasFixedSize(false);
-
+        mWelcomeLayout = (LinearLayout) rootView.
+                findViewById(R.id.navigation_drawer_welcome);
         // Set adapter data
         mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
 
@@ -131,18 +134,21 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                if(mUserLearnedDrawer) {
+                if(!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(),
                             KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
+                    mWelcomeLayout.setVisibility(View.GONE);
                 }
             }
         };
 
         // if the user have never seen the drawer and if the very first time this fragment is starting
         // in that case display the drawer
-        if (!mUserLearnedDrawer && !mFromSavedIstanceState)
-            mDrawerLayout.openDrawer(mContainerView );
+        if (!mUserLearnedDrawer) {
+            mDrawerLayout.openDrawer(mContainerView);
+            mWelcomeLayout.setVisibility(View.VISIBLE);
+        }
 
         mDrawerLayout.post(new Runnable() {
             @Override

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/colorPrimary"
+        android:visibility="gone"
         android:paddingTop="25dp"
         android:paddingBottom="25dp"
         android:paddingLeft="20dp"
