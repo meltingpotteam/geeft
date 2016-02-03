@@ -62,6 +62,7 @@
     <string name="logout_dialog_title">Disconessione</string>
 
 
+    <!-- TODO: separate the spinner arrays in separated resources -->
     <!-- Spinner Array For the Location-->
     <string-array name="cities_array">
         <item>Agrigento</item>
@@ -179,5 +180,16 @@
         <item>5 days</item>
         <item>6 days</item>
         <item>7 days</item>
+    </string-array>
+
+    <!-- Spinner Array For the Expiration Time-->
+    <string-array name="categories_array">
+        <item>Libri</item>
+        <item>Elettronica</item>
+        <item>Casa</item>
+        <item>Uso quotidiano</item>
+        <item>Giocattoli</item>
+        <item>Abbigliamento</item>
+        <item>Musia e Arte</item>
     </string-array>
 </resources>

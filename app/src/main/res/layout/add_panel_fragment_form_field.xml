@@ -155,6 +155,28 @@
                         >
                     </Spinner>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/activity_vertical_margin">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/activity_horizontal_margin"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_edit_black_24dp"/>
+                    <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:hint="Where you want to consign the geeft"/>-->
+                    <Spinner
+                        android:id="@+id/categories_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:spinnerMode="dropdown"
+                        >
+                    </Spinner>
+                </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -164,19 +186,37 @@
                         android:id="@+id/automatic_geefter_selection"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Automatic Geefted Selection"
+                        android:text="Selezione automatica del Geefted"
                         android:textSize="@dimen/geeft_title_text_size"
                         android:textColor="@android:color/black"
                         />
                     <CheckBox
-                        android:id="@+id/list_crime_solved_check_box"
+                        android:id="@+id/automatic_selection_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/automatic_geefter_selection"
                         />
                 </RelativeLayout>
-
-
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="30dp">
+                    <TextView
+                        android:paddingTop="5dp"
+                        android:id="@+id/allow_communication"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Posso essere contattato"
+                        android:textSize="@dimen/geeft_title_text_size"
+                        android:textColor="@android:color/black"
+                        />
+                    <CheckBox
+                        android:id="@+id/allow_communication_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/allow_communication"
+                        />
+                </RelativeLayout>
                 <!--<Button-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
