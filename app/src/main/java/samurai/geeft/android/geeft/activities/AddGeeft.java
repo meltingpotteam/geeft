@@ -167,11 +167,22 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         Spinner spinner = (Spinner) findViewById(R.id.form_field_location_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
+                R.array.cities_array, R.layout.spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Spinner for Expiration Time////////////////////////////////////////////////////////////
+        Spinner spinner_exp_time = (Spinner) findViewById(R.id.expire_time_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter_exp_time = ArrayAdapter.createFromResource(this,
+                R.array.week_array, R.layout.spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter_exp_time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner_exp_time.setAdapter(adapter_exp_time);
         ////////////////////////////////////////////////////////////////////////////////////////////
     }
     /**

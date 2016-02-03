@@ -31,13 +31,15 @@
                 android:src="@drawable/ic_menu_camera_white_24dp"
                 android:layout_gravity="end|end"
                 android:background="#00ffffff"
-                android:paddingRight="15dp"
+                android:padding="15dp"
                 android:paddingBottom="10dp"
                 android:layout_alignBottom="@id/geeft_add_photo_frame"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"/>
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/geeft_add_photo_frame"
@@ -59,9 +61,9 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:padding="@dimen/activity_horizontal_margin"
                         android:background="#00ffffff"
-                        android:src="@drawable/ic_account_circle_black_24dp"/>
+                        android:src="@drawable/ic_object_given_form"/>
                     <EditText
                         android:id="@+id/fragment_add_geeft_form_name"
                         android:textColor="@android:color/black"
@@ -81,7 +83,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:padding="@dimen/activity_horizontal_margin"
                         android:background="#00ffffff"
                         android:src="@drawable/ic_description_black_24dp"/>
                     <!--<TextView-->
@@ -102,7 +104,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingTop="@dimen/activity_vertical_margin">
 
                     <!--<TextView-->
@@ -115,7 +117,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:padding="@dimen/activity_horizontal_margin"
                         android:background="#00ffffff"
                         android:src="@drawable/ic_location_on_black_24dp"/>
                     <!--<EditText-->
@@ -124,9 +126,33 @@
                         <!--android:hint="Where you want to consign the geeft"/>-->
                     <Spinner
                         android:id="@+id/form_field_location_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:spinnerMode="dropdown"
+                        >
 
+                    </Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/activity_vertical_margin">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/activity_horizontal_margin"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_av_timer_black_24dp"/>
+                    <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:hint="Where you want to consign the geeft"/>-->
+                    <Spinner
+                        android:id="@+id/expire_time_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:spinnerMode="dropdown"
+                        >
                     </Spinner>
                 </LinearLayout>
                 <RelativeLayout
