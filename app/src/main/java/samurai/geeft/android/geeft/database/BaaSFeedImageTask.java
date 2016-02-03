@@ -71,7 +71,9 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft = new Geeft();
                     mGeeft.setId(e.getId());
                     mGeeft.setUsername(e.getString("name"));
-                    mGeeft.setGeeftImage(e.getString("image"));
+                    mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                    //Append ad image url your session token!
+
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setTimeStamp(getCreationTimestamp(e));

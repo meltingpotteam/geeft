@@ -46,67 +46,75 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
-        BaasDocument doc = new BaasDocument("geeft");
-        doc.put("title",mTitle);
-        doc.put("description", mDescription);
-        doc.put("location",mLocation);
-        doc.put("close","false");
-        doc.put("name",getFacebookName());
-        doc.put("profilePic",getProfilePicFacebook());
-        String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
-        Log.d(TAG, "Timestamp is: " + timestamp);
-        doc.put("deadline", timestamp);
-        BaasFile image = new BaasFile();
-        BaasResult<BaasFile> resImage = image.uploadSync(mImage);
-        if(resImage.isSuccess()){
-            Log.d(TAG,"Image uploaded");
-        }
-        else{
-            Log.e(TAG,"Fatal error upload");
-            return false;
-        }
-        //file.grantAll(Grant.READ,"registered"
-        BaasResult<Void> resGrant = image.grantAllSync(Grant.READ, Role.REGISTERED);
-        if(resGrant.isSuccess()){
-            Log.d(TAG,"Granted");
-        }
-        else{
-            Log.e(TAG,"Fatal error grant");
-            return false;
-        }
-        doc.put("image", image.getStreamUri().toString());
-        //TODO Retrieve the link at image and put in doc,then save the doc and return true
-        BaasResult<BaasDocument> resDoc = doc.saveSync();
-        if(resDoc.isSuccess()){
-            Log.d(TAG,"Doc saved with success");
-            BaasResult<Void> resDocGrant = doc.grantAllSync(Grant.READ, Role.REGISTERED);
-            if(resDocGrant.isSuccess()){
-                Log.d(TAG,"Doc granted with success");
-                return true;
-            }
-            else{
-                Log.e(TAG,"Error with grant of doc");
+        if(BaasUser.current() !=null) {
+            BaasDocument doc = new BaasDocument("geeft");
+            doc.put("title", mTitle);
+            doc.put("description", mDescription);
+            doc.put("location", mLocation);
+            doc.put("close", "false");
+            doc.put("name", getFacebookName());
+            doc.put("profilePic", getProfilePicFacebook());
+            String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
+            Log.d(TAG, "Timestamp is: " + timestamp);
+            doc.put("deadline", timestamp);
+            BaasFile image = new BaasFile();
+            BaasResult<BaasFile> resImage = image.uploadSync(mImage);
+            if (resImage.isSuccess()) {
+                Log.d(TAG, "Image uploaded");
+                BaasResult<Void> resGrant = image.grantAllSync(Grant.READ, Role.REGISTERED);
+                if (resGrant.isSuccess()) {
+                    Log.d(TAG, "Granted");
+                    doc.put("image", getImageUrl(image));//TODO Now imageUrl is cutted,append in
+                    // another class your session token
+                    //TODO Retrieve the link at image and put in doc,then save the doc and return true
+                    BaasResult<BaasDocument> resDoc = doc.saveSync();
+                    if (resDoc.isSuccess()) {
+                        Log.d(TAG, "Doc saved with success");
+                        BaasResult<Void> resDocGrant = doc.grantAllSync(Grant.READ, Role.REGISTERED);
+                        if (resDocGrant.isSuccess()) {
+                            Log.d(TAG, "Doc granted with success");
+                            return true;
+                        } else {
+                            Log.e(TAG, "Error with grant of doc");
+                            return false;
+                        }
+                    } else {
+                        Log.e(TAG, "Error with doc");
+                        return false;
+                    }
+                } else {
+                    Log.e(TAG, "Fatal error grant");
+                    return false;
+                }
+            } else {
+                Log.e(TAG, "Fatal error upload");
                 return false;
             }
         }
         else{
-            Log.e(TAG,"Error with doc");
             return false;
         }
+
+
 
     }
 
     public String getFacebookName(){// return display name of user's profile
         String FbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
-        Log.d(TAG,"FB_Name is: "+ FbName);
+        Log.d(TAG, "FB_Name is: " + FbName);
         return FbName;
     }
     public String getProfilePicFacebook(){ // return link of user's profile picture
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");
-        Log.d(TAG,"FB_id is: " + id);
-        return "http://graph.facebook.com/"+id+"/picture";
+        Log.d(TAG, "FB_id is: " + id);
+        return "http://graph.facebook.com/" + id + "/picture";
+    }
 
+    public String getImageUrl(BaasFile image){
+        String streamUri = image.getStreamUri().toString();
+        String cropUri = streamUri.substring(0,112);
+        return cropUri;
     }
 
     @Override
