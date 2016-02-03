@@ -44,7 +44,8 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by gabriel-dev on 26/01/16.
- * Update by danybr-dev on 1/02/16
+ * Updated by danybr-dev on 1/02/16
+ * Updated by gabriel-dev on 3/02/16
  */
 
 public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
@@ -58,6 +59,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
     private Spinner mGeeftLocation;   //location of the geeft
+    private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
 
@@ -81,15 +83,23 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 //Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
 
                 //Things TODO before close the activity
+
                 String name = mGeeftTitle.getText().toString();
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
-                Log.d(TAG,"name:" + name + " description: " + description + " location:" +  location);
-                uploadToBB(name, description, location, mGeeftImage);
-                ///////////////////////////////////////
+                String exp_time = mGeeftExpirationTime.getSelectedItem().toString();
+                Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location + " expire time " + exp_time);
+                if(name.length() <= 1 || description.length() <= 1 || location == null || exp_time == null){
+                    Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else{
+                    uploadToBB(name, description, location, mGeeftImage);
 
-                finish();
-                return true;
+                    finish();
+                    return true;
+                }
+                ///////////////////////////////////////
         }
         return false;
 
@@ -114,6 +124,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
         this.mGeeftLocation = (Spinner) this.findViewById(R.id.form_field_location_spinner);
+        this.mGeeftExpirationTime = (Spinner) this.findViewById(R.id.expire_time_spinner);
         //Listener for te imageButton///////////////////////////////////////////////////////////////
         cameraButton = (ImageButton) findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +223,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             Log.e(TAG,"Fatal error while upload file");
         else {
             BaasFile file = new BaasFile();
+            //TODO: add the field "expire time"
             new BaaSUploadGeeft(getApplicationContext(), name,description,location,stream,this).execute();
         }
     }
