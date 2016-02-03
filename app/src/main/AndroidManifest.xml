@@ -45,11 +45,13 @@
         <activity android:name=".activities.MainActivity"/>
 
 
+        <activity android:name=".activities.MainActivity"/>>
 
         <!-- add geeft activity-->
         <activity android:name=".activities.AddGeeft"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.FullScreenViewActivity"/>
 
     </application>
 

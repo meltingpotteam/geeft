@@ -11,7 +11,6 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -92,14 +91,54 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     }
                     mGeeftList.add(0,mGeeft);
                     result = true;
-                }
-            } catch (com.baasbox.android.BaasException ex) {
-                Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
-                Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
-                return false;
+        if(BaasUser.current()!=null) {
+            String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
+            //find all links with the doc_id (User id <--> doc id )
+            Log.d(TAG, "Doc_id is: " + docId);
+            BaasQuery.Criteria query = BaasQuery.builder().where("out.id like '" + docId + "'").criteria();
+            BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
+            List<BaasLink> links;
+            if (resLinks.isSuccess()) {
+                links = resLinks.value();
+                Log.d(TAG, "Your links are here: " + links.size());
+            } else {
+                Log.e(TAG, "Error when retrieve links");
+                return false; // Don't continue if we are in this case
             }
-        } else if (baasResult.isFailed()) {
-            Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+            BaasQuery.Criteria paginate = BaasQuery.builder()
+                    .orderBy("_creation_date asc").criteria();
+            BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
+            if (baasResult.isSuccess()) {
+                try {
+                    for (BaasDocument e : baasResult.get()) {
+                        mGeeft = new Geeft();
+                        mGeeft.setId(e.getId());
+                        mGeeft.setUsername(e.getString("name"));
+                        mGeeft.setGeeftImage(e.getString("image"));
+                        mGeeft.setGeeftDescription(e.getString("description"));
+                        mGeeft.setUserProfilePic(e.getString("profilePic"));
+                        mGeeft.setTimeStamp(getCreationTimestamp(e));
+                        mGeeft.setUserLocation(e.getString("location"));
+                        mGeeft.setGeeftTitle(e.getString("title"));
+                        for (BaasLink l : links) {
+                            if (l.in().getId().equals(e.getId())) {
+                                // SETTA PRENOTE BUTTON TRUE
+                                mGeeft.setLinkId(l.getId());
+                                Log.d(TAG, "link id is: " + l.getId());
+                            }
+                        }
+                        mGeeftList.add(0, mGeeft);
+
+                        result = true;
+                    }
+                } catch (com.baasbox.android.BaasException ex) {
+                    Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            } else if (baasResult.isFailed()) {
+                Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+            }
         }
         return result;
     }
