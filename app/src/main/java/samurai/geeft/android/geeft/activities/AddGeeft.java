@@ -60,12 +60,13 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private TextView mGeeftDescription;   //description of the object
     private Spinner mGeeftLocation;   //location of the geeft
     private Spinner mGeeftExpirationTime; //expire time of the Geeft
+    private Spinner mGeeftCategory; //Category of the Geeft
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
 
     private File mGeeftImage;
-    //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
 
+    //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_geeft_fragment_toolbar_menu, menu);
@@ -82,8 +83,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             case R.id.fragment_add_geeft_ok_button:
                 //Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
 
-                //Things TODO before close the activity
-
+                //Things TODO: Send to baasbox also the "Expire time" and "Category"
                 String name = mGeeftTitle.getText().toString();
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
@@ -95,7 +95,6 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 }
                 else{
                     uploadToBB(name, description, location, mGeeftImage);
-
                     finish();
                     return true;
                 }
@@ -105,7 +104,6 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
 //        return super.onOptionsItemSelected(item);
     }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -118,13 +116,12 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         toolbar.setTitle("Add Geeft");
         setSupportActionBar(toolbar);
 
-        //TODO
-
         this.mGeeftImageView = (ImageView) this.findViewById(R.id.geeft_add_photo_frame);
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
         this.mGeeftLocation = (Spinner) this.findViewById(R.id.form_field_location_spinner);
         this.mGeeftExpirationTime = (Spinner) this.findViewById(R.id.expire_time_spinner);
+        this.mGeeftCategory = (Spinner) this.findViewById(R.id.categories_spinner);
         //Listener for te imageButton///////////////////////////////////////////////////////////////
         cameraButton = (ImageButton) findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -195,6 +192,17 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         // Apply the adapter to the spinner
         spinner_exp_time.setAdapter(adapter_exp_time);
         ////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Spinner for the Geeft Categories/////////////////////////////////////////////////////////
+        Spinner spinner_categories = (Spinner) findViewById(R.id.categories_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter_categories = ArrayAdapter.createFromResource(this,
+                R.array.categories_array, R.layout.spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter_categories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner_categories.setAdapter(adapter_categories);
+        ////////////////////////////////////////////////////////////////////////////////////////////
     }
     /**
      * positioning uploaded; it works now: the image fit the central part of the imageView in the form
@@ -223,7 +231,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             Log.e(TAG,"Fatal error while upload file");
         else {
             BaasFile file = new BaasFile();
-            //TODO: add the field "expire time"
+            //TODO: add the field "expire time" and "category"
             new BaaSUploadGeeft(getApplicationContext(), name,description,location,stream,this).execute();
         }
     }
