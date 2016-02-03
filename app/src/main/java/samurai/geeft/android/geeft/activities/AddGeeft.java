@@ -231,7 +231,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
             Log.e(TAG,"Fatal error while upload file");
         else {
 //            BaasFile file = new BaasFile();
-            //TODO: add the field "expire time" and "category"
+            //TODO: add the field "automatic_selection" and "allow_comunication"
             new BaaSUploadGeeft(getApplicationContext(), name,description,location,streamImage, expTime, category, this).execute();
         }
     }

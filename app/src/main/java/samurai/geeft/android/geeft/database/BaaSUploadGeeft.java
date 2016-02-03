@@ -64,6 +64,8 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
             Log.d(TAG, "Timestamp is: " + timestamp);
             doc.put("deadline", timestamp);
+            doc.put("exptime", mExpTime);
+            doc.put("category", mCategory);
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mImage);
             if (resImage.isSuccess()) {
