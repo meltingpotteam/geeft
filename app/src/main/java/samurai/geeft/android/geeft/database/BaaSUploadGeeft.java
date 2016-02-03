@@ -67,9 +67,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                 BaasResult<Void> resGrant = image.grantAllSync(Grant.READ, Role.REGISTERED);
                 if (resGrant.isSuccess()) {
                     Log.d(TAG, "Granted");
-                    doc.put("image", getImageUrl(image));//TODO Now imageUrl is cutted,append in
+                    doc.put("image", getImageUrl(image));// Now imageUrl is cutted,append in
                     // another class your session token
-                    //TODO Retrieve the link at image and put in doc,then save the doc and return true
+                    //Retrieve the link at image and put in doc,then save the doc and return true
                     BaasResult<BaasDocument> resDoc = doc.saveSync();
                     if (resDoc.isSuccess()) {
                         Log.d(TAG, "Doc saved with success");

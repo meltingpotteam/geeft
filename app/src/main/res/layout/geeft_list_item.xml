@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/geeft_info_button"
-                android:src="@drawable/ic_location_on_black_24dp"
+                android:src="@drawable/ic_location_on"
                 android:background="@drawable/ripple_effect"
                 android:padding="@dimen/activity_vertical_margin"
                 android:clickable="true"

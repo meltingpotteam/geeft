@@ -9,6 +9,7 @@ import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
+import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.json.JsonArray;
 import com.baasbox.android.json.JsonObject;
@@ -48,6 +49,8 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                     Log.d(TAG,"error while linking");
                 }*/
         //-----------------------
+        BaasUser currentUser = BaasUser.current();
+
         BaasResult<BaasDocument> resDoc = BaasDocument.fetchSync("linkable_users", mDocUserId);
         if (resDoc.isSuccess()) { //fetch DocUser linked to USER (we have not the possibility
             // to directly link to the user)
@@ -62,8 +65,9 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
             return false;
 
         }
-        if (mItem.isSelected()) { // Selected button, I reserve (create the link FROM doc of user TO geeft)
-             //This id document associated to Current User
+        if(currentUser != null) {
+            if (mItem.isSelected()) { // Selected button, I reserve (create the link FROM doc of user TO geeft)
+                //This id document associated to Current User
                 BaasResult<BaasLink> resLink = BaasLink.createSync("reserve", mItem.getId(), mDocUser.getId());
                 //TODO : BUG: create(linkname,source-id,dest-id) but source-id is in and dest-id is out.
                 if (resLink.isSuccess()) { //Link created
@@ -75,44 +79,56 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
 
                     mJSONUserLinks.add(value.getId());
                     //Log.d(TAG,mJSONUserLinks.toString());
-                    mDocUser.put("prenoteLinks",mJSONUserLinks);
+                    mDocUser.put("prenoteLinks", mJSONUserLinks);
                     BaasResult<BaasDocument> resResultSaved = mDocUser.saveSync();
                     if (resResultSaved.isSuccess()) { //linkId information stored in docUser
                         Log.d(TAG, "Links Id saved in DocUser");
                         mItem.setLinkId(value.getId()); //Set new link for referenced item
-                                                        // assumed is null
+                        // assumed is null
                         //Toast.makeText(mContext, "Ti sei prenotato con successo", Toast.LENGTH_LONG).show();
-                        return true;
+                        long submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
+                        submits_active++; //Created link,increment currentUser's submits_active field
+                        currentUser.getScope(BaasUser.Scope.REGISTERED).put("submits_active",submits_active);
+                        BaasResult<BaasUser> resUser = currentUser.saveSync();
+                        if(resUser.isSuccess()) {
+                            return true;
+                        }
+                        else{
+                            Log.e(TAG,"Cannot insert new valure of submits_active");
+                            return false;
+                        }
                     } else {
                         Log.e(TAG, "Error with save Link id in DocUser");
                         //Toast.makeText(mContext, "E' accaduto un errore", Toast.LENGTH_LONG).show();
                         return false;
                     }
-                }
-                else {
+                } else {
                     Log.e(TAG, "Error with creation link");
                     //Toast.makeText(mContext, "E' accaduto un errore", Toast.LENGTH_LONG).show();
                     return false;
                 }
-        } else { //Deselected button,delete the link reserve ,then clone the link renamed in wasReserved
-            BaasResult<Void> resDelLink = BaasLink.withId(mItem.getLinkId()).deleteSync();
-            if (resDelLink.isSuccess()) {
-                Log.d("TAG", "Link has been deleted");
-                mItem.setLinkId(""); //Link is null for referenced item
-                BaasResult<BaasLink> resLink = BaasLink.createSync("wasReserved", mItem.getId(), mDocUser.getId());
-                if (resLink.isSuccess()) { //Link created
-                    Log.d(TAG, "Link cloned");
-                    return true;
-                }
-                else{
-                    Log.e(TAG, "Link NOT cloned");
+            } else { //Deselected button,delete the link reserve ,then clone the link renamed in wasReserved
+                BaasResult<Void> resDelLink = BaasLink.withId(mItem.getLinkId()).deleteSync();
+                if (resDelLink.isSuccess()) {
+                    Log.d("TAG", "Link has been deleted");
+                    mItem.setLinkId(""); //Link is null for referenced item
+                    BaasResult<BaasLink> resLink = BaasLink.createSync("wasReserved", mItem.getId(), mDocUser.getId());
+                    if (resLink.isSuccess()) { //Link created
+                        Log.d(TAG, "Link cloned");
+                        return true;
+                    } else {
+                        Log.e(TAG, "Link NOT cloned");
+                        return false;
+                    }
+                } else {
+                    Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
                     return false;
                 }
             }
-            else{
-                Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
+        }
+        else{ //currentUser is null
+            Log.e(TAG,"User is NULL");
                 return false;
-            }
         }
 
     }

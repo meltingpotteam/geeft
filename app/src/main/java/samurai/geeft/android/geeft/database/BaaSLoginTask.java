@@ -98,35 +98,48 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
             if (baasResult.isSuccess()) {
                 //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id"));
                 BaasUser user = BaasUser.current();
-                String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-                if(UserDocId == null || UserDocId.equals("")) {
-                    BaasDocument doc = new BaasDocument("linkable_users");
-                    JsonArray JSONUserLinks = new JsonArray();
-                    doc.put("prenoteLinks",JSONUserLinks);
-                    BaasResult<BaasDocument> resDoc = doc.saveSync();
-                    if(resDoc.isSuccess()){
-                        Log.d(TAG, "Doc ID is: " + doc.getId());
-                        user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
-                        BaasResult<BaasUser> resUser = user.saveSync();
-                        if(resUser.isSuccess()){
-                            Log.d(TAG, "New user, document created");
-                            return true;
-                        }
-                        else{
-                            Log.e(TAG,"FATAL ERROR userScope not update");
+                if (user != null) {
+                    String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                    if (UserDocId == null || UserDocId.equals("")) {
+                        BaasDocument doc = new BaasDocument("linkable_users");
+                        JsonArray JSONUserLinks = new JsonArray();
+                        doc.put("prenoteLinks", JSONUserLinks);
+                        BaasResult<BaasDocument> resDoc = doc.saveSync();
+                        if (resDoc.isSuccess()) {
+                            Log.d(TAG, "Doc ID is: " + doc.getId());
+                            //Insert in doc_id the id of docUser,linked with geefts
+                            user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
+                            //Insert Feedback,first registration is 5
+                            user.getScope(BaasUser.Scope.REGISTERED).put("feedback",5);
+                            //Insert n_given,first registration is 0
+                            user.getScope(BaasUser.Scope.REGISTERED).put("n_given",0);
+                            //Insert n_received,first registration is 0
+                            user.getScope(BaasUser.Scope.REGISTERED).put("n_received",0);
+                            //Insert submits_without,first registration is 0
+                            user.getScope(BaasUser.Scope.REGISTERED).put("submits_without",0);
+                            //Insert submits_active,first registration is 0
+                            user.getScope(BaasUser.Scope.REGISTERED).put("submits_active",0);
+                            BaasResult<BaasUser> resUser = user.saveSync();
+                            if (resUser.isSuccess()) {
+                                Log.d(TAG, "New user, document created");
+                                return true;
+                            } else {
+                                Log.e(TAG, "FATAL ERROR userScope not update");
+                                return false;
+                            }
+                        } else {
+                            Log.e(TAG, "FATAL ERROR document not created");
                             return false;
                         }
+                    } else {
+                        Log.d(TAG, "User already registered");
+                        return true;
                     }
-                    else{
-                        Log.e(TAG,"FATAL ERROR document not created");
-                        return false;
-                    }
-                }
-                else{
-                    Log.d(TAG,"User already registered");
-                    return true;
+                }else{ // if user is null
+                    Log.e(TAG,"Error,user is NULL!");
                 }
             }
+
             else if (baasResult.isCanceled()) {
                 if (mBaasProvider.equals(FACEBOOK))
                     this.publishProgress(R.string.toast_fb_login_canc);

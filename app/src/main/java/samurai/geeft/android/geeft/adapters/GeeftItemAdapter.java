@@ -156,7 +156,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         if (TextUtils.isEmpty(item.getUserLocation())) {
             // location is empty, remove from view location txt and button
             holder.mUserLocationTextView.setVisibility(View.GONE);
-            holder.mLocationButton.setVisibility(View.GONE);
+            holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
+            holder.mLocationButton.setClickable(false);
         }
         setAnimation(holder.mContainer);
 
@@ -166,7 +167,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
         //--------------------------- Prenote button implementation
         // TODO: Use this Asyntask to check if is pressed or not,and create or delete link
-
+        // TODO: Show Dialog to limit damage (ask at Daniele)
 
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
