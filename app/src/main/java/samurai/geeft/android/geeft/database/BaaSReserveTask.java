@@ -29,7 +29,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
     private JsonArray mJSONUserLinks;
-
+    private long submits_active;
 
     public BaaSReserveTask(Context context, String docUserId, Geeft item, TaskCallbackBoolean callback) {
         mContext = context;
@@ -86,7 +86,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                         mItem.setLinkId(value.getId()); //Set new link for referenced item
                         // assumed is null
                         //Toast.makeText(mContext, "Ti sei prenotato con successo", Toast.LENGTH_LONG).show();
-                        long submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
+                        submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
                         submits_active++; //Created link,increment currentUser's submits_active field
                         currentUser.getScope(BaasUser.Scope.REGISTERED).put("submits_active",submits_active);
                         BaasResult<BaasUser> resUser = currentUser.saveSync();
@@ -115,7 +115,17 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                     BaasResult<BaasLink> resLink = BaasLink.createSync("wasReserved", mItem.getId(), mDocUser.getId());
                     if (resLink.isSuccess()) { //Link created
                         Log.d(TAG, "Link cloned");
-                        return true;
+                        submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
+                        submits_active--; //Created link,decrement currentUser's submits_active field
+                        currentUser.getScope(BaasUser.Scope.REGISTERED).put("submits_active",submits_active);
+                        BaasResult<BaasUser> resUser = currentUser.saveSync();
+                        if(resUser.isSuccess()) {
+                            return true;
+                        }
+                        else{
+                            Log.e(TAG,"Cannot insert new valure of submits_active");
+                            return false;
+                        }
                     } else {
                         Log.e(TAG, "Link NOT cloned");
                         return false;
