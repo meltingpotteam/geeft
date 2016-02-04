@@ -5,7 +5,7 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="10dp"
     cardView:cardCornerRadius="2dp"
     cardView:cardElevation="4dp"
     cardView:cardPreventCornerOverlap="true"
@@ -95,8 +95,6 @@
                 android:textColor="#222"
                 android:textStyle="bold"
                 android:textSize="@dimen/geeft_title_text_size" />
-
-
 
             <TextView
                 android:id="@+id/geeft_description"

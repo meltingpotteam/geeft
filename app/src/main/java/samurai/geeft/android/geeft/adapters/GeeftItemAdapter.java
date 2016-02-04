@@ -37,7 +37,8 @@ import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 /**
  * Created by ugookeadu on 20/01/16.
  * adapter for GeeftListFragment Recyclerview
- * Update by danybr-dev on 2/02/16
+ * Updated by danybr-dev on 2/02/16
+ * Updated by gabriel-dev on 04/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBoolean {
 
@@ -142,23 +143,36 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         holder.mTimeStampTextView.setText(timeAgo);
 
+        /**The User are obliged to set a title, a description, a position, a location and an image.
+         * TODO verify this part if the design of the application will change
+         * in any case is better to use "if(holder.mTimeStampTextView.getText != null)"
+         * instead "!TextUtils.isEmpty(item.getGeeftTitle())". It could generate some
+         * false positives and it is redundant with the previous declaration
+         * [gabriel-dev]
+         */
+//        // Check for empty geeft title
+//        if (!TextUtils.isEmpty(item.getGeeftTitle()))
+//            // status is empty, remove from view
+//            holder.mGeeftTitleTextView.setVisibility(View.GONE);
+//
+//        // Check for empty geeft description
+//        if (TextUtils.isEmpty(item.getGeeftDescription()))
+//            // description is empty, remove from view
+//            holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
 
-        // Chcek for empty geeft title
-        if (!TextUtils.isEmpty(item.getGeeftTitle()))
-            // status is empty, remove from view
-            holder.mGeeftTitleTextView.setVisibility(View.GONE);
-
-        // Chcek for empty geeft description
-        if (TextUtils.isEmpty(item.getGeeftDescription()))
-            // description is empty, remove from view
-            holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
-
-        if (TextUtils.isEmpty(item.getUserLocation())) {
+//        if (TextUtils.isEmpty(item.getUserLocation())) {
+//            // location is empty, remove from view location txt and button
+//            holder.mUserLocationTextView.setVisibility(View.GONE);
+//            holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
+//            holder.mLocationButton.setClickable(false);
+//        }
+        if (holder.mUserLocationTextView.getText() == null) {
             // location is empty, remove from view location txt and button
             holder.mUserLocationTextView.setVisibility(View.GONE);
             holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
             holder.mLocationButton.setClickable(false);
         }
+
         setAnimation(holder.mContainer);
 
         if(item.isSelected())
