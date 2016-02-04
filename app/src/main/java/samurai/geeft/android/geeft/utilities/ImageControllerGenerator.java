@@ -41,14 +41,44 @@ public class ImageControllerGenerator {
         if(uriString==null)
             uriString="";
         uri= Uri.parse(uriString);
+        /*
+        Postprocessor redMeshPostprocessor = new BasePostprocessor() {
+            @Override
+            public String getName() {
+                return "redMeshPostprocessor";
+            }
+
+            @Override
+            public CloseableReference<Bitmap> process(
+                    Bitmap sourceBitmap,
+                    PlatformBitmapFactory bitmapFactory) {
+                CloseableReference<Bitmap> bitmapRef = bitmapFactory.createBitmap(
+                        sourceBitmap.getWidth() ,
+                        sourceBitmap.getHeight() );
+                try {
+                    Bitmap destBitmap = bitmapRef.get();
+                    for (int x = 0; x < destBitmap.getWidth(); x++) {
+                        for (int y = 0; y < destBitmap.getHeight(); y++) {
+                            destBitmap.setPixel(x, y, sourceBitmap.getPixel(x, y));
+                        }
+                    }
+                    return CloseableReference.cloneOrNull(bitmapRef);
+                } finally {
+                    CloseableReference.closeSafely(bitmapRef);
+                }
+            }
+        };*/
 
         ImageRequest request = ImageRequestBuilder
-                .newBuilderWithSource(uri).
-                setProgressiveRenderingEnabled(true)
+                .newBuilderWithSource(uri)
+                .setProgressiveRenderingEnabled(true)
                 .build();
+
         DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(request).setRetainImageOnFailure(true)
+                .setImageRequest(request)
+                .setRetainImageOnFailure(true)
                 .setOldController(simpleDraweeView.getController())
+                .setTapToRetryEnabled(true)
                 .build();
         GenericDraweeHierarchyBuilder builder =
                 new GenericDraweeHierarchyBuilder(context.getResources());
@@ -59,4 +89,5 @@ public class ImageControllerGenerator {
         simpleDraweeView.setController(controller);
         simpleDraweeView.setHierarchy(hierarchy);
     }
+
 }
