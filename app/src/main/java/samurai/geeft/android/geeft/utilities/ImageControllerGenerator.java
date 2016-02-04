@@ -54,7 +54,7 @@ public class ImageControllerGenerator {
                 new GenericDraweeHierarchyBuilder(context.getResources());
         GenericDraweeHierarchy hierarchy = builder
                 .setFadeDuration(300)
-                .setPlaceholderImage(context.getResources().getDrawable(R.drawable.ic_image_placeholder))
+                .setPlaceholderImage(context.getResources().getDrawable(R.drawable.ic_image_placeholder, null))
                 .build();
         simpleDraweeView.setController(controller);
         simpleDraweeView.setHierarchy(hierarchy);

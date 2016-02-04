@@ -148,6 +148,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 //"dialog.findVie..." instead "this.findView..."
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
                 mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
+
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
                 //                dialog.setMessage("Some information that we can take from the facebook shared one");
