@@ -101,6 +101,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
+
+
+            //Text Expander///////////////
+            mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mGeeftDescriptionTextView.setSingleLine(false);
+                }
+            });
+            //////////////////////////////
         }
 
     }
@@ -126,7 +136,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         // - replace the contents of the view with that element
         holder.mUsernameTextView.setText(item.getUsername());
+
         holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
+        holder.mGeeftDescriptionTextView.setSingleLine(true);
+        holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
+
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());
         holder.mUserLocationTextView.setText(item.getUserLocation());
