@@ -151,7 +151,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * [gabriel-dev]
          */
 //        // Check for empty geeft title
-//        if (!TextUtils.isEmpty(item.getGeeftTitle()))
+//        if (TextUtils.isEmpty(item.getGeeftTitle()))
 //            // status is empty, remove from view
 //            holder.mGeeftTitleTextView.setVisibility(View.GONE);
 //
