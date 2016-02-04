@@ -58,7 +58,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("title", mTitle);
             doc.put("description", mDescription);
             doc.put("location", mLocation);
-            doc.put("close", "false");
+            doc.put("close", false);
             doc.put("name", getFacebookName());
             doc.put("profilePic", getProfilePicFacebook());
             String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
