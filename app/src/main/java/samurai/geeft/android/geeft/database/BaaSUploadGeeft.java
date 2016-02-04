@@ -65,7 +65,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             Log.d(TAG, "Timestamp is: " + timestamp);
             doc.put("deadline", timestamp);
             doc.put("exptime", mExpTime);
-            doc.put("category", mCategory);
+            doc.put("category", mCategory.toLowerCase());
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mImage);
             if (resImage.isSuccess()) {

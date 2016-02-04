@@ -6,6 +6,7 @@ package samurai.geeft.android.geeft.models;
 public class Geeft {
     private String timeStamp;
     private String deadLine;
+    private String exptime;
     private String userLocation;
     private String username;
     private String geeftDescription;
@@ -20,13 +21,14 @@ public class Geeft {
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, String timeStamp, String deadLine, String userLocation,
+                 boolean isSelected, String timeStamp, String exptime, String deadLine, String userLocation,
                  String username, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
         this.isSelected = isSelected;
         this.timeStamp = timeStamp;
+        this.exptime = exptime;
         this.userLocation = userLocation;
         this.username = username;
         this.userProfilePic = userProfilePic;
@@ -81,6 +83,14 @@ public class Geeft {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getExpTime() {
+        return exptime;
+    }
+
+    public void setExpTime(String exptime) {
+        this.exptime = exptime;
     }
 
     public String getUserLocation() {

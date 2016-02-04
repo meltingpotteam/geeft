@@ -76,6 +76,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setTimeStamp(getCreationTimestamp(e));
+                    mGeeft.setExpTime(e.getString("exptime"));
                     mGeeft.setUserLocation(e.getString("location"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for (BaasLink l : links) {

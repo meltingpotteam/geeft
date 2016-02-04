@@ -67,6 +67,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         private final int MAX_SELECT = 5;//Max number of prenotation for each users
         
         public TextView mTimeStampTextView;
+        public TextView mExpireTime;
         public TextView mUserLocationTextView;
         public TextView mUsernameTextView;
         public TextView mGeeftDescriptionTextView;
@@ -93,6 +94,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
             mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
+            mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
 
             mUserProfilePic = (SimpleDraweeView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.geeft_image);
@@ -143,6 +145,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());
+        holder.mExpireTime.setText(item.getExpTime());
         holder.mUserLocationTextView.setText(item.getUserLocation());
         holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
 
