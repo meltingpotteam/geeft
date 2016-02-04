@@ -1,7 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,10 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasFile;
-import com.baasbox.android.BaasHandler;
-import com.baasbox.android.BaasResult;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -147,16 +141,8 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
                 alertDialog.setView(dialogLayout);
-                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //here you can add functions
-                        dialog.dismiss();
-                    }
-                });
 
                 //On click, the user visualize can visualize some infos about the geefter
-
                 AlertDialog dialog = alertDialog.create();
                 //the context i had to use is the context of the dialog! not the context of the app.
                 //"dialog.findVie..." instead "this.findView..."

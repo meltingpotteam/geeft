@@ -270,6 +270,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 mContext.startActivity(intent);
             }
         });
+
     }
 
     @Override
