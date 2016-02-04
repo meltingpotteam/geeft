@@ -12,6 +12,8 @@ public class Geeft {
     private String geeftDescription;
     private String geeftTitle;
     private String geeftImage;
+    private boolean automaticSelection;
+    private boolean allowCommunication;
     private String id;
     private boolean isSelected;
     private String userProfilePic;
@@ -21,7 +23,7 @@ public class Geeft {
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, String timeStamp, String exptime, String deadLine, String userLocation,
+                 boolean isSelected, String timeStamp, String exptime, boolean automaticSelection, boolean allowCommunication, String deadLine, String userLocation,
                  String username, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
@@ -29,6 +31,8 @@ public class Geeft {
         this.isSelected = isSelected;
         this.timeStamp = timeStamp;
         this.exptime = exptime;
+        this.automaticSelection = automaticSelection;
+        this.allowCommunication = allowCommunication;
         this.userLocation = userLocation;
         this.username = username;
         this.userProfilePic = userProfilePic;
@@ -92,6 +96,23 @@ public class Geeft {
     public void setExpTime(String exptime) {
         this.exptime = exptime;
     }
+
+    public boolean isAllowCommunication() {
+        return this.allowCommunication;
+    }
+
+    public void setAllowCommunication(boolean allowCommunication) {
+        this.allowCommunication = allowCommunication;
+    }
+
+    public boolean isAutomaticSelection() {
+        return this.automaticSelection;
+    }
+
+    public void setAutomaticSelection(boolean automaticSelection) {
+        this.automaticSelection = automaticSelection;
+    }
+
 
     public String getUserLocation() {
         return userLocation;

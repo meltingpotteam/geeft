@@ -31,6 +31,8 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     String mLocation;
     String mExpTime;
     String mCategory;
+    boolean mAutomaticSelection;
+    boolean mAllowComunication;
     byte[] mImage;
     TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
@@ -38,7 +40,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     /**
      * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
      **/
-    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, String expTime, String category, TaskCallbackBoolean callback) {
+    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, String expTime, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
         mDescription = description;
@@ -46,6 +48,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mImage = image;
         mExpTime = expTime;
         mCategory = category;
+
+        mAutomaticSelection = automaticSelection;
+        mAllowComunication = allowCommunication;
 
         mCallback = callback;
         Log.d(TAG, "Lanciato AsyncTask");
@@ -66,6 +71,10 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("deadline", timestamp);
             doc.put("exptime", mExpTime);
             doc.put("category", mCategory.toLowerCase());
+            // send the field fo allow communication and automatic selection; remember to manage them
+            // in the BassReserveTask
+            doc.put("automaticSelection", mAutomaticSelection);
+            doc.put("allowCommunication", mAllowComunication);
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mImage);
             if (resImage.isSuccess()) {

@@ -194,6 +194,7 @@
                         android:id="@+id/automatic_selection_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/automatic_geefter_selection"
                         android:layout_alignRight="@+id/automatic_geefter_selection"
                         />
                 </RelativeLayout>
@@ -214,6 +215,7 @@
                         android:id="@+id/allow_communication_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/allow_communication"
                         android:layout_alignRight="@+id/allow_communication"
                         />
                 </RelativeLayout>
