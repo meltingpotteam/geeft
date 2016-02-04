@@ -1,8 +1,11 @@
 package samurai.geeft.android.geeft.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -30,7 +33,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
@@ -39,7 +42,7 @@ import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
  * adapter for GeeftListFragment Recyclerview
  * Update by danybr-dev on 2/02/16
  */
-public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBoolean {
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder {
 
     private final LayoutInflater inflater;
 
@@ -52,7 +55,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private int lastSize = 0;
     private Context mContext;
 
-    private boolean pressed;
+    private ProgressDialog mProgress;
+    private long mLastClickTime = 0;
 
     //costructor
     public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
@@ -172,16 +176,18 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-                Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
-                item.setIsSelected(!item.isSelected());
-                if (item.isSelected())
-                    holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
-                else
-                    holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
-                new BaaSReserveTask(mContext,docUserId,item,GeeftItemAdapter.this).execute();
-
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
             }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            mProgress = ProgressDialog.show(mContext, "Attendere...",
+                    "Prenotazione in corso", true);
+            String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+            Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
+            item.setIsSelected(!item.isSelected());
+            new BaaSReserveTask(mContext,docUserId,item,holder,GeeftItemAdapter.this).execute();
+
+        }
         });
 
         //--------------------- Location Button implementation
@@ -263,12 +269,24 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             lastSize++;
         }
     }
-    public void done(boolean result){
+    public void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item){
         //enables all social buttons
+        mProgress.dismiss();
         if(!result){
-            //Retry?!
+            new AlertDialog.Builder(mContext)
+                    .setTitle("Errore")
+                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
         }
-
+        else {
+            new AlertDialog.Builder(mContext)
+                    .setTitle("Successo")
+                    .setMessage("Operazione completata con successo.").show();
+            Log.d("NOTATO",""+item.isSelected());
+            if(item.isSelected())
+                holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
+            else
+                holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
+        }
     }
     /*private void dialogShow(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,

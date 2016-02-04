@@ -3,18 +3,16 @@ package samurai.geeft.android.geeft.database;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.json.JsonArray;
-import com.baasbox.android.json.JsonObject;
 
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -26,16 +24,19 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private Context mContext;
     private String mDocUserId;
     private Geeft mItem;
-    private TaskCallbackBoolean mCallback;
+    private TaskCallbackBooleanHolder mCallback;
     private BaasDocument mDocUser;
     private JsonArray mJSONUserLinks;
+    private GeeftItemAdapter.ViewHolder mHolder;
 
 
-    public BaaSReserveTask(Context context, String docUserId, Geeft item, TaskCallbackBoolean callback) {
+    public BaaSReserveTask(Context context, String docUserId, Geeft item,GeeftItemAdapter.ViewHolder holder,
+                           TaskCallbackBooleanHolder callback) {
         mContext = context;
         mDocUserId = docUserId;
         mItem = item;
         mCallback = callback;
+        mHolder = holder;
         Log.d(TAG,"Lanciato AsyncTask");
     }
 
@@ -137,6 +138,6 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result);
+        mCallback.done(result,mHolder, mItem);
     }
 }
