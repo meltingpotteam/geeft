@@ -3,11 +3,12 @@ package samurai.geeft.android.geeft.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
@@ -34,6 +36,7 @@ import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -44,12 +47,16 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBoolean {
 
     private final LayoutInflater inflater;
+
     private final static String TAG ="GeeftAdapter";
+
     //list containing the geefts and avoiding null pointer exception
     private List<Geeft> mGeeftList =
             Collections.emptyList();
+
     private int lastSize = 0;
     private Context mContext;
+
     private boolean pressed;
 
     //costructor
@@ -66,6 +73,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mTimeStampTextView;
         public TextView mExpireTime;
         public TextView mUserLocationTextView;
+        public TextView mUserCapTextView;
         public TextView mUsernameTextView;
         public TextView mGeeftDescriptionTextView;
         public TextView mGeeftTitleTextView;
@@ -76,6 +84,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mPrenoteButton;
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
+        public ImageButton mSignalisationButton;
 
         public CardView mContainer;
 
@@ -90,6 +99,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
             mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
+            mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
             mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
 
@@ -101,6 +111,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
 
+            mSignalisationButton = (ImageButton) itemView.findViewById(R.id.geeft_signalisation);
 
             //Text Expander///////////////
             mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
@@ -143,13 +154,17 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());
         holder.mExpireTime.setText(item.getExpTime());
+
         holder.mUserLocationTextView.setText(item.getUserLocation());
 
+        holder.mUserCapTextView.setText(item.getUserCap());
+        //TODO add the control of the cap matching in the city selected; sand in the maps tracking
         Picasso.with(mContext).load(item.getGeeftImage()).fit()
                 .centerCrop().into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
         Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                 .centerCrop().into(holder.mUserProfilePic);
+
 
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
@@ -240,7 +255,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         final Uri app_url = Uri.parse(holder.app_url);
         final Uri imageUrl = holder.mGeeftImageUri;
 
-
+        //Share Button Implementation----------------------
         holder.mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,7 +276,17 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             }
         });
+        //-------------------------------------------------
 
+        //Signalization button Implementation--------------
+        holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO implement the behaviour of the signalization button
+                Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+            }
+        });
+        //-------------------------------------------------
         holder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,10 +296,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 mContext.startActivity(intent);
             }
         });
-
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        int height = metrics.heightPixels;
-        int width = metrics.widthPixels;
 
     }
 
@@ -292,7 +313,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         if ((mGeeftList.size()-lastSize)>0)
         {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-            animation.setDuration(370);
+            animation.setDuration(350);
             viewToAnimate.startAnimation(animation);
             lastSize++;
         }

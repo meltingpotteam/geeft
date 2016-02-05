@@ -33,8 +33,9 @@
             android:background="@android:color/darker_gray"
         />
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.9"
             android:orientation="vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:id="@+id/geefter">
@@ -55,16 +56,39 @@
                 android:textColor="@android:color/darker_gray"
                 android:layout_height="wrap_content"
                 android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/location"
-                android:text="location"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:layout_height="wrap_content"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/location"
+                    android:text="location"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/location_cap"
+                    android:text="cap"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp" />
+            </LinearLayout>
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/geeft_signalisation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:src="@drawable/ic_flag_black_24dp"
+            android:background="#00ffffff"
+            android:layout_gravity="top"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/geeft_detail"
@@ -96,6 +120,7 @@
                     android:layout_height="match_parent"
                     android:paddingEnd="2dp"
                     android:paddingRight="2dp"
+                    android:paddingLeft="2dp"
                     android:text="remaining time"
                     android:textColor="@color/white"
                     />

@@ -14,6 +14,7 @@
 
     <color name="colorAccent">#536DFE</color>
     <color name="colorSubAccent">#394cb7</color>
+    <color name="colorHintAccent">#d4374aaf</color>
 
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>

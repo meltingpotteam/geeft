@@ -11,6 +11,9 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,8 +41,6 @@
                 android:layout_alignParentEnd="true"/>
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/geeft_add_photo_frame"
@@ -66,10 +67,11 @@
                         android:src="@drawable/ic_object_given_form"/>
                     <EditText
                         android:id="@+id/fragment_add_geeft_form_name"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimaryText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/add_gift_name_hint"
+                        android:textColorHint="@color/colorHintAccent"
                         />
                 </LinearLayout>
 
@@ -96,16 +98,18 @@
 
                     <EditText
                         android:id="@+id/fragment_add_geeft_form_description"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimaryText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/add_geeft_description_hint"
+                        android:textColorHint="@color/colorHintAccent"
                         />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="@dimen/activity_vertical_margin">
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal">
 
                     <!--<TextView-->
                         <!--android:layout_width="match_parent"-->
@@ -124,14 +128,29 @@
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="match_parent"-->
                         <!--android:hint="Where you want to consign the geeft"/>-->
-                    <Spinner
-                        android:id="@+id/form_field_location_spinner"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:spinnerMode="dropdown"
-                        >
-
-                    </Spinner>
+                        android:layout_height="match_parent">
+                        <Spinner
+                            android:id="@+id/form_field_location_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.7"
+                            android:spinnerMode="dropdown"
+                            >
+                        </Spinner>
+                        <EditText
+                            android:id="@+id/form_field_location_cap"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:textColor="@color/colorPrimaryText"
+                            android:maxLength="5"
+                            android:inputType="number"
+                            android:hint="CAP zona"
+                            android:textColorHint="@color/colorHintAccent"/>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

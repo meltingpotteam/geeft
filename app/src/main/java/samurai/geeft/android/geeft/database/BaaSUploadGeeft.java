@@ -23,6 +23,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     String mTitle;
     String mDescription;
     String mLocation;
+    String mCap;
     String mExpTime;
     String mCategory;
     boolean mAutomaticSelection;
@@ -34,11 +35,12 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     /**
      * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
      **/
-    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, String expTime, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
+    public BaaSUploadGeeft(Context context, String title, String description,String location, String cap, byte[] image, String expTime, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
         mDescription = description;
         mLocation = location;
+        mCap = cap;
         mImage = image;
         mExpTime = expTime;
         mCategory = category;
@@ -57,6 +59,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("title", mTitle);
             doc.put("description", mDescription);
             doc.put("location", mLocation);
+            doc.put("cap", mCap);
             doc.put("close", "false");
             doc.put("name", getFacebookName());
             doc.put("profilePic", getProfilePicFacebook());

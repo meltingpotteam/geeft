@@ -83,6 +83,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
 //                    mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
 
                     mGeeft.setUserLocation(e.getString("location"));
+                    mGeeft.setUserCap(e.getString("cap"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for (BaasLink l : links) {
                         //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());

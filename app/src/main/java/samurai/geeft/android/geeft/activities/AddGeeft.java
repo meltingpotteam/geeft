@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -54,6 +55,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
     private Spinner mGeeftLocation;   //location of the geeft
+    private TextView mGeeftCap;     //cap of the area
     private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private Spinner mGeeftCategory; //Category of the Geeft
 
@@ -87,20 +89,22 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 String name = mGeeftTitle.getText().toString();
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
+                String cap = mGeeftCap.getText().toString();
                 String expTime = mGeeftExpirationTime.getSelectedItem().toString();
                 String category = mGeeftCategory.getSelectedItem().toString();
                 boolean automaticSelection = mAutomaticSelection.isChecked();
                 boolean allowCommunication = mAllowCommunication.isChecked();
 
                 Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location
-                        + " expire time: " + expTime + " category: " + category +
+
+                        + " cap: " +  cap + " expire time: " + expTime + " category: " + category +
                         " automatic selection: " + automaticSelection + " allow communication: " + allowCommunication);
                 if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null || location == null || expTime == null){
                     Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{
-                    uploadToBB(name, description, location, mGeeftImage, expTime, category,
+                    uploadToBB(name, description, location, cap, mGeeftImage, expTime, category,
                             automaticSelection, allowCommunication);
                     finish();
                     return true;
@@ -127,6 +131,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
         this.mGeeftLocation = (Spinner) this.findViewById(R.id.form_field_location_spinner);
+        this.mGeeftCap = (TextView) this.findViewById(R.id.form_field_location_cap);
         this.mGeeftExpirationTime = (Spinner) this.findViewById(R.id.expire_time_spinner);
         this.mGeeftCategory = (Spinner) this.findViewById(R.id.categories_spinner);
 
@@ -224,7 +229,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                     .into(mGeeftImageView);
         }
     }
-    public void uploadToBB(String name,String description,String location,File geeftImage, String expTime, String category, boolean automaticSelection, boolean allowCommunication){
+    public void uploadToBB(String name,String description,String location, String cap,File geeftImage, String expTime, String category, boolean automaticSelection, boolean allowCommunication){
         //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
         Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
         byte[] streamImage = getBytesFromBitmap(bitmap);
@@ -234,7 +239,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         else {
 //            BaasFile file = new BaasFile();
             //TODO: add the field "automatic_selection" and "allow_comunication"
-            new BaaSUploadGeeft(getApplicationContext(), name,description,location,streamImage, expTime, category, automaticSelection, allowCommunication, this).execute();
+            new BaaSUploadGeeft(getApplicationContext(), name,description,location, cap, streamImage, expTime, category, automaticSelection, allowCommunication, this).execute();
         }
     }
 
