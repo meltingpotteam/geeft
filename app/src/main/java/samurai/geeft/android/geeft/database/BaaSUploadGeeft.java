@@ -2,21 +2,15 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.baasbox.android.BaasACL;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasFile;
-import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.Grant;
 import com.baasbox.android.Role;
 import com.baasbox.android.json.JsonObject;
-
-import java.io.File;
-import java.sql.Timestamp;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 /**
@@ -126,7 +120,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");
         Log.d(TAG, "FB_id is: " + id);
-        return "http://graph.facebook.com/" + id + "/picture";
+        return "https://graph.facebook.com/" + id + "/picture";
     }
 
     public String getImageUrl(BaasFile image){

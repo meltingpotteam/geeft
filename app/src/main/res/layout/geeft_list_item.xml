@@ -26,7 +26,7 @@
         android:padding="@dimen/activity_vertical_margin"
         android:orientation="horizontal">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <ImageView
             android:id="@+id/geefter_profile_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -76,13 +76,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/geeft_image"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 android:background="@android:color/darker_gray">
 
-            </com.facebook.drawee.view.SimpleDraweeView>
+            </ImageView>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

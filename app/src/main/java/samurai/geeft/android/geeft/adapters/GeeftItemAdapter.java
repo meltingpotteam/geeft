@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -32,7 +34,6 @@ import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
-import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -43,16 +44,12 @@ import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBoolean {
 
     private final LayoutInflater inflater;
-
     private final static String TAG ="GeeftAdapter";
-
     //list containing the geefts and avoiding null pointer exception
     private List<Geeft> mGeeftList =
             Collections.emptyList();
-
     private int lastSize = 0;
     private Context mContext;
-
     private boolean pressed;
 
     //costructor
@@ -73,8 +70,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mGeeftDescriptionTextView;
         public TextView mGeeftTitleTextView;
 
-        public SimpleDraweeView mUserProfilePic;
-        public SimpleDraweeView mGeeftImage;
+        public ImageView mUserProfilePic;
+        public ImageView mGeeftImage;
 
         public ImageButton mPrenoteButton;
         public ImageButton mLocationButton;
@@ -96,8 +93,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
             mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
 
-            mUserProfilePic = (SimpleDraweeView) itemView.findViewById(R.id.geefter_profile_image);
-            mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.geeft_image);
+            mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
+            mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
 
             mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
 
@@ -147,12 +144,13 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mTimeStampTextView.setText(item.getTimeStamp());
         holder.mExpireTime.setText(item.getExpTime());
         holder.mUserLocationTextView.setText(item.getUserLocation());
-        holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
 
-        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mUserProfilePic,
-                item.getUserProfilePic());
-        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mGeeftImage,
-                item.getGeeftImage());
+        Picasso.with(mContext).load(item.getGeeftImage()).fit()
+                .centerCrop().into(holder.mGeeftImage);
+        Log.d("IMAGE", item.getUserProfilePic());
+        Picasso.with(mContext).load(item.getUserProfilePic()).fit()
+                .centerCrop().into(holder.mUserProfilePic);
+
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
                 Long.parseLong(item.getTimeStamp()),
@@ -273,6 +271,10 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 mContext.startActivity(intent);
             }
         });
+
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
 
     }
 
