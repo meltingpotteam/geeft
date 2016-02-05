@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPagerAdapter mViewPagerAdapter;
     private SlidingTabLayout mSlidingTabLayoutTabs;
     private CharSequence mTitles[]={"Profile","Geeft"};
+    private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
 
     /**
@@ -102,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
          clicked will start the associated activity.
         **/
 //        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
-        FloatingActionButton actionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
-        actionNewGeeft.setOnClickListener(new View.OnClickListener() {
+        mActionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
+        mActionNewGeeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
@@ -243,5 +247,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static ShareDialog getShareDialog(){ return mShareDialog;}
+
+    private void hideViews() {
+        mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mActionNewGeeft.getLayoutParams();
+        int fabBottomMargin = lp.bottomMargin;
+        mActionNewGeeft.animate().translationY(mActionNewGeeft.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    private void showViews() {
+        mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        mActionNewGeeft.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
 
 }

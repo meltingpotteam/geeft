@@ -69,14 +69,14 @@ public class ImageControllerGenerator {
                     hierarchy = builder
                             .setFadeDuration(300)
                             .setPlaceholderImage(context.getResources()
-                                    .getDrawable(R.drawable.ic_image_placeholder, context.getTheme()))
+                                    .getDrawable(R.drawable.ic_image_multiple, context.getTheme()))
                             .build();
 
                 } else {
                     hierarchy = builder
                             .setFadeDuration(300)
                             .setPlaceholderImage(context.getResources()
-                                    .getDrawable(R.drawable.ic_image_placeholder))
+                                    .getDrawable(R.drawable.ic_image_multiple))
                             .build();
                 }
 

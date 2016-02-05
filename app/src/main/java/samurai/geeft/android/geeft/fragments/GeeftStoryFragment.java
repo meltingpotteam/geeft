@@ -28,7 +28,7 @@ public class GeeftStoryFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_geeft_story, container, false);
         mImageView = (ImageView)rootView.findViewById(R.id.geeft_story_view);
         Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
-                .centerInside().into(mImageView);
+                .centerInside().placeholder(R.drawable.ic_image_multiple).into(mImageView);
         return   rootView;
     }
 

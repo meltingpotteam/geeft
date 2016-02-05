@@ -3,8 +3,6 @@ package samurai.geeft.android.geeft.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
@@ -36,7 +33,6 @@ import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
-import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -160,10 +156,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mUserCapTextView.setText(item.getUserCap());
         //TODO add the control of the cap matching in the city selected; sand in the maps tracking
         Picasso.with(mContext).load(item.getGeeftImage()).fit()
-                .centerCrop().into(holder.mGeeftImage);
+                .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
         Picasso.with(mContext).load(item.getUserProfilePic()).fit()
-                .centerCrop().into(holder.mUserProfilePic);
+                .centerInside().placeholder(R.drawable.ic_account_circle)
+                .into(holder.mUserProfilePic);
 
 
         // Converting timestamp into x ago format

@@ -123,7 +123,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");
         Log.d(TAG, "FB_id is: " + id);
-        return "https://graph.facebook.com/" + id + "/picture";
+        return "https://graph.facebook.com/" + id + "/picture?type=large";
     }
 
     public String getImageUrl(BaasFile image){
