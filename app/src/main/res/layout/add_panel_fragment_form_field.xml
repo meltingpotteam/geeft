@@ -135,7 +135,7 @@
                             android:id="@+id/form_field_location_spinner"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="0.7"
+                            android:layout_weight="0.65"
                             android:spinnerMode="dropdown"
                             >
                         </Spinner>
@@ -143,7 +143,7 @@
                             android:id="@+id/form_field_location_cap"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
+                            android:layout_weight="0.35"
                             android:singleLine="true"
                             android:textColor="@color/colorPrimaryText"
                             android:maxLength="5"
