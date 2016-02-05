@@ -17,13 +17,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -35,12 +36,12 @@ import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
-import samurai.geeft.android.geeft.utilities.ImageControllerGenerator;
 
 /**
  * Created by ugookeadu on 20/01/16.
  * adapter for GeeftListFragment Recyclerview
- * Update by danybr-dev on 2/02/16
+ * Updated by danybr-dev on 2/02/16
+ * Updated by gabriel-dev on 04/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder {
 
@@ -70,17 +71,20 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         private final int MAX_SELECT = 5;//Max number of prenotation for each users
         
         public TextView mTimeStampTextView;
+        public TextView mExpireTime;
         public TextView mUserLocationTextView;
+        public TextView mUserCapTextView;
         public TextView mUsernameTextView;
         public TextView mGeeftDescriptionTextView;
         public TextView mGeeftTitleTextView;
 
-        public SimpleDraweeView mUserProfilePic;
-        public SimpleDraweeView mGeeftImage;
+        public ImageView mUserProfilePic;
+        public ImageView mGeeftImage;
 
         public ImageButton mPrenoteButton;
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
+        public ImageButton mSignalisationButton;
 
         public CardView mContainer;
 
@@ -95,15 +99,28 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
             mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
             mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
+            mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
+            mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
 
-            mUserProfilePic = (SimpleDraweeView) itemView.findViewById(R.id.geefter_profile_image);
-            mGeeftImage = (SimpleDraweeView) itemView.findViewById(R.id.geeft_image);
+            mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
+            mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
 
             mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
 
             mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
+
+            mSignalisationButton = (ImageButton) itemView.findViewById(R.id.geeft_signalisation);
+
+            //Text Expander///////////////
+            mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mGeeftDescriptionTextView.setSingleLine(false);
+                }
+            });
+            //////////////////////////////
         }
 
     }
@@ -129,16 +146,27 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         // - replace the contents of the view with that element
         holder.mUsernameTextView.setText(item.getUsername());
+
         holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
+        holder.mGeeftDescriptionTextView.setSingleLine(true);
+        holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
+
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());
-        holder.mUserLocationTextView.setText(item.getUserLocation());
-        holder.mGeeftImageUri = Uri.parse(item.getGeeftImage());
+        holder.mExpireTime.setText(item.getExpTime());
 
-        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mUserProfilePic,
-                item.getUserProfilePic());
-        ImageControllerGenerator.generateSimpleDrawee(mContext,holder.mGeeftImage,
-                item.getGeeftImage());
+        holder.mUserLocationTextView.setText(item.getUserLocation());
+
+        holder.mUserCapTextView.setText(item.getUserCap());
+        //TODO add the control of the cap matching in the city selected; sand in the maps tracking
+        Picasso.with(mContext).load(item.getGeeftImage()).fit()
+                .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
+        Log.d("IMAGE", item.getUserProfilePic());
+        Picasso.with(mContext).load(item.getUserProfilePic()).fit()
+                .centerInside().placeholder(R.drawable.ic_account_circle)
+                .into(holder.mUserProfilePic);
+
+
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
                 Long.parseLong(item.getTimeStamp()),
@@ -146,23 +174,36 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         holder.mTimeStampTextView.setText(timeAgo);
 
+        /**The User are obliged to set a title, a description, a position, a location and an image.
+         * TODO verify this part if the design of the application will change
+         * in any case is better to use "if(holder.mTimeStampTextView.getText != null)"
+         * instead "!TextUtils.isEmpty(item.getGeeftTitle())". It could generate some
+         * false positives and it is redundant with the previous declaration
+         * [gabriel-dev]
+         */
+//        // Check for empty geeft title
+//        if (TextUtils.isEmpty(item.getGeeftTitle()))
+//            // status is empty, remove from view
+//            holder.mGeeftTitleTextView.setVisibility(View.GONE);
+//
+//        // Check for empty geeft description
+//        if (TextUtils.isEmpty(item.getGeeftDescription()))
+//            // description is empty, remove from view
+//            holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
 
-        // Chcek for empty geeft title
-        if (!TextUtils.isEmpty(item.getGeeftTitle()))
-            // status is empty, remove from view
-            holder.mGeeftTitleTextView.setVisibility(View.GONE);
-
-        // Chcek for empty geeft description
-        if (TextUtils.isEmpty(item.getGeeftDescription()))
-            // description is empty, remove from view
-            holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
-
-        if (TextUtils.isEmpty(item.getUserLocation())) {
+//        if (TextUtils.isEmpty(item.getUserLocation())) {
+//            // location is empty, remove from view location txt and button
+//            holder.mUserLocationTextView.setVisibility(View.GONE);
+//            holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
+//            holder.mLocationButton.setClickable(false);
+//        }
+        if (holder.mUserLocationTextView.getText() == null) {
             // location is empty, remove from view location txt and button
             holder.mUserLocationTextView.setVisibility(View.GONE);
             holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
             holder.mLocationButton.setClickable(false);
         }
+
         setAnimation(holder.mContainer);
 
         if(item.isSelected())
@@ -217,7 +258,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         final Uri app_url = Uri.parse(holder.app_url);
         final Uri imageUrl = holder.mGeeftImageUri;
 
-
+        //Share Button Implementation----------------------
         holder.mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +279,17 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             }
         });
+        //-------------------------------------------------
 
+        //Signalization button Implementation--------------
+        holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO implement the behaviour of the signalization button
+                Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+            }
+        });
+        //-------------------------------------------------
         holder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,6 +299,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 mContext.startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -264,7 +316,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         if ((mGeeftList.size()-lastSize)>0)
         {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-            animation.setDuration(370);
+            animation.setDuration(350);
             viewToAnimate.startAnimation(animation);
             lastSize++;
         }

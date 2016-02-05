@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -57,8 +58,8 @@
             xmlns:fab="http://schemas.android.com/apk/res-auto"
             fab:menu_buttonSpacing="7dp"
             fab:menu_fab_size="normal"
-            fab:menu_colorNormal="@color/colorPrimaryDark"
-            fab:menu_colorPressed="@color/colorPrimary"
+            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_colorPressed="@color/clickAccent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true">
@@ -67,8 +68,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_menu_camera_white_24dp"
-                fab:fab_colorNormal="@color/colorPrimary"
-                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_colorNormal="@color/colorSubAccent"
+                fab:fab_colorPressed="@color/clickAccent"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
                 fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
                 fab:fab_label="Add Geeft"
@@ -79,8 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_location_on_white_24dp"
-                fab:fab_colorNormal="@color/colorPrimary"
-                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_colorNormal="@color/colorSubAccent"
+                fab:fab_colorPressed="@color/clickAccent"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
                 fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
                 fab:fab_label="Geeft around me"
@@ -88,4 +89,4 @@
                 />
         </com.github.clans.fab.FloatingActionMenu>
     </RelativeLayout>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

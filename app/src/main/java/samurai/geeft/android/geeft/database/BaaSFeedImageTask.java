@@ -76,7 +76,14 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setTimeStamp(getCreationTimestamp(e));
+                    mGeeft.setExpTime(e.getString("exptime"));
+
+//                    TODO verify the error; probably we need to erase and recharg all the object since i send another one field to baas
+//                    mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+//                    mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+
                     mGeeft.setUserLocation(e.getString("location"));
+                    mGeeft.setUserCap(e.getString("cap"));
                     mGeeft.setGeeftTitle(e.getString("title"));
                     for (BaasLink l : links) {
                         //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());

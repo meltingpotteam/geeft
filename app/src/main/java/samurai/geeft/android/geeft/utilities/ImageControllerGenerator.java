@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.utilities;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -12,6 +13,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.squareup.picasso.Picasso;
 
 import samurai.geeft.android.geeft.R;
 
@@ -21,22 +23,10 @@ import samurai.geeft.android.geeft.R;
  */
 
 public class ImageControllerGenerator {
-    public static void generateSimpleDrawee(Context context,SimpleDraweeView simpleDraweeView,
-                                                        String uriString){
-        int width = 1;
-        int height = 1;
-        ViewGroup.LayoutParams lp = simpleDraweeView.getLayoutParams();
-        Log.d("SIZE",lp.height+" "+lp.width);
-        if (lp != null && lp.width > 0) {
-           width = lp.width;
-        }
-
-        lp = simpleDraweeView.getLayoutParams();
-        if (lp != null && lp.height > 0) {
-            height = lp.height;
-        }
-
-
+    static SimpleDraweeView mSimpleDraweeView;
+    static Context mContext;
+    public static void generateSimpleDrawee(Context context, final SimpleDraweeView simpleDraweeView,
+                                                        String uriString, boolean fresco){
         Uri uri;
         if(uriString==null)
             uriString="";

@@ -54,6 +54,7 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeftList = new ArrayList<>();
+
     }
 
     @Override

@@ -2,21 +2,15 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.baasbox.android.BaasACL;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasFile;
-import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.Grant;
 import com.baasbox.android.Role;
 import com.baasbox.android.json.JsonObject;
-
-import java.io.File;
-import java.sql.Timestamp;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 /**
@@ -29,8 +23,11 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     String mTitle;
     String mDescription;
     String mLocation;
+    String mCap;
     String mExpTime;
     String mCategory;
+    boolean mAutomaticSelection;
+    boolean mAllowComunication;
     byte[] mImage;
     TaskCallbackBoolean mCallback;
     private BaasDocument mDocUser;
@@ -38,14 +35,18 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     /**
      * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
      **/
-    public BaaSUploadGeeft(Context context, String title, String description,String location, byte[] image, String expTime, String category, TaskCallbackBoolean callback) {
+    public BaaSUploadGeeft(Context context, String title, String description,String location, String cap, byte[] image, String expTime, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
         mDescription = description;
         mLocation = location;
+        mCap = cap;
         mImage = image;
         mExpTime = expTime;
         mCategory = category;
+
+        mAutomaticSelection = automaticSelection;
+        mAllowComunication = allowCommunication;
 
         mCallback = callback;
         Log.d(TAG, "Lanciato AsyncTask");
@@ -59,13 +60,18 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("description", mDescription);
             doc.put("location", mLocation);
             doc.put("close", false);
+            doc.put("cap", mCap);
             doc.put("name", getFacebookName());
             doc.put("profilePic", getProfilePicFacebook());
             String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
             Log.d(TAG, "Timestamp is: " + timestamp);
             doc.put("deadline", timestamp);
             doc.put("exptime", mExpTime);
-            doc.put("category", mCategory);
+            doc.put("category", mCategory.toLowerCase());
+            // send the field fo allow communication and automatic selection; remember to manage them
+            // in the BassReserveTask
+            doc.put("automaticSelection", mAutomaticSelection);
+            doc.put("allowCommunication", mAllowComunication);
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mImage);
             if (resImage.isSuccess()) {
@@ -117,7 +123,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");
         Log.d(TAG, "FB_id is: " + id);
-        return "http://graph.facebook.com/" + id + "/picture";
+        return "https://graph.facebook.com/" + id + "/picture?type=large";
     }
 
     public String getImageUrl(BaasFile image){

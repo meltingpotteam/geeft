@@ -40,9 +40,10 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"QUI");
+        Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
+        mGeeftList.add(new Geeft());
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),this).execute();
     }
@@ -50,22 +51,20 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     @Override
     public void done(boolean result) {
-        if(result){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-                @Override
-                public Fragment getItem(int position) {
-                    Geeft geeft = mGeeftList.get(position);
-                    GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
-                    geeftStoryFragment.setGeeft(geeft);
-                    return geeftStoryFragment;
-                }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+            @Override
+            public Fragment getItem(int position) {
+                Geeft geeft = mGeeftList.get(position);
+                GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
+                geeftStoryFragment.setGeeft(geeft);
+                return geeftStoryFragment;
+            }
 
-                @Override
-                public int getCount() {
-                    return mGeeftList.size();
-                }
-            });
-        }
+            @Override
+            public int getCount() {
+                return mGeeftList.size();
+            }
+        });
     }
 }

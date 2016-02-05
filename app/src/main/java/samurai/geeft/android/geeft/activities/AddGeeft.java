@@ -1,7 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasFile;
-import com.baasbox.android.BaasHandler;
-import com.baasbox.android.BaasResult;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -59,8 +55,14 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
     private Spinner mGeeftLocation;   //location of the geeft
+    private TextView mGeeftCap;     //cap of the area
     private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private Spinner mGeeftCategory; //Category of the Geeft
+
+    //filed for automatic selection of the geeft and for allowing the the message exchanges
+    private CheckBox mAutomaticSelection;
+    private CheckBox mAllowCommunication;
+
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
 
@@ -87,15 +89,25 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 String name = mGeeftTitle.getText().toString();
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
+                String cap = mGeeftCap.getText().toString();
                 String expTime = mGeeftExpirationTime.getSelectedItem().toString();
                 String category = mGeeftCategory.getSelectedItem().toString();
-                Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location + " expire time: " + expTime + " category: " + category);
-                if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null || location == null || expTime == null){
+                boolean automaticSelection = mAutomaticSelection.isChecked();
+                boolean allowCommunication = mAllowCommunication.isChecked();
+
+                Log.d(TAG,"name: " + name + " description: " + description + " location: " +  location
+
+                        + " cap: " +  cap + " expire time: " + expTime + " category: " + category +
+                        " automatic selection: " + automaticSelection + " allow communication: " + allowCommunication);
+                if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null
+                        || location == null || cap.length() < 5 || expTime == null){
+                    //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{
-                    uploadToBB(name, description, location, mGeeftImage, expTime, category);
+                    uploadToBB(name, description, location, cap, mGeeftImage, expTime, category,
+                            automaticSelection, allowCommunication);
                     finish();
                     return true;
                 }
@@ -121,8 +133,12 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         this.mGeeftTitle = (TextView) this.findViewById(R.id.fragment_add_geeft_form_name);
         this.mGeeftDescription = (TextView) this.findViewById(R.id.fragment_add_geeft_form_description);
         this.mGeeftLocation = (Spinner) this.findViewById(R.id.form_field_location_spinner);
+        this.mGeeftCap = (TextView) this.findViewById(R.id.form_field_location_cap);
         this.mGeeftExpirationTime = (Spinner) this.findViewById(R.id.expire_time_spinner);
         this.mGeeftCategory = (Spinner) this.findViewById(R.id.categories_spinner);
+
+        this.mAutomaticSelection = (CheckBox) this.findViewById(R.id.automatic_selection_checkbox);
+        this.mAllowCommunication = (CheckBox) this.findViewById(R.id.allow_communication_checkbox);
         //Listener for te imageButton///////////////////////////////////////////////////////////////
         cameraButton = (ImageButton) findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -147,21 +163,14 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
                 alertDialog.setView(dialogLayout);
-                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //here you can add functions
-                        dialog.dismiss();
-                    }
-                });
 
                 //On click, the user visualize can visualize some infos about the geefter
-
                 AlertDialog dialog = alertDialog.create();
                 //the context i had to use is the context of the dialog! not the context of the app.
                 //"dialog.findVie..." instead "this.findView..."
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
                 mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
+
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
                 //                dialog.setMessage("Some information that we can take from the facebook shared one");
@@ -222,7 +231,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                     .into(mGeeftImageView);
         }
     }
-    public void uploadToBB(String name,String description,String location,File geeftImage, String expTime, String category){
+    public void uploadToBB(String name,String description,String location, String cap,File geeftImage, String expTime, String category, boolean automaticSelection, boolean allowCommunication){
         //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
         Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
         byte[] streamImage = getBytesFromBitmap(bitmap);
@@ -232,7 +241,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         else {
 //            BaasFile file = new BaasFile();
             //TODO: add the field "automatic_selection" and "allow_comunication"
-            new BaaSUploadGeeft(getApplicationContext(), name,description,location,streamImage, expTime, category, this).execute();
+            new BaaSUploadGeeft(getApplicationContext(), name,description,location, cap, streamImage, expTime, category, automaticSelection, allowCommunication, this).execute();
         }
     }
 

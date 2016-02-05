@@ -11,7 +11,11 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorPrimaryLight">#FFE0B2</color>
+
     <color name="colorAccent">#536DFE</color>
+    <color name="colorSubAccent">#394cb7</color>
+    <color name="colorHintAccent">#d4374aaf</color>
+
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorIconsDark">#212121</color>
