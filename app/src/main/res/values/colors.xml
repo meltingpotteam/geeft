@@ -8,13 +8,13 @@
     <color name="clickAccent">#8dd4d4d4</color>
     <color name="timestamp">#c2c3c8</color>
 
-    <color name="colorPrimary">#FF9800</color>
-    <color name="colorPrimaryDark">#F57C00</color>
-    <color name="colorPrimaryLight">#FFE0B2</color>
+    <color name="colorPrimary">#2f89c6</color>
+    <color name="colorPrimaryDark">#2c3e50</color>
+    <color name="colorPrimaryLight">#92bbd6</color>
 
-    <color name="colorAccent">#536DFE</color>
-    <color name="colorSubAccent">#394cb7</color>
-    <color name="colorHintAccent">#d4374aaf</color>
+    <color name="colorAccent">#F57C00</color>
+    <color name="colorSubAccent">#d67716</color>
+    <color name="colorHintAccent">#d4af7737</color>
 
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>

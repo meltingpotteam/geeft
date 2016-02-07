@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -25,6 +27,8 @@ import com.baasbox.android.BaasUser;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -86,6 +90,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mShareButton;
         public ImageButton mSignalisationButton;
 
+        //info dialog attributes---------------------
+        public TextView mProfileDialogUsername;
+        public TextView mProfileDialogUserLocation;
+        public ImageView mProfileDialogUserImage;
+        //-------------------------------------------
+
         public CardView mContainer;
 
         public Uri mGeeftImageUri;
@@ -112,6 +122,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
 
             mSignalisationButton = (ImageButton) itemView.findViewById(R.id.geeft_signalisation);
+
+
 
             //Text Expander///////////////
             mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +242,39 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         }
         });
+
+        ////
+        holder.mUsernameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
+                View dialogLayout = inflater.inflate(R.layout.profile_dialog, null);
+                alertDialog.setView(dialogLayout);
+                //On click, the user visualize can visualize some infos about the geefter
+                android.app.AlertDialog dialog = alertDialog.create();
+
+                //profile dialog fields-----------------------
+                holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
+                holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
+                holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+                //--------------------------------------------
+                holder.mProfileDialogUsername
+                        .setText(item
+                                .getUsername());
+                holder.mProfileDialogUserLocation.setText(item.getUserLocation());
+                Picasso.with(mContext).load(item.getUserProfilePic()).fit()
+                        .centerInside()
+                        .into(holder.mProfileDialogUserImage);
+
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
+                //                dialog.setMessage("Some information that we can take from the facebook shared one");
+                dialog.show();  //<-- See This!
+                //
+            }
+        });
+        ////
 
         //--------------------- Location Button implementation
         final String location = holder.mUserLocationTextView.getText().toString();
