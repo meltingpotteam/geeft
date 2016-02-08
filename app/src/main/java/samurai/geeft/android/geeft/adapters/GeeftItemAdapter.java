@@ -38,7 +38,9 @@ import java.util.List;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
+import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -49,7 +51,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 04/02/2016
  * Updated by gabriel-dev on 08/02/2016
  */
-public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder {
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
 
     private final LayoutInflater inflater;
 
@@ -96,8 +98,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUsername;
         public TextView mProfileDialogUserLocation;
         public ImageView mProfileDialogUserImage;
-        //-------------------------------------------
+        public TextView mProfileDialogUserRank;
+        public TextView mProfileDialogUserGiven;
+        public TextView mProfileDialogUserReceived;
 
+        //-------------------------------------------
         public CardView mContainer;
 
         public Uri mGeeftImageUri;
@@ -226,7 +231,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
         //--------------------------- Prenote button implementation
         // TODO: Use this Asyntask to check if is pressed or not,and create or delete link
-        // TODO: Show Dialog to limit damage (ask at Daniele)
 
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,10 +280,15 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
                 holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
                 holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
-                //--------------------------------------------
-                holder.mProfileDialogUsername
-                        .setText(item
-                                .getUsername());
+                holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
+                holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
+                holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
+
+
+                        //--------------------------------------------
+                        holder.mProfileDialogUsername
+                                .setText(item
+                                        .getUsername());
                 holder.mProfileDialogUserLocation.setText(item.getUserLocation());
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
@@ -287,12 +296,15 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
                 //TODO: fill the fields "rank" , "geeven", "receeved"-------
                 //----------------------------------------------------------
+                //Relaunch AsyncTask anytime is needed for give information updated
+                new BaaSGetGeefterInformation(mContext,holder,GeeftItemAdapter.this).execute();
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
                 //                dialog.setMessage("Some information that we can take from the facebook shared one");
                 dialog.show();  //<-- See This!
                 //
+
             }
         });
         ////
@@ -405,6 +417,23 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             else
                 holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_off_24dp);
         }
+    }
+
+    public void done(boolean result,GeeftItemAdapter.ViewHolder holder,long[] userInformation){
+        // userInformation order is : Feedback,Given,Received
+        if(result){
+            holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]));
+            holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
+            holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
+
+            //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
+             //       + "," + userInformation[2]);
+
+        }
+        else{
+            Log.e(TAG,"ERROREEEEE!");
+        }
+
     }
     /*private void dialogShow(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,
