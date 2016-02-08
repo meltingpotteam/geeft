@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -46,6 +47,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * adapter for GeeftListFragment Recyclerview
  * Updated by danybr-dev on 2/02/16
  * Updated by gabriel-dev on 04/02/2016
+ * Updated by gabriel-dev on 08/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder {
 
@@ -229,21 +231,38 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return;
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-            mProgress = ProgressDialog.show(mContext, "Attendere...",
-                    "Prenotazione in corso", true);
-            String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-            Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
-            item.setIsSelected(!item.isSelected());
-            new BaaSReserveTask(mContext,docUserId,item,holder,GeeftItemAdapter.this).execute();
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                mProgress = new ProgressDialog(mContext);
+                try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    mProgress.show();
+                } catch (WindowManager.BadTokenException e) {
+                }
+                mProgress.setCancelable(false);
+                mProgress.setIndeterminate(true);
+                mProgress.setMessage("Prenotazione in corso");
+
+//              mProgress = ProgressDialog.show(mContext, "Attendere...",
+//                    "Prenotazione in corso", true);
+                String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
+                item.setIsSelected(!item.isSelected());
+                new BaaSReserveTask(mContext,docUserId,item,holder,GeeftItemAdapter.this).execute();
 
         }
         });
 
-        ////
+        /**
+         * when a User click on the NameText of the Geefter that Upload a geeft, this listener shows
+         * a little card with some useful information about the Geefter.
+         * It shows the name, the profile picture, his ranking, the number of the "Geeven" Geeft and
+         * of the "Receeved" Geeft.
+         * it also display the possibiliy to contact him with facebook.
+         * **/
         holder.mUsernameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,6 +285,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
 
+                //TODO: fill the fields "rank" , "geeven", "receeved"-------
+                //----------------------------------------------------------
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
