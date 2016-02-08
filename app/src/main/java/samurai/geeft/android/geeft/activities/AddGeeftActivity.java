@@ -74,6 +74,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -123,7 +124,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.add_geeft_fragment_panel);
+        setContentView(R.layout.activity_add_geeft);
         Toolbar toolbar = (Toolbar) findViewById(R.id.fragment_add_geeft_toolbar);
         toolbar.setTitle("Add Geeft");
         setSupportActionBar(toolbar);
