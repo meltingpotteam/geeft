@@ -75,8 +75,8 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
 
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
-                    mGeeft.setTimeStamp(getCreationTimestamp(e));
-                    mGeeft.setExpTime(e.getString("exptime"));
+                    mGeeft.setCreationTimeStamp(getCreationTimestamp(e));
+                    mGeeft.setDeadLine(e.getString("deadline"));
 
 //                    TODO verify the error; probably we need to erase and recharg all the object since i send another one field to baas
 //                    mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
@@ -111,6 +111,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
     }
 
     private static String getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+        //TODO: change data type from String to Double (also change it in geeftItemAdapter)
         String date = d.getCreationDate();
         //Log.d(TAG,"_creation_date is:" + date);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");

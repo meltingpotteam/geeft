@@ -4,9 +4,9 @@ package samurai.geeft.android.geeft.models;
  * Created by ugookeadu on 20/01/16.
  */
 public class Geeft {
-    private String timeStamp;
+    private String creationTimeStamp;
     private String deadLine;
-    private String exptime;
+    //private String exptime;
     private String userLocation;
     private String userCap;
     private String username;
@@ -24,14 +24,14 @@ public class Geeft {
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, String timeStamp, String exptime, boolean automaticSelection, boolean allowCommunication, String deadLine, String userLocation, String userCap,
+                 boolean isSelected, String creationTimeStamp, boolean automaticSelection, boolean allowCommunication, String deadLine, String userLocation, String userCap,
                  String username, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
         this.isSelected = isSelected;
-        this.timeStamp = timeStamp;
-        this.exptime = exptime;
+        this.creationTimeStamp = creationTimeStamp;
+        //this.exptime = exptime;
         this.automaticSelection = automaticSelection;
         this.allowCommunication = allowCommunication;
         this.userLocation = userLocation;
@@ -84,21 +84,14 @@ public class Geeft {
         this.isSelected = isSelected;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public String getCreationTimeStamp() {
+        return creationTimeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setCreationTimeStamp(String creationTimeStamp) {
+        this.creationTimeStamp = creationTimeStamp;
     }
 
-    public String getExpTime() {
-        return exptime;
-    }
-
-    public void setExpTime(String exptime) {
-        this.exptime = exptime;
-    }
 
     public boolean isAllowCommunication() {
         return this.allowCommunication;

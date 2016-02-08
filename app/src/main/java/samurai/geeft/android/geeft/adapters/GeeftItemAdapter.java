@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -71,7 +72,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         private final int MAX_SELECT = 5;//Max number of prenotation for each users
         
         public TextView mTimeStampTextView;
-        public TextView mExpireTime;
+        public TextView mDeadlineTime;
         public TextView mUserLocationTextView;
         public TextView mUserCapTextView;
         public TextView mUsernameTextView;
@@ -101,7 +102,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
             mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
-            mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
+            mDeadlineTime = (TextView) itemView.findViewById(R.id.expire_time);
 
             mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
@@ -152,8 +153,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
 
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
-        holder.mTimeStampTextView.setText(item.getTimeStamp());
-        holder.mExpireTime.setText(item.getExpTime());
+        //holder.mTimeStampTextView.setText(item.getCreationTimeStamp()); //Replaced with date
+       // holder.mDeadlineTime.setText(item.getDeadLine());//Replaced with date
 
         holder.mUserLocationTextView.setText(item.getUserLocation());
 
@@ -169,10 +170,35 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-                Long.parseLong(item.getTimeStamp()),
+                Long.parseLong(item.getCreationTimeStamp()),
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
         holder.mTimeStampTextView.setText(timeAgo);
+
+        // Converting timestamp into x ago format
+        //long millis; I can't
+        new CountDownTimer((Long.parseLong(item.getDeadLine())/1000 - Long.parseLong(item.getCreationTimeStamp()) / 1000), 1000) {
+
+            public void onTick(long secondsUntilFinished) {
+
+                //TODO: Fix bug with display time
+               // holder.mDeadlineTime.setText("Ore rimanenti: " + millisUntilFinished / 1000);
+               // Log.d(TAG,"Seconds are: " + seconds + " || millis: " + (millisUntilFinished / 1000) + " and creation: "+  Long.parseLong(item.getCreationTimeStamp()));
+                holder.mDeadlineTime.setText("Tempo rimanente: " + String.format("%02d:%02d:%02d", secondsUntilFinished / 3600,
+                        (secondsUntilFinished % 3600) / 60, (secondsUntilFinished % 60)));
+
+            }
+
+            public void onFinish() {
+                holder.mDeadlineTime.setText("Fine!");
+            }
+        }.start();
+
+        /*CharSequence timeWillCome = DateUtils.getRelativeTimeSpanString(
+                Long.parseLong(item.getCreationTimeStamp()),
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+        holder.mDeadlineTime.setText(timeWillCome);*/
 
         /**The User are obliged to set a title, a description, a position, a location and an image.
          * TODO verify this part if the design of the application will change

@@ -24,7 +24,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     String mDescription;
     String mLocation;
     String mCap;
-    String mExpTime;
+    String mDeadline;
     String mCategory;
     boolean mAutomaticSelection;
     boolean mAllowComunication;
@@ -35,14 +35,14 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     /**
      * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
      **/
-    public BaaSUploadGeeft(Context context, String title, String description,String location, String cap, byte[] image, String expTime, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
+    public BaaSUploadGeeft(Context context, String title, String description,String location, String cap, byte[] image, String deadline, String category, boolean automaticSelection, boolean allowCommunication, TaskCallbackBoolean callback) {
         mContext = context;
         mTitle = title;
         mDescription = description;
         mLocation = location;
         mCap = cap;
         mImage = image;
-        mExpTime = expTime;
+        mDeadline = deadline;
         mCategory = category;
 
         mAutomaticSelection = automaticSelection;
@@ -63,10 +63,10 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("cap", mCap);
             doc.put("name", getFacebookName());
             doc.put("profilePic", getProfilePicFacebook());
-            String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
-            Log.d(TAG, "Timestamp is: " + timestamp);
-            doc.put("deadline", timestamp);
-            doc.put("exptime", mExpTime);
+            //String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
+            //Log.d(TAG, "Timestamp is: " + timestamp);
+            //doc.put("deadline", timestamp);
+            doc.put("deadline", mDeadline);
             doc.put("category", mCategory.toLowerCase());
             // send the field fo allow communication and automatic selection; remember to manage them
             // in the BassReserveTask

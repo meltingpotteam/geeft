@@ -25,12 +25,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasDocument;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
@@ -90,7 +95,10 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 String description = mGeeftDescription.getText().toString();
                 String location = mGeeftLocation.getSelectedItem().toString();
                 String cap = mGeeftCap.getText().toString();
-                String expTime = mGeeftExpirationTime.getSelectedItem().toString();
+
+                int expTime = Integer.parseInt(mGeeftExpirationTime.getSelectedItem().toString().split(" ")[0]);
+                String deadline = getDeadlineTimestamp(expTime);
+
                 String category = mGeeftCategory.getSelectedItem().toString();
                 boolean automaticSelection = mAutomaticSelection.isChecked();
                 boolean allowCommunication = mAllowCommunication.isChecked();
@@ -100,13 +108,13 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                         + " cap: " +  cap + " expire time: " + expTime + " category: " + category +
                         " automatic selection: " + automaticSelection + " allow communication: " + allowCommunication);
                 if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null
-                        || location == null || cap.length() < 5 || expTime == null){
+                        || location.length() < 1 || cap.length() < 5 || expTime == 0 ){ //and equals("")?
                     //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 else{
-                    uploadToBB(name, description, location, cap, mGeeftImage, expTime, category,
+                    uploadToBB(name, description, location, cap, mGeeftImage, deadline, category,
                             automaticSelection, allowCommunication);
                     finish();
                     return true;
@@ -231,7 +239,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                     .into(mGeeftImageView);
         }
     }
-    public void uploadToBB(String name,String description,String location, String cap,File geeftImage, String expTime, String category, boolean automaticSelection, boolean allowCommunication){
+    public void uploadToBB(String name,String description,String location, String cap,File geeftImage, String deadline, String category, boolean automaticSelection, boolean allowCommunication){
         //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
         Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
         byte[] streamImage = getBytesFromBitmap(bitmap);
@@ -241,7 +249,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         else {
 //            BaasFile file = new BaasFile();
             //TODO: add the field "automatic_selection" and "allow_comunication"
-            new BaaSUploadGeeft(getApplicationContext(), name,description,location, cap, streamImage, expTime, category, automaticSelection, allowCommunication, this).execute();
+            new BaaSUploadGeeft(getApplicationContext(), name,description,location, cap, streamImage, deadline, category, automaticSelection, allowCommunication, this).execute();
         }
     }
 
@@ -251,6 +259,31 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         return stream.toByteArray();
     }
 
+    public String getDeadlineTimestamp(int expTime){ // I know,there is a delay between creation and upload time of document,
+                                //so we have a not matching timestamp (deadline and REAL deadline
+                                // calculated like creation data + exptime in days)
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Now use today date.
+        c.add(Calendar.DATE, expTime); // Adding "expTime" days
+        //String deadline = sdf.format(c.getTime()); //return Date,not timestamp.
+        String deadline = ""+ c.getTimeInMillis()/1000; //get timestamp
+        Log.d(TAG,"deadline is:" + deadline); //DELETE THIS AFTER DEBUG
+        return deadline;
+    }
+   /* private static String getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+        //TODO: change data type from String to Double (also change it in geeftItemAdapter)
+        String date = d.getCreationDate();
+        //Log.d(TAG,"_creation_date is:" + date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        try {
+            Date creation_date = dateFormat.parse(date);
+            return ""+creation_date.getTime(); //Convert timestamp in string
+        }catch (java.text.ParseException e){
+            Log.e(TAG,"ERRORE FATALE : " + e.toString());
+        }
+        return "";
+    }*/
 
     public void done(boolean result){
         //enables all social buttons
