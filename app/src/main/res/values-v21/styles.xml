@@ -22,4 +22,12 @@
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>
 
     </style>
+    <!-- animation for the profile_dialog -->
+    <style name="profile_info_dialog_animation">
+
+        <item name="android:windowEnterAnimation">@anim/slide_in_top</item>
+
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+
+    </style>
 </resources>

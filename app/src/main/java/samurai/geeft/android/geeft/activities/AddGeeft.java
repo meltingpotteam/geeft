@@ -51,7 +51,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
     private ImageButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
 
-    //field to fill with the edited parameters in the form field
+    //field to fill with the edited parameters in the form  field
     private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
     private Spinner mGeeftLocation;   //location of the geeft
@@ -68,7 +68,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
     private File mGeeftImage;
 
-    //Listener for the toolbar Buttons//////////////////////////////////////////////////////////////
+    //Listener for the toolbar Buttons------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_geeft_fragment_toolbar_menu, menu);
@@ -117,7 +117,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
 //        return super.onOptionsItemSelected(item);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //--------------------------------------------------------------
 
 
     @Override
@@ -139,7 +139,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
         this.mAutomaticSelection = (CheckBox) this.findViewById(R.id.automatic_selection_checkbox);
         this.mAllowCommunication = (CheckBox) this.findViewById(R.id.allow_communication_checkbox);
-        //Listener for te imageButton///////////////////////////////////////////////////////////////
+        //Listener for te imageButton-----------------------------------
         cameraButton = (ImageButton) findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
 
@@ -151,10 +151,10 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        //--------------------------------------------------------------
 
 
-        //Listener for te imageView: ///////////////////////////////////////////////////////////////
+        //Listener for te imageView: -----------------------------------
         mGeeftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,9 +179,9 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
 
             }
         });
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        //--------------------------------------------------------------
 
-        //Spinner for Location Selection////////////////////////////////////////////////////////////
+        //Spinner for Location Selection--------------------------------
         Spinner spinner = (Spinner) findViewById(R.id.form_field_location_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -190,9 +190,9 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        //--------------------------------------------------------------
 
-        // Spinner for Expiration Time////////////////////////////////////////////////////////////
+        // Spinner for Expiration Time----------------------------------
         Spinner spinner_exp_time = (Spinner) findViewById(R.id.expire_time_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter_exp_time = ArrayAdapter.createFromResource(this,
@@ -201,9 +201,9 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         adapter_exp_time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner_exp_time.setAdapter(adapter_exp_time);
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        //--------------------------------------------------------------
 
-        // Spinner for the Geeft Categories/////////////////////////////////////////////////////////
+        // Spinner for the Geeft Categories-----------------------------
         Spinner spinner_categories = (Spinner) findViewById(R.id.categories_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter_categories = ArrayAdapter.createFromResource(this,
@@ -212,7 +212,7 @@ public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
         adapter_categories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner_categories.setAdapter(adapter_categories);
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        //--------------------------------------------------------------
     }
     /**
      * positioning uploaded; it works now: the image fit the central part of the imageView in the form

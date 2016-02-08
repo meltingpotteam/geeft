@@ -2,41 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@drawable/ripple_effect"
               android:clickable="true"
-              android:paddingTop="25dp"
-              android:paddingBottom="25dp"
-              android:paddingLeft="20dp"
-              android:paddingRight="20dp">
-        <LinearLayout
+              android:paddingTop="@dimen/activity_vertical_margin_x2"
+              android:paddingBottom="@dimen/activity_vertical_margin_x2"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin">
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/navigation_drawer_row_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+        <ImageView
+            android:id="@+id/navigation_drawer_row_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/colorAccent"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin">
+
+
             <TextView
                 android:id="@+id/navigation_drawer_row_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
                 android:text="Here goese the row title"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorPrimaryText"
                 android:textAllCaps="true"
                 android:textStyle="bold"
+
+                />
+            <TextView
+                android:id="@+id/navigation_drawer_row_description"
+                android:paddingTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Here goes the row description"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorSecondaryText"
                 />
         </LinearLayout>
-        <TextView
-            android:id="@+id/navigation_drawer_row_description"
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Here goes the row description"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/black"
-            />
+    </LinearLayout>
 </LinearLayout>

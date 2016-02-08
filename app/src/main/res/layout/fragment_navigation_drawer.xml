@@ -38,7 +38,7 @@
         android:id="@+id/navigation_drawer_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/navigation_drawer_welcome"/>
+        android:layout_below="@id/navigation_drawer_welcome"/>
 
 
 </RelativeLayout>
