@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, AddGeeft.class);
+                Intent intent = new Intent(MainActivity.this, AddGeeftActivity.class);
                 startActivity(intent);
             }
         });

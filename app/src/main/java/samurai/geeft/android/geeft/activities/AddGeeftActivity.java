@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -44,9 +43,9 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 3/02/16
  */
 
-public class AddGeeft extends AppCompatActivity implements TaskCallbackBoolean {
+public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackBoolean {
 
-    private static final String TAG = "AddGeeft";
+    private final String TAG = getClass().getName();
     private Geeft newGeft;
     private ImageButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
