@@ -422,7 +422,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     public void done(boolean result,GeeftItemAdapter.ViewHolder holder,long[] userInformation){
         // userInformation order is : Feedback,Given,Received
         if(result){
-            holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]));
+            holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
             holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
             holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
 
