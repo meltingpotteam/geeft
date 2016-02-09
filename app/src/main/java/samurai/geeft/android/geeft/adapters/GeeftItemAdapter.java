@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder {
 
     private final LayoutInflater inflater;
-
+    private final String WEBSITE_URL = "http://geeft.tk/";
     private final static String TAG ="GeeftAdapter";
 
     //list containing the geefts and avoiding null pointer exception
@@ -89,6 +90,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
         public ImageButton mSignalisationButton;
+        public LinearLayout mProfileClickableArea;
 
         //info dialog attributes---------------------
         public TextView mProfileDialogUsername;
@@ -113,6 +115,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
             mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
+
+            mProfileClickableArea = (LinearLayout) itemView.findViewById(R.id.geefter_info_area);
 
             mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
@@ -262,7 +266,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * of the "Receeved" Geeft.
          * it also display the possibiliy to contact him with facebook.
          * **/
-        holder.mUsernameTextView.setOnClickListener(new View.OnClickListener() {
+        holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
@@ -285,8 +289,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
                 //Parallax background -------------------------------------
-                holder.mProfileDialogBackground.setTiltSensitivity(2);
+                holder.mProfileDialogBackground.setTiltSensitivity(5);
                 holder.mProfileDialogBackground.registerSensorManager();
+                holder.mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uriUrl = Uri.parse(WEBSITE_URL);
+                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        mContext.startActivity(launchBrowser);
+                    }
+                });
                 //TODO tenere la parallasse?!
                 //---------------------------------------------------------
 
