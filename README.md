@@ -27,7 +27,6 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 ==============
 ###Milestone 1 - Proof of Concept
-######Work in progress
 
 - Implementing the first part of front-end, the home screen;
 - Implementing the activity to add new geeft
