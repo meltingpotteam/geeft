@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -27,9 +26,8 @@ import android.widget.Toast;
 import com.baasbox.android.BaasUser;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -96,6 +94,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUsername;
         public TextView mProfileDialogUserLocation;
         public ImageView mProfileDialogUserImage;
+        public ParallaxImageView mProfileDialogBackground;
         //-------------------------------------------
 
         public CardView mContainer;
@@ -276,6 +275,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
                 holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
                 holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
                 //--------------------------------------------
                 holder.mProfileDialogUsername
                         .setText(item
@@ -284,6 +284,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
+                //Parallax background -------------------------------------
+                holder.mProfileDialogBackground.setTiltSensitivity(2);
+                holder.mProfileDialogBackground.registerSensorManager();
+                //TODO tenere la parallasse?!
+                //---------------------------------------------------------
 
                 //TODO: fill the fields "rank" , "geeven", "receeved"-------
                 //----------------------------------------------------------
