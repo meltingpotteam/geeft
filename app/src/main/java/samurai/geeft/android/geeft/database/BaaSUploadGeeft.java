@@ -13,9 +13,11 @@ import com.baasbox.android.Role;
 import com.baasbox.android.json.JsonObject;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+
 /**
  * Created by danybr-dev on 31/01/16.
  */
+
 public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
 
     private final String TAG = "BaaSUploadGeeft";
