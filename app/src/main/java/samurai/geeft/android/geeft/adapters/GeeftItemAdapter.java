@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -21,15 +20,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -54,7 +53,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
 
     private final LayoutInflater inflater;
-
+    private final String WEBSITE_URL = "http://geeft.tk/";
     private final static String TAG ="GeeftAdapter";
 
     //list containing the geefts and avoiding null pointer exception
@@ -93,6 +92,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
         public ImageButton mSignalisationButton;
+        public LinearLayout mProfileClickableArea;
 
         //info dialog attributes---------------------
         public TextView mProfileDialogUsername;
@@ -101,7 +101,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUserRank;
         public TextView mProfileDialogUserGiven;
         public TextView mProfileDialogUserReceived;
-
+        public ParallaxImageView mProfileDialogBackground;
         //-------------------------------------------
         public CardView mContainer;
 
@@ -119,6 +119,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
             mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
+
+            mProfileClickableArea = (LinearLayout) itemView.findViewById(R.id.geefter_info_area);
 
             mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
@@ -267,7 +269,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * of the "Receeved" Geeft.
          * it also display the possibiliy to contact him with facebook.
          * **/
-        holder.mUsernameTextView.setOnClickListener(new View.OnClickListener() {
+        holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
@@ -280,6 +282,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
                 holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
                 holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+
                 holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
                 holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
                 holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
@@ -289,10 +292,28 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                         holder.mProfileDialogUsername
                                 .setText(item
                                         .getUsername());
+                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
+                //--------------------------------------------
+                holder.mProfileDialogUsername
+                        .setText(item
+                                .getUsername());
                 holder.mProfileDialogUserLocation.setText(item.getUserLocation());
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
+                //Parallax background -------------------------------------
+                holder.mProfileDialogBackground.setTiltSensitivity(5);
+                holder.mProfileDialogBackground.registerSensorManager();
+                holder.mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uriUrl = Uri.parse(WEBSITE_URL);
+                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        mContext.startActivity(launchBrowser);
+                    }
+                });
+                //TODO tenere la parallasse?!
+                //---------------------------------------------------------
 
                 //TODO: fill the fields "rank" , "geeven", "receeved"-------
                 //----------------------------------------------------------
