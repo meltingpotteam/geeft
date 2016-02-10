@@ -99,7 +99,8 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                         + " cap: " +  cap + " expire time: " + expTime + " category: " + category +
                         " automatic selection: " + automaticSelection + " allow communication: " + allowCommunication);
                 if(name.length() <= 1 || description.length() <= 1 || mGeeftImageView.getDrawable() == null
-                        || location == null || cap.length() < 5 || expTime == null){
+                        || location == null || cap.length() < 5 || expTime == null
+                        || mGeeftCategory.getSelectedItemPosition() == 0 || mGeeftExpirationTime.getSelectedItemPosition() == 0 ){
                     //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getApplicationContext(), "Bisogna compilare tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                     return true;
