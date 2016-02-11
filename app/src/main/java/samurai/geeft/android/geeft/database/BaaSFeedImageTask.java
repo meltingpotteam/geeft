@@ -27,14 +27,15 @@ import samurai.geeft.android.geeft.models.Geeft;
  */
 public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
 
-    private static final String TAG ="BaaSFeedImageTask";
+    private static final String TAG ="BaaSGeeftItemTask";
     Context mContext;
     List<Geeft> mGeeftList;
     TaskCallbackBoolean mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
 
-    public BaaSFeedImageTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter, TaskCallbackBoolean callback) {
+    public BaaSFeedImageTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                             TaskCallbackBoolean callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -72,7 +73,6 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setUsername(e.getString("name"));
                     mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
                     //Append ad image url your session token!
-
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setTimeStamp(getCreationTimestamp(e));

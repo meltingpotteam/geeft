@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     private ViewPager mViewPager;
     private List<Geeft> mGeeftList = new ArrayList<>();
+    private View mBallView;
+    private Toolbar mToolbar;
 
 
     public static Intent newIntent(Context context, String geeftId) {
@@ -43,7 +48,8 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
-        mGeeftList.add(new Geeft());
+        mBallView = findViewById(R.id.loading_balls);
+
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),this).execute();
     }
@@ -51,20 +57,27 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     @Override
     public void done(boolean result) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-                Geeft geeft = mGeeftList.get(position);
-                GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
-                geeftStoryFragment.setGeeft(geeft);
-                return geeftStoryFragment;
-            }
+        mBallView.setVisibility(View.GONE);
+        if(result) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+                @Override
+                public Fragment getItem(int position) {
+                    Geeft geeft = mGeeftList.get(position);
+                    GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
+                    geeftStoryFragment.setGeeft(geeft);
+                    return geeftStoryFragment;
+                }
 
-            @Override
-            public int getCount() {
-                return mGeeftList.size();
-            }
-        });
+                @Override
+                public int getCount() {
+                    return mGeeftList.size();
+                }
+            });
+        }else {
+            new AlertDialog.Builder(getApplicationContext())
+                    .setTitle("Errore")
+                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+        }
     }
 }

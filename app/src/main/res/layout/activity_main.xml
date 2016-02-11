@@ -20,7 +20,7 @@
             android:layout_below="@id/main_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="8dp"
+            android:elevation="6dp"
             android:background="@color/colorPrimary"/>
 
 

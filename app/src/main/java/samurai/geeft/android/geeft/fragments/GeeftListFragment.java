@@ -29,15 +29,16 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
     private RecyclerView mRecyclerView;
     private GeeftItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
+    private View mBallView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_geeft_list, container, false);
+        mBallView = rootView.findViewById(R.id.loading_balls);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
-
 
         mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -63,10 +64,12 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public void done(boolean result){
+        mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
+
                 toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
