@@ -76,7 +76,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private final int MAX_SELECT = 5;//Max number of prenotation for each users
-        
+
         public TextView mTimeStampTextView;
         public TextView mExpireTime;
         public TextView mUserLocationTextView;
@@ -165,6 +165,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         // - get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
 
+
         // - replace the contents of the view with that element
         holder.mUsernameTextView.setText(item.getUsername());
 
@@ -189,11 +190,60 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
 
         // Converting timestamp into x ago format
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-                Long.parseLong(item.getTimeStamp()),
+//        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+//                Long.parseLong(item.getCreationTimeStamp()),
+//                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+//
+//        holder.mTimeStampTextView.setText(timeAgo);
+
+
+//        int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
+        final Long millisToGo = (Long.parseLong(item.getCreationTimeStamp())+Long.parseLong(item.getDeadLine()))-
+                System.currentTimeMillis();
+        Log.d("MILLISTOGO", millisToGo.toString());
+
+        new CountDownTimer(millisToGo,1000) {
+
+            @Override
+            public void onTick(long millis) {
+                int seconds = (int) (millis / 1000) % 60 ;
+                int minutes = (int) ((millis / (1000*60)) % 60);
+                int hours   = (int) ((millis / (1000*60*60)) % 24);
+                String text = String.format("%02d: %02d: %02d ",hours,minutes,seconds);
+                holder.mDeadlineTime.setText(text);
+            }
+
+            @Override
+            public void onFinish() {
+                holder.mDeadlineTime.setText("Fine!");
+            }
+        }.start();
+
+
+        // Converting timestamp into x ago format
+        //long millis; I can't
+//        new CountDownTimer((Long.parseLong(item.getDeadLine())/1000 - Long.parseLong(item.getCreationTimeStamp()) / 1000), 1000) {
+//
+//            public void onTick(long secondsUntilFinished) {
+//
+//                //TODO: Fix bug with display time
+//               // holder.mDeadlineTime.setText("Ore rimanenti: " + millisUntilFinished / 1000);
+//               // Log.d(TAG,"Seconds are: " + seconds + " || millis: " + (millisUntilFinished / 1000) + " and creation: "+  Long.parseLong(item.getCreationTimeStamp()));
+//                holder.mDeadlineTime.setText("Tempo rimanente: " + String.format("%02d:%02d:%02d", secondsUntilFinished / 3600,
+//                        (secondsUntilFinished % 3600) / 60, (secondsUntilFinished % 60)));
+//
+//            }
+//
+//            public void onFinish() {
+//                holder.mDeadlineTime.setText("Fine!");
+//            }
+//        }.start();
+
+        /*CharSequence timeWillCome = DateUtils.getRelativeTimeSpanString(
+                Long.parseLong(item.getCreationTimeStamp()),
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
-        holder.mTimeStampTextView.setText(timeAgo);
+        holder.mDeadlineTime.setText(timeWillCome);*/
 
         /**The User are obliged to set a title, a description, a position, a location and an image.
          * TODO verify this part if the design of the application will change
