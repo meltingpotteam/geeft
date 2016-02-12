@@ -8,7 +8,6 @@ import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
-import com.baasbox.android.RequestOptions;
 import com.baasbox.android.json.JsonArray;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
@@ -143,8 +142,6 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
         }
 
     }
-
-
 
     @Override
     protected void onPostExecute(Boolean result) {
