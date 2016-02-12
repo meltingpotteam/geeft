@@ -198,26 +198,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
 
 //        int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
-        final Long millisToGo = (Long.parseLong(item.getCreationTimeStamp())+Long.parseLong(item.getDeadLine()))-
-                System.currentTimeMillis();
-        Log.d("MILLISTOGO", millisToGo.toString());
-
-        new CountDownTimer(millisToGo,1000) {
-
-            @Override
-            public void onTick(long millis) {
-                int seconds = (int) (millis / 1000) % 60 ;
-                int minutes = (int) ((millis / (1000*60)) % 60);
-                int hours   = (int) ((millis / (1000*60*60)) % 24);
-                String text = String.format("%02d: %02d: %02d ",hours,minutes,seconds);
-                holder.mDeadlineTime.setText(text);
-            }
-
-            @Override
-            public void onFinish() {
-                holder.mDeadlineTime.setText("Fine!");
-            }
-        }.start();
 
 
         // Converting timestamp into x ago format

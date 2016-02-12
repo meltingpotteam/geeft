@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +32,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -142,7 +146,7 @@ public class AddGeeftFragment extends Fragment{
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext()); //Read Update
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity()); //Read Update
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
                 alertDialog.setView(dialogLayout);
@@ -151,10 +155,24 @@ public class AddGeeftFragment extends Fragment{
                 AlertDialog dialog = alertDialog.create();
                 //the context i had to use is the context of the dialog! not the context of the app.
                 //"dialog.findVie..." instead "this.findView..."
-                mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
-                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
+//                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
+
+                File imgFile = new  File(Environment.getExternalStorageDirectory()
+                        +File.separator + "image.jpg");
+
+                Picasso.with(getActivity()).load(imgFile)
+                        .config(Bitmap.Config.ARGB_8888)
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mDialogImageView);
+
+
                 dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
                 //dialog.setMessage("Some information that we can take from the facebook shared one");
                 dialog.show();  //<-- See This!
@@ -211,7 +229,10 @@ public class AddGeeftFragment extends Fragment{
             mGeeftImageView.setImageDrawable(null);
             Picasso.with(getContext()).load(file)
                     .fit()
-                    .centerInside()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)        //avoid the problem of the chached
+                    .networkPolicy(NetworkPolicy.NO_CACHE)      //image loading every time a new photo
+                    .centerCrop()
+                    .config(Bitmap.Config.ARGB_8888)
                     .into(mGeeftImageView);
         }
     }
@@ -301,7 +322,10 @@ public class AddGeeftFragment extends Fragment{
                     android.support.v7.app.AlertDialog dialog = builder.create();
                     //the context i had to use is the context of the dialog! not the context of the
                     dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+                    File file = new File(Environment.getExternalStorageDirectory()
+                            +File.separator + "image.jpg");
                     dialog.show();
+                    boolean delete = file.delete();
                 }
                 ///////////////////////////////////////
                 return true;
