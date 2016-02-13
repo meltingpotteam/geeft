@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -21,15 +20,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -54,7 +53,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
 
     private final LayoutInflater inflater;
-
+    private final String WEBSITE_URL = "http://geeft.tk/";
     private final static String TAG ="GeeftAdapter";
 
     //list containing the geefts and avoiding null pointer exception
@@ -77,7 +76,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private final int MAX_SELECT = 5;//Max number of prenotation for each users
-        
+
         public TextView mTimeStampTextView;
         public TextView mExpireTime;
         public TextView mUserLocationTextView;
@@ -93,6 +92,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
         public ImageButton mSignalisationButton;
+        public LinearLayout mProfileClickableArea;
 
         //info dialog attributes---------------------
         public TextView mProfileDialogUsername;
@@ -101,7 +101,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUserRank;
         public TextView mProfileDialogUserGiven;
         public TextView mProfileDialogUserReceived;
-
+        public ParallaxImageView mProfileDialogBackground;
         //-------------------------------------------
         public CardView mContainer;
 
@@ -119,6 +119,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
             mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
             mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
+
+            mProfileClickableArea = (LinearLayout) itemView.findViewById(R.id.geefter_info_area);
 
             mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
@@ -163,6 +165,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         // - get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
 
+
         // - replace the contents of the view with that element
         holder.mUsernameTextView.setText(item.getUsername());
 
@@ -187,11 +190,40 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
 
         // Converting timestamp into x ago format
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-                Long.parseLong(item.getTimeStamp()),
+//        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+//                Long.parseLong(item.getCreationTimeStamp()),
+//                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+//
+//        holder.mTimeStampTextView.setText(timeAgo);
+
+
+//        int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
+
+
+        // Converting timestamp into x ago format
+        //long millis; I can't
+//        new CountDownTimer((Long.parseLong(item.getDeadLine())/1000 - Long.parseLong(item.getCreationTimeStamp()) / 1000), 1000) {
+//
+//            public void onTick(long secondsUntilFinished) {
+//
+//                //TODO: Fix bug with display time
+//               // holder.mDeadlineTime.setText("Ore rimanenti: " + millisUntilFinished / 1000);
+//               // Log.d(TAG,"Seconds are: " + seconds + " || millis: " + (millisUntilFinished / 1000) + " and creation: "+  Long.parseLong(item.getCreationTimeStamp()));
+//                holder.mDeadlineTime.setText("Tempo rimanente: " + String.format("%02d:%02d:%02d", secondsUntilFinished / 3600,
+//                        (secondsUntilFinished % 3600) / 60, (secondsUntilFinished % 60)));
+//
+//            }
+//
+//            public void onFinish() {
+//                holder.mDeadlineTime.setText("Fine!");
+//            }
+//        }.start();
+
+        /*CharSequence timeWillCome = DateUtils.getRelativeTimeSpanString(
+                Long.parseLong(item.getCreationTimeStamp()),
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
-        holder.mTimeStampTextView.setText(timeAgo);
+        holder.mDeadlineTime.setText(timeWillCome);*/
 
         /**The User are obliged to set a title, a description, a position, a location and an image.
          * TODO verify this part if the design of the application will change
@@ -267,7 +299,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * of the "Receeved" Geeft.
          * it also display the possibiliy to contact him with facebook.
          * **/
-        holder.mUsernameTextView.setOnClickListener(new View.OnClickListener() {
+        holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
@@ -280,6 +312,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
                 holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
                 holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+
                 holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
                 holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
                 holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
@@ -289,10 +322,28 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                         holder.mProfileDialogUsername
                                 .setText(item
                                         .getUsername());
+                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
+                //--------------------------------------------
+                holder.mProfileDialogUsername
+                        .setText(item
+                                .getUsername());
                 holder.mProfileDialogUserLocation.setText(item.getUserLocation());
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
+                //Parallax background -------------------------------------
+                holder.mProfileDialogBackground.setTiltSensitivity(5);
+                holder.mProfileDialogBackground.registerSensorManager();
+                holder.mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uriUrl = Uri.parse(WEBSITE_URL);
+                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        mContext.startActivity(launchBrowser);
+                    }
+                });
+                //TODO tenere la parallasse?!
+                //---------------------------------------------------------
 
                 //TODO: fill the fields "rank" , "geeven", "receeved"-------
                 //----------------------------------------------------------

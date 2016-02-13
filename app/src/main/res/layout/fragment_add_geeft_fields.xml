@@ -1,265 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:scrollbars="vertical"
-    android:paddingTop="?attr/actionBarSize"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:fillViewport="false"
-    >
-    <android.support.design.widget.CoordinatorLayout
+    android:fitsSystemWindows="true"
+    tools:context=".activity.AddGeeft">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fragment_appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+        <include android:id="@+id/fragment_add_geeft_toolbar" layout="@layout/tool_bar"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:orientation="vertical"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:descendantFocusability="beforeDescendants"
+        android:layout_below="@id/fragment_appbar_layout"
+        android:fillViewport="false"
+        android:background="#e2e2e2"
         >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include layout="@layout/add_geef_fields"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="top"
-                android:scaleType="centerCrop"
-                android:background="@android:color/darker_gray"
-                android:id="@+id/geeft_add_photo_frame"
-                />
-            <ImageButton
-                android:id="@+id/geeft_photo_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_camera_white_24dp"
-                android:layout_gravity="end|end"
-                android:background="#00ffffff"
-                android:padding="15dp"
-                android:paddingBottom="10dp"
-                android:layout_alignBottom="@id/geeft_add_photo_frame"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/geeft_add_photo_frame"
-                android:padding="20dp"
-                android:orientation="vertical"
-                android:id="@+id/geeft_form_field">
+    </ScrollView>
+</RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/activity_vertical_margin">
-                    <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:text="Geeft name"-->
-                    <!--android:textSize="@dimen/geeft_title_text_size"-->
-                    <!--android:textColor="@android:color/black"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:paddingTop="@dimen/activity_vertical_margin"/>-->
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:background="#00ffffff"
-                        android:src="@drawable/ic_object_given_form"/>
-                    <EditText
-                        android:id="@+id/fragment_add_geeft_form_name"
-                        android:textColor="@color/colorPrimaryText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/add_gift_name_hint"
-                        android:textColorHint="@color/colorHintAccent"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    >
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:background="#00ffffff"
-                        android:src="@drawable/ic_description_black_24dp"/>
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:text="Geeft description"-->
-                        <!--android:textSize="@dimen/geeft_title_text_size"-->
-                        <!--android:textColor="@android:color/black"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:paddingTop="@dimen/activity_vertical_margin"/>-->
-
-                    <EditText
-                        android:id="@+id/fragment_add_geeft_form_description"
-                        android:textColor="@color/colorPrimaryText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/add_geeft_description_hint"
-                        android:textColorHint="@color/colorHintAccent"
-                        />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    android:orientation="horizontal">
-
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:text="Geeft location"-->
-                        <!--android:textSize="@dimen/geeft_title_text_size"-->
-                        <!--android:textColor="@android:color/black"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:paddingTop="@dimen/activity_vertical_margin"/>-->
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:background="#00ffffff"
-                        android:src="@drawable/ic_location_on"/>
-                    <!--<EditText-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:hint="Where you want to consign the geeft"/>-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <Spinner
-                            android:id="@+id/form_field_location_spinner"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.6"
-                            android:spinnerMode="dropdown"
-                            >
-                        </Spinner>
-                        <!--Dummy layout for padding-->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.2"/>
-
-                        <EditText
-                            android:id="@+id/form_field_location_cap"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:singleLine="true"
-                            android:textColor="@color/colorPrimaryText"
-                            android:maxLength="5"
-                            android:inputType="number"
-                            android:hint="CAP zona"
-                            android:textColorHint="@color/colorHintAccent"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="@dimen/activity_vertical_margin">
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:background="#00ffffff"
-                        android:src="@drawable/ic_av_timer_black_24dp"/>
-                    <!--<EditText-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:hint="Where you want to consign the geeft"/>-->
-                    <Spinner
-                        android:id="@+id/expire_time_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:spinnerMode="dropdown"
-                        >
-                    </Spinner>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="@dimen/activity_vertical_margin">
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:background="#00ffffff"
-                        android:src="@drawable/ic_edit_black_24dp"/>
-                    <!--<EditText-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:hint="Where you want to consign the geeft"/>-->
-                    <Spinner
-                        android:id="@+id/categories_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:spinnerMode="dropdown"
-                        >
-                    </Spinner>
-                </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="30dp">
-                    <TextView
-                        android:paddingTop="5dp"
-                        android:id="@+id/automatic_geefter_selection"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Selezione automatica del Geefted"
-                        android:textSize="@dimen/geeft_title_text_size"
-                        android:textColor="@android:color/black"
-                        />
-                    <CheckBox
-                        android:id="@+id/automatic_selection_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/automatic_geefter_selection"
-                        android:layout_alignRight="@+id/automatic_geefter_selection"
-                        />
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="30dp">
-                    <TextView
-                        android:paddingTop="5dp"
-                        android:id="@+id/allow_communication"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Posso essere contattato"
-                        android:textSize="@dimen/geeft_title_text_size"
-                        android:textColor="@android:color/black"
-                        />
-                    <CheckBox
-                        android:id="@+id/allow_communication_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/allow_communication"
-                        android:layout_alignRight="@+id/allow_communication"
-                        />
-                </RelativeLayout>
-                <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:text="PHOTO"-->
-                <!--android:id="@+id/geeft_photo_button"-->
-                <!--/>-->
-                <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:text="Ok"-->
-                <!--android:id="@+id/geeft_ok_button"-->
-                <!--/>-->
-            </LinearLayout>
-        </RelativeLayout>
-    </android.support.design.widget.CoordinatorLayout>
-
-</ScrollView>

@@ -173,6 +173,7 @@
 
     <!-- Spinner Array For the Expiration Time-->
     <string-array name="week_array">
+        <item>---Seleziona scadenza---</item>
         <item>1 day</item>
         <item>2 days</item>
         <item>3 days</item>
@@ -180,16 +181,24 @@
         <item>5 days</item>
         <item>6 days</item>
         <item>7 days</item>
+        <item>8 days</item>
+        <item>9 days</item>
+        <item>10 days</item>
+        <item>11 days</item>
+        <item>12 days</item>
+        <item>13 days</item>
+        <item>14 days</item>
     </string-array>
 
     <!-- Spinner Array For the Expiration Time-->
     <string-array name="categories_array">
-        <item>Libri</item>
+        <item>---Seleziona Categoria---</item>
+        <item>Libri e Cartoleria</item>
         <item>Elettronica</item>
         <item>Casa</item>
         <item>Uso quotidiano</item>
         <item>Giocattoli</item>
         <item>Abbigliamento</item>
-        <item>Musia e Arte</item>
+        <item>Arte e Musica</item>
     </string-array>
 </resources>

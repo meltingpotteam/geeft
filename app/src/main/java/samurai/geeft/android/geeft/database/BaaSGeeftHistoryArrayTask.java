@@ -41,7 +41,6 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         BaasQuery.Criteria paginate = BaasQuery.builder().where("id ="+mGeeftId).criteria();
-
         BaasResult<BaasDocument> baasResult = BaasDocument.fetchSync("geeft", mGeeftId);
         if (baasResult.isSuccess()) {
             try {
@@ -78,21 +77,24 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
             if (baasResult.isSuccess()) {
                 try {
                     List<BaasLink> list = baasResult.get();
+                    Log.d(TAG,""+list.size());
                     if (list.size() > 0) {
                         BaasLink link = baasResult.get().get(0);
                         BaasDocument doc = (BaasDocument) link.out();
                         Geeft mGeeft = new Geeft();
-                        mGeeft.setId(e.getId());
-                        mGeeft.setUsername(e.getString("name"));
-                        mGeeft.setGeeftImage(e.getString("image"));
-                        mGeeft.setGeeftDescription(e.getString("description"));
-                        mGeeft.setUserProfilePic(e.getString("profilePic"));
-                        mGeeft.setUserLocation(e.getString("location"));
-                        mGeeft.setGeeftTitle(e.getString("title"));
+                        mGeeft.setId(doc.getId());
+                        mGeeft.setUsername(doc.getString("name"));
+                        mGeeft.setGeeftImage(doc.getString("image")+BaasUser.current().getToken());
+                        mGeeft.setGeeftDescription(doc.getString("description"));
+                        mGeeft.setUserProfilePic(doc.getString("profilePic"));
+                        mGeeft.setUserLocation(doc.getString("location"));
+                        mGeeft.setGeeftTitle(doc.getString("title"));
                         mGeeftList.add(mGeeft);
-                       // mPreviousGeeftId = e.getId();
+                        mPreviousGeeftId = doc.getId();
                         stop = false;
                     }
+                    else
+                        stop=true;
                 } catch (com.baasbox.android.BaasException ex) {
                     Log.e("CLASS2", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();

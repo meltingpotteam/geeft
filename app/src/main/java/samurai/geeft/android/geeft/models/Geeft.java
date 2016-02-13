@@ -1,9 +1,11 @@
 package samurai.geeft.android.geeft.models;
 
+import java.io.Serializable;
+
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class Geeft {
+public class Geeft implements Serializable{
     private String timeStamp;
     private String deadLine;
     private String exptime;
@@ -19,6 +21,18 @@ public class Geeft {
     private boolean isSelected;
     private String userProfilePic;
     private String linkId;
+
+    public byte[] getStreamImage() {
+        return streamImage;
+    }
+
+    public void setStreamImage(byte[] streamImage) {
+        this.streamImage = streamImage;
+    }
+
+    private byte[] streamImage;
+
+    private String category;
 
     public Geeft(){
     }
@@ -150,8 +164,26 @@ public class Geeft {
     }
 
     public String getDeadLine(){return deadLine;}
+
     public void setDeadLine(String deadLine){this.deadLine = deadLine;}
 
     public String getLinkId(){ return linkId;}
+
     public void setLinkId(String linkId){ this.linkId = linkId;}
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getExptime() {
+        return exptime;
+    }
+
+    public void setExptime(String exptime) {
+        this.exptime = exptime;
+    }
 }
