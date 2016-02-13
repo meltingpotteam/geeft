@@ -62,6 +62,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
             return false; // Don't continue if we are in this case
         }
         BaasQuery.Criteria paginate = BaasQuery.builder()
+              //  .pagination(1,5) //TODO delete this after test
                 .orderBy("_creation_date asc").criteria();
         BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
         if (baasResult.isSuccess()) {

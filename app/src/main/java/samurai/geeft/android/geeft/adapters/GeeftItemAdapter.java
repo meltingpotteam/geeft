@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -30,6 +33,9 @@ import com.squareup.picasso.Picasso;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
@@ -139,11 +145,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         //Inflate a new view hierarchy from the specified xml resource.
         return new ViewHolder(mGeeftView);
     }
+    //private AdapterItems myAdapter;
+    private LinearLayoutManager layoutManager;
+    private ScheduledFuture updateFuture;
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
+
+
 
         // - replace the contents of the view with that element
         holder.mUsernameTextView.setText(item.getUsername());
@@ -175,24 +186,41 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         holder.mTimeStampTextView.setText(timeAgo);
 
-        // Converting timestamp into x ago format
-        //long millis; I can't
-        new CountDownTimer((Long.parseLong(item.getDeadLine())/1000 - Long.parseLong(item.getCreationTimeStamp()) / 1000), 1000) {
+//TODO fix for cycling each second.
 
-            public void onTick(long secondsUntilFinished) {
+        long seconds_Actual_Base = (System.currentTimeMillis()/1000);
+        long deadline_Seconds_Base = Long.parseLong(item.getDeadLine());//Deadline is in seconds.
+        final long seconds_Remaining_Base = deadline_Seconds_Base-seconds_Actual_Base;
 
-                //TODO: Fix bug with display time
-               // holder.mDeadlineTime.setText("Ore rimanenti: " + millisUntilFinished / 1000);
-               // Log.d(TAG,"Seconds are: " + seconds + " || millis: " + (millisUntilFinished / 1000) + " and creation: "+  Long.parseLong(item.getCreationTimeStamp()));
-                holder.mDeadlineTime.setText("Tempo rimanente: " + String.format("%02d:%02d:%02d", secondsUntilFinished / 3600,
-                        (secondsUntilFinished % 3600) / 60, (secondsUntilFinished % 60)));
 
+        new CountDownTimer(seconds_Remaining_Base*1000, 10000) {
+
+            public void onTick(long millisecondsUntilFinished) {
+                long seconds_Remaining = millisecondsUntilFinished/1000;
+                long minutes_Remaining = seconds_Remaining/60;
+                long hours_Remaining = minutes_Remaining/60;
+                long days_Remaining = hours_Remaining/24;
+
+                long hours_Display = seconds_Remaining/3600;
+                long minutes_Display = (seconds_Remaining-hours_Display*3600)/60;
+                long seconds_Display = (seconds_Remaining-hours_Display*3600-minutes_Display*60);
+                Log.d(TAG, "deadline data: "+item.getDeadLine()+" para la posicion: "+position);
+                if (days_Remaining>1) {
+                    //If we are going to use more than 10 days, check if "%01d" works.
+                    holder.mDeadlineTime.setText(String.format("%01d", days_Remaining)+" giorni mancanti.");
+                } else if (days_Remaining == 1) {
+                    //If we are going to use more than 10 days, check if "%01d" works.
+                    holder.mDeadlineTime.setText(String.format("%01d", days_Remaining)+" giorno mancante.");
+                }else {
+                    holder.mDeadlineTime.setText(String.format("%01d:%02d", hours_Display,minutes_Display));
+                }
             }
 
             public void onFinish() {
                 holder.mDeadlineTime.setText("Fine!");
             }
         }.start();
+
 
         /*CharSequence timeWillCome = DateUtils.getRelativeTimeSpanString(
                 Long.parseLong(item.getCreationTimeStamp()),
