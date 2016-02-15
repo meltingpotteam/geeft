@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fragment_appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+        <include android:id="@+id/fragment_feedback_help_page_toolbar" layout="@layout/tool_bar"/>
+
+
+    </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/colorPrimaryText"
+        android:padding="@dimen/activity_horizontal_margin_x2"
+        android:textStyle="bold"
+        android:text="Pagina Report"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimaryText"
+        android:paddingEnd="@dimen/activity_horizontal_margin_x2"
+        android:paddingRight="@dimen/activity_horizontal_margin_x2"
+        android:paddingLeft="@dimen/activity_horizontal_margin_x2"
+        android:paddingStart="@dimen/activity_horizontal_margin_x2"
+        android:paddingBottom="@dimen/activity_horizontal_margin_x2"
+        android:text="@string/feedback_page_message"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/activity_horizontal_margin_x2"
+        android:paddingRight="@dimen/activity_horizontal_margin_x2"
+        android:paddingStart="@dimen/activity_horizontal_margin_x2"
+        android:paddingLeft="@dimen/activity_horizontal_margin_x2"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/fragment_feedback_help_page_title"
+            android:textColor="@color/colorPrimaryText"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Titolo del feedback"
+            android:textColorHint="@color/colorHintAccent"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:text="Geeft name"-->
+            <!--android:textSize="@dimen/geeft_title_text_size"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:paddingTop="@dimen/activity_vertical_margin"/>-->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:background="#00ffffff"
+                android:src="@drawable/ic_edit_black_24dp"/>
+            <EditText
+                android:id="@+id/fragment_feedback_help_page_description"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="1"
+                android:hint="Scrivi la descrizione del problema"
+                android:textColorHint="@color/colorHintAccent"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        android:textAlignment="viewEnd"
+        android:layout_gravity="end"
+        android:paddingRight="@dimen/activity_horizontal_margin_x2"
+        android:paddingEnd="@dimen/activity_horizontal_margin_x2"
+        android:text="@string/team_thanks_string"
+        />
+
+</LinearLayout>
