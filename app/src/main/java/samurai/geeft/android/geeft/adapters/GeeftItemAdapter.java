@@ -239,22 +239,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * false positives and it is redundant with the previous declaration
          * [gabriel-dev]
          */
-//        // Check for empty geeft title
-//        if (TextUtils.isEmpty(item.getGeeftTitle()))
-//            // status is empty, remove from view
-//            holder.mGeeftTitleTextView.setVisibility(View.GONE);
-//
-//        // Check for empty geeft description
-//        if (TextUtils.isEmpty(item.getGeeftDescription()))
-//            // description is empty, remove from view
-//            holder.mGeeftDescriptionTextView.setVisibility(View.GONE);
 
-//        if (TextUtils.isEmpty(item.getUserLocation())) {
-//            // location is empty, remove from view location txt and button
-//            holder.mUserLocationTextView.setVisibility(View.GONE);
-//            holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
-//            holder.mLocationButton.setClickable(false);
-//        }
         if (holder.mUserLocationTextView.getText() == null) {
             // location is empty, remove from view location txt and button
             holder.mUserLocationTextView.setVisibility(View.GONE);
