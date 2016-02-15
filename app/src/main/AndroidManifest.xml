@@ -56,6 +56,9 @@
 
         <activity android:name=".activities.FullScreenViewActivity"/>
 
+        <activity android:name=".activities.FeedbackPageActivity"
+                  android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

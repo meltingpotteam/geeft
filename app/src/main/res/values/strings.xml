@@ -69,6 +69,16 @@
     <string name="team_thanks_string">Grazie da parte del team di Geeft</string>
 
 
+    //-----------------------------------FEEDBACK GEEFTED PAGE----------------------------------------------------------
+    <string name="feedback_communication_question">Com\'è stata la comunicazione?</string>
+    <string name="feedback_reliability_question">È stata una persona affidabile?</string>
+    <string name="feedback_courtesy_question">È stata cortese?</string>
+    <string name="feedback_description_question">Il Geeft era descritto bene?</string>
+    <string name="feedback_insert_comment">Scrivi un commento.</string>
+    <string name="feedback_button">Invia</string>
+    //-----------------------------------------------------------------------------------------------------
+
+
     <!-- TODO: separate the spinner arrays in separated resources -->
     <!-- Spinner Array For the Location-->
     <string-array name="cities_array">
