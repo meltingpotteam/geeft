@@ -268,7 +268,9 @@ public class AddGeeftFragment extends Fragment{
                         allowCommunication);
 
                 if(name.length() <= 1 || description.length() <= 1 || mGeeftImage == null
-                        || location == null || cap.length() < 5 || expTime == null){
+                        || location == null || cap.length() < 5 || expTime == null ||
+                        mGeeftExpirationTime.getSelectedItemPosition() == 0 ||
+                        mGeeftCategory.getSelectedItemPosition() == 0){
                     //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getContext(),
                             "Bisogna compilare tutti i campi prima di procedere",

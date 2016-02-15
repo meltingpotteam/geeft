@@ -45,7 +45,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 20/01/16.
- * adapter for GeeftListFragment Recyclerview
+ * adapter for GeeftMainRecycleFragment Recyclerview
  * Updated by danybr-dev on 2/02/16
  * Updated by gabriel-dev on 04/02/2016
  * Updated by gabriel-dev on 08/02/2016
@@ -84,6 +84,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mUsernameTextView;
         public TextView mGeeftDescriptionTextView;
         public TextView mGeeftTitleTextView;
+        public Boolean  mTextIsSingleLine;
 
         public ImageView mUserProfilePic;
         public ImageView mGeeftImage;
@@ -138,7 +139,14 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mGeeftDescriptionTextView.setSingleLine(false);
+                    if(mTextIsSingleLine) {
+                        mGeeftDescriptionTextView.setSingleLine(false);
+                        mTextIsSingleLine = false;
+                    } else {
+                        mGeeftDescriptionTextView.setSingleLine(true);
+                        mTextIsSingleLine = true;
+                    }
+
                 }
             });
             //////////////////////////////
@@ -172,6 +180,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
         holder.mGeeftDescriptionTextView.setSingleLine(true);
         holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
+        holder.mTextIsSingleLine = true;
 
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         holder.mTimeStampTextView.setText(item.getTimeStamp());

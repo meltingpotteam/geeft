@@ -23,7 +23,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+public class GeeftMainRecycleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         TaskCallbackBoolean {
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
@@ -82,7 +82,7 @@ public class GeeftListFragment extends Fragment implements SwipeRefreshLayout.On
         mAdapter.notifyDataSetChanged();
     }
 
-    public GeeftListFragment getInstance(){
+    public GeeftMainRecycleFragment getInstance(){
        return this;
     }
 }
