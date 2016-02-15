@@ -13,6 +13,10 @@ import com.baasbox.android.Grant;
 import com.baasbox.android.Role;
 import com.baasbox.android.json.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -60,10 +64,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("cap", mGeeft.getUserCap());
             doc.put("name", getFacebookName());
             doc.put("profilePic", getProfilePicFacebook());
-            String timestamp = "1455115679"; //timestamp fittizio che punta al 10 Febbraio,serve per la scadenza
-            Log.d(TAG, "Timestamp is: " + timestamp);
-            doc.put("deadline", timestamp);
-            doc.put("exptime", mGeeft.getExpTime());
+           doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long
             doc.put("category", mGeeft.getCategory().toLowerCase());
             // send the field fo allow communication and automatic selection; remember to manage them
             // in the BassReserveTask
@@ -135,6 +136,18 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         mCallback.done(result);
+    }
+    public String getDeadlineTimestamp(int expTime){ // I know,there is a delay between creation and upload time of document,
+        //so we have a not matching timestamp (deadline and REAL deadline
+        // calculated like creation data + exptime in days)
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Now use today date.
+        c.add(Calendar.DATE, expTime); // Adding "expTime" days
+        //String deadline = sdf.format(c.getTime()); //return Date,not timestamp.
+        String deadline = ""+ c.getTimeInMillis()/1000; //get timestamp
+        Log.d(TAG, "deadline is:" + deadline); //DELETE THIS AFTER DEBUG
+        return deadline;
     }
 }
 

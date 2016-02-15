@@ -75,8 +75,8 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     //Append ad image url your session token!
                     mGeeft.setGeeftDescription(e.getString("description"));
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
-                    mGeeft.setTimeStamp(getCreationTimestamp(e));
-                    mGeeft.setExpTime(e.getString("exptime"));
+                    mGeeft.setCreationTime(getCreationTimestamp(e));
+                    mGeeft.setDeadLine(e.getLong("deadline"));
 
 //                    TODO verify the error; probably we need to erase and recharg all the object since i send another one field to baas
 //                    mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
@@ -110,17 +110,17 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
         return result;
     }
 
-    private static String getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+    private static long getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
         String date = d.getCreationDate();
         //Log.d(TAG,"_creation_date is:" + date);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         try {
             Date creation_date = dateFormat.parse(date);
-            return ""+creation_date.getTime(); //Convert timestamp in string
+            return creation_date.getTime(); //Convert timestamp in string
         }catch (java.text.ParseException e){
            Log.e(TAG,"ERRORE FATALE : " + e.toString());
         }
-        return "";
+        return -1;
 
     }
 

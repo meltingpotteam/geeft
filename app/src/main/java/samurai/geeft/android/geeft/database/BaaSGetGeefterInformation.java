@@ -24,12 +24,12 @@ public class BaaSGetGeefterInformation extends AsyncTask<Void,Void,Boolean> {
 
     private final String TAG = getClass().getName();
     private Context mContext;
-    private long mUserInformation[];
+    private double mUserInformation[];
     private GeeftItemAdapter.ViewHolder mHolder;
     TaskCallbackBooleanArray mCallback;
 
     public BaaSGetGeefterInformation(Context context,GeeftItemAdapter.ViewHolder holder, TaskCallbackBooleanArray callback) {
-        mUserInformation = new long[3];
+        mUserInformation = new double[3];
         mContext = context;
         mHolder = holder;
         mCallback = callback;

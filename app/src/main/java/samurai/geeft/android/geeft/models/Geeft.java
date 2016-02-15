@@ -6,9 +6,8 @@ import java.io.Serializable;
  * Created by ugookeadu on 20/01/16.
  */
 public class Geeft implements Serializable{
-    private String timeStamp;
-    private String deadLine;
-    private String exptime;
+    private long creationTime;
+    private long deadLine;
     private String userLocation;
     private String userCap;
     private String username;
@@ -38,14 +37,13 @@ public class Geeft implements Serializable{
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, String timeStamp, String exptime, boolean automaticSelection, boolean allowCommunication, String deadLine, String userLocation, String userCap,
+                 boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, long deadLine, String userLocation, String userCap,
                  String username, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
         this.isSelected = isSelected;
-        this.timeStamp = timeStamp;
-        this.exptime = exptime;
+        this.creationTime = creationTime;
         this.automaticSelection = automaticSelection;
         this.allowCommunication = allowCommunication;
         this.userLocation = userLocation;
@@ -98,20 +96,12 @@ public class Geeft implements Serializable{
         this.isSelected = isSelected;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public long getCreationTime() {
+        return creationTime;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getExpTime() {
-        return exptime;
-    }
-
-    public void setExpTime(String exptime) {
-        this.exptime = exptime;
+    public void setCreationTime(long creationTime) {
+        this.creationTime = creationTime;
     }
 
     public boolean isAllowCommunication() {
@@ -163,9 +153,9 @@ public class Geeft implements Serializable{
         this.userProfilePic = userProfilePic;
     }
 
-    public String getDeadLine(){return deadLine;}
+    public long getDeadLine(){return deadLine;}
 
-    public void setDeadLine(String deadLine){this.deadLine = deadLine;}
+    public void setDeadLine(long deadLine){this.deadLine = deadLine;}
 
     public String getLinkId(){ return linkId;}
 
@@ -179,11 +169,4 @@ public class Geeft implements Serializable{
         this.category = category;
     }
 
-    public String getExptime() {
-        return exptime;
-    }
-
-    public void setExptime(String exptime) {
-        this.exptime = exptime;
-    }
 }
