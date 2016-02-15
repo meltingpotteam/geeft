@@ -210,6 +210,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        if(id == R.id.action_feedback_geefted){
+            Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
+            startActivity(intent);
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
