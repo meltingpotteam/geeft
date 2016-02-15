@@ -17,13 +17,26 @@
 
 
     </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/colorPrimaryText"
+        android:padding="@dimen/activity_horizontal_margin_x2"
+        android:textStyle="bold"
+        android:text="Pagina Report"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/colorPrimaryText"
-        android:padding="@dimen/activity_horizontal_margin_x2"
+        android:paddingEnd="@dimen/activity_horizontal_margin_x2"
+        android:paddingRight="@dimen/activity_horizontal_margin_x2"
+        android:paddingLeft="@dimen/activity_horizontal_margin_x2"
+        android:paddingStart="@dimen/activity_horizontal_margin_x2"
+        android:paddingBottom="@dimen/activity_horizontal_margin_x2"
         android:text="@string/feedback_page_message"
         />
 
@@ -77,7 +90,9 @@
                 android:textColor="@color/colorPrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Scrivi la descrizione del problema(specificando quando e come si è verificato) oppure descrivi il tuo consiglio "
+                android:inputType="textMultiLine"
+                android:minLines="1"
+                android:hint="Scrivi la descrizione del problema"
                 android:textColorHint="@color/colorHintAccent"
                 />
         </LinearLayout>
@@ -88,9 +103,10 @@
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"
         android:textAlignment="viewEnd"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="end"
         android:paddingRight="@dimen/activity_horizontal_margin_x2"
         android:paddingEnd="@dimen/activity_horizontal_margin_x2"
-        android:text="Grazie da parte dello staff di MeltingPot"
+        android:text="@string/team_thanks_string"
         />
+
 </LinearLayout>
