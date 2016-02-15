@@ -316,11 +316,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
 
 
-                        //--------------------------------------------
-                        holder.mProfileDialogUsername
+                //--------------------------------------------
+                holder.mProfileDialogUsername
                                 .setText(item
                                         .getUsername());
-                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
+                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
+                        (R.id.dialog_geefter_background);
                 //--------------------------------------------
                 holder.mProfileDialogUsername
                         .setText(item

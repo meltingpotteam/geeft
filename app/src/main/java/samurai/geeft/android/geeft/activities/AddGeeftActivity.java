@@ -68,6 +68,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     public void onImageSelected(String id) {
         new BaaSUploadGeeft(getApplicationContext(),mGeeft,id,this).execute();
     }
+    public void onImageSelected(Geeft geeft){}
 
     public void done(boolean result){
         //enables all social buttons

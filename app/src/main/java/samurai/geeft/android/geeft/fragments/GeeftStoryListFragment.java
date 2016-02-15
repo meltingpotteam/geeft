@@ -50,10 +50,11 @@ public class GeeftStoryListFragment extends Fragment implements TaskCallbackBool
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
                 mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
             }
 
             @Override
@@ -62,16 +63,18 @@ public class GeeftStoryListFragment extends Fragment implements TaskCallbackBool
                 Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
                 mGeeft = mGeeftList.get(position);
                 mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
             }
         }));
 
-        new BaasRecievedGeeftTask(getContext(),mGeeftList,mAdapter,this).execute();
+        new BaasRecievedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
 
         return rootView;
     }
 
     public interface OnGeeftImageSelectedListener {
         void onImageSelected(String id);
+        void onImageSelected(Geeft geeft);
     }
 
     @Override
