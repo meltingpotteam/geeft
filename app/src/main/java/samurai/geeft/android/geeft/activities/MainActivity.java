@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.widget.ShareDialog;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
@@ -105,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
          that give the possibility to select the action that the user wat to do (the action button)
          clicked will start the associated activity.
         **/
-//        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
+        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
+        floatingActionMenu.setClosedOnTouchOutside(true);
         mActionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
         mActionNewGeeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * End implementation
          */
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles for the Tabs and Number Of Tabs.
         mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(),mTitles,mNumboftabs);
 
         // Assigning ViewPager View and setting the adapter
@@ -199,6 +202,12 @@ public class MainActivity extends AppCompatActivity {
             dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
             dialog.show();  //<-- See This!
             return true;
+        }
+
+        if(id == R.id.action_feedback){
+            Intent intent = new Intent(MainActivity.this, SendFeedbackActivity.class);
+            startActivity(intent);
+
         }
 
         return super.onOptionsItemSelected(item);
