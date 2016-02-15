@@ -40,7 +40,6 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
-        BaasQuery.Criteria paginate = BaasQuery.builder().where("id ="+mGeeftId).criteria();
         BaasResult<BaasDocument> baasResult = BaasDocument.fetchSync("geeft", mGeeftId);
         if (baasResult.isSuccess()) {
             try {
@@ -64,7 +63,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 return false;
             }
         } else if (baasResult.isFailed()) {
-            Log.e("CLASS", "Deal with error: " + baasResult.error().getMessage());
+            Log.e("CLASS", "Deal with error: " + baasResult.error().toString());
         }
         return result;
     }
@@ -100,7 +99,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                 }
             } else if (baasResult.isFailed()) {
-                Log.e("CLASS2", "Deal with error: " + baasResult.error().getMessage());
+                Log.e("CLASS2", "Deal with error: " + baasResult.error().toString());
             }
         }while (!stop);
     }

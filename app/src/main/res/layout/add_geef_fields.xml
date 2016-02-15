@@ -165,7 +165,7 @@
                         android:textColor="@color/colorPrimaryText"
                         android:maxLength="5"
                         android:inputType="number"
-                        android:hint="CAP zona"
+                        android:hint="@string/add_geeft_fields_cap"
                         android:textColorHint="@color/colorHintAccent"/>
                 </LinearLayout>
             </LinearLayout>
@@ -244,7 +244,7 @@
                     android:id="@+id/automatic_geefter_selection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Selezione automatica del Geefted"
+                    android:text="@string/automatic_geeft_selection_text"
                     android:textSize="@dimen/geeft_title_text_size"
                     android:textColor="@android:color/black"
                     />
@@ -265,7 +265,7 @@
                     android:id="@+id/allow_communication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Posso essere contattato"
+                    android:text="@string/can_be_contacted_text"
                     android:textSize="@dimen/geeft_title_text_size"
                     android:textColor="@android:color/black"
                     />

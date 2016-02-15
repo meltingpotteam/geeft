@@ -33,7 +33,7 @@
 
         <provider android:authorities="com.facebook.app.FacebookContentProvider1537015443283612"
                   android:name="com.facebook.FacebookContentProvider"
-                  android:exported="true"/>
+                  android:exported="false"/>
 
         <activity
             android:name=".activities.LoginActivity"
@@ -44,12 +44,8 @@
 
         <activity android:name=".activities.MainActivity"/>
 
-
-        <activity android:name=".activities.MainActivity"/>>
-
         <!-- add geeft activity-->
-        <activity android:name=".activities.AddGeeftActivity"
-                  android:screenOrientation="portrait"/>
+        <activity android:name=".activities.AddGeeftActivity"/>
 
         <activity android:name=".activities.FullScreenViewActivity"/>
 

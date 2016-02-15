@@ -1,17 +1,20 @@
 package samurai.geeft.android.geeft;
 
 import android.app.Application;
+import android.support.v4.app.Fragment;
 
 import com.baasbox.android.BaasBox;
 import com.facebook.FacebookSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
+
+import java.util.Map;
 
 /**
  * Created by ugookeadu on 13/01/16.
  * Class used for initializing all services
  */
 public class ApplicationInit extends Application {
-
+    Map<String, Fragment.SavedState> savedStateMap;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,5 +36,13 @@ public class ApplicationInit extends Application {
          * Fresco sdk initialization
          */
         Fresco.initialize(getApplicationContext());
+    }
+
+    public void setFragmentSavedState(String key, Fragment.SavedState state){
+        savedStateMap.put(key, state);
+    }
+
+    public Fragment.SavedState getFragmentSavedState(String key){
+        return savedStateMap.get(key);
     }
 }

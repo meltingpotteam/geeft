@@ -2,9 +2,6 @@ package samurai.geeft.android.geeft.utilities;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
-import android.util.Log;
-import android.view.ViewGroup;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
@@ -13,9 +10,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.squareup.picasso.Picasso;
 
-import samurai.geeft.android.geeft.R;
 
 /**
  * Created by ugookeadu on 20/01/16.

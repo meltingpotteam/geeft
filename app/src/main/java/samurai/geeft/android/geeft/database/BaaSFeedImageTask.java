@@ -105,7 +105,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     return false;
                 }
             } else if (baasResult.isFailed()) {
-                Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+                Log.e("LOG", "Deal with error: " + baasResult.error().toString());
             }
         return result;
     }

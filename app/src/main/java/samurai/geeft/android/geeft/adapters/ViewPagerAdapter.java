@@ -30,13 +30,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            UserProfileFragment tab1 = new UserProfileFragment();
-            return tab1;
+            return new GeeftListFragment();
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            GeeftListFragment tab2 = new GeeftListFragment();
-            return tab2;
+            return new UserProfileFragment();
         }
 
 

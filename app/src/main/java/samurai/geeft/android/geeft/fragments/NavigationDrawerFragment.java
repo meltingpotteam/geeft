@@ -45,7 +45,7 @@ public class NavigationDrawerFragment extends Fragment {
     private LinearLayout mWelcomeLayout;
 
     // indicates if user is aware that the NavigationBar exists
-    private boolean mUserLearnedDrawer;
+    private boolean mUserLearnedDrawer = false;
 
     // indicate if we runnig the fragment lifecycle from begining
     // for example when back from rotation

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/ripple_effect"
@@ -9,10 +9,6 @@
               android:paddingBottom="@dimen/activity_vertical_margin_x2"
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin">
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
         <ImageView
             android:id="@+id/navigation_drawer_row_icon"
             android:layout_width="wrap_content"
@@ -48,5 +44,4 @@
                 android:textColor="@color/colorSecondaryText"
                 />
         </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

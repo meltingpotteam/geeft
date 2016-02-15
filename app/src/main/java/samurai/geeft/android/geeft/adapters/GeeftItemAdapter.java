@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,7 +86,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         public ImageView mUserProfilePic;
         public ImageView mGeeftImage;
-
+        
         public ImageButton mPrenoteButton;
         public ImageButton mLocationButton;
         public ImageButton mShareButton;
@@ -275,6 +274,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 //                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     mProgress.show();
                 } catch (WindowManager.BadTokenException e) {
+                    Log.d(TAG, e.getMessage());
                 }
                 mProgress.setCancelable(false);
                 mProgress.setIndeterminate(true);
@@ -471,7 +471,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     public void done(boolean result,GeeftItemAdapter.ViewHolder holder,double[] userInformation){
         // userInformation order is : Feedback,Given,Received
         if(result){
-            holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
+            String rank = String.valueOf(userInformation[0]) + "/5.0";
+            holder.mProfileDialogUserRank.setText(rank);
             holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
             holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
 
@@ -480,7 +481,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         }
         else{
-            Log.e(TAG,"ERROREEEEE!");
+            Log.e(TAG, "ERROREEEEE!");
         }
 
     }

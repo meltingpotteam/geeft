@@ -45,7 +45,7 @@
 
                 <TextView
                     android:id="@+id/location"
-                    android:text="location"
+                    android:text="@string/geeft_story_location"
                     android:layout_width="wrap_content"
                     android:textColor="@android:color/darker_gray"
                     android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
 
             <TextView
                 android:id="@+id/geeft_name"
-                android:text="Geeft name"
+                android:text="@string/geeft_story_geeft_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_horizontal_margin"
@@ -91,7 +91,7 @@
 
             <TextView
                 android:id="@+id/geeft_description"
-                android:text="Geeft Description"
+                android:text="@string/geeft_story_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_margin"

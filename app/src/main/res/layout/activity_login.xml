@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -12,7 +12,7 @@
         android:textSize="50sp"
         android:layout_gravity="top|center"
         android:layout_marginTop="80dp"
-        android:text="geeft"
+        android:text="@string/login_app_name_text"
         />
 
     <com.github.glomadrian.loadingballs.BallView
@@ -40,7 +40,7 @@
         <Button
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:text="Login con Facebook"
+            android:text="@string/facebook_login_button_text"
             android:id="@+id/fb_login_button"
             android:padding="4dp"
             android:textAllCaps="false"
@@ -54,7 +54,7 @@
         <Button
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:text="Login con Google+"
+            android:text="@string/google_login_button_text"
             android:id="@+id/google_login_button"
             android:padding="4dp"
             android:textAllCaps="false"
@@ -71,7 +71,7 @@
             android:layout_margin="10dp"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:text="Dona e ricevi oggetti di ogni tipo gratuitamente."
+            android:text="@string/login_app_description"
             />
     </LinearLayout>
-</FrameLayout>
+</merge>

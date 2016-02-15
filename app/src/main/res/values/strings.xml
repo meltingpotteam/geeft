@@ -60,6 +60,19 @@
     <string name="add_geeft_description_hint" translatable="true">Scrivi una breve descrizione</string>
     <string name="logout_dialog_message">Sei sicuro di volerti disconnettere</string>
     <string name="logout_dialog_title">Disconessione</string>
+    <string name="login_app_name_text">geeft</string>
+    <string name="facebook_login_button_text">Login con Facebook</string>
+    <string name="google_login_button_text">Login con Google+</string>
+    <string name="login_app_description">Dona e ricevi oggetti di ogni tipo gratuitamente.</string>
+    <string name="add_geeft_fields_cap">CAP zona</string>
+    <string name="automatic_geeft_selection_text">Selezione automatica del Geefted</string>
+    <string name="can_be_contacted_text">Posso essere contattato</string>
+    <string name="geeft_story_location">location</string>
+    <string name="geeft_story_geeft_name">Geeft name</string>
+    <string name="geeft_story_description">Geeft Description</string>
+    <string name="geeft_list_item_timestamp">timestamp</string>
+    <string name="geeft_list_item_location">location</string>
+    <string name="geeft_list_item_cap">cap</string>
 
 
     <!-- TODO: separate the spinner arrays in separated resources -->

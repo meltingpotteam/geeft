@@ -131,7 +131,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                         return false;
                     }
                 } else {
-                    Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
+                    Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error().toString());
                     return false;
                 }
             }

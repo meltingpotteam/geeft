@@ -56,6 +56,11 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         if(BaasUser.current() !=null) {
+            Log.d("UPLOAD",mGeeft.getGeeftTitle());
+            Log.d("UPLOAD",mGeeft.getGeeftDescription());
+            Log.d("UPLOAD",mGeeft.getUserLocation());
+            Log.d("UPLOAD",mGeeft.getCategory().toLowerCase());
+
             BaasDocument doc = new BaasDocument("geeft");
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
@@ -137,6 +142,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     protected void onPostExecute(Boolean result) {
         mCallback.done(result);
     }
+    
     public String getDeadlineTimestamp(int expTime){ // I know,there is a delay between creation and upload time of document,
         //so we have a not matching timestamp (deadline and REAL deadline
         // calculated like creation data + exptime in days)

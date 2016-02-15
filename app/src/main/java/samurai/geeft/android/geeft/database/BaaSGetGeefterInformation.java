@@ -2,20 +2,11 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasFile;
-import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
-import com.baasbox.android.Grant;
-import com.baasbox.android.Role;
-import com.baasbox.android.json.JsonObject;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
-import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by danybr-dev on 08/02/16.

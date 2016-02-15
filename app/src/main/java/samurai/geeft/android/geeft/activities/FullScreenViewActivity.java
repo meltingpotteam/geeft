@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -29,11 +28,12 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     private final String TAG =""+this.getClass().getName();
     private static final String EXTRA_GEEFT_ID =
             "samurai.geeft.android.geeft.geeft_id";
+    private static final String GEEFT_LIST_KEY = "samurai.geeft.android.geeft.fragments." +
+            "FullScreenViewActivity_geeftList";
 
     private ViewPager mViewPager;
     private List<Geeft> mGeeftList = new ArrayList<>();
     private View mBallView;
-    private Toolbar mToolbar;
 
 
     public static Intent newIntent(Context context, String geeftId) {
@@ -43,41 +43,69 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "QUI");
-        setContentView(R.layout.activity_full_screen_view);
-        mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
-        mBallView = findViewById(R.id.loading_balls);
-
-        new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
-                getIntent().getStringExtra(EXTRA_GEEFT_ID),this).execute();
-    }
-
-
-    @Override
     public void done(boolean result) {
         mBallView.setVisibility(View.GONE);
         if(result) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
-                @Override
-                public Fragment getItem(int position) {
-                    Geeft geeft = mGeeftList.get(position);
-                    GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
-                    geeftStoryFragment.setGeeft(geeft);
-                    return geeftStoryFragment;
-                }
-
-                @Override
-                public int getCount() {
-                    return mGeeftList.size();
-                }
-            });
+           mViewPager.getAdapter().notifyDataSetChanged();
         }else {
             new AlertDialog.Builder(getApplicationContext())
                     .setTitle("Errore")
                     .setMessage("Operazione non possibile. Riprovare più tardi.").show();
         }
     }
+
+    /**
+     * Savind list state and items
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save list items
+        outState.putParcelableArrayList(GEEFT_LIST_KEY, (ArrayList) mGeeftList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            ArrayList<Geeft> array = (ArrayList)
+                    savedInstanceState.getParcelableArrayList(GEEFT_LIST_KEY);
+            mGeeftList.addAll(array);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "QUI");
+        setContentView(R.layout.activity_full_screen_view);
+        mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
+        mBallView = findViewById(R.id.loading_balls);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+            @Override
+            public Fragment getItem(int position) {
+                Geeft geeft = mGeeftList.get(position);
+                GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
+                geeftStoryFragment.setGeeft(geeft);
+                return geeftStoryFragment;
+            }
+
+            @Override
+            public int getCount() {
+                return mGeeftList.size();
+            }
+        });
+        if (savedInstanceState == null){
+            new BaaSGeeftHistoryArrayTask(getApplicationContext(), mGeeftList,
+                    getIntent().getStringExtra(EXTRA_GEEFT_ID), this).execute();
+        }
+        else {
+            mBallView.setVisibility(View.GONE);
+            mViewPager.getAdapter().notifyDataSetChanged();
+        }
+    }
+    /**
+     * END Saving list state and items
+     */
 }

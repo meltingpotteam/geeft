@@ -279,7 +279,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
             //
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            if(acct.getDisplayName()!=null) {
+            if(acct!=null) {
                 Log.d(TAG, "Google+ User is: " + acct.getDisplayName() +
                         " with authCode: " + acct.getServerAuthCode());
             }
