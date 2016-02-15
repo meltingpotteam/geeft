@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/darker_gray"
     >
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
+        app:cardCornerRadius="0dp"
+        app:elevation="5dp"
+        app:cardBackgroundColor="@color/white"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,24 +58,30 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_height="wrap_content"
+        android:minHeight="380dp"
+        app:cardCornerRadius="0dp"
         android:layout_marginTop="10dp"
-        android:elevation="4dp">
+        app:cardBackgroundColor="@color/white"
+        app:elevation="5dp">
         <ImageView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/geeft_story_view"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="3dp"
             />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/white"
         android:layout_marginTop="10dp"
-        android:elevation="4dp">
+        app:elevation="5dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,15 +99,16 @@
 
             <TextView
                 android:id="@+id/geeft_description"
-                android:text="Geeft Description"
+                android:text="Geeft Descriptionflflfhfòalsdfhaòsdlfhasòdfhaòsdljfhaòsdkjfhadfasdsf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin_x2"
                 android:textColor="#666"
                 android:textSize="@dimen/geeft_description_text_size"
                 />
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
 </LinearLayout>

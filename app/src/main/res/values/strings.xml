@@ -60,6 +60,13 @@
     <string name="add_geeft_description_hint" translatable="true">Scrivi una breve descrizione</string>
     <string name="logout_dialog_message">Sei sicuro di volerti disconnettere</string>
     <string name="logout_dialog_title">Disconessione</string>
+    <string name="action_feedback">Segnala/Consiglia</string>
+    <string name="action_guide">Guida</string>
+    <string name="feedback_page_message">Se ci sono state delle anomalie, malfunzionamenti,
+        difficoltà di utilizzo o desideri dare opinioni/consigli sull\'applicazione,
+        compila i seguenti campi con un breve titolo del problema/consiglio ed una descrizione di esso
+        (se stai segnalando un problema, specifica in che situazione e come è avvenuto ).</string>
+    <string name="team_thanks_string">Grazie da parte del team di Geeft</string>
 
 
     <!-- TODO: separate the spinner arrays in separated resources -->

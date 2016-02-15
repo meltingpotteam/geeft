@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -111,7 +109,7 @@ public class AddGeeftFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_geeft_fields, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_geeft_panel, container, false);
         mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
         Log.d("TOOLBAR", "" + (mToolbar != null));
         if (mToolbar!=null)
@@ -275,7 +273,9 @@ public class AddGeeftFragment extends Fragment{
                         allowCommunication);
 
                 if(name.length() <= 1 || description.length() <= 1 || mGeeftImage == null
-                        || location == null || cap.length() < 5 || expTime == null){
+                        || location == null || cap.length() < 5 || expTime == null ||
+                        mGeeftExpirationTime.getSelectedItemPosition() == 0 ||
+                        mGeeftCategory.getSelectedItemPosition() == 0){
                     //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getContext(),
                             "Bisogna compilare tutti i campi prima di procedere",

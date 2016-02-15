@@ -45,10 +45,13 @@
         <activity android:name=".activities.MainActivity"/>
 
 
-        <activity android:name=".activities.MainActivity"/>>
 
         <!-- add geeft activity-->
         <activity android:name=".activities.AddGeeftActivity"
+                  android:screenOrientation="portrait"/>
+
+        <!-- add geeft activity-->
+        <activity android:name=".activities.SendFeedbackActivity"
                   android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.FullScreenViewActivity"/>

@@ -17,10 +17,10 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
- * Created by ugookeadu on 09/02/16.
+ * Created by gabriel-dev on 13/02/16.
  */
-public class GeeftStoryListAdapter extends
-        RecyclerView.Adapter<GeeftStoryListAdapter.ViewHolder> {
+public class GeeftStoryGridAdapter extends RecyclerView.Adapter<GeeftStoryGridAdapter.ViewHolder> {
+
 
     private final LayoutInflater inflater;
     private List<Geeft> mGeeftList =
@@ -29,11 +29,9 @@ public class GeeftStoryListAdapter extends
     private int lastSize = 0;
     private Context mContext;
 
-    private ProgressDialog mProgress;
-    private long mLastClickTime = 0;
 
     //costructor
-    public GeeftStoryListAdapter(Context context, List<Geeft> geeftList) {
+    public GeeftStoryGridAdapter(Context context, List<Geeft> geeftList) {
         inflater = LayoutInflater.from(context);
         this.mGeeftList = geeftList;
         this.mContext = context;
@@ -48,7 +46,7 @@ public class GeeftStoryListAdapter extends
         }
     }
     @Override
-    public GeeftStoryListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GeeftStoryGridAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // inflate the custom layout
         View mGeeftView = inflater.inflate(R.layout.geeft_story_list_item, parent, false);
 
@@ -63,10 +61,8 @@ public class GeeftStoryListAdapter extends
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Geeft item = mGeeftList.get(position);
-        Picasso.with(mContext).load(item.getGeeftImage())
+        Picasso.with(mContext).load(item.getGeeftImage()).fit()
                 .centerInside().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
-
-
     }
 
     @Override

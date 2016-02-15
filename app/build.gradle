@@ -51,6 +51,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.nvanbenschoten.motion:library:1.1.2'
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }
 apply plugin: 'com.google.gms.google-services'//Login with G+
 

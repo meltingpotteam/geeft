@@ -22,6 +22,7 @@
     <color name="colorDivider">#B6B6B6</color>
 
     <color name="cardIconsColor">#919191</color>
+    <color name="colorPrimaryDarkFab">#a62c3e50</color>
 
 
     <color name="colorHighlight">@color/clickAccent</color>
