@@ -66,7 +66,6 @@ public class GeeftStoryListAdapter extends
         Picasso.with(mContext).load(item.getGeeftImage())
                 .centerInside().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
 
-
     }
 
     @Override

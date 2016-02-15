@@ -36,7 +36,7 @@
                 android:id="@+id/geefter"
                 android:layout_gravity="center">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/geefter_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                     android:textColor="#666"
                     android:textSize="14sp"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/location"
                     android:text="location"
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
         android:layout_marginTop="10dp"
         app:cardBackgroundColor="@color/white"
         app:elevation="5dp">
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/geeft_story_view"
             android:layout_gravity="center"
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/geeft_name"
                 android:text="Geeft name"
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/geeft_title_text_size" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/geeft_description"
                 android:text="Geeft Descriptionflflfhfòalsdfhaòsdlfhasòdfhaòsdljfhaòsdkjfhadfasdsf"
                 android:layout_width="wrap_content"

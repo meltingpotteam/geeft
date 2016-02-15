@@ -40,5 +40,4 @@
         android:layout_height="match_parent"
         android:layout_below="@id/navigation_drawer_welcome"/>
 
-
 </RelativeLayout>
