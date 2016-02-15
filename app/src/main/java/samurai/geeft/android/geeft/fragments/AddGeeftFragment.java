@@ -173,7 +173,7 @@ public class AddGeeftFragment extends Fragment{
                         .into(mDialogImageView);
 
 
-                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+                dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
                 //dialog.setMessage("Some information that we can take from the facebook shared one");
                 dialog.show();  //<-- See This!
                 //Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
@@ -348,5 +348,13 @@ public class AddGeeftFragment extends Fragment{
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        File file = new File(Environment.getExternalStorageDirectory()
+                +File.separator + "image.jpg");
+        boolean delete = file.delete();
     }
 }
