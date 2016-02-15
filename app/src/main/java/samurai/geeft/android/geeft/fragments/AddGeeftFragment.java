@@ -38,6 +38,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -78,6 +81,7 @@ public class AddGeeftFragment extends Fragment{
     private boolean automaticSelection;
     private boolean allowCommunication;
     private byte[] streamImage;
+    private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
 
     private static final String ARG_GEEFT = "geeft";
@@ -260,6 +264,7 @@ public class AddGeeftFragment extends Fragment{
                 location = mGeeftLocation.getSelectedItem().toString();
                 cap = mGeeftCAP.getText().toString();
                 expTime = mGeeftExpirationTime.getSelectedItem().toString();
+                deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
                 category = mGeeftCategory.getSelectedItem().toString();
                 automaticSelection = mAutomaticSelection.isChecked();
                 allowCommunication = mAllowCommunication.isChecked();
@@ -279,16 +284,17 @@ public class AddGeeftFragment extends Fragment{
                 else{
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
                     mGeeft = getGeeft();
+                    //------- Create a byteStream of image
                     Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                     streamImage = stream.toByteArray();
-                    //Log.d("log", "creato stream byte");
+                    //--------
                     mGeeft.setGeeftTitle(name);
                     mGeeft.setGeeftDescription(description);
                     mGeeft.setUserLocation(location);
                     mGeeft.setUserCap(cap);
-                    mGeeft.setExpTime(expTime);
+                    mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
                     mGeeft.setCategory(category);
                     mGeeft.setAutomaticSelection(automaticSelection);
                     mGeeft.setAllowCommunication(allowCommunication);
@@ -356,5 +362,18 @@ public class AddGeeftFragment extends Fragment{
         File file = new File(Environment.getExternalStorageDirectory()
                 +File.separator + "image.jpg");
         boolean delete = file.delete();
+    }
+
+    public long getDeadlineTimestamp(int deltaExptime){ // I know,there is a delay between creation and upload time of document,
+        //so we have a not matching timestamp (deadline and REAL deadline
+        // calculated like creation data + exptime in days)
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Now use today date.
+        c.add(Calendar.DATE, deltaExptime); // Adding "expTime" days
+        //String deadline = sdf.format(c.getTime()); //return Date,not timestamp.
+        long deadline = c.getTimeInMillis()/1000; //get timestamp
+        Log.d(TAG,"deadline is:" + deadline); //DELETE THIS AFTER DEBUG
+        return deadline;
     }
 }

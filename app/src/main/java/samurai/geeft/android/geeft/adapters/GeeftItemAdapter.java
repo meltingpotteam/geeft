@@ -174,8 +174,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
 
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
-        holder.mTimeStampTextView.setText(item.getTimeStamp());
-        holder.mExpireTime.setText(item.getExpTime());
+        //holder.mExpireTime.setText(item.getCreationTime()); //TODO: GESTIRE
 
         holder.mUserLocationTextView.setText(item.getUserLocation());
 
@@ -190,11 +189,10 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
 
         // Converting timestamp into x ago format
-//        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-//                Long.parseLong(item.getCreationTimeStamp()),
-//                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
-//
-//        holder.mTimeStampTextView.setText(timeAgo);
+        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getCreationTime(),
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+        holder.mTimeStampTextView.setText(timeAgo);
 
 
 //        int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
@@ -470,7 +468,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
     }
 
-    public void done(boolean result,GeeftItemAdapter.ViewHolder holder,long[] userInformation){
+    public void done(boolean result,GeeftItemAdapter.ViewHolder holder,double[] userInformation){
         // userInformation order is : Feedback,Given,Received
         if(result){
             holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
