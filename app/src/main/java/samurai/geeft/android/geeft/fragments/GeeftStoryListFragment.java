@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,8 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     private OnGeeftImageSelectedListener mCallback;
     private Geeft mGeeft;
     private Parcelable mGeeftListState;
+    private Toolbar mToolbar;
+
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftRecievedListFragment_geeftListState";
     private final static String ADD_GEEFT_RECIEVED_LIST_FRAGMENT_SAVED_STATE_KEY = "samurai.geeft.android.geeft.activities."+
@@ -63,7 +68,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
-        new BaasRecievedGeeftTask(getContext(),mGeeftList,mAdapter,this).execute();
+        new BaasRecievedGeeftTask(getContext(), "recieved", mGeeftList, mAdapter, this).execute();
     }
 
     @Override
@@ -76,6 +81,11 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_geeft_story_list, container, false);
+        mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
+        Log.d("TOOLBAR", "" + (mToolbar != null));
+        if (mToolbar!=null)
+            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 //        mRecyclerView.setHasFixedSize(true);
@@ -129,14 +139,6 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mGeeftList = new ArrayList<>();
-
-    }
-
-
     public void done(boolean result){
         Toast toast;
         Log.d("DONE", "in done");
@@ -145,12 +147,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP, 0, 0);
             toast.show();
-        } else {
-            toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
-        }
-                mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
         }
         else {
             new AlertDialog.Builder(getContext())
@@ -190,13 +187,12 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
-            ArrayList<Geeft> array = (ArrayList)
-                    savedInstanceState.getSerializable("mGeeftList2");
+            ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable("mGeeftList2");
             mGeeftList.addAll(array);
             mGeeftListShowDialog();
         }
         else{
-            new BaasRecievedGeeftTask(getContext(),mGeeftList,mAdapter,this).execute();
+            new BaasRecievedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
         }
     }
 

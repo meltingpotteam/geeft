@@ -64,7 +64,10 @@ public class GeeftStoryListAdapter extends
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Geeft item = mGeeftList.get(position);
         Picasso.with(mContext).load(item.getGeeftImage())
-                .centerInside().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
+                .fit()
+                .centerInside()
+                .placeholder(R.drawable.ic_image_multiple)
+                .into(holder.mGeeftImage);
 
     }
 

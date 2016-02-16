@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,13 +47,15 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftStoryLis
     private Button mReceivedStoryButton;
     private Button mReceivedGeeftButton;
     private  LayoutInflater inflater;
+    private Toolbar mToolbar;
     //-------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO da rivedere assolutamente la logica
         setContentView(R.layout.activity_add_geeft);
         Bundle bundle = new Bundle();
-
         inflater = LayoutInflater.from(ReceivedActivity.this);
         GeeftStoryListFragment geeftStoryListFragment = new GeeftStoryListFragment();
         FragmentManager fm = getSupportFragmentManager();

@@ -75,12 +75,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="#00ffffff"
+                    android:background="@drawable/ripple_effect"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimaryText"
-                    android:textAlignment="center"
                     android:text="Aggiorna Storia"
                     android:layout_weight="0.5"/>
                 <Button
@@ -88,12 +86,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="#00ffffff"
+                    android:background="@drawable/ripple_effect"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimaryText"
-                    android:textAlignment="center"
                     android:text="Regala"
                     android:layout_weight="0.5"/>
             </LinearLayout>
