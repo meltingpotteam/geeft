@@ -28,6 +28,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         AddGeeftFragment.OnCheckOkSelectedListener,
         GeeftStoryListFragment.OnGeeftImageSelectedListener{
 
+    private final String TAG = getClass().getName();
     private Geeft mGeeft;
     private final static String TAG_ADD_GEEFT_FIELDS = "samurai.geeft.android.geeft.activities." +
             "stack_add_geeft";
@@ -75,10 +76,10 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             transaction.replace(R.id.add_geeft_fields_fragment, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
+            Log.d(TAG, getFragmentManager().getBackStackEntryCount() + "");
         }
         else{
-            Log.d("AAAA",geeft.getUserCap()+" "+geeft.getGeeftTitle());
+            Log.d(TAG,geeft.getUserCap()+" "+geeft.getGeeftTitle());
             new BaaSUploadGeeft(getApplicationContext(),geeft,this).execute();
         }
     }
