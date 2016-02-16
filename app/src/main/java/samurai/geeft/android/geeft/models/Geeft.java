@@ -11,6 +11,7 @@ public class Geeft implements Serializable{
     private String userLocation;
     private String userCap;
     private String username;
+    private String userFbId;
     private String geeftDescription;
     private String geeftTitle;
     private String geeftImage;
@@ -36,9 +37,17 @@ public class Geeft implements Serializable{
     public Geeft(){
     }
 
+    public String getUserFbId() {
+        return userFbId;
+    }
+
+    public void setUserFbId(String userFbId) {
+        this.userFbId = userFbId;
+    }
+
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
                  boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, long deadLine, String userLocation, String userCap,
-                 String username, String userProfilePic, String linkId) {
+                 String username,String userFbId, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
@@ -49,6 +58,7 @@ public class Geeft implements Serializable{
         this.userLocation = userLocation;
         this.userCap = userCap;
         this.username = username;
+        this.userFbId = userFbId;
         this.userProfilePic = userProfilePic;
         this.id=id;
         this.deadLine = deadLine;
