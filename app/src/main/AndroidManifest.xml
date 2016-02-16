@@ -56,7 +56,10 @@
 
         <activity android:name=".activities.FullScreenViewActivity"/>
 
-        <activity android:name=".activities.FeedbackPageActivity"
+        <activity android:name=".activities.FeedbackGeeftedActivity"
+                  android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.FeedbackGeefterActivity"
                   android:screenOrientation="portrait"/>
 
     </application>

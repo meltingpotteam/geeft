@@ -16,7 +16,7 @@ import samurai.geeft.android.geeft.R;
 /**
  * Created by joseph on 15/02/16.
  */
-public class FeedbackPageActivity extends AppCompatActivity {
+public class FeedbackGeeftedActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RatingBar mRatingCommunication;
@@ -49,6 +49,7 @@ public class FeedbackPageActivity extends AppCompatActivity {
                 double UserRatingCourtesy = mRatingCourtesy.getRating();
                 //-- Feedback calculation. Communication 20% Reliability 30% Description 30% Courtesy 20%
                 double UserFeedback = UserRatingCommunication*0.2+UserRatingDescription*0.3+UserRatingReliability*0.3+UserRatingCourtesy*0.2;
+                if (UserFeedback==0) { UserFeedback = 0.1; }
                 Toast.makeText(getApplicationContext(),
                         "Feedback ricevuto. Il tuo feedback è: "+UserFeedback,Toast.LENGTH_SHORT).show();
 

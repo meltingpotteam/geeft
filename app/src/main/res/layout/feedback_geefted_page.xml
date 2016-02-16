@@ -95,17 +95,6 @@
         android:text="@string/feedback_description_question"
         />
     <RatingBar
-        android:id="@+id/ratingBarDescription2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:numStars="5"
-        android:stepSize="0.5"
-        android:rating="1.0"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        />
-    <RatingBar
         android:id="@+id/ratingBarDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,7 +105,6 @@
         android:scaleX="0.7"
         android:scaleY="0.7"
         />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
