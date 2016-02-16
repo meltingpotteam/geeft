@@ -20,7 +20,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class BaasRecievedGeeftTask extends AsyncTask<Void,Void,Boolean> {
+public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
     private final String TAG = getClass().getName();
     Context mContext;
     List<Geeft> mGeeftList;
@@ -28,9 +28,9 @@ public class BaasRecievedGeeftTask extends AsyncTask<Void,Void,Boolean> {
     TaskCallbackBoolean mCallback;
     GeeftStoryListAdapter mGeeftStoryListAdapter;
 
-    public BaasRecievedGeeftTask(Context context, String linkNameQuery,List<Geeft> feedItems,
-                                 GeeftStoryListAdapter Adapter,
-                                 TaskCallbackBoolean callback) {
+    public BaaSReceivedDonatedGeeftTask(Context context, String linkNameQuery, List<Geeft> feedItems,
+                                        GeeftStoryListAdapter Adapter,
+                                        TaskCallbackBoolean callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;

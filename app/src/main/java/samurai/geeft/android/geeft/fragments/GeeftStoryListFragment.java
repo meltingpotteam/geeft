@@ -25,7 +25,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
-import samurai.geeft.android.geeft.database.BaasRecievedGeeftTask;
+import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -68,7 +68,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
-        new BaasRecievedGeeftTask(getContext(), "recieved", mGeeftList, mAdapter, this).execute();
+        new BaaSReceivedDonatedGeeftTask(getContext(), "recieved", mGeeftList, mAdapter, this).execute();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
 
         mAdapter = new GeeftStoryListAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL));
+                new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
                 , mRecyclerView, new ClickListener() {
@@ -116,7 +116,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             }
         }));
 
-        new BaasRecievedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
+        new BaaSReceivedDonatedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
 
         return rootView;
     }
@@ -192,7 +192,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             mGeeftListShowDialog();
         }
         else{
-            new BaasRecievedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
+            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
         }
     }
 
