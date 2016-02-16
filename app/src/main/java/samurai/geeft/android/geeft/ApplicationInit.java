@@ -23,7 +23,7 @@ public class ApplicationInit extends Application {
          * BaasBox initialization
          */
         BaasBox.builder(this).setAuthentication(BaasBox.Config.AuthType.SESSION_TOKEN)
-                .setApiDomain("geeft1.cloudapp.net")
+                .setApiDomain("geeft.no-ip.org")
                 .setPort(9000)
                 .setAppCode("1234567890")
                 .init();

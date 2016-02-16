@@ -310,8 +310,8 @@ public class AddGeeftFragment extends StatedFragment {
                                     R.style.AppCompatAlertDialogStyle); //Read Update
 
                     builder.setTitle("Hey");
-                    builder.setMessage("Hai ricevuto in precedanza tale oggetto in regalo " +
-                            "tremite Geeft?");
+                    builder.setMessage("Hai ricevuto in precedenza tale oggetto in regalo " +
+                            "tramite Geeft?");
                     builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                         //the positive button should call the "logout method"
                         @Override
