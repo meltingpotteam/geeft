@@ -50,6 +50,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
         mBallView = findViewById(R.id.loading_balls);
 
+
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),this).execute();
     }

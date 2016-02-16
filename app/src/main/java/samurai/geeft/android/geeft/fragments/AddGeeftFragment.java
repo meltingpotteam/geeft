@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -42,12 +41,26 @@ import java.util.Date;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by ugookeadu on 08/02/16.
  */
-public class AddGeeftFragment extends Fragment{
+public class AddGeeftFragment extends StatedFragment {
     private final String TAG = getClass().getName();
+    private static final String ARG_GEEFT = "samurai.geeft.android.geeft.fragments." +
+            "AddGeeftFragment_geeft";
+    private final static String ARG_ARRAY_STRINGS = "samurai.geeft.android.geeft.fragments." +
+            "AddGeeftFragment_arrayStrings";
+    private final static String ARG_SELECTED_ITEMS = "samurai.geeft.android.geeft.fragments." +
+            "AddGeeftFragment_selectedItems";
+    private final static String ARG_CHECKED_ITEMS = "samurai.geeft.android.geeft.fragments." +
+            "AddGeeftFragment_checkedItems";
+    private final static String ARG_FILE = "samurai.geeft.android.geeft.fragments." +
+            "AddGeeftFragment_file";
+    private final static String ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY= "samurai.geeft.android.geeft.activities."+
+            "add_geeft_fragment_seved_state";
+
 
     private Geeft mGeeft;
     private ImageButton cameraButton;
@@ -82,15 +95,13 @@ public class AddGeeftFragment extends Fragment{
     private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
 
-    private static final String ARG_GEEFT = "geeft";
+    public static AddGeeftFragment newInstance(Bundle b) {
+        AddGeeftFragment fragment = new AddGeeftFragment();
+        fragment.setArguments(b);
 
-    public static AddGeeftFragment newInstance(Geeft geeft) {
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_GEEFT, geeft);
-        AddGeeftFragment addGeeftFragment = new AddGeeftFragment();
-        addGeeftFragment.setArguments(args);
-        return addGeeftFragment;
+        return fragment;
     }
+
 
     public Geeft getGeeft() {
         Bundle bundle = getArguments();
@@ -101,9 +112,23 @@ public class AddGeeftFragment extends Fragment{
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnCheckOkSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d("ADDGEEEFT", "onCreated");
     }
 
     @Override
@@ -163,17 +188,13 @@ public class AddGeeftFragment extends Fragment{
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
 //                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
 
-                File imgFile = new  File(Environment.getExternalStorageDirectory()
-                        +File.separator + "image.jpg");
-
-                Picasso.with(getActivity()).load(imgFile)
+                Picasso.with(getActivity()).load(mGeeftImage)
                         .config(Bitmap.Config.ARGB_8888)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .into(mDialogImageView);
-
 
                 dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
                 //dialog.setMessage("Some information that we can take from the facebook shared one");
@@ -216,28 +237,10 @@ public class AddGeeftFragment extends Fragment{
         // Apply the adapter to the spinner
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
-
+        Log.d("onCreateView", "onActivityCreated2");
         return rootView;
     }
 
-    /**
-     * positioning uploaded; it works now: the image fit the central part of the imageView in the form
-     **/
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
-            File file = new File(Environment.getExternalStorageDirectory()
-                    +File.separator + "image.jpg");
-//            Picasso.with(this).load(file).into(mGeeftImageView);
-            mGeeftImageView.setImageDrawable(null);
-            Picasso.with(getContext()).load(file)
-                    .fit()
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)        //avoid the problem of the chached
-                    .networkPolicy(NetworkPolicy.NO_CACHE)      //image loading every time a new photo
-                    .centerCrop()
-                    .config(Bitmap.Config.ARGB_8888)
-                    .into(mGeeftImageView);
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -262,7 +265,8 @@ public class AddGeeftFragment extends Fragment{
                 location = mGeeftLocation.getSelectedItem().toString();
                 cap = mGeeftCAP.getText().toString();
                 expTime = mGeeftExpirationTime.getSelectedItem().toString();
-                deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
+                if(mGeeftExpirationTime.getSelectedItemPosition()>0)
+                    deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
                 category = mGeeftCategory.getSelectedItem().toString();
                 automaticSelection = mAutomaticSelection.isChecked();
                 allowCommunication = mAllowCommunication.isChecked();
@@ -272,7 +276,8 @@ public class AddGeeftFragment extends Fragment{
                         " automatic selection: " + automaticSelection + " allow communication: " +
                         allowCommunication);
 
-                if(name.length() <= 1 || description.length() <= 1 || mGeeftImage == null
+                if(name.length() <= 1 || description.length() <= 1
+                        || mGeeftImageView.getDrawable() == null
                         || location == null || cap.length() < 5 || expTime == null ||
                         mGeeftExpirationTime.getSelectedItemPosition() == 0 ||
                         mGeeftCategory.getSelectedItemPosition() == 0){
@@ -283,7 +288,7 @@ public class AddGeeftFragment extends Fragment{
                 }
                 else{
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
-                    mGeeft = getGeeft();
+                    mGeeft = new Geeft();
                     //------- Create a byteStream of image
                     Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -312,7 +317,7 @@ public class AddGeeftFragment extends Fragment{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //here you can add functions
-                            mCallback.onCheckSelected(true);
+                            mCallback.onCheckSelected(true,mGeeft);
 
                         }
                     });
@@ -321,7 +326,7 @@ public class AddGeeftFragment extends Fragment{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //here you can add functions
-                            mCallback.onCheckSelected(false);
+                            mCallback.onCheckSelected(false,mGeeft);
                         }
                     });
                     //On click, the user visualize can visualize some infos about the geefter
@@ -331,7 +336,6 @@ public class AddGeeftFragment extends Fragment{
                     File file = new File(Environment.getExternalStorageDirectory()
                             +File.separator + "image.jpg");
                     dialog.show();
-                    boolean delete = file.delete();
                 }
                 ///////////////////////////////////////
                 return true;
@@ -339,29 +343,24 @@ public class AddGeeftFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
-    public interface OnCheckOkSelectedListener {
-        void onCheckSelected(boolean startChooseStory);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (OnCheckOkSelectedListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+    /**
+     * positioning uploaded; it works now: the image fit the central part of the imageView in the form
+     **/
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
+            mGeeftImage = new File(Environment.getExternalStorageDirectory()
+                    +File.separator + "image.jpg");
+            Picasso.with(getActivity()).load(mGeeftImage)
+                    .fit()
+                    .centerInside()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .into(mGeeftImageView);
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        File file = new File(Environment.getExternalStorageDirectory()
-                +File.separator + "image.jpg");
-        boolean delete = file.delete();
+    public interface OnCheckOkSelectedListener {
+        void onCheckSelected(boolean startChooseStory, Geeft mGeeft);
     }
 
     public long getDeadlineTimestamp(int deltaExptime){ // I know,there is a delay between creation and upload time of document,
@@ -373,7 +372,84 @@ public class AddGeeftFragment extends Fragment{
         c.add(Calendar.DATE, deltaExptime); // Adding "expTime" days
         //String deadline = sdf.format(c.getTime()); //return Date,not timestamp.
         long deadline = c.getTimeInMillis()/1000; //get timestamp
-        Log.d(TAG,"deadline is:" + deadline); //DELETE THIS AFTER DEBUG
+        Log.d(TAG, "deadline is:" + deadline); //DELETE THIS AFTER DEBUG
         return deadline;
+    }
+
+
+    /**
+     * Save Fragment's State here
+     */
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        outState.putSerializable(ARG_FILE, mGeeftImage);
+
+        String arrayStrings[] = {
+                mGeeftTitle.getText().toString(),
+                mGeeftDescription.getText().toString(),
+                mGeeftCAP.getText().toString()
+        };
+        outState.putStringArray(ARG_ARRAY_STRINGS, arrayStrings);
+
+        int selectedItems[] = {
+                mGeeftLocation.getSelectedItemPosition(),
+                mGeeftExpirationTime.getSelectedItemPosition(),
+                mGeeftCategory.getSelectedItemPosition()
+        };
+        outState.putIntArray(ARG_SELECTED_ITEMS, selectedItems);
+
+        boolean checkedItems[] = {
+                mAutomaticSelection.isChecked(),
+                mAllowCommunication.isChecked(),
+        };
+        outState.putBooleanArray(ARG_CHECKED_ITEMS, checkedItems);
+    }
+
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
+            Log.d("savedInstanceState", "is not "+ mGeeftImage.toString());
+            if(mGeeftImage!=null) {
+                Picasso.with(getActivity()).invalidate(mGeeftImage);
+                Picasso.with(getContext()).load(mGeeftImage)
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mGeeftImageView);
+            }
+
+            String arrayStrings[] =  savedInstanceState.getStringArray(ARG_ARRAY_STRINGS);
+            if(arrayStrings!=null) {
+                mGeeftTitle.setText(arrayStrings[0]);
+                mGeeftDescription.setText(arrayStrings[1]);
+                mGeeftCAP.setText(arrayStrings[2]);
+            }
+
+
+            int selectedItems[] = savedInstanceState.getIntArray(ARG_SELECTED_ITEMS);
+            if(selectedItems!=null) {
+                mGeeftLocation.setSelection(selectedItems[0]);
+                mGeeftExpirationTime.setSelection(selectedItems[1]);
+                mGeeftCategory.setSelection(selectedItems[2]);
+            }
+
+            boolean checkedItems[] = savedInstanceState.getBooleanArray(ARG_CHECKED_ITEMS);
+            if(checkedItems!=null) {
+                mAutomaticSelection.setChecked(checkedItems[0]);
+                mAllowCommunication.setChecked(checkedItems[1]);
+            }
+        }
+
+    }
+
+    protected void onFirstTimeLaunched() {
+
     }
 }

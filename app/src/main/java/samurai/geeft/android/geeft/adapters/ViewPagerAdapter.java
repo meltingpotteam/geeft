@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.adapters;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -35,8 +36,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            GeeftMainRecycleFragment tab2 = new GeeftMainRecycleFragment();
-            return tab2;
+            return GeeftMainRecycleFragment.newInstance(new Bundle());
         }
 
 

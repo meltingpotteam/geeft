@@ -1,25 +1,24 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by ugookeadu on 02/02/16.
  */
-public class GeeftStoryFragment extends Fragment{
+public class GeeftStoryFragment extends StatedFragment {
     private Geeft mGeeft;
     private ImageView mGeeftImage;
     private CircleImageView mUserProfilePic;
@@ -29,8 +28,14 @@ public class GeeftStoryFragment extends Fragment{
     private TextView mGeeftTitleTextView;
     private Boolean mTextIsSingleLine;
 
+    private static final String GEEFT_KEY = "samurai.geeft.android.geeft.fragments."+
+            "GeeftStoryFragment_geeft";
 
-    public GeeftStoryFragment(){
+    public static GeeftStoryFragment newInstance(Bundle b) {
+        GeeftStoryFragment fragment = new GeeftStoryFragment();
+        fragment.setArguments(b);
+
+        return fragment;
     }
 
     @Override
@@ -85,5 +90,27 @@ public class GeeftStoryFragment extends Fragment{
 
     public GeeftStoryFragment getInstance(){
         return this;
+    }
+
+
+    /**
+     * Save Fragment's State here
+     */
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        // Save items for later restoring them on rotation
+        outState.putSerializable(GEEFT_KEY, mGeeft);
+    }
+
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mGeeft = (Geeft)savedInstanceState.getSerializable(GEEFT_KEY);
+        }
     }
 }
