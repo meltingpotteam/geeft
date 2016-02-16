@@ -340,8 +340,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG,"profileDialogFbButton pressed!!");
-                        getOpenFacebookIntent(mContext,item.getUserFbId());
+                        Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                        mContext.startActivity(facebookIntent);
                     }
                 });
 
@@ -465,13 +465,22 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             lastSize++;
         }
     }
-    public static Intent getOpenFacebookIntent(Context context,String userFacebookId) {
+    public static Intent getOpenFacebookProfileIntent(Context context,String userFacebookId) { // THIS
+                                    // create a intent to user's facebook profile
         try {
-            context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + userFacebookId));
+            int versionCode = context.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            if(versionCode >= 3002850) {
+                Uri uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/" + userFacebookId);
+               return  new Intent(Intent.ACTION_VIEW, uri);
+            }
+            else {
+                Uri uri = Uri.parse("fb://page/" + userFacebookId);
+                return  new Intent(Intent.ACTION_VIEW, uri);
+
+            }
         } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"));
-            //NOTE:"https://www.facebook.com/<Username>
+            Log.d(TAG,"profileDialogFbButton i'm in catch!!");
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
         }
     }
 
