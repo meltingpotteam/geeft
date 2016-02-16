@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/profile_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_margin="10dp"
+    android:focusableInTouchMode="false"
+    android:focusable="false">
+    <!-- TODO add the "signal to the moderator" -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical">
+        <com.nvanbenschoten.motion.ParallaxImageView
+            android:id="@+id/dialog_geefter_background"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/geeft_background_blur"
+            android:background="@color/colorPrimaryDark">
+
+        </com.nvanbenschoten.motion.ParallaxImageView>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/activity_vertical_margin_x2"
+            >
+            <TextView
+                android:id="@+id/dialog_geefter_name"
+                android:paddingStart="@dimen/activity_horizontal_margin_x2"
+                android:paddingLeft="@dimen/activity_horizontal_margin_x2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="14sp"/>
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:tint="@android:color/holo_blue_dark"
+                android:padding="10dp"
+                android:layout_gravity="top|right"
+                android:src="@drawable/com_facebook_button_icon"
+                android:background="#00ffffff"/>
+        </FrameLayout>
+    </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/dialog_geefter_profile_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:border_color="@color/white"
+        android:layout_gravity="center"
+        />
+
+</FrameLayout>

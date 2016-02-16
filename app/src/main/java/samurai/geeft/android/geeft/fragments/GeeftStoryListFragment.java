@@ -144,7 +144,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         if (result) {
             toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
+            toast.show(); //comment
         } else {
             toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP, 0, 0);
