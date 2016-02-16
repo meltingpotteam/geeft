@@ -107,7 +107,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     return false;
                 }
             } else {
-                Log.e(TAG, "Fatal error upload");
+                Log.e(TAG, "Fatal error upload:" + resImage.error());
                 return false;
             }
         }
@@ -130,7 +130,10 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
 
     private String getImageUrl(BaasFile image){
         String streamUri = image.getStreamUri().toString();
-        return streamUri.substring(0, 112);
+        String temp[] = streamUri.split("=");
+        StringBuilder stbuild = new StringBuilder("");
+        stbuild.append(temp[0]).append(temp[1]).append("=");
+        return stbuild.toString();
     }
 
     @Override

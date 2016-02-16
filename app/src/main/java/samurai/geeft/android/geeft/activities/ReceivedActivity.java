@@ -109,6 +109,16 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftStoryLis
                 //TODO: Story button
             }
         });
+        //------------------------
+
+        //--------------- GeeftButton
+        mReceivedGeeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Geeft Button
+            }
+        });
+        //------------------------
 
         //Listener for te imageView: -----------------------------------
         mReceivedDialogBackground.setOnClickListener(new View.OnClickListener() {
@@ -140,16 +150,6 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftStoryLis
             }
         });
         //--------------------------------------------------------------
-
-        //------------------------
-
-        //--------------- GeeftButton
-        mReceivedGeeftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Geeft Button
-            }
-        });
 
 
         //TODO tenere la parallasse?!
