@@ -45,8 +45,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         Geeft mGeeft;
-        Log.d(TAG,"Lanciato");
-        Log.d(TAG,BaasUser.current().toString());
+        Log.d(TAG, BaasUser.current().toString());
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
         //find all links with the doc_id (User id <--> doc id )
         Log.d(TAG,"Doc_id is: " + docId);
@@ -77,7 +76,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                     mGeeft.setUserProfilePic(e.getString("profilePic"));
                     mGeeft.setCreationTime(getCreationTimestamp(e));
                     mGeeft.setDeadLine(e.getLong("deadline"));
-
+                    mGeeft.setUserFbId(e.getString("userFbId"));
 //                    TODO verify the error; probably we need to erase and recharg all the object since i send another one field to baas
 //                    mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
 //                    mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));

@@ -105,12 +105,14 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUserGiven;
         public TextView mProfileDialogUserReceived;
         public ParallaxImageView mProfileDialogBackground;
+        public ImageButton mProfileDialogFbButton;
         //-------------------------------------------
         public CardView mContainer;
 
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
+        private String mUserId;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -318,7 +320,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
                 holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
                 holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
-
+                holder.mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
 
                 //--------------------------------------------
                 holder.mProfileDialogUsername
@@ -334,6 +336,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
+                //Show Facebook profile of geefter------------------------
+                holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                        mContext.startActivity(facebookIntent);
+                    }
+                });
+
+
                 //Parallax background -------------------------------------
                 holder.mProfileDialogBackground.setTiltSensitivity(5);
                 holder.mProfileDialogBackground.registerSensorManager();
@@ -453,6 +465,25 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             lastSize++;
         }
     }
+    public static Intent getOpenFacebookProfileIntent(Context context,String userFacebookId) { // THIS
+                                    // create a intent to user's facebook profile
+        try {
+            int versionCode = context.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            if(versionCode >= 3002850) {
+                Uri uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/" + userFacebookId);
+               return  new Intent(Intent.ACTION_VIEW, uri);
+            }
+            else {
+                Uri uri = Uri.parse("fb://page/" + userFacebookId);
+                return  new Intent(Intent.ACTION_VIEW, uri);
+
+            }
+        } catch (Exception e) {
+            Log.d(TAG,"profileDialogFbButton i'm in catch!!");
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
+        }
+    }
+
     public void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item){
         //enables all social buttons
         mProgress.dismiss();
@@ -479,13 +510,14 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
             holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
             holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
+            //holder.mUserId = userId;
 
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
              //       + "," + userInformation[2]);
 
         }
         else{
-            Log.e(TAG,"ERROREEEEE!");
+            Log.e(TAG, "ERROREEEEE!");
         }
 
     }

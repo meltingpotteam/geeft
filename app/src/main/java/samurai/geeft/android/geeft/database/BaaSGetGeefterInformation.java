@@ -42,7 +42,8 @@ public class BaaSGetGeefterInformation extends AsyncTask<Void,Void,Boolean> {
         if(currentUser !=null) {
             double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
             long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
-            long received =currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
+            long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
+
             mUserInformation[0] = feedback;
             mUserInformation[1] = given;
             mUserInformation[2] = received;
