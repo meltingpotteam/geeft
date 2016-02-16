@@ -52,7 +52,7 @@
                   />
 
         <!-- add geeft activity-->
-        <activity android:name=".activities.SendFeedbackActivity"
+        <activity android:name=".activities.SendReportActivity"
                  />
 
         <activity android:name=".activities.FullScreenViewActivity"/>

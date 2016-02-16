@@ -22,6 +22,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
@@ -219,7 +220,8 @@ public class NavigationDrawerFragment extends Fragment {
             case 3:
                 break;
             case 4:
-                break;
+                Intent intent = new Intent(getContext(), SendReportActivity.class);
+                startActivity(intent);
             default:
                 Toast.makeText(getActivity(), "Azione non supportata",
                         Toast.LENGTH_SHORT).show();

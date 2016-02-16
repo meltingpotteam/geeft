@@ -56,6 +56,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         if(BaasUser.current() !=null) {
+            String userFbId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getObject("_social")
+                    .getObject("facebook")
+                    .get("id").toString();
             BaasDocument doc = new BaasDocument("geeft");
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
@@ -63,6 +66,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("close", false);
             doc.put("cap", mGeeft.getUserCap());
             doc.put("name", getFacebookName());
+            doc.put("userFbId",userFbId);
             doc.put("profilePic", getProfilePicFacebook());
            doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long
             doc.put("category", mGeeft.getCategory().toLowerCase());
