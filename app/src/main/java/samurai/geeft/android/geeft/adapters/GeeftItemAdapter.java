@@ -472,6 +472,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                                     // create a intent to user's facebook profile
         try {
             int versionCode = context.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            Log.d(TAG,"UserFacebookId is: " + userFacebookId);
             if(versionCode >= 3002850) {
                 Uri uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/" + userFacebookId);
                return  new Intent(Intent.ACTION_VIEW, uri);
@@ -511,8 +512,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         // userInformation order is : Feedback,Given,Received
         if(result){
             holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
-            holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
-            holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
+            holder.mProfileDialogUserGiven.setText(String.valueOf((long)userInformation[1]));
+            holder.mProfileDialogUserReceived.setText(String.valueOf((long)userInformation[2]));
             //holder.mUserId = userId;
 
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
@@ -547,6 +548,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
     private void sendEmail(String docId){
         BaasUser currentUser = BaasUser.current();
+        //final Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+            //ACTION_SENDTO is filtered,but my list is empty
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geeft.app@gmail.com" });
