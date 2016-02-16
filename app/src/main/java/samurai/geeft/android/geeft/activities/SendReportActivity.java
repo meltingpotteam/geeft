@@ -97,7 +97,7 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
             BaasUser user = BaasUser.current();
             final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
             emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, "geeft.app@gmail.com");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geeft.app@gmail.com" });
             emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Suggestion/Feedback from "
                     + mUserDisplayName);
             emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "User: " + user.getName() +
