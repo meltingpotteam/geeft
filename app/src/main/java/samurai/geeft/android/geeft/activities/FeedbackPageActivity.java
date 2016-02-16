@@ -9,6 +9,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasBox;
+import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.R;
 
@@ -50,6 +51,7 @@ public class FeedbackPageActivity extends AppCompatActivity {
                 double UserFeedback = UserRatingCommunication*0.2+UserRatingDescription*0.3+UserRatingReliability*0.3+UserRatingCourtesy*0.2;
                 Toast.makeText(getApplicationContext(),
                         "Feedback ricevuto. Il tuo feedback è: "+UserFeedback,Toast.LENGTH_SHORT).show();
+
 
             }
         });
