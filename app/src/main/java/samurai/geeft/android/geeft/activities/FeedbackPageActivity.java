@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasBox;
-
 import samurai.geeft.android.geeft.R;
 
 /**

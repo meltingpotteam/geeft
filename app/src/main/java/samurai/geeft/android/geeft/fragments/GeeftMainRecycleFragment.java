@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  */
 public class GeeftMainRecycleFragment extends StatedFragment
         implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
-
+    private final String TAG = getClass().getSimpleName().toUpperCase();
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftRecievedListFragment_geeftListState";
 
@@ -48,6 +50,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, " onCreateView()-> savedInstanceState is null? "+(savedInstanceState==null));
         View rootView = inflater.inflate(R.layout.fragment_geeft_list, container, false);
         mBallView = rootView.findViewById(R.id.loading_balls);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
@@ -66,16 +69,19 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
         mGeeftList = new ArrayList<>();
-
+        Picasso.with(getActivity()).setIndicatorsEnabled(true);
     }
 
     @Override
     public void onRefresh() {
-        new BaaSFeedImageTask(getContext(),mGeeftList,mAdapter,this).execute();
+        Log.d(TAG,"onRefresh()");
+        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     public void done(boolean result){
+        Log.d(TAG,"done()");
         mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
@@ -101,7 +107,8 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
-        new BaaSFeedImageTask(getContext(),mGeeftList,mAdapter,this).execute();
+        Log.d(TAG, "onFirstTimeLaunched()");
+        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     /**
@@ -111,6 +118,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     protected void onSaveState(Bundle outState) {
         super.onSaveState(outState);
+        Log.d(TAG, "onSaveState()");
         outState.putParcelableArrayList("mGeeftList", (ArrayList) mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
@@ -123,13 +131,28 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
+
+        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? "+(savedInstanceState==null));
+
         if (savedInstanceState != null) {
-            mBallView.setVisibility(View.GONE);
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
+            ArrayList<Geeft> arrayList=
+                    (ArrayList)savedInstanceState.getParcelableArrayList("mGeeftList");
+            mGeeftList.addAll(arrayList);
         }
-        else{
-            Log.d("LOADBALL", "LOAD");
-            new BaaSFeedImageTask(getContext(),mGeeftList,mAdapter,this).execute();
+
+        Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
+                +(mGeeftList==null || mGeeftList.size()==0));
+        if (mGeeftList!=null)
+            Log.d(TAG, "onRestoreState()-> mGeeftList.size= "
+                    +(mGeeftList.size()));
+
+        if (mGeeftList==null || mGeeftList.size()==0){
+            new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        }
+        else {
+            mBallView.setVisibility(View.GONE);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -139,6 +162,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume()");
         if (mGeeftListState != null) {
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mGeeftListState);
         }

@@ -477,8 +477,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         // userInformation order is : Feedback,Given,Received
         if(result){
             holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
-            holder.mProfileDialogUserGiven.setText(String.valueOf(userInformation[1]));
-            holder.mProfileDialogUserReceived.setText(String.valueOf(userInformation[2]));
+            holder.mProfileDialogUserGiven.setText(String.valueOf((int)userInformation[1]));
+            holder.mProfileDialogUserReceived.setText(String.valueOf((int)userInformation[2]));
 
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
              //       + "," + userInformation[2]);

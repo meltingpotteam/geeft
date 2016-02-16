@@ -40,6 +40,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
+        mGeeftList = feedItems;
     }
 
     @Override
