@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
@@ -211,6 +213,8 @@ public class NavigationDrawerFragment extends Fragment {
             case 1:
                 break;
             case 2:
+                Intent i = new Intent(getContext(), ReceivedActivity.class);
+                startActivity(i);
                 break;
             case 3:
                 break;

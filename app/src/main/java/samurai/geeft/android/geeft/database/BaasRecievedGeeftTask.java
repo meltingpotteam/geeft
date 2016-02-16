@@ -24,14 +24,17 @@ public class BaasRecievedGeeftTask extends AsyncTask<Void,Void,Boolean> {
     private final String TAG = getClass().getName();
     Context mContext;
     List<Geeft> mGeeftList;
+    String mlinkNameQuery;
     TaskCallbackBoolean mCallback;
     GeeftStoryListAdapter mGeeftStoryListAdapter;
 
-    public BaasRecievedGeeftTask(Context context, List<Geeft> feedItems,
-                                 GeeftStoryListAdapter Adapter, TaskCallbackBoolean callback) {
+    public BaasRecievedGeeftTask(Context context, String linkNameQuery,List<Geeft> feedItems,
+                                 GeeftStoryListAdapter Adapter,
+                                 TaskCallbackBoolean callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
+        mlinkNameQuery = linkNameQuery;
         mGeeftStoryListAdapter = Adapter;
     }
 
@@ -39,36 +42,55 @@ public class BaasRecievedGeeftTask extends AsyncTask<Void,Void,Boolean> {
     protected Boolean doInBackground(Void... params) {
         if(BaasUser.current()==null)
             return false;
-        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-        BaasQuery.Criteria query =BaasQuery.builder().where("in.id like '" + docId + "'" ).criteria();
+        String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+       BaasQuery.Criteria query =BaasQuery.builder().where("out.id like '" + docUserId + "'" ).criteria();
+        Log.d(TAG,"doc_id are: " + docUserId);
+        // PROBLEMA GRAVE: QUANDO FAI LA QUERY,OUT È L'UTENTE (DocUserId) E IN È IL GEEFT
+        //                 QUANDO PRENDI I LINK,OUT() È IL GEEFT,IN() È L'UTENTE
+        Log.d(TAG,"mNameLinkQuery is: " + mlinkNameQuery);
+        if(mlinkNameQuery != null || !mlinkNameQuery.equals("")) { // mLinkNameQuery are only
+                                    // "received" and "geefted"
+            BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync(mlinkNameQuery, query);
+            List<BaasLink> links;
+            if (resLinks.isSuccess()) {
+                links = resLinks.value();
+                //Log.d(mlinkNameQuery, getClass().getName());
+                for (BaasLink link : links) {
+                    BaasResult<BaasDocument> result = BaasDocument.fetchSync("geeft", link.out().getId());
+                    Log.d(TAG,"geeftID: " + link.in().getId());
+                    if (result.isSuccess()) {
+                        Log.d(TAG, "Your links are here: " + links.size());
+                        try {
+                            BaasDocument document = result.get().asDocument();
+                            Geeft geeft = new Geeft();
+                            geeft.setGeeftImage(document.getString("image") + BaasUser.current().getToken());
+                            geeft.setId(document.getId());
+                            geeft.setUsername(document.getString("name"));
+                            //Append ad image url your session token!
 
-        BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("recieved", query);
-        List<BaasLink> links;
-        if(resLinks.isSuccess()){
-            links = resLinks.value();
-            Log.d("Recieved",getClass().getName());
-            for (BaasLink link : links){
-                BaasResult<BaasDocument> result= BaasDocument.fetchSync("geeft", link.in().getId());
-                if(result.isSuccess()){
-                    Log.d(TAG, "Your links are here: " + links.size());
-                    try {
-                        BaasDocument document = result.get().asDocument();
-                        Geeft geeft = new Geeft();
-                        geeft.setGeeftImage(document.getString("image")+BaasUser.current().getToken());
-                        geeft.setId(document.getId());
-                        mGeeftList.add(geeft);
-                    }catch (com.baasbox.android.BaasException ex){
-                        Toast.makeText(mContext, "Exception during loading!",
-                                Toast.LENGTH_LONG).show();
+                            geeft.setUserLocation(document.getString("location"));
+                            geeft.setGeeftDescription(document.getString("description"));
+                            geeft.setUserProfilePic(document.getString("profilePic"));
+                            geeft.setUserCap(document.getString("cap"));
+                            geeft.setGeeftTitle(document.getString("title"));
+                            mGeeftList.add(geeft);
+                        } catch (com.baasbox.android.BaasException ex) {
+                            Toast.makeText(mContext, "Exception during loading!",
+                                    Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    } else if (result.isFailed()) {
+                        Log.e(TAG, "Error when retrieve links: " + result.error());
                         return false;
                     }
-                }else if (result.isFailed()){
-                    Log.e(TAG, "Error when retrieve links");
-                    return false;
                 }
             }
+            return true;
         }
-        return true;
+        else{
+            Log.e(TAG, "Error when retrieve links");
+            return false;
+        }
     }
 
     @Override
