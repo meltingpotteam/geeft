@@ -3,7 +3,6 @@ package samurai.geeft.android.geeft.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -286,11 +285,11 @@ public class AddGeeftFragment extends StatedFragment {
                             "Bisogna compilare tutti i campi prima di procedere",
                             Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else {
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
                     mGeeft = new Geeft();
                     //------- Create a byteStream of image
-                    Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
+                    Bitmap bitmap = ((BitmapDrawable) mGeeftImageView.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                     streamImage = stream.toByteArray();
@@ -304,41 +303,10 @@ public class AddGeeftFragment extends StatedFragment {
                     mGeeft.setAutomaticSelection(automaticSelection);
                     mGeeft.setAllowCommunication(allowCommunication);
                     mGeeft.setStreamImage(streamImage);
-
-                    final android.support.v7.app.AlertDialog.Builder builder =
-                            new android.support.v7.app.AlertDialog.Builder(getContext(),
-                                    R.style.AppCompatAlertDialogStyle); //Read Update
-
-                    builder.setTitle("Hey");
-                    builder.setMessage("Hai ricevuto in precedenza tale oggetto in regalo " +
-                            "tramite Geeft?");
-                    builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        //the positive button should call the "logout method"
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //here you can add functions
-                            mCallback.onCheckSelected(true,mGeeft);
-
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        //cancel the intent
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //here you can add functions
-                            mCallback.onCheckSelected(false,mGeeft);
-                        }
-                    });
-                    //On click, the user visualize can visualize some infos about the geefter
-                    android.support.v7.app.AlertDialog dialog = builder.create();
-                    //the context i had to use is the context of the dialog! not the context of the
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-                    File file = new File(Environment.getExternalStorageDirectory()
-                            +File.separator + "image.jpg");
-                    dialog.show();
+                    ///////////////////////////////////////
+                    mCallback.onCheckSelected(true,mGeeft);
+                    return true;
                 }
-                ///////////////////////////////////////
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }

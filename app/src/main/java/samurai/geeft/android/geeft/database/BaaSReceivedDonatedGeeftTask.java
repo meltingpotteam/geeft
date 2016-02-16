@@ -43,7 +43,7 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
         if(BaasUser.current()==null)
             return false;
         String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-       BaasQuery.Criteria query =BaasQuery.builder().where("out.id like '" + docUserId + "'" ).criteria();
+        BaasQuery.Criteria query =BaasQuery.builder().where("out.id like '" + docUserId + "'" ).criteria();
         Log.d(TAG,"doc_id are: " + docUserId);
         // PROBLEMA GRAVE: QUANDO FAI LA QUERY,OUT È L'UTENTE (DocUserId) E IN È IL GEEFT
         //                 QUANDO PRENDI I LINK,OUT() È IL GEEFT,IN() È L'UTENTE

@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftStoryListFragment extends StatedFragment implements TaskCallbackBoolean{
+public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBoolean{
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftStoryListAdapter mAdapter;
@@ -50,8 +49,8 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             "add_geeft_recieved_list_fragment_saved_state";
     private ProgressDialog mProgress;
 
-    public static GeeftStoryListFragment newInstance(Bundle b) {
-        GeeftStoryListFragment fragment = new GeeftStoryListFragment();
+    public static GeeftReceivedListFragment newInstance(Bundle b) {
+        GeeftReceivedListFragment fragment = new GeeftReceivedListFragment();
         fragment.setArguments(b);
         return fragment;
     }
@@ -59,7 +58,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
-        mProgress = new ProgressDialog(getContext());
+        mProgress = new ProgressDialog(getActivity());
         try {
 //                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mProgress.show();
@@ -115,9 +114,6 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
                 mCallback.onImageSelected(mGeeft);
             }
         }));
-
-        new BaaSReceivedDonatedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
-
         return rootView;
     }
 
@@ -144,13 +140,25 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
-            mAdapter.notifyDataSetChanged();
+            if (mGeeftList!=null || mGeeftList.size()==0) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Oops")
+                        .setMessage("Nessun oggetto ricevuto da mostrare!")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().getSupportFragmentManager().popBackStack();
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                mAdapter.notifyDataSetChanged();
+            }
         }
         else {
-            new AlertDialog.Builder(getContext())
+            new AlertDialog.Builder(getActivity())
                     .setTitle("Errore")
                     .setMessage("Riprovare più tardi")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -163,7 +171,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         }
     }
 
-    public GeeftStoryListFragment getInstance(){
+    public GeeftReceivedListFragment getInstance(){
         return this;
     }
 

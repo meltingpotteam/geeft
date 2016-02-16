@@ -3,7 +3,6 @@ package samurai.geeft.android.geeft.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -122,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
         actionGeeftAroundMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Activity to 'Geeft around me' started", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
+                startActivity(intent);
             }
         });
         /**
