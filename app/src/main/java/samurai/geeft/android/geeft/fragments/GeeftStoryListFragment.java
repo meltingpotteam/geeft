@@ -39,12 +39,12 @@ public class GeeftStoryListFragment extends Fragment implements TaskCallbackBool
         View rootView = inflater.inflate(R.layout.fragment_geeft_story_list, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setHasFixedSize(true);
 
 
         mAdapter = new GeeftStoryListAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(3,LinearLayoutManager.VERTICAL));
+                new StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
                 , mRecyclerView, new ClickListener() {

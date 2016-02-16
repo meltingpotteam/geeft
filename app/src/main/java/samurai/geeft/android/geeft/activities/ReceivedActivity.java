@@ -91,12 +91,16 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftStoryLis
                 .setText(geeft
                         .getUsername());
         mReceivedDialogUserLocation.setText(geeft.getUserLocation());
-        Picasso.with(ReceivedActivity.this).load(geeft.getUserProfilePic()).fit()
+        Picasso.with(ReceivedActivity.this)
+                .load(geeft.getUserProfilePic())
+                .fit()
                 .centerInside()
                 .into(mReceivedDialogUserImage);
 
         //Parallax background -------------------------------------
-        Picasso.with(ReceivedActivity.this).load(geeft.getGeeftImage()).fit()
+        Picasso.with(ReceivedActivity.this)
+                .load(geeft.getGeeftImage())
+                .fit()
                 .centerInside()
                 .into(mReceivedDialogBackground);
         mReceivedDialogBackground.setTiltSensitivity(5);
