@@ -59,7 +59,7 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
             Log.d(TAG, "Your links are here: " + links.size());
         }
         else{
-            Log.e(TAG, "Error when retrieve links");
+            Log.e(TAG, "Error when retrieve links:" + resLinks.error());
             return false; // Don't continue if we are in this case
         }
         BaasQuery.Criteria paginate = BaasQuery.builder()

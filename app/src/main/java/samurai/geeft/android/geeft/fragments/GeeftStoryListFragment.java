@@ -78,34 +78,42 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         View rootView = inflater.inflate(R.layout.fragment_geeft_story_list, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setHasFixedSize(true);
 
 
         mAdapter = new GeeftStoryListAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL));
+                new StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+                //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
                 mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
             }
 
             @Override
             public void onLongClick(View view, int position) {
                 //TODO what happens on long press
+                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
                 mGeeft = mGeeftList.get(position);
                 mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
             }
         }));
+
+        new BaasRecievedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
 
         return rootView;
     }
 
     public interface OnGeeftImageSelectedListener {
         void onImageSelected(String id);
+        void onImageSelected(Geeft geeft);
     }
 
     @Override
@@ -121,12 +129,27 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGeeftList = new ArrayList<>();
+
+    }
+
+
     public void done(boolean result){
         Toast toast;
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            if(!mGeeftListShowDialog())
+            toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+        } else {
+            toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+        }
                 mAdapter.notifyDataSetChanged();
         }
         else {
