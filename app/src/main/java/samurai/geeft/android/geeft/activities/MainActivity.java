@@ -204,12 +204,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if(id == R.id.action_feedback){
-            Intent intent = new Intent(MainActivity.this, SendFeedbackActivity.class);
-            startActivity(intent);
-
-        }
-
         if(id == R.id.action_feedback_geefted){
             Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
             startActivity(intent);
