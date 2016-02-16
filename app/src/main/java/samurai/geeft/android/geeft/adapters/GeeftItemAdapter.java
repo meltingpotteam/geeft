@@ -31,7 +31,9 @@ import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
@@ -226,11 +228,19 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 //            }
 //        }.start();
 
-        /*CharSequence timeWillCome = DateUtils.getRelativeTimeSpanString(
-                Long.parseLong(item.getCreationTimeStamp()),
-                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
-
-        holder.mDeadlineTime.setText(timeWillCome);*/
+        //--------------------- Display Time to GO (NOW is only days) TODO: show time to go
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Now use today date.
+        long actualMillis = c.getTimeInMillis() / 1000; //get timestamp
+        long deadlineMillis = item.getDeadLine();
+        long remainingDays = (deadlineMillis - actualMillis) / 86400;
+        // long remainingHours = (deadlineMillis - actualMillis) % 86400 / 60;
+        if(remainingDays>1)
+            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni");
+        else if (remainingDays == 1)
+            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno");
+        else
+            holder.mExpireTime.setText("Fine");
 
         /**The User are obliged to set a title, a description, a position, a location and an image.
          * TODO verify this part if the design of the application will change
