@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
@@ -212,16 +213,19 @@ public class NavigationDrawerFragment extends Fragment {
             case 0:
                 break;
             case 1:
+                Intent intent1 = new Intent(getContext(), DonatedActivity.class);
+                startActivity(intent1);
                 break;
             case 2:
-                Intent i = new Intent(getContext(), ReceivedActivity.class);
-                startActivity(i);
+                Intent intent2 = new Intent(getContext(), ReceivedActivity.class);
+                startActivity(intent2);
                 break;
             case 3:
                 break;
             case 4:
                 Intent intent = new Intent(getContext(), SendReportActivity.class);
                 startActivity(intent);
+                break;
             default:
                 Toast.makeText(getActivity(), "Azione non supportata",
                         Toast.LENGTH_SHORT).show();

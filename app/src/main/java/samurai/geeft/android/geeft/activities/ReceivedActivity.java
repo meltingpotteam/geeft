@@ -1,12 +1,7 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,16 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nvanbenschoten.motion.ParallaxImageView;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
-import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
-import samurai.geeft.android.geeft.fragments.AddGeeftFragment;
 import samurai.geeft.android.geeft.fragments.GeeftStoryListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
 
