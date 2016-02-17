@@ -240,11 +240,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         long actualMillis = c.getTimeInMillis() / 1000; //get timestamp
         long deadlineMillis = item.getDeadLine();
         long remainingDays = (deadlineMillis - actualMillis) / 86400;
-        // long remainingHours = (deadlineMillis - actualMillis) % 86400 / 60;
+        long remainingHours = ((deadlineMillis - actualMillis) % 86400)/3600;
         if(remainingDays>1)
-            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni");
+            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni e "+ remainingHours+" ore.");
         else if (remainingDays == 1)
-            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno");
+            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno e "+ remainingHours+" ore.");
         else
             holder.mExpireTime.setText("Fine");
 

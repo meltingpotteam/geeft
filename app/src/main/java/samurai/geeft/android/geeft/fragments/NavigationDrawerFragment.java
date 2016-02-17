@@ -211,6 +211,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         switch (position){
             case 0:
+                Intent intent0 = new Intent(getContext(), FullProfileFragment.class);
+                startActivity(intent0);
                 break;
             case 1:
                 Intent intent1 = new Intent(getContext(), DonatedActivity.class);
