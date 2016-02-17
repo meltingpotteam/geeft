@@ -414,7 +414,7 @@ public class AddGeeftFragment extends StatedFragment {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
             mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
-            Log.d("savedInstanceState", "is not "+ mGeeftImage.toString());
+
             if(mGeeftImage!=null) {
                 Picasso.with(getActivity()).invalidate(mGeeftImage);
                 Picasso.with(getContext()).load(mGeeftImage)
