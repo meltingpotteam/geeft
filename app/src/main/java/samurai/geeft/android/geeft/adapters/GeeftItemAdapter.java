@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -41,6 +42,8 @@ import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
+import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -52,8 +55,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 04/02/2016
  * Updated by gabriel-dev on 08/02/2016
  */
-
-public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray,TaskCallBackBooleanInt {
 
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
@@ -106,12 +108,14 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public TextView mProfileDialogUserGiven;
         public TextView mProfileDialogUserReceived;
         public ParallaxImageView mProfileDialogBackground;
+        public ImageButton mProfileDialogFbButton;
         //-------------------------------------------
         public CardView mContainer;
 
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
+        private String mUserId;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -319,7 +323,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
                 holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
                 holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
-
+                holder.mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
 
                 //--------------------------------------------
                 holder.mProfileDialogUsername
@@ -335,6 +339,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
+                //Show Facebook profile of geefter------------------------
+                holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                        mContext.startActivity(facebookIntent);
+                    }
+                });
+
+
                 //Parallax background -------------------------------------
                 holder.mProfileDialogBackground.setTiltSensitivity(5);
                 holder.mProfileDialogBackground.registerSensorManager();
@@ -412,15 +426,32 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             }
         });
-        //-------------------------------------------------
 
         //Signalization button Implementation--------------
-
         holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO implement the behaviour of the signalization button
-                Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+                final android.support.v7.app.AlertDialog.Builder alertDialog =
+                        new android.support.v7.app.AlertDialog.Builder(mContext,
+                                R.style.AppCompatAlertDialogStyle); //Read Update
+
+                alertDialog.setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new BaaSSignalisationTask(mContext, item.getId(), GeeftItemAdapter.this).execute();
+                    }
+                });
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.setMessage("Sei proprio sicuro di voler procedere con la segnalazione?");
+                android.support.v7.app.AlertDialog dialog = alertDialog.create();
+                //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+                dialog.show();
             }
         });
         //-------------------------------------------------
@@ -455,6 +486,26 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             lastSize++;
         }
     }
+    public static Intent getOpenFacebookProfileIntent(Context context,String userFacebookId) { // THIS
+                                    // create a intent to user's facebook profile
+        try {
+            int versionCode = context.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            Log.d(TAG,"UserFacebookId is: " + userFacebookId);
+            if(versionCode >= 3002850) {
+                Uri uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/" + userFacebookId);
+               return  new Intent(Intent.ACTION_VIEW, uri);
+            }
+            else {
+                Uri uri = Uri.parse("fb://page/" + userFacebookId);
+                return  new Intent(Intent.ACTION_VIEW, uri);
+
+            }
+        } catch (Exception e) {
+            Log.d(TAG,"profileDialogFbButton i'm in catch!!");
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
+        }
+    }
+
     public void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item){
         //enables all social buttons
         mProgress.dismiss();
@@ -467,7 +518,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             new AlertDialog.Builder(mContext)
                     .setTitle("Successo")
                     .setMessage("Operazione completata con successo.").show();
-            Log.d("NOTATO",""+item.isSelected());
+            Log.d("NOTATO", "" + item.isSelected());
             if(item.isSelected())
                 holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
             else
@@ -479,17 +530,54 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         // userInformation order is : Feedback,Given,Received
         if(result){
             holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
-            holder.mProfileDialogUserGiven.setText(String.valueOf((int)userInformation[1]));
-            holder.mProfileDialogUserReceived.setText(String.valueOf((int)userInformation[2]));
+            holder.mProfileDialogUserGiven.setText(String.valueOf((long)userInformation[1]));
+            holder.mProfileDialogUserReceived.setText(String.valueOf((long)userInformation[2]));
+            //holder.mUserId = userId;
 
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
              //       + "," + userInformation[2]);
 
         }
         else{
-            Log.e(TAG,"ERROREEEEE!");
+            Log.e(TAG, "ERROREEEEE!");
         }
 
+    }
+
+    public void done(boolean result,int action,String docId){ //This is for signalisation button!
+        // action_i with i={1,2,3}
+        if(result) {
+            switch (action) {
+                case 1:
+                    sendEmail(docId); //I'm registered user
+                    break;
+                case 2: //document is already deleted by BaaSSignalisationTask, I'm a moderator
+                    Toast.makeText(mContext,"Documento eliminato con successo",Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    Toast.makeText(mContext,"C'è stato un errore nella segnalazione",Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+        else{
+            Toast.makeText(mContext,"C'è stato un errore nella segnalazione",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void sendEmail(String docId){
+        BaasUser currentUser = BaasUser.current();
+        //final Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+            //ACTION_SENDTO is filtered,but my list is empty
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geeft.app@gmail.com" });
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Segnalazione oggetto"
+                + docId);
+        //Name is added in e-mail for debugging,TODO: delete
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "User: " + currentUser.getName() +
+                " \n" + "E' presente un Geeft non conforme al regolamento. " + "\n"
+                + "ID: " + docId);
+        mContext.startActivity(Intent.createChooser(emailIntent, "Invia mail..."));
     }
     /*private void dialogShow(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,
