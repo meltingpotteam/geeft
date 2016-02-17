@@ -117,6 +117,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
         private String mUserId;
 
+
         public ViewHolder(View itemView) {
             super(itemView);
             mContainer = (CardView) itemView.findViewById(R.id.card_view);
@@ -340,13 +341,18 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                         .centerInside()
                         .into(holder.mProfileDialogUserImage);
                 //Show Facebook profile of geefter------------------------
-                holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
-                        mContext.startActivity(facebookIntent);
-                    }
-                });
+                if(item.isAllowCommunication()){
+                    holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                            mContext.startActivity(facebookIntent);
+                        }
+                    });
+                }
+                else{
+                    holder.mProfileDialogFbButton.setVisibility(View.GONE);
+                }
 
 
                 //Parallax background -------------------------------------
