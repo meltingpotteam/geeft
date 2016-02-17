@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,19 @@ import com.squareup.picasso.Picasso;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
+import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by joseph on 16/02/16.
  */
-public class FullProfileFragment extends Fragment {
+public class FullProfileFragment extends StatedFragment {
+
+    private static final String TAG = "SendReportActivity";
+
+    private TextView mReportTitle;
+    private TextView mReportDesription;
+    private Toolbar mToolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
