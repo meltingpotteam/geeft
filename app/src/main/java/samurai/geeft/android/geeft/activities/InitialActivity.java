@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 /**
@@ -16,6 +18,13 @@ public class InitialActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*BaasResult<BaasUser> temp = null;
+        try{
+            temp = BaasUser.current().followSync();
+        }
+        catch(BaasInvalidSessionException exception){
+
+        }*/
         if (BaasUser.current() != null) {
             startMainActivity();
         } else {
