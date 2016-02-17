@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -425,15 +426,32 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             }
         });
-        //-------------------------------------------------
 
         //Signalization button Implementation--------------
         holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO implement the behaviour of the signalization button
-                new BaaSSignalisationTask(mContext,item.getId(),GeeftItemAdapter.this).execute();
-                //Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+                final android.support.v7.app.AlertDialog.Builder alertDialog =
+                        new android.support.v7.app.AlertDialog.Builder(mContext,
+                                R.style.AppCompatAlertDialogStyle); //Read Update
+
+                alertDialog.setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new BaaSSignalisationTask(mContext, item.getId(), GeeftItemAdapter.this).execute();
+                    }
+                });
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.setMessage("Sei proprio sicuro di voler procedere con la segnalazione?");
+                android.support.v7.app.AlertDialog dialog = alertDialog.create();
+                //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+                dialog.show();
             }
         });
         //-------------------------------------------------
