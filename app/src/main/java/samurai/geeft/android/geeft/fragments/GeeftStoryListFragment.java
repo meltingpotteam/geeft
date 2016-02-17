@@ -151,13 +151,9 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     }
 
     public void done(boolean result){
-        Toast toast;
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
             mAdapter.notifyDataSetChanged();
         }
         else {
