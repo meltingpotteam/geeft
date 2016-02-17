@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/fragment_appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            >
+            <include android:id="@+id/feedback_page_toolbar" layout="@layout/tool_bar"/>
+        </android.support.design.widget.AppBarLayout>
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/tools"
+            android:id="@+id/profile_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:focusableInTouchMode="false"
+            android:focusable="false">
+            <!-- TODO add the "signal to the moderator" -->
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="vertical">
+
+                <com.nvanbenschoten.motion.ParallaxImageView
+                    android:id="@+id/dialog_geefter_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:src="@drawable/geeft_background_blur"
+                    android:background="@color/colorPrimaryDark">
+
+                </com.nvanbenschoten.motion.ParallaxImageView>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/activity_vertical_margin_x2"
+                    >
+                </FrameLayout>
+            </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/dialog_geefter_profile_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:border_color="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/dialog_geefter_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100sp"
+                    android:maxLength="20"
+                    android:text="@string/user_name"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="26sp"
+                    android:layout_weight="2.18"
+                    android:layout_gravity="center"/>
+                <!-- TODO AsynTask for the ranking score, for the "geefted geeft" and for"geefter geeft"-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Feedback:"/>
+                    <TextView
+                        android:id="@+id/dialog_ranking_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:hint="#geeft"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:hint="Received:"/>
+                    <TextView
+                        android:id="@+id/dialog_received_geeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:hint="#geeft"/>
+                    <TextView
+                        android:textAlignment="viewEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:hint="Geeven:"/>
+                    <TextView
+                        android:id="@+id/dialog_given_geeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:hint="#geeft"/>
+                    <TextView
+                        android:id="@+id/dialog_geefter_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="location"/>
+                </LinearLayout>
+                <ImageButton
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:tint="@android:color/holo_blue_dark"
+                    android:padding="10dp"
+                    android:layout_gravity="bottom|center"
+                    android:src="@drawable/com_facebook_button_icon"
+                    android:background="#00ffffff"/>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
+
+
+
