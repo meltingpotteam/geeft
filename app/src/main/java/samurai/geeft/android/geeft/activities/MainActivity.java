@@ -122,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
         actionGeeftAroundMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Activity to 'Geeft around me' started", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Activity to 'Geeft around me' started", Toast.LENGTH_SHORT).show();
+                // FOR TESTING NEW ACTIVITIES
+                Intent intent = new Intent(MainActivity.this, WinnerScreenActivity.class);
+                startActivity(intent);
             }
         });
         /**

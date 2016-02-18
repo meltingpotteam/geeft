@@ -66,10 +66,16 @@
         <activity android:name=".activities.SettingsActivity"
             android:theme="@style/AppThemeSettings"/>
 
+        <!-- FullScreenViewActivity-->
         <activity android:name=".activities.FullScreenViewActivity"/>
+
+        <!-- Winner Screen-->
+        <activity android:name=".activities.WinnerScreenActivity"/>
+
+
         <activity android:name=".fragments.FullProfileFragment"/>
 
-
+        <!-- FeedbackPage Activity-->
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>
 
