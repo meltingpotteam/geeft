@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
@@ -70,7 +69,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
-        new BaaSReceivedDonatedGeeftTask(getContext(), "received", mGeeftList, mAdapter, this).execute();
+        new BaaSReceivedDonatedGeeftTask(getContext(), getArguments().getString("link_name"), mGeeftList, mAdapter, this).execute();
     }
 
     @Override

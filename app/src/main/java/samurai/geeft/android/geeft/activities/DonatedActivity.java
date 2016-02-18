@@ -6,6 +6,7 @@ package samurai.geeft.android.geeft.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,13 +44,16 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
 
         //TODO da rivedere assolutamente la logica
         setContentView(R.layout.container_for_fragment);
-        Bundle bundle = new Bundle();
         inflater = LayoutInflater.from(DonatedActivity.this);
-        GeeftReceivedListFragment geeftReceivedListFragment = new GeeftReceivedListFragment();
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.fragment_container, geeftReceivedListFragment)
-                .commit();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        if (fragment == null) {
+            Bundle b = new Bundle();
+            b.putString("link_name","donated");
+            fragment = GeeftReceivedListFragment.newInstance(b);
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 
     @Override
