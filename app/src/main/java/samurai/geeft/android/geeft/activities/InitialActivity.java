@@ -8,12 +8,16 @@ import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
+import samurai.geeft.android.geeft.database.BaaSBackgroundNewAssignment;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanGeeft;
+import samurai.geeft.android.geeft.models.Geeft;
+
 /**
  * Created by ugookeadu on 14/01/16.
  * Chooses first activity in base of if the user is signed in (MainActivity)
  * or not (LoginActivity)
  */
-public class InitialActivity extends Activity {
+public class InitialActivity extends Activity implements TaskCallbackBooleanGeeft {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +30,8 @@ public class InitialActivity extends Activity {
 
         }*/
         if (BaasUser.current() != null) {
-            startMainActivity();
+            new BaaSBackgroundNewAssignment(getApplicationContext(),this).execute();
+            //startMainActivity();
         } else {
             startLoginActivity();
         }
@@ -34,10 +39,18 @@ public class InitialActivity extends Activity {
     }
 
     private void startMainActivity() {
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     private void startLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    public void done(boolean result,Geeft geeft){
+        if(result){ //You have a new assignation
+            //TODO: start Winner screen with this geeft
+        }
+        else
+            startMainActivity();
     }
 }
