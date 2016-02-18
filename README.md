@@ -51,17 +51,15 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 ###Milestone 3 - Final
 ######Work in progress
 
-- Complete back-end and front-end development  to support the "Geeft Story " feature
-- Implement the "Geeft Story" feature and testing
-- Eventually correction of bugs of the previous release
-- New sperimental features
-- Beta version release
-- Promoting the product
+- Implementing Geeft around me
+- Finish the Geeftory
+- Eventually correction of bugs
+- Beta version release, testing and promoting
+
 
 ==============
 ###Final Submission
 ######Work in progress
 
 - Application release
-- Basic website development
 - Promoting the product
