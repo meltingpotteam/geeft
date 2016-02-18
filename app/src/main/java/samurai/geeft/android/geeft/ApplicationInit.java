@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 
 import com.baasbox.android.BaasBox;
 import com.facebook.FacebookSdk;
-import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +31,6 @@ public class ApplicationInit extends Application {
          * Facebook sdk initialization
          */
         FacebookSdk.sdkInitialize(getApplicationContext());
-
-        /**
-         * Fresco sdk initialization
-         */
-        Fresco.initialize(getApplicationContext());
 
         savedStateMap = new HashMap<>();
     }

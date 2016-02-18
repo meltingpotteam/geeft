@@ -43,14 +43,14 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
         super.onCreate(savedInstanceState);
 
         //TODO da rivedere assolutamente la logica
-        setContentView(R.layout.activity_add_geeft);
+        setContentView(R.layout.container_for_fragment);
         Bundle bundle = new Bundle();
         inflater = LayoutInflater.from(ReceivedActivity.this);
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.add_geeft_fields_fragment);
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             fragment = GeeftReceivedListFragment.newInstance(new Bundle());
-            fm.beginTransaction().add(R.id.add_geeft_fields_fragment, fragment)
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
     }

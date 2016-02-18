@@ -28,7 +28,8 @@
                 android:contentDescription="the view contatin the image of the geeft"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
-                android:background="@android:color/darker_gray">
+                android:background="@android:color/darker_gray"
+                android:scaleType="fitXY">
             </ImageView>
             <TextView
                 android:id="@+id/geeft_name"

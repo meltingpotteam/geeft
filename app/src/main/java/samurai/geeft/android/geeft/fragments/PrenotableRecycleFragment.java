@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +69,6 @@ public class PrenotableRecycleFragment extends StatedFragment
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
         mGeeftList = new ArrayList<>();
-        Picasso.with(getActivity()).setIndicatorsEnabled(true);
     }
 
     @Override

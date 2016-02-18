@@ -12,19 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.nvanbenschoten.motion.ParallaxImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
+import samurai.geeft.android.geeft.activities.HowToDoActivity;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackStoryItem;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -88,6 +90,9 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
 
         //-------------------------------------------
         public CardView mContainer;
+
+        public Button mMoreButton;
+
         public Geeft mGeeft;
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
 
@@ -104,6 +109,7 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
 
             //mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
+            mMoreButton = (Button)itemView.findViewById(R.id.see_more_button);
         }
 
     }
@@ -139,7 +145,7 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
         //holder.mExpireTime.setText(item.getCreationTime()); //TODO: GESTIRE
 
         //TODO add the control of the cap matching in the city selected; sand in the maps tracking
-        Picasso.with(mContext).load(item.getGeeftImage()).fit()
+        Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
                 .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
         //Log.d("IMAGE", item.getUserProfilePic());
         /*Picasso.with(mContext).load(item.getUserProfilePic()).fit()
@@ -239,6 +245,15 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
                 // launch full screen activity
                 Intent intent = FullScreenViewActivity.newIntent(mContext,
                         item.getId(),"story");
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.mMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = HowToDoActivity.newIntent(mContext,
+                        item.getId());
                 mContext.startActivity(intent);
             }
         });

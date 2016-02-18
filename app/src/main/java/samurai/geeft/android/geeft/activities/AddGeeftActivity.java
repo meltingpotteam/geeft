@@ -42,18 +42,23 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     private Map<String, Fragment.SavedState> savedStateMap;
     private ApplicationInit init;
+    private String mId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeft = new Geeft();
-        setContentView(R.layout.activity_add_geeft);
+        if (savedInstanceState!=null){
+            mId = savedInstanceState.getString("GEEFT_ID");
+            mGeeft = (Geeft)savedInstanceState.getSerializable("GEEFT");
+        }
+        setContentView(R.layout.container_for_fragment);
         init = (ApplicationInit)getApplication();
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.add_geeft_fields_fragment);
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             fragment = AddGeeftFragment.newInstance(new Bundle());
-            fm.beginTransaction().add(R.id.add_geeft_fields_fragment, fragment)
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
 
@@ -76,7 +81,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                 Log.d("DONE", "in startChooseStory");
                 GeeftReceivedListFragment fragment = GeeftReceivedListFragment.newInstance(new Bundle());
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.add_geeft_fields_fragment, fragment);
+                transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
                 Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
@@ -101,8 +106,17 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     @Override
     public void onImageSelected(String id) {
-        new BaaSUploadGeeft(getApplicationContext(),mGeeft,id,this).execute();
+        String mId = id;
+        new BaaSUploadGeeft(getApplicationContext(),mGeeft,mId,this).execute();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("GEEFT_ID",mId);
+        outState.putSerializable("GEEFT", mGeeft);
+    }
+
     public void onImageSelected(Geeft geeft){}
 
     public void done(boolean result){

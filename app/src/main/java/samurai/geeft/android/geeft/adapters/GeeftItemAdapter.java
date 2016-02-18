@@ -196,7 +196,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
                 .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
-        Glide.with(mContext).load(item.getUserProfilePic()).fitCenter()
+        Picasso.with(mContext).load(item.getUserProfilePic()).fit().centerInside()
                 .placeholder(R.drawable.ic_account_circle)
                 .into(holder.mUserProfilePic);
 
