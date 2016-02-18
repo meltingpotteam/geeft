@@ -95,7 +95,7 @@ public class NavigationDrawerFragment extends Fragment {
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
                 //TODO complete the fragment to start
                 startFragmentByPosition(position);
             }
