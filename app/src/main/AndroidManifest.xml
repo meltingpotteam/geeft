@@ -44,12 +44,21 @@
 
         <activity android:name=".activities.MainActivity"/>
 
-        <activity android:name=".activities.ReceivedActivity"/>
+
+
+
+        <!-- Add geeft activity-->
+        <activity android:name=".activities.AddGeeftActivity"/>
+
+        <!--Donated geeft activity-->
         <activity android:name=".activities.DonatedActivity"/>
 
+        <!--Received geeft activity-->
+        <activity android:name=".activities.ReceivedActivity"/>
 
-        <!-- add geeft activity-->
-        <activity android:name=".activities.AddGeeftActivity"/>
+        <!--Assigned geeft activity-->
+        <activity android:name=".activities.AssignedActivity"/>
+
         <!-- Send Report activity-->
         <activity android:name=".activities.SendReportActivity"/>
 
@@ -63,6 +72,7 @@
 
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>
+
 
     </application>
 
