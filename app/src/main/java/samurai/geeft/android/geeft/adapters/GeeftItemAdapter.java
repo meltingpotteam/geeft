@@ -108,7 +108,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mShareButton;
         public ImageButton mSignalisationButton;
         public LinearLayout mProfileClickableArea;
-
+        public ImageButton mProfileDialogFbButton;
         //-------------------------------------------
         public CardView mContainer;
 
@@ -309,7 +309,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
                 mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
                 mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
-
+                holder.mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
 
                 //--------------------------------------------
                 mProfileDialogUsername
@@ -325,6 +325,21 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
                         .into(mProfileDialogUserImage);
+
+                //Show Facebook profile of geefter------------------------
+                if(item.isAllowCommunication()){
+                    holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                            mContext.startActivity(facebookIntent);
+                        }
+                    });
+                }
+                else{
+                    holder.mProfileDialogFbButton.setVisibility(View.GONE);
+                }
+
                 //Parallax background -------------------------------------
                 mProfileDialogBackground.setTiltSensitivity(5);
                 mProfileDialogBackground.registerSensorManager();

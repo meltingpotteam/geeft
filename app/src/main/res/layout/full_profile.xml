@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:hint="Received:"/>
+                        android:hint="Ricevuti:"/>
                     <TextView
                         android:id="@+id/full_profile_page_received_geeft"
                         android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:hint="Geeven:"/>
+                        android:hint="Donati:"/>
                     <TextView
                         android:id="@+id/full_profile_page_given_geeft"
                         android:layout_width="wrap_content"
