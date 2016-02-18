@@ -42,6 +42,8 @@ import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
+import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -54,7 +56,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 08/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>
-        implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
+        implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray,TaskCallBackBooleanInt {
 
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
@@ -378,8 +380,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         final String title = holder.mGeeftTitleTextView.getText().toString();
         final Uri app_url = Uri.parse(holder.app_url);
         final Uri imageUrl = holder.mGeeftImageUri;
-
-        //Share Button Implementation----------------------
         holder.mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -406,7 +406,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             @Override
             public void onClick(View v) {
                 //TODO implement the behaviour of the signalization button
-                Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+                new BaaSSignalisationTask(mContext,item.getId(),GeeftItemAdapter.this).execute();
+                //Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
             }
         });
         //-------------------------------------------------
@@ -525,7 +526,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geeft.app@gmail.com" });
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Segnalazione oggetto"
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Segnalazione oggetto: "
                 + docId);
         //Name is added in e-mail for debugging,TODO: delete
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "User: " + currentUser.getName() +
