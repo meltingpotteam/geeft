@@ -28,20 +28,23 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     String mGeeftId;
     boolean result;
     boolean stop = true;
+    String mCollection;
 
     public BaaSGeeftHistoryArrayTask(Context context, List<Geeft> feedItems, String geeftId,
+                                     String collection,
                                      TaskCallbackBoolean callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftId = geeftId;
         result = true;
+        mCollection = collection;
     }
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
         BaasQuery.Criteria paginate = BaasQuery.builder().where("id ="+mGeeftId).criteria();
-        BaasResult<BaasDocument> baasResult = BaasDocument.fetchSync("geeft", mGeeftId);
+        BaasResult<BaasDocument> baasResult = BaasDocument.fetchSync(mCollection, mGeeftId);
         if (baasResult.isSuccess()) {
             try {
                 BaasDocument e = baasResult.get();

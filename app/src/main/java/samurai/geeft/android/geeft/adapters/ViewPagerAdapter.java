@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import samurai.geeft.android.geeft.fragments.GeeftMainRecycleFragment;
-import samurai.geeft.android.geeft.fragments.UserProfileFragment;
+import samurai.geeft.android.geeft.fragments.GeeftoryRecycleFragment;
+import samurai.geeft.android.geeft.fragments.PrenotableRecycleFragment;
 
 /**
  * Created by ugookeadu on 31/01/16.
@@ -31,12 +31,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            UserProfileFragment tab1 = new UserProfileFragment();
-            return tab1;
+            return GeeftoryRecycleFragment.newInstance(new Bundle());
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            return GeeftMainRecycleFragment.newInstance(new Bundle());
+            return PrenotableRecycleFragment.newInstance(new Bundle());
         }
 
 

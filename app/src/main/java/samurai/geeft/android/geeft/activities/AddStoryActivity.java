@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import samurai.geeft.android.geeft.ApplicationInit;
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
-import samurai.geeft.android.geeft.fragments.AddGeeftFragment;
+import samurai.geeft.android.geeft.database.BaaSUploadStory;
+import samurai.geeft.android.geeft.fragments.AddStoryFragment;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -21,7 +21,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Created by ugookeadu on 16/02/16.
  */
 public class AddStoryActivity extends AppCompatActivity implements TaskCallbackBoolean,
-            AddGeeftFragment.OnCheckOkSelectedListener,
+            AddStoryFragment.OnCheckOkSelectedListener,
             GeeftReceivedListFragment.OnGeeftImageSelectedListener{
     private final String TAG = getClass().getSimpleName().toUpperCase();
 
@@ -50,7 +50,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         this.id = id;
-        AddGeeftFragment fragment = AddGeeftFragment.newInstance(new Bundle());
+        AddStoryFragment fragment = AddStoryFragment.newInstance(new Bundle());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.add_geeft_fields_fragment, fragment);
         transaction.addToBackStack(null);
@@ -64,8 +64,9 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
 
     @Override
     public void onCheckSelected(boolean startChooseStory,Geeft geeft) {
-        mProgress = ProgressDialog.show(getApplicationContext(),"Attendere", "agginta in corso");
-        new BaaSUploadGeeft(getApplicationContext(),mGeeft,id,this).execute();
+        mGeeft = geeft;
+        mProgress = ProgressDialog.show(AddStoryActivity.this,"Attendere", "agginta in corso");
+        new BaaSUploadStory(getApplicationContext(),mGeeft,id,this).execute();
     }
 
     public void done(boolean result){

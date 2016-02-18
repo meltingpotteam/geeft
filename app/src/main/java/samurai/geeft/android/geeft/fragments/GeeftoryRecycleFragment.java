@@ -18,31 +18,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.database.BaaSFeedImageTask;
+import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
+import samurai.geeft.android.geeft.database.BaaSGeeftoryRecycleTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
- * Created by ugookeadu on 20/01/16.
+ * Created by ugookeadu on 17/02/16.
  */
-public class GeeftMainRecycleFragment extends StatedFragment
+public class GeeftoryRecycleFragment extends StatedFragment
         implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
     private final String TAG = getClass().getSimpleName().toUpperCase();
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftRecievedListFragment_geeftListState";
+            "GeeftoryRecycleFragment_geeftListState";
 
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
-    private GeeftItemAdapter mAdapter;
+    private StoryItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private View mBallView;
 
     private Parcelable mGeeftListState;
 
-    public static GeeftMainRecycleFragment newInstance(Bundle b) {
-        GeeftMainRecycleFragment fragment = new GeeftMainRecycleFragment();
+    public static GeeftoryRecycleFragment newInstance(Bundle b) {
+        GeeftoryRecycleFragment fragment = new GeeftoryRecycleFragment();
         fragment.setArguments(b);
         return fragment;
     }
@@ -50,14 +50,14 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, " onCreateView()-> savedInstanceState is null? "+(savedInstanceState==null));
+        Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
         View rootView = inflater.inflate(R.layout.fragment_geeft_list, container, false);
         mBallView = rootView.findViewById(R.id.loading_balls);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
+        mAdapter = new StoryItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -77,7 +77,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
     @Override
     public void onRefresh() {
         Log.d(TAG,"onRefresh()");
-        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     public void done(boolean result){
@@ -88,11 +88,11 @@ public class GeeftMainRecycleFragment extends StatedFragment
             Toast toast;
             if (result) {
 
-                toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
+                toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
             } else {
-                toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
             }
@@ -100,15 +100,15 @@ public class GeeftMainRecycleFragment extends StatedFragment
         mAdapter.notifyDataSetChanged();
     }
 
-    public GeeftMainRecycleFragment getInstance(){
-       return this;
+    public GeeftoryRecycleFragment getInstance(){
+        return this;
     }
 
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
         Log.d(TAG, "onFirstTimeLaunched()");
-        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     /**
@@ -148,7 +148,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
         }
         else {
             mBallView.setVisibility(View.GONE);

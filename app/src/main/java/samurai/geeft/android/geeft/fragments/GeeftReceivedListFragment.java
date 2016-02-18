@@ -67,7 +67,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
-        new BaaSReceivedDonatedGeeftTask(getContext(), "recieved", mGeeftList, mAdapter, this).execute();
+        new BaaSReceivedDonatedGeeftTask(getContext(), "received", mGeeftList, mAdapter, this).execute();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_geeft_story_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
         mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
         Log.d("TOOLBAR", "" + (mToolbar != null));
         if (mToolbar!=null)
@@ -140,7 +140,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            if (mGeeftList!=null || mGeeftList.size()==0) {
+            if (mGeeftList==null || mGeeftList.size()==0) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Oops")
                         .setMessage("Nessun oggetto ricevuto da mostrare!")

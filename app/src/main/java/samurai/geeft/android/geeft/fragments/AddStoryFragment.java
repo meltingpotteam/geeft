@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,47 +34,38 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
- * Created by ugookeadu on 08/02/16.
+ * Created by ugookeadu on 17/02/16.
  */
-public class AddGeeftFragment extends StatedFragment {
+public class AddStoryFragment extends StatedFragment {
     private final String TAG = getClass().getName();
     private static final String ARG_GEEFT = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_geeft";
+            "AddStoryFragment_geeft";
     private final static String ARG_ARRAY_STRINGS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_arrayStrings";
+            "AddStoryFragment_arrayStrings";
     private final static String ARG_SELECTED_ITEMS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_selectedItems";
+            "AddStoryFragment_selectedItems";
     private final static String ARG_CHECKED_ITEMS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_checkedItems";
+            "AddStoryFragment_checkedItems";
     private final static String ARG_FILE = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_file";
-    private final static String ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY= "samurai.geeft.android.geeft.activities."+
-            "add_geeft_fragment_seved_state";
+            "AddStoryFragment_file";
 
 
     private Geeft mGeeft;
-    private ImageButton cameraButton;
+    private FloatingActionButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
 
     //field to fill with the edited parameters in the form  field
     private TextView mGeeftTitle;  //name of the object
     private TextView mGeeftDescription;   //description of the object
-    private Spinner mGeeftLocation;   //location of the geeft
-    private TextView mGeeftCAP;     //cap of the area
-    private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private Spinner mGeeftCategory; //Category of the Geeft
 
     //filed for automatic selection of the geeft and for allowing the the message exchanges
-    private CheckBox mAutomaticSelection;
     private CheckBox mAllowCommunication;
 
     private ImageView mGeeftImageView;
@@ -84,31 +75,18 @@ public class AddGeeftFragment extends StatedFragment {
     private Toolbar mToolbar;
     private String name;
     private String description;
-    private String location;
-    private String cap;
-    private String expTime;
     private String category;
     private boolean automaticSelection;
-    private boolean allowCommunication;
     private byte[] streamImage;
-    private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
 
-    public static AddGeeftFragment newInstance(Bundle b) {
-        AddGeeftFragment fragment = new AddGeeftFragment();
+    public static AddStoryFragment newInstance(Bundle b) {
+        AddStoryFragment fragment = new AddStoryFragment();
         fragment.setArguments(b);
 
         return fragment;
     }
 
-
-    public Geeft getGeeft() {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            return (Geeft) getArguments().getSerializable(ARG_GEEFT);
-        }
-        return null;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -127,14 +105,14 @@ public class AddGeeftFragment extends StatedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("ADDGEEEFT", "onCreated");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_geeft_panel, container, false);
-        mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
+        View rootView = inflater.inflate(R.layout.fragment_story, container, false);
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
         Log.d("TOOLBAR", "" + (mToolbar != null));
         if (mToolbar!=null)
             ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
@@ -143,16 +121,11 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
         mGeeftDescription = (TextView) rootView.findViewById
                 (R.id.fragment_add_geeft_form_description);
-        mGeeftLocation = (Spinner) rootView.findViewById(R.id.form_field_location_spinner);
-        mGeeftCAP = (TextView) rootView.findViewById(R.id.form_field_location_cap);
-        mGeeftExpirationTime = (Spinner) rootView.findViewById(R.id.expire_time_spinner);
         mGeeftCategory = (Spinner) rootView.findViewById(R.id.categories_spinner);
-        this.mAutomaticSelection = (CheckBox) rootView
-                .findViewById(R.id.automatic_selection_checkbox);
         this.mAllowCommunication = (CheckBox) rootView
                 .findViewById(R.id.allow_communication_checkbox);
 
-        cameraButton = (ImageButton) rootView.findViewById(R.id.geeft_photo_button);
+        cameraButton = (FloatingActionButton) rootView.findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -204,27 +177,6 @@ public class AddGeeftFragment extends StatedFragment {
         });
         //--------------------------------------------------------------
 
-        //Spinner for Location Selection--------------------------------
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.form_field_location_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.cities_array, R.layout.spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        //--------------------------------------------------------------
-
-        // Spinner for Expiration Time----------------------------------
-        Spinner spinner_exp_time = (Spinner) rootView.findViewById(R.id.expire_time_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter_exp_time = ArrayAdapter.createFromResource(getContext(),
-                R.array.week_array, R.layout.spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter_exp_time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner_exp_time.setAdapter(adapter_exp_time);
-        //--------------------------------------------------------------
 
         // Spinner for the Geeft Categories-----------------------------
         Spinner spinner_categories = (Spinner) rootView.findViewById(R.id.categories_spinner);
@@ -261,25 +213,15 @@ public class AddGeeftFragment extends StatedFragment {
                 //Things TODO: Send to baasbox also the "Expire time" and "Category"
                 name = mGeeftTitle.getText().toString();
                 description = mGeeftDescription.getText().toString();
-                location = mGeeftLocation.getSelectedItem().toString();
-                cap = mGeeftCAP.getText().toString();
-                expTime = mGeeftExpirationTime.getSelectedItem().toString();
-                if(mGeeftExpirationTime.getSelectedItemPosition()>0)
-                    deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
                 category = mGeeftCategory.getSelectedItem().toString();
-                automaticSelection = mAutomaticSelection.isChecked();
-                allowCommunication = mAllowCommunication.isChecked();
 
-                Log.d(TAG, "name: " + name + " description: " + description + " location: " + location
-                        + " cap: " + cap + " expire time: " + expTime + " category: " + category +
-                        " automatic selection: " + automaticSelection + " allow communication: " +
-                        allowCommunication);
+                Log.d(TAG, "name: " + name + " description: " + description + " location: " +
+                        " category: " + category + " automatic selection: "
+                        + automaticSelection + " allow communication: " );
 
                 if(name.length() <= 1 || description.length() <= 1
                         || mGeeftImageView.getDrawable() == null
-                        || location == null || cap.length() < 5 || expTime == null ||
-                        mGeeftExpirationTime.getSelectedItemPosition() == 0 ||
-                        mGeeftCategory.getSelectedItemPosition() == 0){
+                        || mGeeftCategory.getSelectedItemPosition() == 0){
                     //TODO controlare se il cap corrisponde alla location selezionata
                     Toast.makeText(getContext(),
                             "Bisogna compilare tutti i campi prima di procedere",
@@ -296,17 +238,13 @@ public class AddGeeftFragment extends StatedFragment {
                     //--------
                     mGeeft.setGeeftTitle(name);
                     mGeeft.setGeeftDescription(description);
-                    mGeeft.setUserLocation(location);
-                    mGeeft.setUserCap(cap);
-                    mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
                     mGeeft.setCategory(category);
-                    mGeeft.setAutomaticSelection(automaticSelection);
-                    mGeeft.setAllowCommunication(allowCommunication);
                     mGeeft.setStreamImage(streamImage);
                     ///////////////////////////////////////
                     mCallback.onCheckSelected(true,mGeeft);
                     return true;
                 }
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -331,19 +269,6 @@ public class AddGeeftFragment extends StatedFragment {
         void onCheckSelected(boolean startChooseStory, Geeft mGeeft);
     }
 
-    public long getDeadlineTimestamp(int deltaExptime){ // I know,there is a delay between creation and upload time of document,
-        //so we have a not matching timestamp (deadline and REAL deadline
-        // calculated like creation data + exptime in days)
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date()); // Now use today date.
-        c.add(Calendar.DATE, deltaExptime); // Adding "expTime" days
-        //String deadline = sdf.format(c.getTime()); //return Date,not timestamp.
-        long deadline = c.getTimeInMillis()/1000; //get timestamp
-        Log.d(TAG, "deadline is:" + deadline); //DELETE THIS AFTER DEBUG
-        return deadline;
-    }
-
 
     /**
      * Save Fragment's State here
@@ -356,22 +281,9 @@ public class AddGeeftFragment extends StatedFragment {
         String arrayStrings[] = {
                 mGeeftTitle.getText().toString(),
                 mGeeftDescription.getText().toString(),
-                mGeeftCAP.getText().toString()
         };
         outState.putStringArray(ARG_ARRAY_STRINGS, arrayStrings);
-
-        int selectedItems[] = {
-                mGeeftLocation.getSelectedItemPosition(),
-                mGeeftExpirationTime.getSelectedItemPosition(),
-                mGeeftCategory.getSelectedItemPosition()
-        };
-        outState.putIntArray(ARG_SELECTED_ITEMS, selectedItems);
-
-        boolean checkedItems[] = {
-                mAutomaticSelection.isChecked(),
-                mAllowCommunication.isChecked(),
-        };
-        outState.putBooleanArray(ARG_CHECKED_ITEMS, checkedItems);
+        outState.putSerializable(ARG_SELECTED_ITEMS, mGeeftCategory.getSelectedItemPosition());
     }
 
     /**
@@ -396,22 +308,12 @@ public class AddGeeftFragment extends StatedFragment {
             if(arrayStrings!=null) {
                 mGeeftTitle.setText(arrayStrings[0]);
                 mGeeftDescription.setText(arrayStrings[1]);
-                mGeeftCAP.setText(arrayStrings[2]);
             }
 
 
-            int selectedItems[] = savedInstanceState.getIntArray(ARG_SELECTED_ITEMS);
-            if(selectedItems!=null) {
-                mGeeftLocation.setSelection(selectedItems[0]);
-                mGeeftExpirationTime.setSelection(selectedItems[1]);
-                mGeeftCategory.setSelection(selectedItems[2]);
-            }
-
-            boolean checkedItems[] = savedInstanceState.getBooleanArray(ARG_CHECKED_ITEMS);
-            if(checkedItems!=null) {
-                mAutomaticSelection.setChecked(checkedItems[0]);
-                mAllowCommunication.setChecked(checkedItems[1]);
-            }
+            int selectedItems = (int)savedInstanceState.getSerializable(ARG_SELECTED_ITEMS);
+            mGeeftCategory.setSelection(selectedItems);
+            Log.d("SELECTED",mGeeftCategory.getSelectedItemPosition()+"");
         }
 
     }

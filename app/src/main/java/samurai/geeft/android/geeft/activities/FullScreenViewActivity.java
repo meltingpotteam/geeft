@@ -29,16 +29,20 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     private final String TAG =""+this.getClass().getName();
     private static final String EXTRA_GEEFT_ID =
             "samurai.geeft.android.geeft.geeft_id";
+    private final static String ARG_COLLECTION = "samurai.geeft.android.geeft.activities." +
+            "FullScreenViewActivity_collection";
+
 
     private ViewPager mViewPager;
     private List<Geeft> mGeeftList = new ArrayList<>();
     private View mBallView;
     private Toolbar mToolbar;
+    private static String mCollection;
 
-
-    public static Intent newIntent(Context context, String geeftId) {
+    public static Intent newIntent(Context context, String geeftId, String collection) {
         Intent intent = new Intent(context, FullScreenViewActivity.class);
         intent.putExtra(EXTRA_GEEFT_ID, geeftId);
+        mCollection = collection;
         return intent;
     }
 
@@ -49,12 +53,18 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         setContentView(R.layout.activity_full_screen_view);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
         mBallView = findViewById(R.id.loading_balls);
-
+        if(savedInstanceState!=null)
+                mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
-                getIntent().getStringExtra(EXTRA_GEEFT_ID),this).execute();
+                getIntent().getStringExtra(EXTRA_GEEFT_ID),mCollection,this).execute();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ARG_COLLECTION, mCollection);
+    }
 
     @Override
     public void done(boolean result) {

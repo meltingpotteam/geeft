@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
+import com.bumptech.glide.Glide;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.nvanbenschoten.motion.ParallaxImageView;
@@ -47,12 +48,13 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 20/01/16.
- * adapter for GeeftMainRecycleFragment Recyclerview
+ * adapter for PrenotableRecycleFragment Recyclerview
  * Updated by danybr-dev on 2/02/16
  * Updated by gabriel-dev on 04/02/2016
  * Updated by gabriel-dev on 08/02/2016
  */
-public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder> implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
+public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>
+        implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray {
 
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
@@ -68,6 +70,15 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private ProgressDialog mProgress;
     private long mLastClickTime = 0;
 
+    //info dialog attributes---------------------
+    private TextView mProfileDialogUsername;
+    private TextView mProfileDialogUserLocation;
+    private ImageView mProfileDialogUserImage;
+    private TextView mProfileDialogUserRank;
+    private TextView mProfileDialogUserGiven;
+    private TextView mProfileDialogUserReceived;
+    private ParallaxImageView mProfileDialogBackground;
+
     //costructor
     public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
         inflater = LayoutInflater.from(context);
@@ -75,9 +86,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         this.mContext = context;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private final int MAX_SELECT = 5;//Max number of prenotation for each users
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView mTimeStampTextView;
         public TextView mExpireTime;
@@ -97,14 +107,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public ImageButton mSignalisationButton;
         public LinearLayout mProfileClickableArea;
 
-        //info dialog attributes---------------------
-        public TextView mProfileDialogUsername;
-        public TextView mProfileDialogUserLocation;
-        public ImageView mProfileDialogUserImage;
-        public TextView mProfileDialogUserRank;
-        public TextView mProfileDialogUserGiven;
-        public TextView mProfileDialogUserReceived;
-        public ParallaxImageView mProfileDialogBackground;
         //-------------------------------------------
         public CardView mContainer;
 
@@ -191,11 +193,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         holder.mUserCapTextView.setText(item.getUserCap());
         //TODO add the control of the cap matching in the city selected; sand in the maps tracking
-        Picasso.with(mContext).load(item.getGeeftImage()).fit()
+        Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
                 .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
-        Picasso.with(mContext).load(item.getUserProfilePic()).fit()
-                .centerInside().placeholder(R.drawable.ic_account_circle)
+        Glide.with(mContext).load(item.getUserProfilePic()).fitCenter()
+                .placeholder(R.drawable.ic_account_circle)
                 .into(holder.mUserProfilePic);
 
 
@@ -204,29 +206,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
         holder.mTimeStampTextView.setText(timeAgo);
-
-
-//        int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
-
-
-        // Converting timestamp into x ago format
-        //long millis; I can't
-//        new CountDownTimer((Long.parseLong(item.getDeadLine())/1000 - Long.parseLong(item.getCreationTimeStamp()) / 1000), 1000) {
-//
-//            public void onTick(long secondsUntilFinished) {
-//
-//                //TODO: Fix bug with display time
-//               // holder.mDeadlineTime.setText("Ore rimanenti: " + millisUntilFinished / 1000);
-//               // Log.d(TAG,"Seconds are: " + seconds + " || millis: " + (millisUntilFinished / 1000) + " and creation: "+  Long.parseLong(item.getCreationTimeStamp()));
-//                holder.mDeadlineTime.setText("Tempo rimanente: " + String.format("%02d:%02d:%02d", secondsUntilFinished / 3600,
-//                        (secondsUntilFinished % 3600) / 60, (secondsUntilFinished % 60)));
-//
-//            }
-//
-//            public void onFinish() {
-//                holder.mDeadlineTime.setText("Fine!");
-//            }
-//        }.start();
 
         //--------------------- Display Time to GO (NOW is only days) TODO: show time to go
         Calendar c = Calendar.getInstance();
@@ -311,33 +290,33 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 android.app.AlertDialog dialog = alertDialog.create();
 
                 //profile dialog fields-----------------------
-                holder.mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
-                holder.mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
-                holder.mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+                mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
+                mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
+                mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
 
-                holder.mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
-                holder.mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
-                holder.mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
+                mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
+                mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
+                mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
 
 
                 //--------------------------------------------
-                holder.mProfileDialogUsername
+                mProfileDialogUsername
                                 .setText(item
                                         .getUsername());
-                holder.mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
+                mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
                         (R.id.dialog_geefter_background);
                 //--------------------------------------------
-                holder.mProfileDialogUsername
+                mProfileDialogUsername
                         .setText(item
                                 .getUsername());
-                holder.mProfileDialogUserLocation.setText(item.getUserLocation());
+                mProfileDialogUserLocation.setText(item.getUserLocation());
                 Picasso.with(mContext).load(item.getUserProfilePic()).fit()
                         .centerInside()
-                        .into(holder.mProfileDialogUserImage);
+                        .into(mProfileDialogUserImage);
                 //Parallax background -------------------------------------
-                holder.mProfileDialogBackground.setTiltSensitivity(5);
-                holder.mProfileDialogBackground.registerSensorManager();
-                holder.mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+                mProfileDialogBackground.setTiltSensitivity(5);
+                mProfileDialogBackground.registerSensorManager();
+                mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Uri uriUrl = Uri.parse(WEBSITE_URL);
@@ -351,7 +330,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 //TODO: fill the fields "rank" , "geeven", "receeved"-------
                 //----------------------------------------------------------
                 //Relaunch AsyncTask anytime is needed for give information updated
-                new BaaSGetGeefterInformation(mContext,holder,GeeftItemAdapter.this).execute();
+                new BaaSGetGeefterInformation(mContext,GeeftItemAdapter.this).execute();
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
@@ -427,7 +406,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             public void onClick(View v) {
                 // launch full screen activity
                 Intent intent = FullScreenViewActivity.newIntent(mContext,
-                        item.getId());
+                        item.getId(),"geeft");
                 mContext.startActivity(intent);
             }
         });
@@ -465,7 +444,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             new AlertDialog.Builder(mContext)
                     .setTitle("Successo")
                     .setMessage("Operazione completata con successo.").show();
-            Log.d("NOTATO",""+item.isSelected());
+            Log.d("NOTATO", "" + item.isSelected());
             if(item.isSelected())
                 holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
             else
@@ -473,12 +452,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
     }
 
-    public void done(boolean result,GeeftItemAdapter.ViewHolder holder,double[] userInformation){
+    public void done(boolean result,double[] userInformation){
         // userInformation order is : Feedback,Given,Received
         if(result){
-            holder.mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
-            holder.mProfileDialogUserGiven.setText(String.valueOf((int)userInformation[1]));
-            holder.mProfileDialogUserReceived.setText(String.valueOf((int)userInformation[2]));
+            mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
+            mProfileDialogUserGiven.setText(String.valueOf((int)userInformation[1]));
+            mProfileDialogUserReceived.setText(String.valueOf((int)userInformation[2]));
 
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
              //       + "," + userInformation[2]);
@@ -489,36 +468,4 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
 
     }
-    /*private void dialogShow(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,
-                R.style.AppCompatAlertDialogStyle)); //Read Update
-       alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            //the positive button should call the "logout method"
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //here you can add functions
-                LOGOUT_METHOD
-            }
-        });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            //cancel the intent
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //here you can add functions
-                dialog.dismiss();
-            }
-        });
-        //On click, the user visualize can visualize some infos about the geefter
-        AlertDialog dialog = alertDialog.create();
-        //the context i had to use is the context of the dialog! not the context of the
-
-        //set the title
-        dialog.setTitle("TITLE OF THE DIALOG")
-        //if you don't want the title
-        //use this: dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-        dialog.setMessage("MESSAGE YOU WANT TO RETURN TO THE USER");
-        dialog.show();  //<-- See This!
-    }*/
 }

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private SlidingTabLayout mSlidingTabLayoutTabs;
-    private CharSequence mTitles[]={"Profile","Geeft"};
+    private CharSequence mTitles[]={"Geeftory","Geeft"};
     private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
 
