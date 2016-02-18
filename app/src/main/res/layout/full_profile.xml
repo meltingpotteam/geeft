@@ -65,7 +65,7 @@
                     android:id="@+id/full_profile_page_geefter_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="100sp"
+                    android:layout_marginTop="150sp"
                     android:maxLength="20"
                     android:text="@string/user_name"
                     android:textColor="@color/colorPrimaryText"
@@ -88,7 +88,7 @@
                         android:id="@+id/full_profile_page_ranking_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:hint="#geeft"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                         android:id="@+id/full_profile_page_received_geeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:hint="#geeft"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -110,24 +110,23 @@
                         android:id="@+id/full_profile_page_given_geeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:hint="#geeft"/>
                     <TextView
-                        android:id="@+id/full_profile_page_geefter_location"
+                        android:id="@+id/full_profile_page_display_fb_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:text="location"/>
+                        android:text="Facebook Id"
+                        android:hint="#geeft"/>
+                    <TextView
+                        android:id="@+id/full_profile_page_geefter_fb_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="-"/>
                 </LinearLayout>
-                <ImageButton
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:id="@+id/full_profile_page_facebook_button"
-                    android:tint="@android:color/holo_blue_dark"
-                    android:padding="10dp"
-                    android:layout_gravity="bottom|center"
-                    android:src="@drawable/ic_facebook_box"
-                    android:background="#00ffffff"/>
+
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
