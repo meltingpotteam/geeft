@@ -49,12 +49,13 @@
 
 
         <!-- add geeft activity-->
-        <activity android:name=".activities.AddGeeftActivity"
-                  />
+        <activity android:name=".activities.AddGeeftActivity"/>
+        <!-- Send Report activity-->
+        <activity android:name=".activities.SendReportActivity"/>
 
-        <!-- add geeft activity-->
-        <activity android:name=".activities.SendReportActivity"
-                 />
+        <!-- Settings activity-->
+        <activity android:name=".activities.SettingsActivity"
+            android:theme="@style/AppThemeSettings"/>
 
         <activity android:name=".activities.FullScreenViewActivity"/>
 

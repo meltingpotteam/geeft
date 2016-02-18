@@ -218,4 +218,65 @@
         <item>Abbigliamento</item>
         <item>Arte e Musica</item>
     </string-array>
+
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Generale</string>
+
+    <string name="pref_title_social_recommendations">Posso essere contattato</string>
+    <string name="pref_description_social_recommendations">Permette di specificare l\'operazione di default
+        ovvero se l\'utente vuole essere contattato oppure no.\nNota: Questa opzione è visualizzata di default quando si aggiunge un Geeft,ma può essere modificata
+        manualmente. </string>
+
+    <string name="pref_title_display_name">Username</string>
+    <string name="pref_default_display_name"></string>
+
+    <string name="pref_title_add_friends_to_messages">Permetti chat interna</string>
+    <string-array name="pref_example_list_titles">
+        <item>Sempre</item>
+        <item>Solo a chi assegno gli oggetti</item>
+        <item>Mai</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Dati &amp; sincronizzazione</string>
+
+    <string name="pref_title_sync_frequency">Frequenza di aggiornamento Geeft</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minuti</item>
+        <item>30 minuti</item>
+        <item>1 ora</item>
+        <item>3 ore</item>
+        <item>6 ore</item>
+        <item>Mai</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">Impostazioni di sincronizzazione di sistema</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifiche</string>
+
+    <string name="pref_title_new_message_notifications">Notifiche di nuovi messaggi</string>
+
+    <string name="pref_title_ringtone">Suoneria</string>
+    <string name="pref_ringtone_silent">Silenzioso</string>
+
+    <string name="pref_title_vibrate">Vibrazione</string>
+
 </resources>

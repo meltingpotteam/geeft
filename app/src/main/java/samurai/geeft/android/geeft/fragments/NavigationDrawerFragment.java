@@ -24,6 +24,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
+import samurai.geeft.android.geeft.activities.SettingsActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
@@ -223,6 +224,8 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent2);
                 break;
             case 3:
+                Intent intent3 = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent3);
                 break;
             case 4:
                 Intent intent = new Intent(getContext(), SendReportActivity.class);
