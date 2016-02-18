@@ -138,7 +138,7 @@
                     android:gravity="center"
                     android:tint="@android:color/holo_blue_dark"
                     android:padding="10dp"
-                    android:src="@drawable/ic_menu_share_white_24dp"
+                    android:src="@drawable/ic_location_on_white_24dp"
                     android:scaleType="fitCenter"
                     android:background="#00ffffff"/>
             </LinearLayout>

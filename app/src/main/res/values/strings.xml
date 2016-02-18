@@ -280,6 +280,6 @@
     <string name="pref_title_vibrate">Vibrazione</string>
     <string name="assigned_gift_title">Assegnati</string>
     <string name="assigned_gift_description">Visualizza oggetti in attesa di essere ritirati</string>
-    <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro oppure vedi la posizione approssimativa</string>
+    <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo vedi la posizione approssimativa</string>
 
 </resources>

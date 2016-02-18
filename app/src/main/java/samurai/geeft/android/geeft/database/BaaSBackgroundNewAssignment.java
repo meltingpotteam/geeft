@@ -38,6 +38,7 @@ public class BaaSBackgroundNewAssignment extends AsyncTask<Void,Void,Boolean> {
     public BaaSBackgroundNewAssignment(Context context, TaskCallbackBooleanGeeft callback) {
         mContext = context;
         mlinkNameQuery = "assigned";
+        mGeeft = new Geeft();
         mCallback = callback;
     }
 
@@ -66,7 +67,7 @@ public class BaaSBackgroundNewAssignment extends AsyncTask<Void,Void,Boolean> {
                                 Log.d(TAG, "Your links are here: " + links.size());
                                 try {
                                     BaasDocument document = result.get().asDocument();
-
+                                    Log.d(TAG,"document information:" + document.getId() );
                                     mGeeft.setGeeftImage(document.getString("image") + BaasUser.current().getToken());
                                     mGeeft.setId(document.getId());
                                     mGeeft.setUsername(document.getString("name"));
@@ -77,6 +78,7 @@ public class BaaSBackgroundNewAssignment extends AsyncTask<Void,Void,Boolean> {
                                     mGeeft.setUserProfilePic(document.getString("profilePic"));
                                     mGeeft.setUserCap(document.getString("cap"));
                                     mGeeft.setGeeftTitle(document.getString("title"));
+                                    return true;
                                 } catch (com.baasbox.android.BaasException ex) {
                                     Toast.makeText(mContext, "Exception during loading!",
                                             Toast.LENGTH_LONG).show();

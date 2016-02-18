@@ -8,6 +8,8 @@ import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
+import java.io.Serializable;
+
 import samurai.geeft.android.geeft.database.BaaSBackgroundNewAssignment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanGeeft;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -49,6 +51,10 @@ public class InitialActivity extends Activity implements TaskCallbackBooleanGeef
     public void done(boolean result,Geeft geeft){
         if(result){ //You have a new assignation
             //TODO: start Winner screen with this geeft
+            Intent intent = new Intent(this,WinnerScreenActivity.class);
+            intent.putExtra("geeft", (Serializable) geeft);
+            startMainActivity();
+            startActivity(intent);
         }
         else
             startMainActivity();
