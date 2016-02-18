@@ -14,222 +14,222 @@
     android:focusableInTouchMode="false"
     android:focusable="false">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-
-    <!-- TODO add the "signal to the moderator" -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/geefter_info_area"
-        android:padding="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/geefter_profile_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:border_color="@color/white"
-            android:layout_gravity="center"
-        />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/geefter_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@string/user_name"
-                android:textColor="#666"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/timestamp"
-                android:text="timestamp"
-                android:layout_width="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:layout_height="wrap_content"
-                android:textSize="13sp" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/location"
-                    android:text="location"
-                    android:layout_width="wrap_content"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"/>
-
-                <TextView
-                    android:id="@+id/location_cap"
-                    android:text="cap"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:layout_width="wrap_content"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/geeft_signalisation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:src="@drawable/ic_flag_black_24dp"
-            android:background="#00ffffff"
-            android:layout_gravity="top"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/geeft_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/geeft_image"
-                android:contentDescription="the view contatin the image of the geeft"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:background="@android:color/darker_gray">
-
-            </ImageView>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_gravity="end|bottom"
-                android:background="#96000000"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/expire_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingEnd="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingLeft="2dp"
-                    android:text="remaining time"
-                    android:textColor="@color/white"
-                    />
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="an icon for the deadline time"
-                    android:background="#00ffffff"
-                    android:src="@drawable/ic_remainig_time"
-                    />
-            </LinearLayout>
-
-        </FrameLayout>
+        <!-- TODO add the "signal to the moderator" -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/geefter_info_area"
+            android:padding="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/geefter_profile_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:border_color="@color/white"
+                android:layout_gravity="center"
+            />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
 
-            <TextView
-                android:id="@+id/geeft_name"
-                android:text="Geeft name"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/geefter_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/user_name"
+                    android:textColor="#666"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/timestamp"
+                    android:text="timestamp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/location"
+                        android:text="location"
+                        android:layout_width="wrap_content"
+                        android:textColor="@android:color/darker_gray"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/location_cap"
+                        android:text="cap"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:layout_width="wrap_content"
+                        android:textColor="@android:color/darker_gray"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/geeft_signalisation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:textColor="#222"
-                android:textStyle="bold"
-                android:textSize="@dimen/geeft_title_text_size" />
+                android:layout_weight="0.1"
+                android:src="@drawable/ic_flag_black_24dp"
+                android:background="#00ffffff"
+                android:layout_gravity="top"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/geeft_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/geeft_description"
-                android:text="Geeft Description"
+                <ImageView
+                    android:id="@+id/geeft_image"
+                    android:contentDescription="the view contatin the image of the geeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:scaleType="fitXY"
+                    android:background="@android:color/darker_gray">
+
+                </ImageView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_gravity="end|bottom"
+                    android:background="#96000000"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/expire_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
+                        android:paddingLeft="2dp"
+                        android:text="remaining time"
+                        android:textColor="@color/white"
+                        />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="an icon for the deadline time"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_remainig_time"
+                        />
+                </LinearLayout>
+
+            </FrameLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin_x2"
-                android:textColor="#666"
-                android:textSize="@dimen/geeft_description_text_size"
-                />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/geeft_name"
+                    android:text="Geeft name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:textColor="#222"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/geeft_title_text_size" />
+
+                <TextView
+                    android:id="@+id/geeft_description"
+                    android:text="Geeft Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingBottom="@dimen/activity_vertical_margin_x2"
+                    android:textColor="#666"
+                    android:textSize="@dimen/geeft_description_text_size"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+                <ImageButton
+                    android:id="@+id/geeft_like_reservation_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ripple_effect"
+                    android:src="@drawable/ic_reserve_off_24dp"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:clickable="true"
+                    android:visibility="visible"
+                />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/geeft_share_button"
+                    android:background="@drawable/ripple_effect"
+                    android:src="@drawable/ic_menu_share_white_24dp"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:clickable="true"
+                    android:visibility="visible"
+                    />
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/geeft_info_button"
+                    android:src="@drawable/ic_location_on"
+                    android:background="@drawable/ripple_effect"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:clickable="true"
+                    android:visibility="visible"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <ImageButton
-                android:id="@+id/geeft_like_reservation_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ripple_effect"
-                android:src="@drawable/ic_reserve_off_24dp"
-                android:padding="@dimen/activity_vertical_margin"
-                android:clickable="true"
-                android:visibility="visible"
-            />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/geeft_share_button"
-                android:background="@drawable/ripple_effect"
-                android:src="@drawable/ic_menu_share_white_24dp"
-                android:padding="@dimen/activity_vertical_margin"
-                android:clickable="true"
-                android:visibility="visible"
-                />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/geeft_info_button"
-                android:src="@drawable/ic_location_on"
-                android:background="@drawable/ripple_effect"
-                android:padding="@dimen/activity_vertical_margin"
-                android:clickable="true"
-                android:visibility="visible"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
-</LinearLayout>
-
 </android.support.v7.widget.CardView>

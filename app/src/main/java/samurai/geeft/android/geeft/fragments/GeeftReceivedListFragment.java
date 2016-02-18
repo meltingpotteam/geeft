@@ -37,7 +37,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftStoryListFragment extends StatedFragment implements TaskCallbackBoolean{
+public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBoolean{
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftStoryListAdapter mAdapter;
@@ -52,8 +52,8 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             "add_geeft_recieved_list_fragment_saved_state";
     private ProgressDialog mProgress;
 
-    public static GeeftStoryListFragment newInstance(Bundle b) {
-        GeeftStoryListFragment fragment = new GeeftStoryListFragment();
+    public static GeeftReceivedListFragment newInstance(Bundle b) {
+        GeeftReceivedListFragment fragment = new GeeftReceivedListFragment();
         fragment.setArguments(b);
         return fragment;
     }
@@ -61,7 +61,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
-        mProgress = new ProgressDialog(getContext());
+        mProgress = new ProgressDialog(getActivity());
         try {
 //                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mProgress.show();
@@ -70,7 +70,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
-        new BaaSReceivedDonatedGeeftTask(getContext(), "recieved", mGeeftList, mAdapter, this).execute();
+        new BaaSReceivedDonatedGeeftTask(getContext(), "received", mGeeftList, mAdapter, this).execute();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_geeft_story_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
         mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
         Log.d("TOOLBAR", "" + (mToolbar != null));
         if (mToolbar!=null)
@@ -117,20 +117,6 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
                 mCallback.onImageSelected(mGeeft);
             }
         }));
-
-        if(getContext().getClass().equals(ReceivedActivity.class)){
-            Log.d("geeftStoryFragment","getContext is equal to Received Activity: " + getContext().getClass().equals(ReceivedActivity.class));
-            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
-        }
-        if(getContext().getClass().equals(DonatedActivity.class)){
-            Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(DonatedActivity.class));
-            new BaaSReceivedDonatedGeeftTask(getContext(), "donated" ,mGeeftList,mAdapter,this).execute();
-        }
-        if(getContext().getClass().equals(AssignedActivity.class)){
-            Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(AssignedActivity.class));
-            new BaaSReceivedDonatedGeeftTask(getContext(), "assigned" ,mGeeftList,mAdapter,this).execute();
-        }
-
         return rootView;
     }
 
@@ -153,13 +139,29 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     }
 
     public void done(boolean result){
+        Toast toast;
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            mAdapter.notifyDataSetChanged();
+            if (mGeeftList==null || mGeeftList.size()==0) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Oops")
+                        .setMessage("Nessun oggetto ricevuto da mostrare!")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().getSupportFragmentManager().popBackStack();
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                mAdapter.notifyDataSetChanged();
+            }
         }
         else {
-            new AlertDialog.Builder(getContext())
+            new AlertDialog.Builder(getActivity())
                     .setTitle("Errore")
                     .setMessage("Riprovare più tardi")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -172,7 +174,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
         }
     }
 
-    public GeeftStoryListFragment getInstance(){
+    public GeeftReceivedListFragment getInstance(){
         return this;
     }
 
@@ -204,7 +206,7 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
 
             if(getContext().getClass().equals(ReceivedActivity.class)){
                 Log.d("geeftStoryFragment","getContext is equal to Received Activity: " + getContext().getClass().equals(ReceivedActivity.class));
-                new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
+            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
             }
             if(getContext().getClass().equals(DonatedActivity.class)){
                 Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(DonatedActivity.class));

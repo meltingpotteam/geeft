@@ -79,6 +79,9 @@
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.AddStoryActivity"/>
+
+        <activity android:name=".activities.HowToDoActivity"/>
 
     </application>
 

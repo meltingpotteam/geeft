@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +15,7 @@ import samurai.geeft.android.geeft.ApplicationInit;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
 import samurai.geeft.android.geeft.fragments.AddGeeftFragment;
-import samurai.geeft.android.geeft.fragments.GeeftStoryListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -26,7 +27,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackBoolean,
         AddGeeftFragment.OnCheckOkSelectedListener,
-        GeeftStoryListFragment.OnGeeftImageSelectedListener{
+        GeeftReceivedListFragment.OnGeeftImageSelectedListener{
 
     private final String TAG = getClass().getName();
     private Geeft mGeeft;
@@ -42,52 +43,81 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     private Map<String, Fragment.SavedState> savedStateMap;
     private ApplicationInit init;
+    private String mId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeft = new Geeft();
-        setContentView(R.layout.activity_add_geeft);
+        if (savedInstanceState!=null){
+            mId = savedInstanceState.getString("GEEFT_ID");
+            mGeeft = (Geeft)savedInstanceState.getSerializable("GEEFT");
+        }
+        setContentView(R.layout.container_for_fragment);
         init = (ApplicationInit)getApplication();
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.add_geeft_fields_fragment);
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             fragment = AddGeeftFragment.newInstance(new Bundle());
-            Fragment.SavedState savedState =
-                    init.getFragmentSavedState(ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY);
-            if(savedState!=null)
-                fragment.setInitialSavedState(savedState);
-
-            fm.beginTransaction().add(R.id.add_geeft_fields_fragment, fragment)
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
 
     }
 
     @Override
-    public void onCheckSelected(boolean startChooseStory,Geeft geeft) {
+    public void onCheckSelected(boolean startChooseStory,final Geeft geeft) {
         mGeeft = geeft;
-        if (startChooseStory){
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            Log.d("DONE", "in startChooseStory");
-            GeeftStoryListFragment fragment = GeeftStoryListFragment.newInstance(new Bundle());
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.add_geeft_fields_fragment, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-            Log.d(TAG, getFragmentManager().getBackStackEntryCount() + "");
-        }
-        else{
-            Log.d(TAG,geeft.getUserCap()+" "+geeft.getGeeftTitle());
-            new BaaSUploadGeeft(getApplicationContext(),geeft,this).execute();
-        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(this,
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Hey");
+        builder.setMessage("Hai ricevuto in precedenza tale oggetto in regalo " +
+                "tramite Geeft?");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            //the positive button should call the "logout method"
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                Log.d("DONE", "in startChooseStory");
+                GeeftReceivedListFragment fragment = GeeftReceivedListFragment.newInstance(new Bundle());
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            //cancel the intent
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                Log.d("AAAA",geeft.getUserCap()+" "+geeft.getGeeftTitle());
+                new BaaSUploadGeeft(getApplicationContext(),geeft,AddGeeftActivity.this).execute();
+            }
+        });
+        //On click, the user visualize can visualize some infos about the geefter
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        //the context i had to use is the context of the dialog! not the context of the
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        dialog.show();
     }
 
     @Override
     public void onImageSelected(String id) {
-        new BaaSUploadGeeft(getApplicationContext(),mGeeft,id,this).execute();
+        String mId = id;
+        new BaaSUploadGeeft(getApplicationContext(),mGeeft,mId,this).execute();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("GEEFT_ID",mId);
+        outState.putSerializable("GEEFT", mGeeft);
+    }
+
     public void onImageSelected(Geeft geeft){}
 
     public void done(boolean result){

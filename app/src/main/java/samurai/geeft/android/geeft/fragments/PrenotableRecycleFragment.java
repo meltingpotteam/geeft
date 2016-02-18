@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class GeeftMainRecycleFragment extends StatedFragment
+public class PrenotableRecycleFragment extends StatedFragment
         implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
     private final String TAG = getClass().getSimpleName().toUpperCase();
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
@@ -41,8 +39,8 @@ public class GeeftMainRecycleFragment extends StatedFragment
 
     private Parcelable mGeeftListState;
 
-    public static GeeftMainRecycleFragment newInstance(Bundle b) {
-        GeeftMainRecycleFragment fragment = new GeeftMainRecycleFragment();
+    public static PrenotableRecycleFragment newInstance(Bundle b) {
+        PrenotableRecycleFragment fragment = new PrenotableRecycleFragment();
         fragment.setArguments(b);
         return fragment;
     }
@@ -71,7 +69,6 @@ public class GeeftMainRecycleFragment extends StatedFragment
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
         mGeeftList = new ArrayList<>();
-        Picasso.with(getActivity()).setIndicatorsEnabled(true);
     }
 
     @Override
@@ -100,7 +97,7 @@ public class GeeftMainRecycleFragment extends StatedFragment
         mAdapter.notifyDataSetChanged();
     }
 
-    public GeeftMainRecycleFragment getInstance(){
+    public PrenotableRecycleFragment getInstance(){
        return this;
     }
 
