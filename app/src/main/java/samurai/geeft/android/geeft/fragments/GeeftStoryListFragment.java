@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.DonatedActivity;
+import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
@@ -116,7 +120,14 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             }
         }));
 
-        new BaaSReceivedDonatedGeeftTask(getContext(),"received",mGeeftList,mAdapter,this).execute();
+        if(getContext().getClass().equals(ReceivedActivity.class)){
+            Log.d("geeftStoryFragment","getContext is equal to Received Activity: " + getContext().getClass().equals(ReceivedActivity.class));
+            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
+        }
+        if(getContext().getClass().equals(DonatedActivity.class)){
+            Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(DonatedActivity.class));
+            new BaaSReceivedDonatedGeeftTask(getContext(), "donated" ,mGeeftList,mAdapter,this).execute();
+        }
 
         return rootView;
     }
@@ -140,13 +151,9 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
     }
 
     public void done(boolean result){
-        Toast toast;
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
-            toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
             mAdapter.notifyDataSetChanged();
         }
         else {
@@ -192,7 +199,15 @@ public class GeeftStoryListFragment extends StatedFragment implements TaskCallba
             mGeeftListShowDialog();
         }
         else{
-            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
+
+            if(getContext().getClass().equals(ReceivedActivity.class)){
+                Log.d("geeftStoryFragment","getContext is equal to Received Activity: " + getContext().getClass().equals(ReceivedActivity.class));
+                new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
+            }
+            if(getContext().getClass().equals(DonatedActivity.class)){
+                Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(DonatedActivity.class));
+                new BaaSReceivedDonatedGeeftTask(getContext(), "donated" ,mGeeftList,mAdapter,this).execute();
+            }
         }
     }
 

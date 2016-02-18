@@ -45,17 +45,21 @@
         <activity android:name=".activities.MainActivity"/>
 
         <activity android:name=".activities.ReceivedActivity"/>
+        <activity android:name=".activities.DonatedActivity"/>
 
 
         <!-- add geeft activity-->
-        <activity android:name=".activities.AddGeeftActivity"
-                  />
+        <activity android:name=".activities.AddGeeftActivity"/>
+        <!-- Send Report activity-->
+        <activity android:name=".activities.SendReportActivity"/>
 
-        <!-- add geeft activity-->
-        <activity android:name=".activities.SendReportActivity"
-                 />
+        <!-- Settings activity-->
+        <activity android:name=".activities.SettingsActivity"
+            android:theme="@style/AppThemeSettings"/>
 
         <activity android:name=".activities.FullScreenViewActivity"/>
+        <activity android:name=".fragments.FullProfileFragment"/>
+
 
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>

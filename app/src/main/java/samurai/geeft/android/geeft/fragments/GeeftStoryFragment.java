@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,37 +50,40 @@ public class GeeftStoryFragment extends StatedFragment {
         mGeeftDescriptionTextView = (TextView) rootView.findViewById(R.id.geeft_description);
         mGeeftTitleTextView = (TextView) rootView.findViewById(R.id.geeft_name);
 
+        Log.d("mGeeft before create", "mGeeft val: " + mGeeft);
+        if (mGeeft != null){
 
-        mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
-        mGeeftDescriptionTextView.setSingleLine(true);
-        mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
-        mTextIsSingleLine = true;
+            mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
+            mGeeftDescriptionTextView.setSingleLine(true);
+            mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
+            mTextIsSingleLine = true;
 
+            Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
+                    .centerInside().placeholder(R.drawable.ic_image_multiple).into(mGeeftImage);
+            Picasso.with(getContext()).load(mGeeft.getUserProfilePic()).fit()
+                    .centerInside().placeholder(R.drawable.ic_account_circle).into(mUserProfilePic);
+            mUserLocationTextView.setText(mGeeft.getUserLocation());
+            mUsernameTextView.setText(mGeeft.getUsername());
+            mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
+            mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
 
-        Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
-                .centerInside().placeholder(R.drawable.ic_image_multiple).into(mGeeftImage);
-        Picasso.with(getContext()).load(mGeeft.getUserProfilePic()).fit()
-                .centerInside().placeholder(R.drawable.ic_account_circle).into(mUserProfilePic);
-        mUserLocationTextView.setText(mGeeft.getUserLocation());
-        mUsernameTextView.setText(mGeeft.getUsername());
-        mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
-        mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
+            //Text Expander///////////////
+            mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mTextIsSingleLine) {
+                        mGeeftDescriptionTextView.setSingleLine(false);
+                        mTextIsSingleLine = false;
+                    } else {
+                        mGeeftDescriptionTextView.setSingleLine(true);
+                        mTextIsSingleLine = true;
+                    }
 
-        //Text Expander///////////////
-        mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mTextIsSingleLine) {
-                    mGeeftDescriptionTextView.setSingleLine(false);
-                    mTextIsSingleLine = false;
-                } else {
-                    mGeeftDescriptionTextView.setSingleLine(true);
-                    mTextIsSingleLine = true;
                 }
+            });
+            //////////////////////////////
+        }
 
-            }
-        });
-        //////////////////////////////
 
         return rootView;
     }

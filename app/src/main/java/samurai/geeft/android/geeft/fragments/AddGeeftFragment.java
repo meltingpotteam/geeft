@@ -292,7 +292,9 @@ public class AddGeeftFragment extends StatedFragment {
                     //------- Create a byteStream of image
                     Bitmap bitmap = ((BitmapDrawable)mGeeftImageView.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+//                    Log.d(TAG,"image size before compression: "+bitmap.getByteCount());
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 95, stream);
+//                    Log.d(TAG,"image size after compression: "+stream.size());
                     streamImage = stream.toByteArray();
                     //--------
                     mGeeft.setGeeftTitle(name);
@@ -414,8 +416,8 @@ public class AddGeeftFragment extends StatedFragment {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
             mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
-
             if(mGeeftImage!=null) {
+                Log.d("savedInstanceState", "is not "+ mGeeftImage.toString());
                 Picasso.with(getActivity()).invalidate(mGeeftImage);
                 Picasso.with(getContext()).load(mGeeftImage)
                         .fit()

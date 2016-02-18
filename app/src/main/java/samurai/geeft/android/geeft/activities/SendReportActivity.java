@@ -48,8 +48,6 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

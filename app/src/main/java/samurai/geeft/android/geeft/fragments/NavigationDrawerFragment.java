@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
+import samurai.geeft.android.geeft.activities.SettingsActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
@@ -93,7 +95,7 @@ public class NavigationDrawerFragment extends Fragment {
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
                 //TODO complete the fragment to start
                 startFragmentByPosition(position);
             }
@@ -210,18 +212,25 @@ public class NavigationDrawerFragment extends Fragment {
 
         switch (position){
             case 0:
+                Intent intent0 = new Intent(getContext(), FullProfileFragment.class);
+                startActivity(intent0);
                 break;
             case 1:
+                Intent intent1 = new Intent(getContext(), DonatedActivity.class);
+                startActivity(intent1);
                 break;
             case 2:
-                Intent i = new Intent(getContext(), ReceivedActivity.class);
-                startActivity(i);
+                Intent intent2 = new Intent(getContext(), ReceivedActivity.class);
+                startActivity(intent2);
                 break;
             case 3:
+                Intent intent3 = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent3);
                 break;
             case 4:
                 Intent intent = new Intent(getContext(), SendReportActivity.class);
                 startActivity(intent);
+                break;
             default:
                 Toast.makeText(getActivity(), "Azione non supportata",
                         Toast.LENGTH_SHORT).show();
