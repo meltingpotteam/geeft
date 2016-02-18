@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
@@ -188,15 +189,15 @@ public class NavigationDrawerFragment extends Fragment {
     public static List<NavigationDrawerItem> getData(){
         List<NavigationDrawerItem> navigationDrawerItems = new ArrayList<>();
         int icons[] = {R.drawable.ic_profile_24dp,R.drawable.ic_object_given_24dp,
-                R.drawable.ic_object_recieved_24dp, R.drawable.ic_settings_24dp,
-                R.drawable.ic_contact_us_24dp};
+                R.drawable.ic_object_recieved_24dp,R.drawable.ic_object_assigned_24dp,
+                R.drawable.ic_settings_24dp, R.drawable.ic_contact_us_24dp};
 
-        int titles[] = {R.string.account_title,R.string.gift_title,
-                R.string.recycle_title, R.string.settings_title, R.string.mail_title};
+        int titles[] = {R.string.account_title,R.string.gift_title,R.string.recycle_title,
+                R.string.assigned_gift_title, R.string.settings_title, R.string.mail_title};
 
         int descriptions[] = {R.string.account_description, R.string.gift_description,
-                R.string.recycle_description,R.string.settings_description,
-                R.string.mail_description};
+                R.string.recycle_description, R.string.assigned_gift_description,
+                R.string.settings_description, R.string.mail_description};
 
         for(int i=0;i<icons.length && i<titles.length && i<descriptions.length;i++){
             NavigationDrawerItem item = new NavigationDrawerItem(titles[i],
@@ -224,12 +225,16 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent2);
                 break;
             case 3:
-                Intent intent3 = new Intent(getContext(), SettingsActivity.class);
+                Intent intent3 = new Intent(getContext(), AssignedActivity.class);
                 startActivity(intent3);
                 break;
             case 4:
-                Intent intent = new Intent(getContext(), SendReportActivity.class);
-                startActivity(intent);
+                Intent intent4 = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent4);
+                break;
+            case 5:
+                Intent intent5 = new Intent(getContext(), SendReportActivity.class);
+                startActivity(intent5);
                 break;
             default:
                 Toast.makeText(getActivity(), "Azione non supportata",
