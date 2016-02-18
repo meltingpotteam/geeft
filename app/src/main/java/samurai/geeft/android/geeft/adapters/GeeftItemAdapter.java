@@ -215,11 +215,19 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         long actualMillis = c.getTimeInMillis() / 1000; //get timestamp
         long deadlineMillis = item.getDeadLine();
         long remainingDays = (deadlineMillis - actualMillis) / 86400;
-        // long remainingHours = (deadlineMillis - actualMillis) % 86400 / 60;
-        if(remainingDays>0)
-            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni");
-        else if (remainingDays == 1)
-            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno");
+        long remainingHours = (deadlineMillis - actualMillis) % 86400 / 3600;
+
+        if (remainingDays == 1)
+            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno e "+ remainingHours+" ore.");
+        else if(remainingDays == 0) {
+            if(remainingHours == 1)
+                holder.mExpireTime.setText("Rimane: " + remainingHours + " ora.");
+
+            else
+                holder.mExpireTime.setText("Rimangono: " + remainingHours + " ore.");
+        }
+        else if(remainingDays >0)
+            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni e "+ remainingHours+" ore.");
         else
             holder.mExpireTime.setText("Fine");
 
@@ -506,7 +514,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             }
         }
         else{
-            Toast.makeText(mContext,"C'è stato un errore nella segnalazione",Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext,"C'è stato un errore nella segnalazione", Toast.LENGTH_LONG).show();
         }
     }
 
