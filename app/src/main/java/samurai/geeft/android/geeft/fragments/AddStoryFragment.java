@@ -197,7 +197,7 @@ public class AddStoryFragment extends StatedFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.add_geeft_fragment_toolbar_menu, menu);
+        inflater.inflate(R.menu.toolbar_button_menu, menu);
         Log.d("TOOLBAR", "" + inflater.toString());
     }
 

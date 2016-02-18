@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -43,8 +42,6 @@ import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
-import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
-import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -219,10 +216,10 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         long deadlineMillis = item.getDeadLine();
         long remainingDays = (deadlineMillis - actualMillis) / 86400;
         // long remainingHours = (deadlineMillis - actualMillis) % 86400 / 60;
-        if(remainingDays>1)
-            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni e "+ remainingHours+" ore.");
+        if(remainingDays>0)
+            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni");
         else if (remainingDays == 1)
-            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno e "+ remainingHours+" ore.");
+            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno");
         else
             holder.mExpireTime.setText("Fine");
 

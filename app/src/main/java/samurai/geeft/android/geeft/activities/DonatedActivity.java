@@ -17,13 +17,13 @@ import android.widget.TextView;
 import com.nvanbenschoten.motion.ParallaxImageView;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragments.GeeftStoryListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by danybr-dev on 15/02/16.
  */
-public class DonatedActivity extends AppCompatActivity implements GeeftStoryListFragment.OnGeeftImageSelectedListener{
+public class DonatedActivity extends AppCompatActivity implements GeeftReceivedListFragment.OnGeeftImageSelectedListener{
 
     private final String TAG = getClass().getName();
     //info dialog attributes---------------------
@@ -42,13 +42,13 @@ public class DonatedActivity extends AppCompatActivity implements GeeftStoryList
         super.onCreate(savedInstanceState);
 
         //TODO da rivedere assolutamente la logica
-        setContentView(R.layout.activity_add_geeft);
+        setContentView(R.layout.container_for_fragment);
         Bundle bundle = new Bundle();
         inflater = LayoutInflater.from(DonatedActivity.this);
-        GeeftStoryListFragment geeftStoryListFragment = new GeeftStoryListFragment();
+        GeeftReceivedListFragment geeftReceivedListFragment = new GeeftReceivedListFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.add_geeft_fields_fragment, geeftStoryListFragment)
+                .replace(R.id.fragment_container, geeftReceivedListFragment)
                 .commit();
     }
 
@@ -59,7 +59,7 @@ public class DonatedActivity extends AppCompatActivity implements GeeftStoryList
     public void onImageSelected(Geeft geeft) { // give id of image
         // launch full screen activity
         Intent intent = FullScreenViewActivity.newIntent(DonatedActivity.this,
-        geeft.getId());
+        geeft.getId(),"geeft");
         DonatedActivity.this.startActivity(intent);
     }
 }
