@@ -1,6 +1,5 @@
 package samurai.geeft.android.geeft.activities;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,11 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nvanbenschoten.motion.ParallaxImageView;
-import com.squareup.picasso.Picasso;
-
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.database.BaaSGetGeefterFullInformation;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArray;
 
 /**
@@ -29,7 +24,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     private TextView mWinnerScreenGeeftedName;
     private ImageView mWinnerScreenGeeftBackground;
     private ImageButton mWinnerScreenFbButton;
-    private ImageButton mWinnerScreenFbShareButton;
+    private ImageButton mWinnerScreenLocationButton;
     //-------------------------------------------
     private Toolbar mToolbar;
 
@@ -46,7 +41,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenGeeftedName = (TextView) findViewById(R.id.winner_screen_geefted_name);
         mWinnerScreenGeeftBackground = (ImageView) findViewById(R.id.winner_screen_geeft_background);
         mWinnerScreenFbButton = (ImageButton) findViewById(R.id.winner_screen_facebook_button);
-        mWinnerScreenFbShareButton = (ImageButton) findViewById(R.id.winner_screen_share_button);
+        mWinnerScreenLocationButton = (ImageButton) findViewById(R.id.winner_screen_location_button);
 
 
         mWinnerScreenFbButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +50,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                 Toast.makeText(WinnerScreenActivity.this, "Start the communication with the Geefter", Toast.LENGTH_SHORT).show();
             }
         });
-        mWinnerScreenFbShareButton.setOnClickListener(new View.OnClickListener() {
+        mWinnerScreenLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(WinnerScreenActivity.this, "Show approximate position of the Geef", Toast.LENGTH_SHORT).show();

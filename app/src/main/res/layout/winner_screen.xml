@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5">
                 <ImageButton
-                    android:id="@+id/winner_screen_share_button"
+                    android:id="@+id/winner_screen_location_button"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center"
