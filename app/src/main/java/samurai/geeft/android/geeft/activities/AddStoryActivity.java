@@ -39,7 +39,9 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            fragment = GeeftReceivedListFragment.newInstance(new Bundle());
+            Bundle b = new Bundle();
+            b.putString("link_name","received");
+            fragment = GeeftReceivedListFragment.newInstance(b);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
