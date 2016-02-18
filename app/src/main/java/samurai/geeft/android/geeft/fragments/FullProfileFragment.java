@@ -3,7 +3,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +24,44 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by joseph on 16/02/16.
  */
-public class FullProfileFragment extends StatedFragment {
+public class FullProfileFragment extends AppCompatActivity {
 
     private static final String TAG = "SendReportActivity";
 
-    private TextView mReportTitle;
-    private TextView mReportDesription;
+    //info dialog attributes---------------------
+    private TextView mFullProfileUsername;
+    private TextView mFullProfileUserLocation;
+    private ImageView mFullProfilegUserImage;
+    private TextView mFullProfileUserRank;
+    private TextView mFullProfileUserGiven;
+    private TextView mFullProfileUserReceived;
+    private ImageButton mFullProfileFbButton;
+    private ParallaxImageView mFullProfileBackground;
+    //-------------------------------------------
     private Toolbar mToolbar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.full_profile, container, false);
-        return rootView;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.full_profile);
+
+        mToolbar = (Toolbar) findViewById(R.id.full_profile_toolbar);
+        mToolbar.setTitle("Geefter Page");
+        setSupportActionBar(mToolbar);
+
+        mFullProfileUsername = (TextView) findViewById(R.id.full_profile_page_geefter_name);
+        mFullProfileUserLocation = (TextView) findViewById(R.id.full_profile_page_geefter_location);
+        mFullProfilegUserImage = (ImageView) findViewById(R.id.full_profile_page_geefter_image);
+        mFullProfileUserRank = (TextView) findViewById(R.id.full_profile_page_ranking_score);
+        mFullProfileUserGiven = (TextView) findViewById(R.id.full_profile_page_given_geeft);
+        mFullProfileUserReceived = (TextView) findViewById(R.id.full_profile_page_received_geeft);
+        mFullProfileFbButton = (ImageButton) findViewById(R.id.full_profile_page_facebook_button);
+
+        mFullProfileBackground = (ParallaxImageView) findViewById(R.id.full_profile_page_background);
+
+        mFullProfileBackground.setTiltSensitivity(5);
+        mFullProfileBackground.registerSensorManager();
+        //TODO tenere la parallasse?!
     }
 
 /*

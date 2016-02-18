@@ -17,7 +17,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             >
-            <include android:id="@+id/feedback_page_toolbar" layout="@layout/tool_bar"/>
+            <include android:id="@+id/full_profile_toolbar" layout="@layout/tool_bar"/>
         </android.support.design.widget.AppBarLayout>
         <FrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@
                 android:layout_height="300dp"
                 android:orientation="vertical">
                 <com.nvanbenschoten.motion.ParallaxImageView
-                    android:id="@+id/dialog_geefter_background"
+                    android:id="@+id/full_profile_page_background"
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
                     android:src="@drawable/geeft_background_blur"
@@ -47,7 +47,7 @@
                 </FrameLayout>
             </LinearLayout>
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/dialog_geefter_profile_image"
+                android:id="@+id/full_profile_page_geefter_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 app:border_color="@color/white"
@@ -59,9 +59,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                >
                 <TextView
-                    android:id="@+id/dialog_geefter_name"
+                    android:id="@+id/full_profile_page_geefter_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="100sp"
@@ -84,7 +85,7 @@
                         android:textSize="20sp"
                         android:text="Feedback:"/>
                     <TextView
-                        android:id="@+id/dialog_ranking_score"
+                        android:id="@+id/full_profile_page_ranking_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
@@ -95,7 +96,7 @@
                         android:textSize="20sp"
                         android:hint="Received:"/>
                     <TextView
-                        android:id="@+id/dialog_received_geeft"
+                        android:id="@+id/full_profile_page_received_geeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
@@ -106,13 +107,13 @@
                         android:textSize="20sp"
                         android:hint="Geeven:"/>
                     <TextView
-                        android:id="@+id/dialog_given_geeft"
+                        android:id="@+id/full_profile_page_given_geeft"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:hint="#geeft"/>
                     <TextView
-                        android:id="@+id/dialog_geefter_location"
+                        android:id="@+id/full_profile_page_geefter_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
@@ -121,10 +122,11 @@
                 <ImageButton
                     android:layout_width="72dp"
                     android:layout_height="72dp"
+                    android:id="@+id/full_profile_page_facebook_button"
                     android:tint="@android:color/holo_blue_dark"
                     android:padding="10dp"
                     android:layout_gravity="bottom|center"
-                    android:src="@drawable/com_facebook_button_icon"
+                    android:src="@drawable/ic_facebook_box"
                     android:background="#00ffffff"/>
             </LinearLayout>
         </FrameLayout>

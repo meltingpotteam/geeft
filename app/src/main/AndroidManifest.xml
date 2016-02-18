@@ -58,6 +58,8 @@
             android:theme="@style/AppThemeSettings"/>
 
         <activity android:name=".activities.FullScreenViewActivity"/>
+        <activity android:name=".fragments.FullProfileFragment"/>
+
 
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>
