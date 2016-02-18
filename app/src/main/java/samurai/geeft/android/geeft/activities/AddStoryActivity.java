@@ -32,6 +32,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeft = new Geeft();
+
         if (savedInstanceState!=null){
             mId = savedInstanceState.getString("STORY_ID");
         }

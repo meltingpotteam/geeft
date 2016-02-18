@@ -78,6 +78,7 @@
             fab:fab_label="Nuovo Geeft"
             fab:fab_size="mini"
             />
+        
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/geeft_around_me_button"
             android:layout_width="wrap_content"
