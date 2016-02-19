@@ -54,6 +54,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 - Implementing Geeft around me
 - Finish the Geeftory
+- Implementing filtered search feature
+- Push notifications
 - Eventually correction of bugs
 - Beta version release, testing and promoting
 
