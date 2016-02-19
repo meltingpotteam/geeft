@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.DonatedActivity;
-import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
@@ -196,21 +194,11 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
+            mGeeftList = new ArrayList<>();
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
             ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable("mGeeftList2");
             mGeeftList.addAll(array);
             mGeeftListShowDialog();
-        }
-        else{
-
-            if(getContext().getClass().equals(ReceivedActivity.class)){
-                Log.d("geeftStoryFragment","getContext is equal to Received Activity: " + getContext().getClass().equals(ReceivedActivity.class));
-            new BaaSReceivedDonatedGeeftTask(getContext(), "received" ,mGeeftList,mAdapter,this).execute();
-            }
-            if(getContext().getClass().equals(DonatedActivity.class)){
-                Log.d("geeftStoryFragment","getContext is equal to Donated Activity: " + getContext().getClass().equals(DonatedActivity.class));
-                new BaaSReceivedDonatedGeeftTask(getContext(), "donated" ,mGeeftList,mAdapter,this).execute();
-            }
         }
     }
 
