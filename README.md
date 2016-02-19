@@ -46,6 +46,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Possibly developing users prefered features based on surveys and feedbacks pages on social networks
 - Possibly sperimenting the alpha version UI and UX with real users
 - Promoting the product
+- [APK] (http://meltingpotteam.altervista.org/apk/geeft_19_02_16.apk)
 
 ==============
 ###Milestone 3 - Final
