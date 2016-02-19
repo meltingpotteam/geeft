@@ -74,7 +74,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     @Override
     public void onCheckSelected(boolean startChooseStory,Geeft geeft) {
         mGeeft = geeft;
-        mProgress = ProgressDialog.show(AddStoryActivity.this,"Attendere", "agginta in corso");
+        mProgress = ProgressDialog.show(AddStoryActivity.this,"Attendere", "aggiunta in corso");
         new BaaSUploadStory(getApplicationContext(),mGeeft,mId,this).execute();
     }
 
