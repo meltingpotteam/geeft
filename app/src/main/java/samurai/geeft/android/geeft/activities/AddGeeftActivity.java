@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -31,6 +33,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     private final String TAG = getClass().getName();
     private Geeft mGeeft;
+    private ProgressDialog mProgress;
     private final static String TAG_ADD_GEEFT_FIELDS = "samurai.geeft.android.geeft.activities." +
             "stack_add_geeft";
     private final static String TAG_ADD_GEEFT_RECIEVED_LIST = "samurai.geeft.android.geeft.activities." +
@@ -80,7 +83,9 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             public void onClick(DialogInterface dialog, int which) {
                 //here you can add functions
                 Log.d("DONE", "in startChooseStory");
-                GeeftReceivedListFragment fragment = GeeftReceivedListFragment.newInstance(new Bundle());
+                Bundle b = new Bundle();
+                b.putString("link_name", "received");
+                GeeftReceivedListFragment fragment = GeeftReceivedListFragment.newInstance(b);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);
@@ -95,6 +100,11 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             public void onClick(DialogInterface dialog, int which) {
                 //here you can add functions
                 Log.d("AAAA",geeft.getUserCap()+" "+geeft.getGeeftTitle());
+                mProgress = new ProgressDialog(AddGeeftActivity.this);
+                mProgress.show();
+                mProgress.setCancelable(false);
+                mProgress.setIndeterminate(true);
+                mProgress.setMessage("Attendere");
                 new BaaSUploadGeeft(getApplicationContext(),geeft,AddGeeftActivity.this).execute();
             }
         });
@@ -108,6 +118,11 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     @Override
     public void onImageSelected(String id) {
         String mId = id;
+        mProgress = new ProgressDialog(this);
+        mProgress.show();
+        mProgress.setCancelable(false);
+        mProgress.setIndeterminate(true);
+        mProgress.setMessage("Attendere");
         new BaaSUploadGeeft(getApplicationContext(),mGeeft,mId,this).execute();
     }
 
@@ -122,6 +137,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     public void done(boolean result){
         //enables all social buttons
+        mProgress.dismiss();
         if(result){
             Toast.makeText(getApplicationContext(),
                     "Annuncio inserito con successo", Toast.LENGTH_LONG).show();

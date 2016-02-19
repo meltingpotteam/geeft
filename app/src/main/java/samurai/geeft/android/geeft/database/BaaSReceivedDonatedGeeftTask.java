@@ -48,7 +48,7 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
         // PROBLEMA GRAVE: QUANDO FAI LA QUERY,OUT È L'UTENTE (DocUserId) E IN È IL GEEFT
         //                 QUANDO PRENDI I LINK,OUT() È IL GEEFT,IN() È L'UTENTE
         Log.d(TAG,"mNameLinkQuery is: " + mlinkNameQuery);
-        if(mlinkNameQuery != null || !mlinkNameQuery.equals("")) { // mLinkNameQuery are only
+        if(mlinkNameQuery != null ) { // mLinkNameQuery are only
                                     // "received" and "geefted"
             BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync(mlinkNameQuery, query);
             List<BaasLink> links;
