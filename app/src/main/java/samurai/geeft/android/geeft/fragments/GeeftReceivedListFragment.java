@@ -202,6 +202,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
     }
 
+
     /**
      * Resume position of list
      */
