@@ -7,9 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    cardView:cardCornerRadius="2dp"
-    cardView:cardElevation="4dp"
-    cardView:cardPreventCornerOverlap="true"
     cardView:paddingEnd="@dimen/item_touch_helper_max_drag_scroll_per_frame"
     android:focusableInTouchMode="false"
     android:focusable="false">
@@ -18,9 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        style="@style/CardView.Light"
         >
 
-        <!-- TODO add the "signal to the moderator" -->
+        <!--->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,6 +92,7 @@
                 android:background="#00ffffff"
                 android:layout_gravity="top"/>
         </LinearLayout>
+        <!-->
         <LinearLayout
             android:id="@+id/geeft_detail"
             android:layout_width="match_parent"
@@ -117,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:layout_gravity="end|bottom"
+                    android:layout_gravity="end|top"
                     android:background="#96000000"
                     android:orientation="horizontal">
                     <TextView
@@ -138,38 +137,19 @@
                         android:src="@drawable/ic_remainig_time"
                         />
                 </LinearLayout>
-
-            </FrameLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
                 <TextView
                     android:id="@+id/geeft_name"
                     android:text="Geeft name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:textColor="#222"
-                    android:textStyle="bold"
+                    android:textColor="#ffffff"
                     android:textSize="@dimen/geeft_title_text_size" />
 
-                <TextView
-                    android:id="@+id/geeft_description"
-                    android:text="Geeft Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_vertical_margin_x2"
-                    android:textColor="#666"
-                    android:textSize="@dimen/geeft_description_text_size"
-                    />
-
-            </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
         <LinearLayout
@@ -180,7 +160,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:gravity="center"
                 >
                 <ImageButton
@@ -197,7 +177,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:gravity="center"
                 >
                 <ImageButton
@@ -215,7 +195,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:gravity="center"
                 >
                 <ImageButton
@@ -229,7 +209,11 @@
                     android:visibility="visible"
                     />
             </LinearLayout>
-
+            <LinearLayout android:layout_width="0dp"
+                          android:layout_height="match_parent"
+                          android:layout_weight="1"
+                          android:gravity="end">
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

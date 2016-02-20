@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
@@ -30,8 +29,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
         protected Boolean doInBackground(Void... arg0) {
             BaasUser currentUser = BaasUser.current();
             if(currentUser !=null) {
-                long fb = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
-                double feedback = (double) fb; //to avoid error of casting
+                double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                 long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
                 long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
                 String fbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
@@ -46,15 +44,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
                 mFullUserInformation[3] = fbName;
                 mFullUserInformation[4] = profilePicUri;
                 mFullUserInformation[5] = fbId;
-                        /*
-                private TextView mFullProfileUserRank;
-                private TextView mFullProfileUserGiven;
-                private TextView mFullProfileUserReceived;
-                private TextView mFullProfileUsername;
-                private ImageView mFullProfilegUserImage;
 
-                private ImageButton mFullProfileFbButton;
-                private ParallaxImageView mFullProfileBackground;*/
                 return true;
             }
             else{

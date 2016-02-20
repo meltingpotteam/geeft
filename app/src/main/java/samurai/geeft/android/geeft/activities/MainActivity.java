@@ -95,10 +95,11 @@ public class MainActivity extends AppCompatActivity {
         /**
          * End implementation
          */
+        final FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
         NavigationDrawerFragment drawerFragment =  (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_fragment);
         Log.d("LOG",""+drawerFragment);
-        drawerFragment.setUp(R.id.navigation_drawer_fragment,
+                drawerFragment.setUp(R.id.navigation_drawer_fragment,
                 (DrawerLayout)findViewById(R.id.drawer_layout),mToolbar);
 
 
@@ -106,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
          that give the possibility to select the action that the user wat to do (the action button)
          clicked will start the associated activity.
         **/
-        FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
         floatingActionMenu.setClosedOnTouchOutside(true);
         mActionNewGeeft = (FloatingActionButton) findViewById(R.id.add_geeft_button);
         mActionNewGeeft.setOnClickListener(new View.OnClickListener() {
@@ -115,14 +115,17 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AddGeeftActivity.class);
                 startActivity(intent);
+                floatingActionMenu.close(false);
             }
         });
-        FloatingActionButton actionGeeftAroundMe = (FloatingActionButton) findViewById(R.id.geeft_around_me_button);
-        actionGeeftAroundMe.setOnClickListener(new View.OnClickListener() {
+
+        FloatingActionButton mActionGeeftStory = (FloatingActionButton) findViewById(R.id.geeft_around_me_button);
+        mActionGeeftStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
+                floatingActionMenu.close(false);
             }
         });
         /**
