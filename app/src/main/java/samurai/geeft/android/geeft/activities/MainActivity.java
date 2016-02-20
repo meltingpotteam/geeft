@@ -22,6 +22,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasUser;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar()!=null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+        // TODO: Move this to where you establish a user session
+        logUser();
 
 
         /**
@@ -269,5 +273,14 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         mActionNewGeeft.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
+    private void logUser() {
+        BaasUser current = BaasUser.current();
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.setUserIdentifier("12345");
+        Crashlytics.setUserEmail(current.getName()+"@fabric.io");
+        Crashlytics.setUserName(current.getName());
+    }
+
 
 }

@@ -53,6 +53,10 @@ public class FeedbackPageActivity extends AppCompatActivity {
         });
 
     }
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
+    }
+
 
 
 
