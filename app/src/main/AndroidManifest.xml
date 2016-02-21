@@ -84,7 +84,7 @@
         <activity android:name=".activities.HowToDoActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="83da223800c760239f74f1fc4593d2fc3e7af8d2" />
+            android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
     </application>
 
 </manifest>
