@@ -47,6 +47,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Possibly sperimenting the alpha version UI and UX with real users
 - Promoting the product
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft_19_02_16.apk)
+- [Presentation] (https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
 
 ==============
 ###Milestone 3 - Final
