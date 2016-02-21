@@ -19,7 +19,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
+public class BaaSTabGeeftoryTask extends AsyncTask<Void,Void,Boolean> {
 
     private static final String TAG ="BaaSGeeftItemTask";
             Context mContext;
@@ -28,8 +28,8 @@ public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
             StoryItemAdapter mGeeftStroryAdapter;
             boolean result;
     
-    public BaaSGeeftoryRecycleTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
-            TaskCallbackBoolean callback) {
+    public BaaSTabGeeftoryTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
+                               TaskCallbackBoolean callback) {
             mContext = context;
             mGeeftList = feedItems;
             mCallback = callback;
@@ -63,7 +63,7 @@ public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
                         result = true;
                     }
                 } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Log.e("LOG", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                     return false;
                 }

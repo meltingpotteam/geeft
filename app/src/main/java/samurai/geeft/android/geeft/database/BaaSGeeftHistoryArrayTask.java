@@ -62,7 +62,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 createGeeftStoryArray(e,mGeeftId+"");
                 result = true;
             } catch (com.baasbox.android.BaasException ex) {
-                Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                Log.e("CLASS", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
                 Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -99,7 +99,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                     else
                         stop=true;
                 } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("CLASS2", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Log.e("CLASS2", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                 }
             } else if (baasResult.isFailed()) {

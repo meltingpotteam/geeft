@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:name=".ApplicationInit"
@@ -20,7 +23,6 @@
         <activity android:name=".activities.InitialActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -68,6 +70,8 @@
 
         <!-- FullScreenViewActivity-->
         <activity android:name=".activities.FullScreenViewActivity"/>
+
+        <activity android:name=".activities.FullGeeftDetailsActivity"/>
 
         <!-- Winner Screen-->
         <activity android:name=".activities.WinnerScreenActivity"/>

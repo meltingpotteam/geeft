@@ -187,6 +187,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
     }
 
+
     /**
      * Restore Fragment's State here
      */

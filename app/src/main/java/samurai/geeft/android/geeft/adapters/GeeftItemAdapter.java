@@ -38,7 +38,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
+import samurai.geeft.android.geeft.activities.FullGeeftDetailsActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
@@ -105,7 +105,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         /**
          * BINDING
          */
-        //@Bind(R.id.geeft_name) TextView mGeeftTitleTextView;
+        @Bind(R.id.geeft_name) TextView mGeeftTitleTextView;
         //@Bind(R.id.geeft_description)ExpandableTextView mGeeftDescriptionTextView;
         //@Bind(R.id.location) TextView mUserLocationTextView;
         //@Bind(R.id.geefter_name) TextView mUsernameTextView;
@@ -157,9 +157,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         /**
          * holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
-         * older.mGeeftTitleTextView.setText(item.getGeeftTitle());
          */
 
+        holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
         // - replace the contents of the view with that element
         //holder.mUsernameTextView.setText(item.getUsername());
 
@@ -331,9 +331,10 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             @Override
             public void onClick(View v) {
                 // launch full screen activity
-                Intent intent = FullScreenViewActivity.newIntent(mContext,
-                        item.getId(),"geeft");
+                Intent intent = FullGeeftDetailsActivity.newIntent(mContext,
+                        item);
                 mContext.startActivity(intent);
+                Log.d(TAG,"ONCLICK");
             }
         });
 
