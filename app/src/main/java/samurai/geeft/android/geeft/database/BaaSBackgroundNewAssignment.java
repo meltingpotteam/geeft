@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
@@ -85,8 +86,15 @@ public class BaaSBackgroundNewAssignment extends AsyncTask<Void,Void,Boolean> {
                                     return false;
                                 }
                             } else if (result.isFailed()) {
-                                Log.e(TAG, "Error when retrieve links: " + result.error());
-                                return false;
+                                if(result.error() instanceof BaasInvalidSessionException) { //Invialid
+                                    //session token,return to login activity
+
+                                }
+                                else{
+                                    Log.e(TAG, "Error when retrieve links: " + result.error());
+                                    return false;
+                                }
+
                             }
                         }
                     }

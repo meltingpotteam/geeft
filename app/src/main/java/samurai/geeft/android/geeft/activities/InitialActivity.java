@@ -54,7 +54,7 @@ public class InitialActivity extends Activity implements TaskCallbackBooleanGeef
             Intent intent = new Intent(this,WinnerScreenActivity.class);
             intent.putExtra("geeft", (Serializable) geeft);
             startMainActivity();
-            startActivity(intent);
+            //startActivity(intent);
         }
         else
             startMainActivity();

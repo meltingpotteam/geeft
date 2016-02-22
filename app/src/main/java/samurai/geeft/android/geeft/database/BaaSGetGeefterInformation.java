@@ -28,8 +28,7 @@ public class BaaSGetGeefterInformation extends AsyncTask<Void,Void,Boolean> {
     protected Boolean doInBackground(Void... arg0) {
         BaasUser currentUser = BaasUser.current();
         if(currentUser !=null) {
-            long fb = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
-            double feedback = (double) fb; //to avoid error of casting
+            double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
             long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
             long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
 

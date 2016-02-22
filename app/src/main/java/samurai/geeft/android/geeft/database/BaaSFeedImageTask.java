@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -30,12 +32,17 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
     private static final String TAG ="BaaSGeeftItemTask";
     Context mContext;
     List<Geeft> mGeeftList;
-    TaskCallbackBoolean mCallback;
+    TaskCallbackBooleanToken mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
-
+    private int mResultToken;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
     public BaaSFeedImageTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                             TaskCallbackBoolean callback) {
+                             TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -49,18 +56,24 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
         Log.d(TAG, BaasUser.current().toString());
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
         //find all links with the doc_id (User id <--> doc id )
-        Log.d(TAG,"Doc_id is: " + docId);
+        Log.d(TAG, "Doc_id is: " + docId);
         //TODO: change when baasbox fix issue with BaasLink.create
-        BaasQuery.Criteria query =BaasQuery.builder().where("in.id like '" + docId + "'" ).criteria();
+        BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'").criteria();
         BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
         List<BaasLink> links;
-        if(resLinks.isSuccess()){
+        if (resLinks.isSuccess()) {
             links = resLinks.value();
             Log.d(TAG, "Your links are here: " + links.size());
-        }
-        else{
-            Log.e(TAG, "Error when retrieve links:" + resLinks.error());
-            return false; // Don't continue if we are in this case
+        } else {
+            if (resLinks.error() instanceof BaasInvalidSessionException) {
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
+
+            } else {
+                Log.e(TAG, "Error when retrieve links:" + resLinks.error());
+                mResultToken = RESULT_FAILED;
+                return false; // Don't continue if we are in this case
+            }
         }
         BaasQuery.Criteria paginate = BaasQuery.builder()
                 .orderBy("_creation_date asc").criteria();
@@ -97,16 +110,30 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
                         }
                     }
                     mGeeftList.add(0, mGeeft);
+                    mResultToken = RESULT_OK;
                     result = true;
                 }
-                } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
-                    Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } else if (baasResult.isFailed()) {
-                Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+            }catch (BaasInvalidSessionException ise){
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
             }
+            catch (com.baasbox.android.BaasException ex) {
+                Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                mResultToken = RESULT_FAILED;
+                return false;
+            }
+        } else {
+            if(baasResult.error() instanceof BaasInvalidSessionException){
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
+            }
+            else {
+                Log.e("LOG", "Deal with error: " + baasResult.error().getMessage());
+                mResultToken = RESULT_FAILED;
+                return false;
+            }
+        }
         return result;
     }
 
@@ -126,6 +153,6 @@ public class BaaSFeedImageTask extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result);
+        mCallback.done(result,mResultToken);
     }
 }
