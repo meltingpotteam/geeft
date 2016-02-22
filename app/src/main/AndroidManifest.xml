@@ -82,7 +82,9 @@
         <activity android:name=".activities.AddStoryActivity"/>
 
         <activity android:name=".activities.HowToDoActivity"/>
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
     </application>
 
 </manifest>
