@@ -46,7 +46,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Possibly developing users prefered features based on surveys and feedbacks pages on social networks
 - Possibly sperimenting the alpha version UI and UX with real users
 - Promoting the product
-- [APK] (http://meltingpotteam.altervista.org/apk/geeft_19_02_16.apk)
+- [APK] (https://app.edo.io/preview?id=56cb0f3cb80991bc29d7798d&k=WKBdR3tHrj_bBSD3h-wtacj2MSA70vhr1cP5euTB7os=)
 - [Presentation] (https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
 - [Demo Video] (https://app.edo.io/preview?id=56c684cedd9264cfcb17dd02&k=Dl6yFPkxvR2B4o-qwM4DPdoUgpputn0S2qA7en5tWa4=)
 
