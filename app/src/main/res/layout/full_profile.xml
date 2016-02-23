@@ -44,9 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/activity_horizontal_margin_x2"
+            android:padding="@dimen/activity_horizontal_margin"
             android:layout_gravity="center"
-            android:layout_marginTop="90sp"
+            android:layout_marginTop="100sp"
             >
             <TextView
                 android:id="@+id/full_profile_page_geefter_name"
@@ -55,7 +55,7 @@
                 android:maxLength="20"
                 android:text="@string/user_name"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="26sp"
+                android:textSize="24sp"
                 android:layout_weight="2.18"
                 android:layout_gravity="center"/>
 
@@ -74,8 +74,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/standard_text_size"
                         android:text="Feedback:"/>
                     <TextView
                         android:id="@+id/full_profile_page_ranking_score"
@@ -83,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/standard_text_size"
                         android:hint="#geeft"/>
                 </LinearLayout>
 
@@ -100,7 +99,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/standard_text_size"
                             android:hint="Ricevuti:"/>
                         <TextView
                             android:id="@+id/full_profile_page_received_geeft"
@@ -108,7 +107,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginStart="5dp"
-                            android:textSize="15sp"
+                            android:textSize="@dimen/standard_text_size"
                             android:hint="#geeft"/>
                     </LinearLayout>
 
@@ -120,7 +119,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/standard_text_size"
                             android:hint="Donati:"/>
                         <TextView
                             android:id="@+id/full_profile_page_given_geeft"
@@ -128,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginStart="5dp"
-                            android:textSize="15sp"
+                            android:textSize="@dimen/standard_text_size"
                             android:hint="#geeft"/>
                     </LinearLayout>
 
@@ -139,13 +138,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="130dp"
                     android:orientation="horizontal">
                     <TextView
                         android:id="@+id/full_profile_page_display_fb_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/standard_text_size"
                         android:text="Facebook Id:"
                         android:hint="#geeft"/>
                     <TextView
@@ -154,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/standard_text_size"
                         android:text="-"/>
                 </LinearLayout>
             </LinearLayout>
