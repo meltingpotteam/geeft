@@ -29,7 +29,7 @@
 
             <include
                 android:id="@+id/item_user_profile_card"
-                layout="@layout/item_user_profile_card"
+                layout="@layout/item_user_profile_and_rating_card"
                 />
 
             <include

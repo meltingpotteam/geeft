@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.FullGeeftDeatailsFragment;
@@ -46,7 +48,7 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
         }
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = null;
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             Bundle b = new Bundle();
             b.putSerializable(FullGeeftDeatailsFragment.GEEFT_KEY,mGeeft);
@@ -56,4 +58,18 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
