@@ -73,7 +73,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
             }
         });*/
         mWinnerScreenGeefterName.setText(geeft.getUsername());
-        mWinnerScreenGeeftedName.setText("NomeCheVuoiTu");
+        mWinnerScreenGeeftedName.setText("Gabriele Vecchia");
         Picasso.with(getApplicationContext()).load(geeft.getGeeftImage()).fit().centerCrop()
                 .placeholder(R.drawable.ic_image_multiple)
                 .into(mWinnerScreenGeeftBackground);
