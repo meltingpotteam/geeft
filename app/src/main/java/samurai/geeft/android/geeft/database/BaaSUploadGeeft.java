@@ -136,7 +136,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         String streamUri = image.getStreamUri().toString();
         String temp[] = streamUri.split("=");
         StringBuilder stbuild = new StringBuilder("");
-        stbuild.append(temp[0]).append(temp[1]).append("=");
+        stbuild.append(temp[1]).append("=");
         return stbuild.toString();
     }
 
