@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:text="@string/geeft_title_text"
             android:textStyle="bold"
-            android:textSize="@dimen/geeft_title_text_size"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@color/colorAccent"
+            style="@style/TextAppearance.AppCompat.Title"/>
         <TextView
             android:id="@+id/geeft_description_textview"
             android:paddingTop="10dp"
