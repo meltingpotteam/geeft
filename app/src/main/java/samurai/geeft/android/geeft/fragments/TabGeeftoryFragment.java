@@ -32,10 +32,12 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBoolean {
 
     private final String TAG = getClass().getSimpleName();
+    private final String PREF_FILE_NAME = "2pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
     private static final String GEFFTORY_LIST_KEY = "geeftory_list_key";
+    private static final String GEFFTORY_LIST_PREF = "geeftory_list_pref";
 
-    private List<Geeft> mGeeftoryList= new ArrayList<>();
+    private List<Geeft> mGeeftoryList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private StoryItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
@@ -74,7 +76,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         super.onFirstTimeLaunched();
 
         Log.d(TAG, "onFirstTimeLaunched()");
-
         getData();
     }
 
@@ -85,9 +86,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     @Override
     protected void onSaveState(Bundle outState) {
         super.onSaveState(outState);
-
         Log.d(TAG, "onSaveState()");
-
         saveState(outState);
     }
 
@@ -98,8 +97,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
 
-        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? "+(savedInstanceState==null));
-
+        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? " + (savedInstanceState == null));
         restoreState(savedInstanceState);
     }
 
@@ -116,10 +114,10 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     }
 
 
-    public void done(boolean result){
+    public void done(boolean result) {
         Log.d(TAG, "done()");
 
-        if(mRefreshLayout.isRefreshing()) {
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
@@ -135,7 +133,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         mAdapter.notifyDataSetChanged();
     }
 
-    private  void initUI(View rootView){
+    private void initUI(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 
@@ -158,49 +156,48 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         });
     }
 
-    private void saveState(Bundle outState){
+    private void saveState(Bundle outState) {
         outState.putParcelableArrayList(GEFFTORY_LIST_KEY, (ArrayList) mGeeftoryList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
     }
 
-    private void restoreState(Bundle savedInstanceState){
+    private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
-            ArrayList<Geeft> arrayList=
-                    (ArrayList)savedInstanceState.getParcelableArrayList(GEFFTORY_LIST_KEY);
+            ArrayList<Geeft> arrayList =
+                    (ArrayList) savedInstanceState.getParcelableArrayList(GEFFTORY_LIST_KEY);
             mGeeftoryList.addAll(arrayList);
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftoryList==null || mGeeftoryList.size()==0? "
-                +(mGeeftoryList==null || mGeeftoryList.size()==0));
-        if (mGeeftoryList!=null)
+                + (mGeeftoryList == null || mGeeftoryList.size() == 0));
+        if (mGeeftoryList != null)
             Log.d(TAG, "onRestoreState()-> mGeeftoryList.size= "
-                    +(mGeeftoryList.size()));
+                    + (mGeeftoryList.size()));
 
-        if (mGeeftoryList==null || mGeeftoryList.size()==0){
-            new BaaSTabGeeftoryTask(getActivity(),mGeeftoryList,mAdapter,this).execute();
-        }
-        else {
+        if (mGeeftoryList == null || mGeeftoryList.size() == 0) {
+            new BaaSTabGeeftoryTask(getActivity(), mGeeftoryList, mAdapter, this).execute();
+        } else {
             mAdapter.notifyDataSetChanged();
         }
     }
 
 
-    private void getData(){
+    private void getData() {
 
-        if(!isNetworkConnected()) {
+        if (!isNetworkConnected()) {
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
-        }else {
-            new BaaSTabGeeftoryTask(getActivity(),mGeeftoryList,mAdapter,this).execute();
+        } else {
+            new BaaSTabGeeftoryTask(getActivity(), mGeeftoryList, mAdapter, this).execute();
         }
     }
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm =
-                (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
@@ -208,7 +205,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private void showSnackbar(){
+    private void showSnackbar() {
         final Snackbar snackbar = Snackbar
                 .make(getActivity().findViewById(R.id.main_coordinator_layout),
                         "No Internet Connection!", Snackbar.LENGTH_LONG)

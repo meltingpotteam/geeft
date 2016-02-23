@@ -22,6 +22,7 @@ public class HowToDoFragment extends StatedFragment{
     private TextView mTextView;
     private TextView mTextView2;
 
+
     public static HowToDoFragment newInstance(Bundle b) {
         HowToDoFragment fragment = new HowToDoFragment();
         fragment.setArguments(b);

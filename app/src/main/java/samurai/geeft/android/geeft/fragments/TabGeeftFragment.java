@@ -32,10 +32,12 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 public class TabGeeftFragment extends StatedFragment implements TaskCallbackBoolean{
 
     private final String TAG = getClass().getSimpleName();
+    private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
-    private static final String GEFFTORY_LIST_KEY = "geeftory_list_key";
+    private static final String GEFFT_LIST_KEY = "geeft_list_key";
+    private static final String GEFFT_LIST_PREF = "geeft_list_pref";
 
-    private List<Geeft> mGeeftoryList= new ArrayList<>();
+    private List<Geeft> mGeeftList= new ArrayList<>();
     private RecyclerView mRecyclerView;
     private GeeftItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
@@ -74,7 +76,6 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         super.onFirstTimeLaunched();
 
         Log.d(TAG, "onFirstTimeLaunched()");
-
         getData();
     }
 
@@ -87,7 +88,6 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         super.onSaveState(outState);
 
         Log.d(TAG, "onSaveState()");
-
         saveState(outState);
     }
 
@@ -139,7 +139,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftoryList);
+        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -159,7 +159,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
     private void saveState(Bundle outState){
-        outState.putParcelableArrayList(GEFFTORY_LIST_KEY, (ArrayList) mGeeftoryList);
+        outState.putParcelableArrayList(GEFFT_LIST_KEY, (ArrayList) mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
@@ -169,18 +169,18 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         if (savedInstanceState != null) {
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
             ArrayList<Geeft> arrayList=
-                    (ArrayList)savedInstanceState.getParcelableArrayList(GEFFTORY_LIST_KEY);
-            mGeeftoryList.addAll(arrayList);
+                    (ArrayList)savedInstanceState.getParcelableArrayList(GEFFT_LIST_KEY);
+            mGeeftList.addAll(arrayList);
         }
 
-        Log.d(TAG, "onRestoreState()-> mGeeftoryList==null || mGeeftoryList.size()==0? "
-                +(mGeeftoryList==null || mGeeftoryList.size()==0));
-        if (mGeeftoryList!=null)
-            Log.d(TAG, "onRestoreState()-> mGeeftoryList.size= "
-                    +(mGeeftoryList.size()));
+        Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
+                + (mGeeftList == null || mGeeftList.size() == 0));
+        if (mGeeftList!=null)
+            Log.d(TAG, "onRestoreState()-> mGeeftList.size= "
+                    +(mGeeftList.size()));
 
-        if (mGeeftoryList==null || mGeeftoryList.size()==0){
-            new BaaSTabGeeftTask(getActivity(),mGeeftoryList,mAdapter,this).execute();
+        if (mGeeftList==null || mGeeftList.size()==0){
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
         }
         else {
             mAdapter.notifyDataSetChanged();
@@ -194,7 +194,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
         }else {
-            new BaaSTabGeeftTask(getActivity(),mGeeftoryList,mAdapter,this).execute();
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
         }
     }
 

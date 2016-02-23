@@ -284,5 +284,8 @@
     <string name="assigned_gift_description">Visualizza oggetti in attesa di essere ritirati</string>
     <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa</string>
     <string name="show_story">Visualizza la storia dell\'oggetto</string>
+    <string name="geeft_title_text">Geeft title</string>
+    <string name="geeft_description_text">Geeft description</string>
+    <string name="geeft_show_story">Visualizza storia</string>
 
 </resources>
