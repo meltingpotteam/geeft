@@ -49,7 +49,6 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mGeeft = geeft;
         mCallback = callback;
         mOldGeeftId = id;
-        Log.d(TAG, "Lanciato AsyncTask");
     }
 
 
@@ -134,9 +133,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
 
     private String getImageUrl(BaasFile image){
         String streamUri = image.getStreamUri().toString();
-        String temp[] = streamUri.split("=");
+        String temp[] = streamUri.split("\\?");
         StringBuilder stbuild = new StringBuilder("");
-        stbuild.append(temp[1]).append("=");
+        stbuild.append(temp[0]).append("?X-BB-SESSION=");
         return stbuild.toString();
     }
 

@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
@@ -149,6 +151,8 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                             public void onClick(DialogInterface dialog, int which) {
                                 getActivity().getSupportFragmentManager().popBackStack();
                                 dialog.dismiss();
+                                startActivity(new Intent(getContext(), MainActivity.class));
+                                getActivity().finish();
                             }
                         })
                         .show();
