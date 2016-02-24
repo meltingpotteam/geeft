@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
@@ -14,6 +15,7 @@ import com.baasbox.android.BaasUser;
 import java.util.List;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -24,15 +26,21 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     private final String TAG =""+this.getClass().getName();
     Context mContext;
     List<Geeft> mGeeftList;
-    TaskCallbackBoolean mCallback;
+    TaskCallbackBooleanToken mCallback;
     String mGeeftId;
     boolean result;
     boolean stop = true;
     String mCollection;
+    private int mResultToken;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     public BaaSGeeftHistoryArrayTask(Context context, List<Geeft> feedItems, String geeftId,
                                      String collection,
-                                     TaskCallbackBoolean callback) {
+                                     TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -61,13 +69,27 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 mGeeftList.add(0,mGeeft);
                 createGeeftStoryArray(e,mGeeftId+"");
                 result = true;
-            } catch (com.baasbox.android.BaasException ex) {
+            }catch (BaasInvalidSessionException ise){
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
+
+            }catch (com.baasbox.android.BaasException ex) {
                 Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                 Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                mResultToken = RESULT_FAILED;
                 return false;
             }
+
         } else if (baasResult.isFailed()) {
-            Log.e("CLASS", "Deal with error: " + baasResult.error().getMessage());
+            if(baasResult.error() instanceof BaasInvalidSessionException){
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
+            }
+            else {
+                Log.e("CLASS", "Deal with error: " + baasResult.error().getMessage());
+                mResultToken = RESULT_FAILED;
+                return false;
+            }
         }
         return result;
     }
@@ -98,17 +120,26 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                     }
                     else
                         stop=true;
-                } catch (com.baasbox.android.BaasException ex) {
+                }catch (BaasInvalidSessionException ise){
+                    mResultToken = RESULT_SESSION_EXPIRED;
+                }catch (com.baasbox.android.BaasException ex) {
                     Log.e("CLASS2", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                    mResultToken = RESULT_FAILED;
                 }
             } else if (baasResult.isFailed()) {
-                Log.e("CLASS2", "Deal with error: " + baasResult.error().getMessage());
+                if(baasResult.error() instanceof BaasInvalidSessionException){
+                    mResultToken = RESULT_SESSION_EXPIRED;
+                }
+                else {
+                    mResultToken = RESULT_FAILED;
+                    Log.e("CLASS2", "Deal with error: " + baasResult.error().getMessage());
+                }
             }
         }while (!stop);
     }
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result);
+        mCallback.done(result,mResultToken);
     }
 }

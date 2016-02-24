@@ -11,7 +11,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +22,13 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.fragments.GeeftStoryFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 02/02/16.
  */
-public class FullScreenViewActivity extends AppCompatActivity implements TaskCallbackBoolean{
+public class FullScreenViewActivity extends AppCompatActivity implements TaskCallbackBooleanToken{
     private final String TAG =""+this.getClass().getName();
     private static final String EXTRA_GEEFT_ID =
             "samurai.geeft.android.geeft.geeft_id";
@@ -38,6 +41,11 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     private View mBallView;
     private Toolbar mToolbar;
     private static String mCollection;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     public static Intent newIntent(Context context, String geeftId, String collection) {
         Intent intent = new Intent(context, FullScreenViewActivity.class);
@@ -67,7 +75,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     }
 
     @Override
-    public void done(boolean result) {
+    public void done(boolean result,int resultToken) {
         mBallView.setVisibility(View.GONE);
         if(result) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -86,9 +94,19 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
                 }
             });
         }else {
-            new AlertDialog.Builder(getApplicationContext())
-                    .setTitle("Errore")
-                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                //DO SOMETHING
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(getApplicationContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                toast.show();
+            } else {
+                new AlertDialog.Builder(getApplicationContext())
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
         }
     }
 }

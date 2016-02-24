@@ -40,13 +40,14 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -57,7 +58,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 08/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>
-        implements TaskCallbackBooleanHolder,TaskCallbackBooleanArray,TaskCallBackBooleanInt {
+        implements TaskCallbackBooleanHolderToken,TaskCallbackBooleanArray,TaskCallBackBooleanInt {
 
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
@@ -72,6 +73,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
     private ProgressDialog mProgress;
     private long mLastClickTime = 0;
+
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     //info dialog attributes---------------------
     private TextView mProfileDialogUsername;
@@ -496,13 +503,24 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
     }
 
-    public void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item){
+    public void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item,int resultToken){
         //enables all social buttons
         mProgress.dismiss();
         if(!result){
-            new AlertDialog.Builder(mContext)
-                    .setTitle("Errore")
-                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                //DO SOMETHING
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(mContext, "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                toast.show();
+            }
+            else {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
         }
         else {
             new AlertDialog.Builder(mContext)

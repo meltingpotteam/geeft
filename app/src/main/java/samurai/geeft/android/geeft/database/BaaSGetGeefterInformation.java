@@ -33,8 +33,8 @@ public class BaaSGetGeefterInformation extends AsyncTask<Void,Void,Boolean> {
             long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
 
             mUserInformation[0] = feedback;
-            mUserInformation[1] = given;
-            mUserInformation[2] = received;
+            mUserInformation[1] = (double)given;
+            mUserInformation[2] = (double)received;
             return true;
         }
         else{

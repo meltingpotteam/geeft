@@ -6,6 +6,6 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 03/02/16.
  */
-public interface TaskCallbackBooleanHolder {
-    void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item);
+public interface TaskCallbackBooleanHolderToken {
+    void done(boolean result, GeeftItemAdapter.ViewHolder holder,Geeft item,int resultToken);
 }

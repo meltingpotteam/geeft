@@ -24,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
@@ -36,7 +38,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBoolean{
+public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBooleanToken{
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftStoryListAdapter mAdapter;
@@ -44,6 +46,11 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     private Geeft mGeeft;
     private Parcelable mGeeftListState;
     private Toolbar mToolbar;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftRecievedListFragment_geeftListState";
@@ -137,8 +144,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
     }
 
-    public void done(boolean result){
-        Toast toast;
+    public void done(boolean result,int resultToken){
         Log.d("DONE", "in done");
         mProgress.dismiss();
         if (result) {
@@ -162,16 +168,19 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
             }
         }
         else {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Errore")
-                    .setMessage("Riprovare più tardi")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    })
-                    .show();
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                //DO SOMETHING
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                startActivity(new Intent(getContext(), LoginActivity.class));
+                toast.show();
+            } else {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
         }
     }
 

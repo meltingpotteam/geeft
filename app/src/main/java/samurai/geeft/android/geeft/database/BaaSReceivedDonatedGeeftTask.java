@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -25,12 +27,18 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
     Context mContext;
     List<Geeft> mGeeftList;
     String mlinkNameQuery;
-    TaskCallbackBoolean mCallback;
+    TaskCallbackBooleanToken mCallback;
     GeeftStoryListAdapter mGeeftStoryListAdapter;
+    private int mResultToken;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     public BaaSReceivedDonatedGeeftTask(Context context, String linkNameQuery, List<Geeft> feedItems,
                                         GeeftStoryListAdapter Adapter,
-                                        TaskCallbackBoolean callback) {
+                                        TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -74,14 +82,26 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
                             geeft.setUserCap(document.getString("cap"));
                             geeft.setGeeftTitle(document.getString("title"));
                             mGeeftList.add(geeft);
+                        }catch (BaasInvalidSessionException ise){
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+
                         } catch (com.baasbox.android.BaasException ex) {
                             Toast.makeText(mContext, "Exception during loading!",
                                     Toast.LENGTH_LONG).show();
+                            mResultToken = RESULT_FAILED;
                             return false;
                         }
                     } else if (result.isFailed()) {
-                        Log.e(TAG, "Error when retrieve links: " + result.error());
-                        return false;
+                        if(result.error() instanceof BaasInvalidSessionException){
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+                        }
+                        else {
+                            Log.e(TAG, "Error when retrieve links: " + result.error());
+                            mResultToken=RESULT_FAILED;
+                            return false;
+                        }
                     }
                 }
             }
@@ -95,6 +115,6 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result);
+        mCallback.done(result,mResultToken);
     }
 }
