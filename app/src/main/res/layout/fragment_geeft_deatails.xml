@@ -43,10 +43,4 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        app:layout_anchor="@id/collapsing_toolbar"
-        app:layout_anchorGravity="bottom|right|end"
-        style="@style/FabStyle"/>
 </android.support.design.widget.CoordinatorLayout>

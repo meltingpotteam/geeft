@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class Geeft implements Serializable{
+public class Geeft implements Serializable {
     private long creationTime;
     private long deadLine;
     private String userLocation;

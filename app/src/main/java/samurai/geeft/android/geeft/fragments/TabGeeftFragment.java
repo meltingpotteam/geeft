@@ -109,8 +109,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
         if (mGeeftListState != null) {
+            Log.d(TAG, "onResume()");
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mGeeftListState);
         }
     }
@@ -136,6 +136,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
     private  void initUI(View rootView){
+        Log.d(TAG, "INITUI GEEFT");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 
@@ -147,12 +148,6 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getData();
-            }
-        });
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
                 getData();
             }
         });
@@ -180,13 +175,12 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+           getData();
         }
         else {
             mAdapter.notifyDataSetChanged();
         }
     }
-
 
     private void getData(){
 

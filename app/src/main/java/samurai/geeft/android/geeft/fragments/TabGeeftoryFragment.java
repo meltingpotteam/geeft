@@ -148,12 +148,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 getData();
             }
         });
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                getData();
-            }
-        });
     }
 
     private void saveState(Bundle outState) {
@@ -178,7 +172,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                     + (mGeeftoryList.size()));
 
         if (mGeeftoryList == null || mGeeftoryList.size() == 0) {
-            new BaaSTabGeeftoryTask(getActivity(), mGeeftoryList, mAdapter, this).execute();
+           getData();
         } else {
             mAdapter.notifyDataSetChanged();
         }

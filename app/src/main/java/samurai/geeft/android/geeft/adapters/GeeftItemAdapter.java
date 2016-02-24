@@ -170,7 +170,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         //holder.mUserCapTextView.setText(item.getUserCap());
         //TODO add the control of the cap matching in the city selected; sand in the maps tracking
         Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
-                .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
+                .centerCrop().into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
         /**
          *  Picasso.with(mContext).load(item.getUserProfilePic()).fit().centerInside()
@@ -332,7 +332,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             public void onClick(View v) {
                 // launch full screen activity
                 Intent intent = FullGeeftDetailsActivity.newIntent(mContext,
-                        item);
+                    item);
                 mContext.startActivity(intent);
                 Log.d(TAG,"ONCLICK");
             }

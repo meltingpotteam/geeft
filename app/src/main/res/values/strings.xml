@@ -293,5 +293,8 @@
         segnalazione?
     </string>
     <string name="action_segnalation">Segnala</string>
+    <string name="ooops">Ooops!</string>
+    <string name="no_story_alert_dialog_message">Questo oggetto non ha ancora una storia...</string>
+    <string name="progres_dialog_message">Attendere...</string>
 
 </resources>

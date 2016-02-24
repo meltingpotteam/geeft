@@ -87,6 +87,8 @@
 
         <activity android:name=".activities.HowToDoActivity"/>
 
+        <activity android:name=".activities.FullScreenImageActivity"/>
+
     </application>
 
 </manifest>

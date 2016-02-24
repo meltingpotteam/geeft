@@ -23,7 +23,7 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
 
     private Geeft mGeeft;
     private ProgressDialog mProgress;
-    private   final static String EXTRA_GEFFT = "geeft";
+    private final static String EXTRA_GEFFT = "geeft";
 
     public static Intent newIntent(@NonNull Context context, @NonNull Geeft geeft) {
         Intent intent = new Intent(context, FullGeeftDetailsActivity.class);

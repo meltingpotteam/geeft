@@ -52,7 +52,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
-        mBallView = findViewById(R.id.loading_balls);
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
@@ -68,7 +67,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     @Override
     public void done(boolean result) {
-        mBallView.setVisibility(View.GONE);
         if(result) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
