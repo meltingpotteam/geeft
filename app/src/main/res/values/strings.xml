@@ -226,7 +226,7 @@
     <!-- Strings related to fragment_add_geeft_fields -->
     <string name="allow_communication_string">Posso essere contattato</string>
     <string name="automatic_selection_text">Selezione automatica del Geefted</string>
-    <string name="geeft_dimension_text">È ingombrante?</string>
+    <string name="geeft_dimension_text">È ingombrante? [cm]</string>
     <string name="geeft_height_text">Altezza</string>
     <string name="geeft_width_text">Lunghezza</string>
     <string name="geeft_depth_text">Profondità</string>

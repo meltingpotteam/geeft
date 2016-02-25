@@ -18,6 +18,10 @@ public class Geeft implements Serializable{
     private boolean automaticSelection;
     private boolean allowCommunication;
     private boolean dimensionRead;
+    private int geeftHeight;
+    private int geeftWidth;
+    private int geeftDepth;
+
     private String id;
     private boolean isSelected;
     private String userProfilePic;
@@ -46,9 +50,33 @@ public class Geeft implements Serializable{
         this.userFbId = userFbId;
     }
 
+    public int getGeeftHeight() {
+        return geeftHeight;
+    }
+
+    public void setGeeftHeight(int geeftHeight) {
+        this.geeftHeight = geeftHeight;
+    }
+
+    public int getGeeftWidth() {
+        return geeftWidth;
+    }
+
+    public void setGeeftWidth(int geeftWidth) {
+        this.geeftWidth = geeftWidth;
+    }
+
+    public int getGeeftDepth() {
+        return geeftDepth;
+    }
+
+    public void setGeeftDepth(int geeftDepth) {
+        this.geeftDepth = geeftDepth;
+    }
+
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
                  boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String linkId) {
+                 String username,String userFbId, String userProfilePic, String linkId,int geeftHeight, int geeftWidth,int geeftDepth) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftTitle = geeftTitle;
@@ -65,6 +93,9 @@ public class Geeft implements Serializable{
         this.id=id;
         this.deadLine = deadLine;
         this.linkId = linkId;
+        this.geeftHeight = geeftHeight;
+        this.geeftWidth = geeftWidth;
+        this.geeftDepth = geeftDepth;
 
     }
 

@@ -202,20 +202,8 @@ public class AddGeeftFragment extends StatedFragment {
                 }
             }
         });
-   /*     mDimensionRead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mDimensionRead.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getContext() , "You have selected item no.", Toast.LENGTH_SHORT).show();
-                } else {
-                    mDimensionRead.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getContext() , "You have selected item no.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });   */
 
-  /*//--------------------Check postal code   ------------------
+        /*//--------------------Check postal code   ------------------
         mGeeftCAP.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 new Thread(new CheckCap(mGeeftCAP.getText().toString(),mGeeftLocation.getSelectedItem().toString())).start();
@@ -371,6 +359,9 @@ public class AddGeeftFragment extends StatedFragment {
                     mGeeft.setAllowCommunication(allowCommunication);
                     mGeeft.setDimensionRead(dimensionRead);
                     mGeeft.setStreamImage(streamImage);
+                    mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
+                    mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
+                    mGeeft.setGeeftDepth(Integer.parseInt(mGeeftDepth.getText().toString()));
                     ///////////////////////////////////////
                     mCallback.onCheckSelected(true,mGeeft);
                     return true;

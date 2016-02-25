@@ -73,6 +73,10 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             // in the BassReserveTask
             doc.put("automaticSelection", mGeeft.isAutomaticSelection());
             doc.put("allowCommunication", mGeeft.isAllowCommunication());
+            doc.put("height",mGeeft.getGeeftHeight());
+            doc.put("width",mGeeft.getGeeftWidth());
+            doc.put("depth",mGeeft.getGeeftDepth());
+            doc.put("allowDimension",mGeeft.isDimensionRead());
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mGeeft.getStreamImage());
             if (resImage.isSuccess()) {
