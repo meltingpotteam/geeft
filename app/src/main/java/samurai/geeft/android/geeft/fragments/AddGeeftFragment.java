@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -83,12 +84,17 @@ public class AddGeeftFragment extends StatedFragment {
     private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private Spinner mGeeftCategory; //Category of the Geeft
 
-    //filed for automatic selection of the geeft and for allowing the the message exchanges
+    //filed for automatic selection of the geeft, geeft's dimension and for allowing the the message exchanges
     private CheckBox mAutomaticSelection;
     private CheckBox mAllowCommunication;
+    private CheckBox mDimensionRead;
 
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
+
+    private EditText mGeeftHeight;
+    private EditText mGeeftWidth;
+    private EditText mGeeftDepth;
 
     private File mGeeftImage;
     private Toolbar mToolbar;
@@ -98,6 +104,7 @@ public class AddGeeftFragment extends StatedFragment {
     private String cap;
     private String expTime;
     private String category;
+    private boolean dimensionRead;
     private boolean automaticSelection;
     private boolean allowCommunication;
     private byte[] streamImage;
@@ -174,7 +181,41 @@ public class AddGeeftFragment extends StatedFragment {
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
-        /*//--------------------Check postal code   ------------------
+        //Listener for the dimension checkbox--------------------------------------------------------------
+        mGeeftHeight = (EditText) rootView.findViewById(R.id.geeft_height);
+        mGeeftWidth = (EditText) rootView.findViewById(R.id.geeft_width);
+        mGeeftDepth = (EditText) rootView.findViewById(R.id.geeft_depth);
+        mDimensionRead = (CheckBox) rootView
+                .findViewById(R.id.geeft_dimension_checkbox);
+        mDimensionRead.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mGeeftHeight.setVisibility(View.VISIBLE);
+                    mGeeftWidth.setVisibility(View.VISIBLE);
+                    mGeeftDepth.setVisibility(View.VISIBLE);
+                    mGeeftHeight.requestFocus();
+                } else {
+                    mGeeftHeight.setVisibility(View.GONE);
+                    mGeeftWidth.setVisibility(View.GONE);
+                    mGeeftDepth.setVisibility(View.GONE);
+                }
+            }
+        });
+   /*     mDimensionRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    mDimensionRead.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext() , "You have selected item no.", Toast.LENGTH_SHORT).show();
+                } else {
+                    mDimensionRead.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext() , "You have selected item no.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });   */
+
+  /*//--------------------Check postal code   ------------------
         mGeeftCAP.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 new Thread(new CheckCap(mGeeftCAP.getText().toString(),mGeeftLocation.getSelectedItem().toString())).start();
@@ -186,6 +227,7 @@ public class AddGeeftFragment extends StatedFragment {
         *///-----------------------------------------------------
 
 
+        
         //Listener for te imageView: -----------------------------------
         mGeeftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,6 +301,9 @@ public class AddGeeftFragment extends StatedFragment {
         return rootView;
     }
 
+    //
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -286,6 +331,7 @@ public class AddGeeftFragment extends StatedFragment {
                 if(mGeeftExpirationTime.getSelectedItemPosition()>0)
                     deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
                 category = mGeeftCategory.getSelectedItem().toString();
+                dimensionRead = mDimensionRead.isChecked();
                 automaticSelection = mAutomaticSelection.isChecked();
                 allowCommunication = mAllowCommunication.isChecked();
 
@@ -323,6 +369,7 @@ public class AddGeeftFragment extends StatedFragment {
                     mGeeft.setCategory(category);
                     mGeeft.setAutomaticSelection(automaticSelection);
                     mGeeft.setAllowCommunication(allowCommunication);
+                    mGeeft.setDimensionRead(dimensionRead);
                     mGeeft.setStreamImage(streamImage);
                     ///////////////////////////////////////
                     mCallback.onCheckSelected(true,mGeeft);
@@ -391,6 +438,7 @@ public class AddGeeftFragment extends StatedFragment {
         boolean checkedItems[] = {
                 mAutomaticSelection.isChecked(),
                 mAllowCommunication.isChecked(),
+                mDimensionRead.isChecked(),
         };
         outState.putBooleanArray(ARG_CHECKED_ITEMS, checkedItems);
     }
@@ -433,6 +481,7 @@ public class AddGeeftFragment extends StatedFragment {
             if (checkedItems != null) {
                 mAutomaticSelection.setChecked(checkedItems[0]);
                 mAllowCommunication.setChecked(checkedItems[1]);
+                mDimensionRead.setChecked(checkedItems[2]);
             }
         }
     }

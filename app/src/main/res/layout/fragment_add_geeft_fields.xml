@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    >
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -42,6 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
     </android.support.v7.widget.CardView>
+
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -245,7 +246,7 @@
                     android:id="@+id/automatic_geefter_selection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Selezione automatica del Geefted"
+                    android:text="@string/automatic_selection_text"
                     android:textSize="@dimen/geeft_title_text_size"
                     android:textColor="@android:color/black"
                     />
@@ -266,7 +267,7 @@
                     android:id="@+id/allow_communication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Posso essere contattato"
+                    android:text="@string/allow_communication_string"
                     android:textSize="@dimen/geeft_title_text_size"
                     android:textColor="@android:color/black"
                     />
@@ -277,6 +278,75 @@
                     android:layout_alignEnd="@+id/allow_communication"
                     android:layout_alignRight="@+id/allow_communication"
                     />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_vertical_margin"
+                >
+                <TextView
+                    android:id="@+id/geeft_dimension"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/geeft_dimension_text"
+                    android:textSize="@dimen/geeft_title_text_size"
+                    android:textColor="@android:color/black"
+                    />
+                <CheckBox
+                    android:id="@+id/geeft_dimension_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/geeft_dimension"
+                    android:layout_alignRight="@+id/geeft_dimension"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/geeft_height"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.35"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimaryText"
+                        android:maxLength="5"
+                        android:textAlignment="center"
+                        android:visibility="gone"
+                        android:inputType="number"
+                        android:hint="@string/geeft_height_text"
+                        android:textColorHint="@color/colorHintAccent"/>
+                    <EditText
+                        android:id="@+id/geeft_width"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.35"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimaryText"
+                        android:maxLength="5"
+                        android:textAlignment="center"
+                        android:visibility="gone"
+                        android:inputType="number"
+                        android:hint="@string/geeft_width_text"
+                        android:textColorHint="@color/colorHintAccent"/>
+                    <EditText
+                        android:id="@+id/geeft_depth"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.35"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimaryText"
+                        android:maxLength="5"
+                        android:textAlignment="center"
+                        android:inputType="number"
+                        android:visibility="gone"
+                        android:hint="@string/geeft_depth_text"
+                        android:textColorHint="@color/colorHintAccent"/>
+                </LinearLayout>
             </RelativeLayout>
 
         </LinearLayout>

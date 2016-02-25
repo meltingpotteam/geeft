@@ -17,6 +17,7 @@ public class Geeft implements Serializable{
     private String geeftImage;
     private boolean automaticSelection;
     private boolean allowCommunication;
+    private boolean dimensionRead;
     private String id;
     private boolean isSelected;
     private String userProfilePic;
@@ -46,7 +47,7 @@ public class Geeft implements Serializable{
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
-                 boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, long deadLine, String userLocation, String userCap,
+                 boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
                  String username,String userFbId, String userProfilePic, String linkId) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
@@ -55,6 +56,7 @@ public class Geeft implements Serializable{
         this.creationTime = creationTime;
         this.automaticSelection = automaticSelection;
         this.allowCommunication = allowCommunication;
+        this.dimensionRead = dimensionRead;
         this.userLocation = userLocation;
         this.userCap = userCap;
         this.username = username;
@@ -125,10 +127,16 @@ public class Geeft implements Serializable{
     public boolean isAutomaticSelection() {
         return this.automaticSelection;
     }
-
     public void setAutomaticSelection(boolean automaticSelection) {
         this.automaticSelection = automaticSelection;
     }
+
+    public void setDimensionRead(boolean dimensionRead) {
+        this.dimensionRead = dimensionRead;
+    }
+    public boolean isDimensionRead() { return this.dimensionRead;
+    }
+
 
     public String getUserLocation() {
         return userLocation;

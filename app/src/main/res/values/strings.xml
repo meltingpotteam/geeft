@@ -193,36 +193,43 @@
     <!-- Spinner Array For the Expiration Time-->
     <string-array name="week_array">
         <item>---Seleziona scadenza---</item>
-        <item>1 day</item>
-        <item>2 days</item>
-        <item>3 days</item>
-        <item>4 days</item>
-        <item>5 days</item>
-        <item>6 days</item>
-        <item>7 days</item>
-        <item>8 days</item>
-        <item>9 days</item>
-        <item>10 days</item>
-        <item>11 days</item>
-        <item>12 days</item>
-        <item>13 days</item>
-        <item>14 days</item>
+        <item>1 giorno</item>
+        <item>2 giorni</item>
+        <item>3 giorni</item>
+        <item>4 giorni</item>
+        <item>5 giorni</item>
+        <item>6 giorni</item>
+        <item>7 giorni</item>
+        <item>8 giorni</item>
+        <item>9 giorni</item>
+        <item>10 giorni</item>
+        <item>11 giorni</item>
+        <item>12 giorni</item>
+        <item>13 giorni</item>
+        <item>14 giorni</item>
     </string-array>
 
     <!-- Spinner Array For the Expiration Time-->
     <string-array name="categories_array">
         <item>---Seleziona Categoria---</item>
-        <item>Libri e Cartoleria</item>
+        <item>Abbigliamento e accessori</item>
+        <item>Casa e giardino</item>
         <item>Elettronica</item>
-        <item>Casa</item>
-        <item>Uso quotidiano</item>
-        <item>Giocattoli</item>
-        <item>Abbigliamento</item>
-        <item>Arte e Musica</item>
+        <item>Film, Libri e Musica</item>
+        <item>Infanzia e Bambini</item>
+        <item>Sport, Tempo Libero e Giochi</item>
+        <item>Auto e Motori</item>
+        <item>Servizi</item>
+        <item>Altro</item>
     </string-array>
 
-
-
+    <!-- Strings related to fragment_add_geeft_fields -->
+    <string name="allow_communication_string">Posso essere contattato</string>
+    <string name="automatic_selection_text">Selezione automatica del Geefted</string>
+    <string name="geeft_dimension_text">È ingombrante?</string>
+    <string name="geeft_height_text">Altezza</string>
+    <string name="geeft_width_text">Lunghezza</string>
+    <string name="geeft_depth_text">Profondità</string>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
