@@ -2,12 +2,15 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
 
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArray;
+import java.util.List;
+
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArrayToken;
 
 /**
  * Created by danybr-dev on 18/02/16.
@@ -17,9 +20,14 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
         private final String TAG = getClass().getName();
         private Context mContext;
         private String mFullUserInformation[];
-        TaskCallbackBooleanStringArray mCallback;
-
-        public BaaSGetGeefterFullInformation(Context context, TaskCallbackBooleanStringArray callback) {
+        TaskCallbackBooleanStringArrayToken mCallback;
+        private int mResultToken;
+        //-------------------Macros
+        private final int RESULT_OK = 1;
+        private final int RESULT_FAILED = 0;
+        private final int RESULT_SESSION_EXPIRED = -1;
+        //-------------------
+        public BaaSGetGeefterFullInformation(Context context, TaskCallbackBooleanStringArrayToken callback) {
             mFullUserInformation = new String[6];
             mContext = context;
             mCallback = callback;
@@ -29,12 +37,24 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
         @Override
         protected Boolean doInBackground(Void... arg0) {
             BaasUser currentUser = BaasUser.current();
-            if(currentUser !=null) { //TODO: Double feedback,modify in baaslogin
+            //--- Try to get followers to check if the current session is valid or not
+            BaasResult<List<BaasUser>> resultSession = currentUser.followersSync();
+            if(resultSession.isFailed()){
+                if(resultSession.error() instanceof BaasInvalidSessionException){
+                    mResultToken = RESULT_SESSION_EXPIRED;
+                    return false;
+                }
+                else{
+                    mResultToken = RESULT_FAILED;
+                    return false;
+                }
+            }
+            //---------------------------------------
+            if(currentUser !=null) {
                 double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                 long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
                 long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
                 String fbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
-
                 JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
                 String fbId = field.getObject("_social").getObject("facebook").getString("id");
                 String profilePicUri = "https://graph.facebook.com/" + fbId + "/picture?type=large";
@@ -57,6 +77,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
                 return true;
             }
             else{
+                mResultToken = RESULT_FAILED;
                 return false;
             }
 
@@ -66,7 +87,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
 
         @Override
         protected void onPostExecute(Boolean result) {
-            mCallback.done(result,mFullUserInformation);
+            mCallback.done(result,mFullUserInformation,mResultToken);
         }
 
     }

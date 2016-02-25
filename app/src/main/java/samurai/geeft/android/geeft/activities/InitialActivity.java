@@ -32,7 +32,8 @@ public class InitialActivity extends Activity implements TaskCallbackBooleanGeef
 
         }*/
         if (BaasUser.current() != null) {
-            //new BaaSBackgroundNewAssignment(getApplicationContext(),this).execute();
+            //new BaaSBackgroundNewAssignment(getApplicationContext(),this).execute(); TODO:Replace with
+            //a push notifications service
             startMainActivity();
         } else {
             startLoginActivity();

@@ -5,13 +5,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonArray;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -23,14 +24,20 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private Context mContext;
     private String mDocUserId;
     private Geeft mItem;
-    private TaskCallbackBooleanHolder mCallback;
+    private TaskCallbackBooleanHolderToken mCallback;
     private BaasDocument mDocUser;
     private JsonArray mJSONUserLinks;
     private GeeftItemAdapter.ViewHolder mHolder;
     private long submits_active;
+    private int mResultToken;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     public BaaSReserveTask(Context context, String docUserId, Geeft item,GeeftItemAdapter.ViewHolder holder,
-                           TaskCallbackBooleanHolder callback) {
+                           TaskCallbackBooleanHolderToken callback) {
         mContext = context;
         mDocUserId = docUserId;
         mItem = item;
@@ -60,9 +67,15 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
             //Log.d(TAG, "JSONDocUser is:" + mJSONUserLinks.toString());
         }
         else {
-            Log.e(TAG, "Fatal error while retrieve DocUser");
-            //Toast.makeText(mContext, "E' accaduto un errore", Toast.LENGTH_LONG).show();
-            return false;
+            if(resDoc.error() instanceof BaasInvalidSessionException){
+                mResultToken = RESULT_SESSION_EXPIRED;
+                return false;
+            }
+            else {
+                Log.e(TAG, "Fatal error while retrieve DocUser");
+                mResultToken = RESULT_FAILED;
+                return false;
+            }
 
         }
         if(currentUser != null) {
@@ -94,18 +107,35 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                             return true;
                         }
                         else{
-                            Log.e(TAG,"Cannot insert new valure of submits_active");
-                            return false;
+                            if(resUser.error() instanceof BaasInvalidSessionException){
+                                mResultToken = RESULT_SESSION_EXPIRED;
+                                return false;
+                            }
+                            else {
+                                Log.e(TAG, "Cannot insert new valure of submits_active");
+                                mResultToken = RESULT_FAILED;
+                                return false;
+                            }
                         }
                     } else {
-                        Log.e(TAG, "Error with save Link id in DocUser");
-                        //Toast.makeText(mContext, "E' accaduto un errore", Toast.LENGTH_LONG).show();
-                        return false;
+                        if(resResultSaved.error() instanceof BaasInvalidSessionException) {
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+                        }else {
+                            Log.e(TAG, "Error with save Link id in DocUser");
+                            mResultToken = RESULT_FAILED;
+                            return false;
+                        }
                     }
                 } else {
-                    Log.e(TAG, "Error with creation link");
-                    //Toast.makeText(mContext, "E' accaduto un errore", Toast.LENGTH_LONG).show();
-                    return false;
+                    if(resLink.error() instanceof BaasInvalidSessionException) {
+                        mResultToken = RESULT_SESSION_EXPIRED;
+                        return false;
+                    }else {
+                        Log.e(TAG, "Error with creation link");
+                        mResultToken = RESULT_FAILED;
+                        return false;
+                    }
                 }
             } else { //Deselected button,delete the link reserve ,then clone the link renamed in wasReserved
                 BaasResult<Void> resDelLink = BaasLink.withId(mItem.getLinkId()).deleteSync();
@@ -123,16 +153,37 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                             return true;
                         }
                         else{
-                            Log.e(TAG,"Cannot insert new valure of submits_active");
-                            return false;
+                            if(resUser.error() instanceof BaasInvalidSessionException) {
+                                mResultToken = RESULT_SESSION_EXPIRED;
+                                return false;
+                            }
+                            else {
+                                Log.e(TAG, "Cannot insert new valure of submits_active");
+                                mResultToken = RESULT_FAILED;
+                                return false;
+                            }
                         }
                     } else {
-                        Log.e(TAG, "Link NOT cloned");
-                        return false;
+                        if(resLink.error() instanceof BaasInvalidSessionException) {
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+                        }
+                        else {
+                            Log.e(TAG, "Link NOT cloned");
+                            mResultToken = RESULT_FAILED;
+                            return false;
+                        }
                     }
                 } else {
-                    Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
-                    return false;
+                    if(resDelLink.error() instanceof BaasInvalidSessionException) {
+                        mResultToken = RESULT_SESSION_EXPIRED;
+                        return false;
+                    }
+                    else {
+                        Log.e(TAG, "Link NOT deleted,error is:" + resDelLink.error());
+                        mResultToken = RESULT_FAILED;
+                        return false;
+                    }
                 }
             }
         }
@@ -145,6 +196,6 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mHolder, mItem);
+        mCallback.done(result,mHolder, mItem,mResultToken);
     }
 }

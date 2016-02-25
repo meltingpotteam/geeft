@@ -3,10 +3,12 @@ package samurai.geeft.android.geeft.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,8 @@ import java.util.List;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
 import samurai.geeft.android.geeft.activities.HowToDoActivity;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
+import samurai.geeft.android.geeft.activities.LoginActivity;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackStoryItem;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -35,7 +38,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Created by ugookeadu on 17/02/16.
  */
 public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.ViewHolder> implements
-        TaskCallbackStoryItem,TaskCallbackBooleanArray {
+        TaskCallbackStoryItem,TaskCallbackBooleanArrayToken {
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
     private final static String TAG ="GeeftAdapter";
@@ -281,7 +284,12 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
     }
 
 
-    public void done(boolean result,double[] userInformation){
+    public void done(boolean result,double[] userInformation,int resultToken){
+        //-------------------Macros
+        final int RESULT_OK = 1;
+        final int RESULT_FAILED = 0;
+        final int RESULT_SESSION_EXPIRED = -1;
+        //-------------------
         // userInformation order is : Feedback,Given,Received
         if(result){
             mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
@@ -291,9 +299,22 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
             //Log.d(TAG, "Ritornato AsyncTask con: " + userInformation[0] + "," + userInformation[1]
             //       + "," + userInformation[2]);
 
-        }
-        else{
-            Log.e(TAG,"ERROREEEEE!");
+        }else {
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                toast = Toast.makeText(mContext, "Nessuna nuova storia", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(mContext, "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                toast.show();
+            } else {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
         }
 
     }

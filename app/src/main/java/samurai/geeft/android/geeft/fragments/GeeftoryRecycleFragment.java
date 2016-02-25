@@ -1,8 +1,10 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSGeeftoryRecycleTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -26,7 +30,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  * Created by ugookeadu on 17/02/16.
  */
 public class GeeftoryRecycleFragment extends StatedFragment
-        implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
+        implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBooleanToken {
     private final String TAG = getClass().getSimpleName().toUpperCase();
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "GeeftoryRecycleFragment_geeftListState";
@@ -38,6 +42,11 @@ public class GeeftoryRecycleFragment extends StatedFragment
     private View mBallView;
 
     private Parcelable mGeeftListState;
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
 
     public static GeeftoryRecycleFragment newInstance(Bundle b) {
         GeeftoryRecycleFragment fragment = new GeeftoryRecycleFragment();
@@ -73,25 +82,36 @@ public class GeeftoryRecycleFragment extends StatedFragment
 
     @Override
     public void onRefresh() {
-        Log.d(TAG,"onRefresh()");
+        Log.d(TAG, "onRefresh()");
         new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
-    public void done(boolean result){
-        Log.d(TAG,"done()");
+    public void done(boolean result,int resultToken){
+        //Log.d(TAG,"done()");
         mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
-
                 toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
             } else {
-                toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
+                if(resultToken == RESULT_OK) {
+                    toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+                else if (resultToken == RESULT_SESSION_EXPIRED) {
+                    toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                            " il login", Toast.LENGTH_LONG);
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    toast.show();
+                } else {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Errore")
+                            .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                }
             }
         }
         mAdapter.notifyDataSetChanged();
