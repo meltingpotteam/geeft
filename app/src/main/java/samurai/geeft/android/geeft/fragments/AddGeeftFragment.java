@@ -12,6 +12,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,15 +24,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.baasbox.android.impl.Task;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -164,7 +174,16 @@ public class AddGeeftFragment extends StatedFragment {
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
-        //--------------------------------------------------------------
+        /*//--------------------Check postal code   ------------------
+        mGeeftCAP.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                new Thread(new CheckCap(mGeeftCAP.getText().toString(),mGeeftLocation.getSelectedItem().toString())).start();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
+        });
+
+        *///-----------------------------------------------------
 
 
         //Listener for te imageView: -----------------------------------
@@ -383,9 +402,9 @@ public class AddGeeftFragment extends StatedFragment {
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
-            mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
-            if(mGeeftImage!=null) {
-                Log.d("savedInstanceState", "is not "+ mGeeftImage.toString());
+            mGeeftImage = (File) savedInstanceState.getSerializable(ARG_FILE);
+            if (mGeeftImage != null) {
+                Log.d("savedInstanceState", "is not " + mGeeftImage.toString());
                 Picasso.with(getActivity()).invalidate(mGeeftImage);
                 Picasso.with(getContext()).load(mGeeftImage)
                         .fit()
@@ -395,8 +414,8 @@ public class AddGeeftFragment extends StatedFragment {
                         .into(mGeeftImageView);
             }
 
-            String arrayStrings[] =  savedInstanceState.getStringArray(ARG_ARRAY_STRINGS);
-            if(arrayStrings!=null) {
+            String arrayStrings[] = savedInstanceState.getStringArray(ARG_ARRAY_STRINGS);
+            if (arrayStrings != null) {
                 mGeeftTitle.setText(arrayStrings[0]);
                 mGeeftDescription.setText(arrayStrings[1]);
                 mGeeftCAP.setText(arrayStrings[2]);
@@ -404,22 +423,44 @@ public class AddGeeftFragment extends StatedFragment {
 
 
             int selectedItems[] = savedInstanceState.getIntArray(ARG_SELECTED_ITEMS);
-            if(selectedItems!=null) {
+            if (selectedItems != null) {
                 mGeeftLocation.setSelection(selectedItems[0]);
                 mGeeftExpirationTime.setSelection(selectedItems[1]);
                 mGeeftCategory.setSelection(selectedItems[2]);
             }
 
             boolean checkedItems[] = savedInstanceState.getBooleanArray(ARG_CHECKED_ITEMS);
-            if(checkedItems!=null) {
+            if (checkedItems != null) {
                 mAutomaticSelection.setChecked(checkedItems[0]);
                 mAllowCommunication.setChecked(checkedItems[1]);
             }
         }
-
     }
+
 
     protected void onFirstTimeLaunched() {
 
     }
+
+    class CheckCap implements Runnable {
+        private String postal_code;
+        private String administrative_area;
+
+        public CheckCap(String postal_code, String administrative_area) {
+            this.postal_code = postal_code;
+            this.administrative_area = administrative_area;
+        }
+
+        private void sendGetRequest() {
+            //TODO: Implementation, Get JsonObject response and check his status
+        }
+
+        @Override
+        public void run() {
+            sendGetRequest();
+            //Do somethings
+        }
+    }
+
+
 }
