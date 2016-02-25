@@ -26,6 +26,10 @@ public class GeeftStoryListAdapter extends
     private List<Geeft> mGeeftList =
             Collections.emptyList();
 
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
     private int lastSize = 0;
     private Context mContext;
 

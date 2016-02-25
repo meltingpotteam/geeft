@@ -21,7 +21,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
+public class BaaSGeeftoryRecycleTask extends BaaSCheckTask {
 
     private static final String TAG = "BaaSGeeftoryRecycleTask";
     Context mContext;
@@ -29,13 +29,7 @@ public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
     TaskCallbackBooleanToken mCallback;
     StoryItemAdapter mGeeftStroryAdapter;
     boolean result;
-    private int mResultToken;
-    //-------------------Macros
-    private final int RESULT_OK = 1;
-    private final int RESULT_FAILED = 0;
-    private final int RESULT_SESSION_EXPIRED = -1;
-    //-------------------
-    
+
     public BaaSGeeftoryRecycleTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
             TaskCallbackBooleanToken callback) {
             mContext = context;
@@ -54,7 +48,7 @@ public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
             BaasQuery.Criteria paginate = BaasQuery.builder()
                     .orderBy("_creation_date asc").criteria();
             BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("story", paginate);
-            if (baasResult.isSuccess()) {
+            if (checkError(baasResult)) {
                 try {
                     if (baasResult.get().size() == 0) {
                         mResultToken = RESULT_OK;
@@ -82,17 +76,6 @@ public class BaaSGeeftoryRecycleTask extends AsyncTask<Void,Void,Boolean> {
                 } catch (com.baasbox.android.BaasException ex) {
                     Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
-                    mResultToken = RESULT_FAILED;
-                    return false;
-                }
-
-            } else if (baasResult.isFailed()) {
-                if(baasResult.error() instanceof BaasInvalidSessionException){
-                    mResultToken = RESULT_SESSION_EXPIRED;
-                    return false;
-                }
-            else {
-                    Log.e("CLASS", "Deal with error: " + baasResult.error().getMessage());
                     mResultToken = RESULT_FAILED;
                     return false;
                 }
