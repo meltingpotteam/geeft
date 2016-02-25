@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasResult;
+import com.baasbox.android.BaasUser;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,12 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  * Created by ugookeadu on 09/02/16.
  */
 public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBooleanToken{
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
+    private final String TAG = getClass().getName();
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftStoryListAdapter mAdapter;
@@ -46,11 +55,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     private Geeft mGeeft;
     private Parcelable mGeeftListState;
     private Toolbar mToolbar;
-    //-------------------Macros
-    private final int RESULT_OK = 1;
-    private final int RESULT_FAILED = 0;
-    private final int RESULT_SESSION_EXPIRED = -1;
-    //-------------------
+
 
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftRecievedListFragment_geeftListState";

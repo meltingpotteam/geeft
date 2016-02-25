@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -58,7 +59,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Updated by gabriel-dev on 08/02/2016
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>
-        implements TaskCallbackBooleanHolderToken,TaskCallbackBooleanArray,TaskCallBackBooleanInt {
+        implements TaskCallbackBooleanHolderToken,TaskCallbackBooleanArrayToken,TaskCallBackBooleanInt {
 
     private final LayoutInflater inflater;
     private final String WEBSITE_URL = "http://geeft.tk/";
@@ -118,6 +119,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public LinearLayout mProfileClickableArea;
         public ImageButton mProfileDialogFbButton;
         //-------------------------------------------
+        //-------------------Macros
+        private final int RESULT_OK = 1;
+        private final int RESULT_FAILED = 0;
+        private final int RESULT_SESSION_EXPIRED = -1;
+        //-------------------
         public CardView mContainer;
 
         public Uri mGeeftImageUri;
@@ -288,9 +294,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                 Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
                 item.setIsSelected(!item.isSelected());
-                new BaaSReserveTask(mContext,docUserId,item,holder,GeeftItemAdapter.this).execute();
+                new BaaSReserveTask(mContext, docUserId, item, holder, GeeftItemAdapter.this).execute();
 
-        }
+            }
         });
 
         /**
@@ -534,7 +540,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         }
     }
 
-    public void done(boolean result,double[] userInformation){
+    public void done(boolean result,double[] userInformation,int resultToken){
         // userInformation order is : Feedback,Given,Received
         if(result){
             mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
@@ -546,7 +552,21 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
         }
         else{
-            Log.e(TAG, "ERROREEEEE!");
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                toast = Toast.makeText(mContext, "Nessuna nuova storia", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(mContext, "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                toast.show();
+            } else {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
         }
 
     }
