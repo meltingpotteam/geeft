@@ -43,7 +43,6 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
         mItem = item;
         mCallback = callback;
         mHolder = holder;
-        Log.d(TAG,"Lanciato AsyncTask");
     }
 
     @Override
