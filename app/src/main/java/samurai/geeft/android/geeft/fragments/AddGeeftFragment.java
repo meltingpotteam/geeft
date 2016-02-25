@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.database.CapDatabaseHelper;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -60,6 +61,7 @@ public class AddGeeftFragment extends StatedFragment {
     private final static String ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY= "samurai.geeft.android.geeft.activities."+
             "add_geeft_fragment_seved_state";
 
+    private CapDatabaseHelper capDB;
 
     private Geeft mGeeft;
     private ImageButton cameraButton;
@@ -128,6 +130,8 @@ public class AddGeeftFragment extends StatedFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         Log.d("ADDGEEEFT", "onCreated");
+
+        capDB = new CapDatabaseHelper(getActivity().getApplicationContext());
     }
 
     @Override
