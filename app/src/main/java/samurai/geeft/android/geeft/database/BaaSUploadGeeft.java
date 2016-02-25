@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasFile;
+import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
@@ -33,14 +34,13 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     TaskCallbackBoolean mCallback;
 
     /**
-     * Constructor to create an object Geeft to send to Baasbox TODO: add the field 'expiration time'
+     * Constructor to create an object Geeft to send to Baasbox
      **/
     public BaaSUploadGeeft(Context context, Geeft geeft,
                            TaskCallbackBoolean callback) {
         mContext = context;
         mGeeft = geeft;
         mCallback = callback;
-        Log.d(TAG, "Lanciato AsyncTask");
     }
 
     public BaaSUploadGeeft(Context context, Geeft geeft, String id,
@@ -58,6 +58,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             String userFbId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getObject("_social")
                     .getObject("facebook")
                     .get("id").toString();
+            String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
             BaasDocument doc = new BaasDocument("geeft");
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
@@ -67,7 +68,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("name", getFacebookName());
             doc.put("userFbId",userFbId);
             doc.put("profilePic", getProfilePicFacebook());
-           doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long
+            doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long
             doc.put("category", mGeeft.getCategory().toLowerCase());
             // send the field fo allow communication and automatic selection; remember to manage them
             // in the BassReserveTask
@@ -77,6 +78,8 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("width",mGeeft.getGeeftWidth());
             doc.put("depth",mGeeft.getGeeftDepth());
             doc.put("allowDimension",mGeeft.isDimensionRead());
+            doc.put("assigned",false);
+            doc.put("taken",false);
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mGeeft.getStreamImage());
             if (resImage.isSuccess()) {
@@ -100,7 +103,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                                         , mOldGeeftId);
                                 return resLink.isSuccess();
                             }
-                            return true;
+                            return createDonatedLink(docUserId);
                         } else {
                             Log.e(TAG, "Error with grant of doc");
                             return false;
@@ -117,6 +120,21 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                 Log.e(TAG, "Fatal error upload:" + resImage.error());
                 return false;
             }
+        }
+        else{
+            return false;
+        }
+    }
+    private boolean createDonatedLink(String docUserId){
+
+        BaasResult<BaasLink> resLink = BaasLink.createSync("donated", docUserId,mGeeft.getId());
+        //TODO : swap and Manage resLink
+        if (resLink.isSuccess()) { //Link created
+            BaasLink value = resLink.value();
+            Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
+            Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
+                    " OUT is: " + value.out().getId().equals(docUserId));
+            return true;
         }
         else{
             return false;

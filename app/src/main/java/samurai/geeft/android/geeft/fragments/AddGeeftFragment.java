@@ -359,9 +359,16 @@ public class AddGeeftFragment extends StatedFragment {
                     mGeeft.setAllowCommunication(allowCommunication);
                     mGeeft.setDimensionRead(dimensionRead);
                     mGeeft.setStreamImage(streamImage);
-                    mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
-                    mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
-                    mGeeft.setGeeftDepth(Integer.parseInt(mGeeftDepth.getText().toString()));
+                    if(dimensionRead) {
+                        mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
+                        mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
+                        mGeeft.setGeeftDepth(Integer.parseInt(mGeeftDepth.getText().toString()));
+                    }
+                    else{
+                        mGeeft.setGeeftHeight(0);
+                        mGeeft.setGeeftWidth(0);
+                        mGeeft.setGeeftDepth(0);
+                    }
                     ///////////////////////////////////////
                     mCallback.onCheckSelected(true,mGeeft);
                     return true;
