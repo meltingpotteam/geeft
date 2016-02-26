@@ -126,7 +126,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     }
     private boolean createDonatedLink(String docUserId){
 
-        BaasResult<BaasLink> resLink = BaasLink.createSync("donated", docUserId,mGeeft.getId());
+        BaasResult<BaasLink> resLink = BaasLink.createSync("donated", mGeeft.getId(),docUserId);
         //TODO : swap and Manage resLink
         if (resLink.isSuccess()) { //Link created
             BaasLink value = resLink.value();

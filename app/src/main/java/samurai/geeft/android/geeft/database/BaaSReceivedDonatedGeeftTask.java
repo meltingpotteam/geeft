@@ -51,10 +51,10 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
         if(BaasUser.current()==null)
             return false;
         String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-        BaasQuery.Criteria query =BaasQuery.builder().where("out.id like '" + docUserId + "'" ).criteria();
+        BaasQuery.Criteria query =BaasQuery.builder().where("in.id like '" + docUserId + "'" ).criteria();
         Log.d(TAG,"doc_id are: " + docUserId);
-        // PROBLEMA GRAVE: QUANDO FAI LA QUERY,OUT È L'UTENTE (DocUserId) E IN È IL GEEFT
-        //                 QUANDO PRENDI I LINK,OUT() È IL GEEFT,IN() È L'UTENTE
+        // PROBLEMA GRAVE: QUANDO FAI LA QUERY,IN È L'UTENTE (DocUserId) E OUT È IL GEEFT
+        //                 QUANDO PRENDI I LINK,OUT() È L'UTENTE, IN() È IL GEEFT
         Log.d(TAG,"mNameLinkQuery is: " + mlinkNameQuery);
         if(mlinkNameQuery != null ) { // mLinkNameQuery are only
                                     // "received" and "geefted"
@@ -64,7 +64,7 @@ public class BaaSReceivedDonatedGeeftTask extends AsyncTask<Void,Void,Boolean> {
                 links = resLinks.value();
                 //Log.d(mlinkNameQuery, getClass().getName());
                 for (BaasLink link : links) {
-                    BaasResult<BaasDocument> result = BaasDocument.fetchSync("geeft", link.out().getId());
+                    BaasResult<BaasDocument> result = BaasDocument.fetchSync("geeft", link.in().getId());
                     Log.d(TAG,"geeftID: " + link.in().getId());
                     if (result.isSuccess()) {
                         Log.d(TAG, "Your links are here: " + links.size());

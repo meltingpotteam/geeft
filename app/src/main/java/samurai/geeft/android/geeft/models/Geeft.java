@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by ugookeadu on 20/01/16.
  */
 public class Geeft implements Serializable{
+
     private long creationTime;
     private long deadLine;
     private String userLocation;
@@ -15,6 +16,7 @@ public class Geeft implements Serializable{
     private String geeftDescription;
     private String geeftTitle;
     private String geeftImage;
+    private String[] geeftArrayImage;
     private boolean automaticSelection;
     private boolean allowCommunication;
     private boolean dimensionRead;
@@ -74,11 +76,20 @@ public class Geeft implements Serializable{
         this.geeftDepth = geeftDepth;
     }
 
-    public Geeft(String id, String geeftDescription, String geeftImage, String geeftTitle,
+    public String[] getGeeftArrayImage() {
+        return geeftArrayImage;
+    }
+
+    public void setGeeftArrayImage(String[] geeftArrayImage) {
+        this.geeftArrayImage = geeftArrayImage;
+    }
+
+    public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
                  String username,String userFbId, String userProfilePic, String linkId,int geeftHeight, int geeftWidth,int geeftDepth) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
+        this.geeftArrayImage = geeftArrayImage;
         this.geeftTitle = geeftTitle;
         this.isSelected = isSelected;
         this.creationTime = creationTime;
