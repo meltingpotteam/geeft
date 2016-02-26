@@ -41,95 +41,68 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBooleanToken{
-    //-------------------Macros
+public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBoolean{
+    public static final String KEY_LINK_NAME = "key_link_name";
+    public static final String KEY_SHOW_WINNER_DIALOG = "key_show_winner_dialog";
+    private static final String KEY_LIST_STATE = "key_list_state";
+
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
-    //-------------------
-    private final String TAG = getClass().getName();
+    
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftStoryListAdapter mAdapter;
     private OnGeeftImageSelectedListener mCallback;
     private Geeft mGeeft;
-    private Parcelable mGeeftListState;
     private Toolbar mToolbar;
 
+    private Parcelable mGeeftListState;
+    private boolean showWinnerDialog;
+    private ProgressDialog mProgressDialog;
+    private String linkName;
 
-    private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftRecievedListFragment_geeftListState";
-    private final static String ADD_GEEFT_RECIEVED_LIST_FRAGMENT_SAVED_STATE_KEY = "samurai.geeft.android.geeft.activities."+
-            "add_geeft_recieved_list_fragment_saved_state";
-    private ProgressDialog mProgress;
-
-    public static GeeftReceivedListFragment newInstance(Bundle b) {
+    public static GeeftReceivedListFragment newInstance(String linkName,boolean showWinnerDialog) {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_LINK_NAME, linkName);
+        bundle.putBoolean(KEY_SHOW_WINNER_DIALOG, showWinnerDialog);
         GeeftReceivedListFragment fragment = new GeeftReceivedListFragment();
-        fragment.setArguments(b);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
-        mProgress = new ProgressDialog(getActivity());
-        try {
-//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mProgress.show();
-        } catch (WindowManager.BadTokenException e) {
+
+        if(showWinnerDialog){
+            showWinnerDialog();
+        }else {
+            getData();
         }
-        mProgress.setCancelable(false);
-        mProgress.setIndeterminate(true);
-        mProgress.setMessage("Attendere");
-        new BaaSReceivedDonatedGeeftTask(getContext(), getArguments().getString("link_name"), mGeeftList, mAdapter, this).execute();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGeeftList = new ArrayList<>();
+        initVariables();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
-        mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
-        Log.d("TOOLBAR", "" + (mToolbar != null));
-        if (mToolbar!=null)
-            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
-        mRecyclerView.setNestedScrollingEnabled(true);
-//        mRecyclerView.setHasFixedSize(true);
+        initActionBar(rootView);
 
+        initUI(rootView);
 
-        mAdapter = new GeeftStoryListAdapter(getActivity(), mGeeftList);
-        mRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
-                , mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
-                //TODO complete the fragment to start
-                mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-                mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
-            }
-        }));
         return rootView;
     }
+
+
 
     public interface OnGeeftImageSelectedListener {
         void onImageSelected(String id);
@@ -151,7 +124,9 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
 
     public void done(boolean result,int resultToken){
         Log.d("DONE", "in done");
-        mProgress.dismiss();
+        if(mProgressDialog!=null)
+            mProgressDialog.dismiss();
+
         if (result) {
             if (mGeeftList==null || mGeeftList.size()==0) {
                 new AlertDialog.Builder(getContext())
@@ -202,8 +177,9 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         outState.putSerializable("mGeeftList2", (Serializable)mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-        outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
+        outState.putParcelable(KEY_LIST_STATE, mGeeftListState);
     }
+
 
     /**
      * Restore Fragment's State here
@@ -213,7 +189,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
             mGeeftList = new ArrayList<>();
-            mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
+            mGeeftListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
             ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable("mGeeftList2");
             mGeeftList.addAll(array);
             mGeeftListShowDialog();
@@ -231,6 +207,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mGeeftListState);
         }
     }
+
 
 
     /**
@@ -253,4 +230,91 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
         return false;
     }
+
+    private void initVariables() {
+        mGeeftList = new ArrayList<>();
+        showWinnerDialog = getArguments().getBoolean(KEY_SHOW_WINNER_DIALOG);
+        linkName = getArguments().getString(KEY_LINK_NAME);
+    }
+
+    public void getData() {
+        showProgressDialog();
+        new BaaSReceivedDonatedGeeftTask(getContext(),
+                linkName, mGeeftList, mAdapter, this).execute();
+    }
+
+    private void showWinnerDialog() {
+        if(showWinnerDialog){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.winner_screen_message);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getData();
+                }
+            });
+            builder.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = MainActivity.newIntent(getContext());
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
+            builder.show();
+        }
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(getActivity());
+        try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.show();
+        } catch (WindowManager.BadTokenException e) {
+        }
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Attendere");
+    }
+
+    private void initActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
+        Log.d("TOOLBAR", "" + (mToolbar != null));
+        if (mToolbar!=null)
+            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+    }
+
+    private void initUI(View rootView) {
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
+        mRecyclerView.setNestedScrollingEnabled(true);
+//        mRecyclerView.setHasFixedSize(true);
+
+
+        mAdapter = new GeeftStoryListAdapter(getActivity(), mGeeftList);
+        mRecyclerView.setLayoutManager(
+                new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
+                , mRecyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+                //TODO complete the fragment to start
+                mGeeft = mGeeftList.get(position);
+                mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //TODO what happens on long press
+                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+                mGeeft = mGeeftList.get(position);
+                mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
+            }
+        }));
+    }
+
 }

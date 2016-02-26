@@ -21,17 +21,17 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class BaaSGeeftoryRecycleTask extends BaaSCheckTask {
+public class BaaSTabGeeftoryTask extends AsyncTask<Void,Void,Boolean> {
 
-    private static final String TAG = "BaaSGeeftoryRecycleTask";
-    Context mContext;
-    List<Geeft> mGeeftList;
-    TaskCallbackBooleanToken mCallback;
-    StoryItemAdapter mGeeftStroryAdapter;
-    boolean result;
-
-    public BaaSGeeftoryRecycleTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
-            TaskCallbackBooleanToken callback) {
+    private static final String TAG ="BaaSGeeftItemTask";
+            Context mContext;
+            List<Geeft> mGeeftList;
+            TaskCallbackBoolean mCallback;
+            StoryItemAdapter mGeeftStroryAdapter;
+            boolean result;
+    
+    public BaaSTabGeeftoryTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
+                               TaskCallbackBoolean callback) {
             mContext = context;
             mGeeftList = feedItems;
             mCallback = callback;

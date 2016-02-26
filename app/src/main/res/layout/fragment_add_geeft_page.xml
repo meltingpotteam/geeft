@@ -30,7 +30,7 @@
         android:fillViewport="false"
         android:background="#e2e2e2"
         >
-        <include layout="@layout/fragment_add_geeft_fields"
+        <include layout="@layout/item_add_geeft_fields"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"/>
 

@@ -21,13 +21,13 @@ import java.net.URLEncoder;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArrayToken;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArray;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by oldboy on 18/02/16.
  */
-public class WinnerScreenActivity extends AppCompatActivity implements TaskCallbackBooleanStringArrayToken {
+public class WinnerScreenActivity extends AppCompatActivity implements TaskCallbackBooleanStringArray {
 
     private static final String TAG = "WinnerScreenActivity";
     private String url = "http://geeft.tk";
@@ -63,6 +63,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenFbButton = (ImageButton) findViewById(R.id.winner_screen_facebook_button);
         mWinnerScreenLocationButton = (ImageButton) findViewById(R.id.winner_screen_location_button);
         mIntent = getIntent();
+
         final Geeft geeft = (Geeft) mIntent.getSerializableExtra("geeft");
         Log.d(TAG,"Geeft image is:" + geeft.getGeeftImage() );
 

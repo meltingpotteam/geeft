@@ -122,7 +122,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             BaasResult<BaasUser> resUser = user.saveSync();
                             if (resUser.isSuccess()) {
                                 Log.d(TAG, "New user, document created");
-                                return true;
+                                return  true;
                             } else {
                                 Log.e(TAG, "FATAL ERROR userScope not update");
                                 return false;
@@ -173,6 +173,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
         super.onProgressUpdate(values);
         Toast.makeText(mContext,values[0], Toast.LENGTH_LONG).show();
     }
+
+
 
     /**
      * Handles the callback

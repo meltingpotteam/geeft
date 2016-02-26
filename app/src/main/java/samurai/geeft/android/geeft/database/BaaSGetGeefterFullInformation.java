@@ -65,15 +65,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
                 mFullUserInformation[3] = fbName;
                 mFullUserInformation[4] = profilePicUri;
                 mFullUserInformation[5] = fbId;
-                        /*
-                private TextView mFullProfileUserRank;
-                private TextView mFullProfileUserGiven;
-                private TextView mFullProfileUserReceived;
-                private TextView mFullProfileUsername;
-                private ImageView mFullProfilegUserImage;
 
-                private ImageButton mFullProfileFbButton;
-                private ParallaxImageView mFullProfileBackground;*/
                 return true;
             }
             else{

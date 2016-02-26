@@ -29,5 +29,15 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="list_item_avatar_size">40dp</dimen>
     <dimen name="geeft_title_text_size_large">24dp</dimen>
+
     <dimen name="standard_text_size">14sp</dimen>
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <dimen name="elevation_low">6dp</dimen>
+    <dimen name="elevation_medium">9dp</dimen>
+    <dimen name="elevation_high">12dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
 </resources>

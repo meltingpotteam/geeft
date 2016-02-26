@@ -1,0 +1,46 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
+
+    <include
+        android:id="@+id/collapsing_toolbar"
+        layout="@layout/item_collapsing_toolbar"
+        />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_gravity=""
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/item_user_profile_card"
+                layout="@layout/item_user_profile_and_rating_card"
+                />
+
+            <include
+                android:id="@+id/item_geeft_title_and_description"
+                layout="@layout/item_geeft_title_and_description_card"
+                />
+
+            <include
+                android:id="@+id/item_geeft_story"
+                layout="@layout/item_show_geeft_story"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

@@ -58,10 +58,6 @@ public class NavigationDrawerFragment extends Fragment {
     // for example when back from rotation
     private boolean mFromSavedIstanceState;
 
-    public NavigationDrawerFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,34 +77,9 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
-        mRecyclerView.setHasFixedSize(false);
-        mWelcomeLayout = (LinearLayout) rootView.
-                findViewById(R.id.navigation_drawer_welcome);
-        // Set adapter data
-        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
 
-        //set manager and adapter dor recycleview
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
-
-        //handle touch event of recycleview
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
-                , mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
-                //TODO complete the fragment to start
-                startFragmentByPosition(position);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-
-            }
-        }));
+        //initialize UI
+        initUI(rootView);
 
         return rootView;
     }
@@ -169,7 +140,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     // implements the SharedPreferences with private mode
-    public static void saveToPreferences(Context context, String preferenceName, String preferenceValue){
+    private static void saveToPreferences(Context context, String preferenceName, String preferenceValue){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -180,7 +151,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     // returns the SharedPreferences
-    public static String readFromPreferences(Context context, String preferenceName, String defaultValue){
+    private static String readFromPreferences(Context context, String preferenceName, String defaultValue){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,
                 Context.MODE_PRIVATE);
         return sharedPreferences.getString(preferenceName,defaultValue);
@@ -247,5 +218,36 @@ public class NavigationDrawerFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private  void initUI(View rootView){
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
+        mRecyclerView.setHasFixedSize(false);
+        mWelcomeLayout = (LinearLayout) rootView.
+                findViewById(R.id.navigation_drawer_welcome);
+        // Set adapter data
+        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
+
+        //set manager and adapter dor recycleview
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
+
+        //handle touch event of recycleview
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
+                , mRecyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
+                //TODO complete the fragment to start
+                startFragmentByPosition(position);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //TODO what happens on long press
+                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+
+            }
+        }));
     }
 }

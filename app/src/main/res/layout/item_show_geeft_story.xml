@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_margin"
+    android:clickable="true"
+    >
+    <LinearLayout
+        style="@style/Widget.CardContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimaryDark"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            >
+
+            <TextView
+                android:id="@+id/show_geeft_story_tex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/geeft_show_story"
+                android:textStyle="bold"
+                android:textSize="@dimen/geeft_title_text_size"
+                android:textColor="@android:color/white"
+                android:layout_marginRight="8dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_white_24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple_effect"
+                android:clickable="true"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

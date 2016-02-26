@@ -27,7 +27,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Task for populating GeeftItem cards
  * Update by danybr-dev on 17/01/16
  */
-public class BaaSFeedImageTask extends BaaSCheckTask {
+public class BaaSTabGeeftTask extends AsyncTask<Void,Void,Boolean> {
 
     private static final String TAG ="BaaSGeeftItemTask";
     Context mContext;
@@ -36,9 +36,8 @@ public class BaaSFeedImageTask extends BaaSCheckTask {
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
 
-
-    public BaaSFeedImageTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                             TaskCallbackBooleanToken callback) {
+    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                            TaskCallbackBoolean callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -116,7 +115,7 @@ public class BaaSFeedImageTask extends BaaSCheckTask {
                     mResultToken = RESULT_SESSION_EXPIRED;
                     return false;
                 } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("LOG", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Log.e("LOG", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                     mResultToken = RESULT_FAILED;
                     return false;

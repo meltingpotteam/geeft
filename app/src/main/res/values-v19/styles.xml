@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="AppTheme.Base">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
+    <style name="AppTheme" parent="AppTheme.Base"/>
     <!-- animation for the dialog in addGeeft-->
     <style name="dialog_animation">
 

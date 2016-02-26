@@ -6,10 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,7 +22,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,45 +34,60 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
-import samurai.geeft.android.geeft.activities.LoginActivity;
+import samurai.geeft.android.geeft.activities.FullGeeftDetailsActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
-import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
- * Created by ugookeadu on 20/01/16.
- * adapter for PrenotableRecycleFragment Recyclerview
- * Updated by danybr-dev on 2/02/16
- * Updated by gabriel-dev on 04/02/2016
- * Updated by gabriel-dev on 08/02/2016
+ * Created by Ugo Nnanna Okeadu (UNOAlterEgo) on 20/01/16.
+ *
+ * Contributors:
+ *      danybr-dev
+ *      gabriel-dev
  */
 public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.ViewHolder>
         implements TaskCallbackBooleanHolderToken,TaskCallbackBooleanArrayToken,TaskCallBackBooleanInt {
 
+    /**
+     * TAGS
+     */
+    private static final String TAG = "GeeftItemAdapter";
+    private static final String WEBSITE_URL = TagsValue.WEBSITE_URL;
+
+    /**
+     *  BINDING
+     */
+    @Bind(R.id.dialog_geefter_name)TextView mProfileDialogUsername;
+    @Bind(R.id.dialog_geefter_location)TextView mProfileDialogUserLocation;
+    @Bind(R.id.dialog_geefter_profile_image)ImageView mProfileDialogUserImage;
+    @Bind(R.id.dialog_ranking_score)TextView mProfileDialogUserRank;
+    @Bind(R.id.dialog_given_geeft)TextView mProfileDialogUserGiven;
+    @Bind(R.id.dialog_received_geeft)TextView mProfileDialogUserReceived;
+    @Bind(R.id.dialog_geefter_background)ParallaxImageView mProfileDialogBackground;
+    @Bind(R.id.dialog_geefter_facebook_button)ImageButton mProfileDialogFbButton;
+
+
+    /**
+     * VARIABLES
+     */
     private final LayoutInflater inflater;
-    private final String WEBSITE_URL = "http://geeft.tk/";
-    private final static String TAG ="GeeftAdapter";
-
-    //list containing the geefts and avoiding null pointer exception
-    private List<Geeft> mGeeftList =
-            Collections.emptyList();
-
-    private int lastSize = 0;
-    private Context mContext;
-
+    private int mLastSize;
     private ProgressDialog mProgress;
-    private long mLastClickTime = 0;
+    private long mLastClickTime;
+    private Context mContext;
+    private List<Geeft> mGeeftList;
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -87,143 +101,107 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private ImageView mProfileDialogUserImage;
     private TextView mProfileDialogUserRank;
     private TextView mProfileDialogUserGiven;
-    private TextView mProfileDialogUserReceived;
-    private ParallaxImageView mProfileDialogBackground;
-
-    //costructor
-    public GeeftItemAdapter(Context context, List<Geeft> geeftList) {
+     * CONSTRUCTOR
+     * @param context the calling context
+     * @param geeftList the list of objects
+     */
+    public GeeftItemAdapter(@NonNull Context context,@NonNull List<Geeft> geeftList) {
         inflater = LayoutInflater.from(context);
         this.mGeeftList = geeftList;
         this.mContext = context;
+        mLastSize = 0;
+        mLastClickTime=0;
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+        /**
+         * BINDING
+         */
+        @Bind(R.id.geeft_name) TextView mGeeftTitleTextView;
+        //@Bind(R.id.geeft_description)ExpandableTextView mGeeftDescriptionTextView;
+        //@Bind(R.id.location) TextView mUserLocationTextView;
+        //@Bind(R.id.geefter_name) TextView mUsernameTextView;
+        @Bind(R.id.expire_time) TextView mExpireTime;
+       // @Bind(R.id.timestamp)TextView mTimeStampTextView;
+        //@Bind(R.id.location_cap)TextView mUserCapTextView;
+        @Bind(R.id.card_view) CardView mContainer;
+       // @Bind(R.id.geefter_info_area) LinearLayout mProfileClickableArea;
+       // @Bind(R.id.geefter_profile_image) ImageView mUserProfilePic;
+        @Bind(R.id.geeft_image) ImageView mGeeftImage;
+        @Bind(R.id.geeft_like_reservation_button) ImageButton mPrenoteButton;
+        @Bind(R.id.geeft_info_button) ImageButton mLocationButton;
+        @Bind(R.id.geeft_share_button) ImageButton mShareButton;
+        //@Bind(R.id.geeft_signalisation) ImageButton mSignalisationButton;
 
-        public TextView mTimeStampTextView;
-        public TextView mExpireTime;
-        public TextView mUserLocationTextView;
-        public TextView mUserCapTextView;
-        public TextView mUsernameTextView;
-        public TextView mGeeftDescriptionTextView;
-        public TextView mGeeftTitleTextView;
-        public Boolean  mTextIsSingleLine;
-
-        public ImageView mUserProfilePic;
-        public ImageView mGeeftImage;
-
-        public ImageButton mPrenoteButton;
-        public ImageButton mLocationButton;
-        public ImageButton mShareButton;
-        public ImageButton mSignalisationButton;
-        public LinearLayout mProfileClickableArea;
-        public ImageButton mProfileDialogFbButton;
-        //-------------------------------------------
         //-------------------Macros
         private final int RESULT_OK = 1;
         private final int RESULT_FAILED = 0;
         private final int RESULT_SESSION_EXPIRED = -1;
         //-------------------
-        public CardView mContainer;
-
+         * VARIABLES
+         */
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
-        private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
-        private String mUserId;
 
-
+        /**
+         * CONSTRUCTOR
+         * @param itemView parent view
+         */
         public ViewHolder(View itemView) {
             super(itemView);
-            mContainer = (CardView) itemView.findViewById(R.id.card_view);
-            mGeeftTitleTextView = (TextView) itemView.findViewById(R.id.geeft_name);
-            mGeeftDescriptionTextView = (TextView) itemView.findViewById(R.id.geeft_description);
-            mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
-            mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
-            mUserCapTextView = (TextView) itemView.findViewById(R.id.location_cap);
-            mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
-            mExpireTime = (TextView) itemView.findViewById(R.id.expire_time);
 
-            mProfileClickableArea = (LinearLayout) itemView.findViewById(R.id.geefter_info_area);
-
-            mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
-            mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
-
-            mPrenoteButton = (ImageButton) itemView.findViewById(R.id.geeft_like_reservation_button);
-
-            mLocationButton = (ImageButton) itemView.findViewById(R.id.geeft_info_button);
-            mShareButton = (ImageButton) itemView.findViewById(R.id.geeft_share_button);
-
-            mSignalisationButton = (ImageButton) itemView.findViewById(R.id.geeft_signalisation);
-
-
-
-            //Text Expander///////////////
-            mGeeftDescriptionTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mTextIsSingleLine) {
-                        mGeeftDescriptionTextView.setSingleLine(false);
-                        mTextIsSingleLine = false;
-                    } else {
-                        mGeeftDescriptionTextView.setSingleLine(true);
-                        mTextIsSingleLine = true;
-                    }
-
-                }
-            });
-            //////////////////////////////
+            ButterKnife.bind(this, itemView);
         }
-
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+
     @Override
     public GeeftItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         // inflate the custom layout
         View mGeeftView = inflater.inflate(R.layout.geeft_list_item, parent, false);
 
-        /** set the view's size, margins, paddings and layout parameters
-         *
-         */
-
-        //Inflate a new view hierarchy from the specified xml resource.
+        //  Inflate a new view hierarchy from the specified xml resource.
         return new ViewHolder(mGeeftView);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // - get element of the data model from list at this position
+
+        //  Get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
 
-
-        // - replace the contents of the view with that element
-        holder.mUsernameTextView.setText(item.getUsername());
-
-        holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
-        holder.mGeeftDescriptionTextView.setSingleLine(true);
-        holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
-        holder.mTextIsSingleLine = true;
+        /**
+         * holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
+         */
 
         holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
+        // - replace the contents of the view with that element
+        //holder.mUsernameTextView.setText(item.getUsername());
+
         //holder.mExpireTime.setText(item.getCreationTime()); //TODO: GESTIRE
 
-        holder.mUserLocationTextView.setText(item.getUserLocation());
+        //holder.mUserLocationTextView.setText(item.getUserLocation());
 
-        holder.mUserCapTextView.setText(item.getUserCap());
+        //holder.mUserCapTextView.setText(item.getUserCap());
         //TODO add the control of the cap matching in the city selected; sand in the maps tracking
         Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
-                .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
+                .centerCrop().into(holder.mGeeftImage);
         Log.d("IMAGE", item.getUserProfilePic());
-        Picasso.with(mContext).load(item.getUserProfilePic()).fit().centerInside()
-                .placeholder(R.drawable.ic_account_circle)
-                .into(holder.mUserProfilePic);
+        /**
+         *  Picasso.with(mContext).load(item.getUserProfilePic()).fit().centerInside()
+         .placeholder(R.drawable.ic_account_circle)
+         .into(holder.mUserProfilePic);
+         */
+
 
 
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getCreationTime(),
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
-        holder.mTimeStampTextView.setText(timeAgo);
+        //holder.mTimeStampTextView.setText(timeAgo);
 
         //--------------------- Display Time to GO (NOW is only days) TODO: show time to go
         Calendar c = Calendar.getInstance();
@@ -233,19 +211,13 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         long remainingDays = (deadlineMillis - actualMillis) / 86400;
         long remainingHours = (deadlineMillis - actualMillis) % 86400 / 3600;
 
-        if (remainingDays == 1)
-            holder.mExpireTime.setText("Rimane: " + remainingDays + " giorno e "+ remainingHours+" ore.");
-        else if(remainingDays == 0) {
-            if(remainingHours == 1)
-                holder.mExpireTime.setText("Rimane: " + remainingHours + " ora.");
-
-            else
-                holder.mExpireTime.setText("Rimangono: " + remainingHours + " ore.");
+        if (remainingDays >0)
+            holder.mExpireTime.setText(remainingDays + "g "+ remainingHours+"ore");
+        else if(remainingHours>0) {
+                holder.mExpireTime.setText( remainingHours +"ore");
         }
-        else if(remainingDays >0)
-            holder.mExpireTime.setText("Rimangono: " + remainingDays + " giorni e "+ remainingHours+" ore.");
         else
-            holder.mExpireTime.setText("Fine");
+            holder.mExpireTime.setText("Scaduto");
 
         /**The User are obliged to set a title, a description, a position, a location and an image.
          * TODO verify this part if the design of the application will change
@@ -255,12 +227,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * [gabriel-dev]
          */
 
-        if (holder.mUserLocationTextView.getText() == null) {
+        /*if (holder.mUserLocationTextView.getText() == null) {
             // location is empty, remove from view location txt and button
             holder.mUserLocationTextView.setVisibility(View.GONE);
             holder.mLocationButton.setImageResource(R.drawable.ic_location_off);
             holder.mLocationButton.setClickable(false);
-        }
+        }*/
 
         setAnimation(holder.mContainer);
 
@@ -306,85 +278,16 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
          * of the "Receeved" Geeft.
          * it also display the possibiliy to contact him with facebook.
          * **/
-        holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
+        /*holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
-                View dialogLayout = inflater.inflate(R.layout.profile_dialog, null);
-                alertDialog.setView(dialogLayout);
-                //On click, the user visualize can visualize some infos about the geefter
-                android.app.AlertDialog dialog = alertDialog.create();
-
-                //profile dialog fields-----------------------
-                mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
-                mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
-                mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
-
-                mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
-                mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
-                mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
-                holder.mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
-
-                //--------------------------------------------
-                mProfileDialogUsername
-                                .setText(item
-                                        .getUsername());
-                mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
-                        (R.id.dialog_geefter_background);
-                //--------------------------------------------
-                mProfileDialogUsername
-                        .setText(item
-                                .getUsername());
-                mProfileDialogUserLocation.setText(item.getUserLocation());
-                Picasso.with(mContext).load(item.getUserProfilePic()).fit()
-                        .centerInside()
-                        .into(mProfileDialogUserImage);
-
-                //Show Facebook profile of geefter------------------------
-                if(item.isAllowCommunication()){
-                    holder.mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
-                            mContext.startActivity(facebookIntent);
-                        }
-                    });
-                }
-                else{
-                    holder.mProfileDialogFbButton.setVisibility(View.GONE);
-                }
-
-                //Parallax background -------------------------------------
-                mProfileDialogBackground.setTiltSensitivity(5);
-                mProfileDialogBackground.registerSensorManager();
-                mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uriUrl = Uri.parse(WEBSITE_URL);
-                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-                        mContext.startActivity(launchBrowser);
-                    }
-                });
-                //TODO tenere la parallasse?!
-                //---------------------------------------------------------
-
-                //TODO: fill the fields "rank" , "geeven", "receeved"-------
-                //----------------------------------------------------------
-                //Relaunch AsyncTask anytime is needed for give information updated
-                new BaaSGetGeefterInformation(mContext,GeeftItemAdapter.this).execute();
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
-                //                dialog.setMessage("Some information that we can take from the facebook shared one");
-                dialog.show();  //<-- See This!
-                //
-
+                showProfileDialog(item);
             }
-        });
+        });*/
         ////
 
         //--------------------- Location Button implementation
-        final String location = holder.mUserLocationTextView.getText().toString();
+        final String location = item.getUserLocation();
         holder.mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -406,9 +309,10 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             }
         });
         //-------------------------- ShareButton implementation
-        final String title = holder.mGeeftTitleTextView.getText().toString();
-        final Uri app_url = Uri.parse(holder.app_url);
+        final String title = item.getGeeftTitle();
+        final Uri app_url = Uri.parse(WEBSITE_URL);
         final Uri imageUrl = holder.mGeeftImageUri;
+
         holder.mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -431,40 +335,23 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         });
 
         //Signalization button Implementation--------------
-        holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
+        /*holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final android.support.v7.app.AlertDialog.Builder alertDialog =
-                        new android.support.v7.app.AlertDialog.Builder(mContext,
-                                R.style.AppCompatAlertDialogStyle); //Read Update
-
-                alertDialog.setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new BaaSSignalisationTask(mContext, item.getId(), GeeftItemAdapter.this).execute();
-                    }
-                });
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alertDialog.setMessage("Sei proprio sicuro di voler procedere con la segnalazione?");
-                android.support.v7.app.AlertDialog dialog = alertDialog.create();
-                //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-                dialog.show();
+                //TODO implement the behaviour of the signalization button
+                new BaaSSignalisationTask(mContext,item.getId(),GeeftItemAdapter.this).execute();
+                //Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
         //-------------------------------------------------
         holder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // launch full screen activity
-                Intent intent = FullScreenViewActivity.newIntent(mContext,
-                        item.getId(),"geeft");
+                Intent intent = FullGeeftDetailsActivity.newIntent(mContext,
+                    item);
                 mContext.startActivity(intent);
+                Log.d(TAG,"ONCLICK");
             }
         });
 
@@ -481,12 +368,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private void setAnimation(View viewToAnimate)
     {
         // If the bound view wasn't previously displayed on screen, it's animated
-        if ((mGeeftList.size()-lastSize)>0)
+        if ((mGeeftList.size()-mLastSize)>0)
         {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
             animation.setDuration(350);
-            viewToAnimate.startAnimation(animation);
-            lastSize++;
+            viewToAnimate.startAnimation(animation);mLastSize++;
         }
     }
     public static Intent getOpenFacebookProfileIntent(Context context,String userFacebookId) { // THIS
@@ -605,5 +491,77 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
                 " \n" + "E' presente un Geeft non conforme al regolamento. " + "\n"
                 + "ID: " + docId);
         mContext.startActivity(Intent.createChooser(emailIntent, "Invia mail..."));
+    }
+
+    private void showProfileDialog(@NonNull final Geeft item){
+        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(mContext); //Read Update
+        View dialogLayout = inflater.inflate(R.layout.profile_dialog, null);
+        alertDialog.setView(dialogLayout);
+        //On click, the user visualize can visualize some infos about the geefter
+        android.app.AlertDialog dialog = alertDialog.create();
+
+        //profile dialog fields-----------------------
+        mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
+        mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
+        mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+
+        mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
+        mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
+        mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
+        mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
+
+        //--------------------------------------------
+        mProfileDialogUsername
+                .setText(item
+                        .getUsername());
+        mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
+                (R.id.dialog_geefter_background);
+        //--------------------------------------------
+        mProfileDialogUsername
+                .setText(item
+                        .getUsername());
+        mProfileDialogUserLocation.setText(item.getUserLocation());
+        Picasso.with(mContext).load(item.getUserProfilePic()).fit()
+                .centerInside()
+                .into(mProfileDialogUserImage);
+
+        //Show Facebook profile of geefter------------------------
+        if(item.isAllowCommunication()){
+            mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent facebookIntent = getOpenFacebookProfileIntent(mContext,item.getUserFbId());
+                    mContext.startActivity(facebookIntent);
+                }
+            });
+        }
+        else{
+            mProfileDialogFbButton.setVisibility(View.GONE);
+        }
+
+        //Parallax background -------------------------------------
+        mProfileDialogBackground.setTiltSensitivity(5);
+        mProfileDialogBackground.registerSensorManager();
+        mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse(WEBSITE_URL);
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                mContext.startActivity(launchBrowser);
+            }
+        });
+        //TODO tenere la parallasse?!
+        //---------------------------------------------------------
+
+        //TODO: fill the fields "rank" , "geeven", "receeved"-------
+        //----------------------------------------------------------
+        //Relaunch AsyncTask anytime is needed for give information updated
+        new BaaSGetGeefterInformation(mContext,GeeftItemAdapter.this).execute();
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
+        //                dialog.setMessage("Some information that we can take from the facebook shared one");
+        dialog.show();  //<-- See This!
+        //
     }
 }

@@ -60,7 +60,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
-        mBallView = findViewById(R.id.loading_balls);
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
