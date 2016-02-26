@@ -101,7 +101,6 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                                 Log.d(TAG,"OLD GEEFT ID: "+mOldGeeftId);
                                 BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story",mGeeft.getId()
                                         , mOldGeeftId);
-                                return resLink.isSuccess();
                             }
                             return createDonatedLink(docUserId);
                         } else {
