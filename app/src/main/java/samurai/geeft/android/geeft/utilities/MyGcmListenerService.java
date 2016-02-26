@@ -79,9 +79,11 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
+
         Vibrator v = (Vibrator) this.getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-        AssignedActivity.newIntent(getApplicationContext(),"assigned",true);
-        Intent intent = new Intent(this, AssignedActivity.class);
+
+        Intent intent = AssignedActivity
+                .newIntent(getApplicationContext(),TagsValue.LINK_NAME_ASSIGNED ,true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);

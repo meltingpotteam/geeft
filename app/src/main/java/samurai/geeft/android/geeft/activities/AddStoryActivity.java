@@ -15,6 +15,7 @@ import samurai.geeft.android.geeft.fragments.AddStoryFragment;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 16/02/16.
@@ -40,9 +41,8 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            Bundle b = new Bundle();
-            b.putString("link_name","received");
-            fragment = GeeftReceivedListFragment.newInstance(b);
+            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
+                    false);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
