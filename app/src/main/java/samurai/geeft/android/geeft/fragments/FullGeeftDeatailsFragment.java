@@ -152,7 +152,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                     .fit().centerInside().into(mGeeftImageView);
             Picasso.with(getContext()).load(mGeeft.getUserProfilePic())
-                    .fit().centerInside().placeholder(R.drawable.ic_profile_24dp)
+                    .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
                     .into(mGeefterProfilePicImageView);
 
             mGeefterNameTextView.setText(mGeeft.getUsername());

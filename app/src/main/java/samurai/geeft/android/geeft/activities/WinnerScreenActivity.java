@@ -13,14 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.database.BaaSGetGeefterFullInformation;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArray;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -57,6 +55,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenFbButton = (ImageButton) findViewById(R.id.winner_screen_facebook_button);
         mWinnerScreenLocationButton = (ImageButton) findViewById(R.id.winner_screen_location_button);
         mIntent = getIntent();
+
         final Geeft geeft = (Geeft) mIntent.getSerializableExtra("geeft");
         Log.d(TAG,"Geeft image is:" + geeft.getGeeftImage() );
 

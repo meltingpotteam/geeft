@@ -40,7 +40,7 @@ public class ScrollingFABBehavior extends  CoordinatorLayout.Behavior<FloatingAc
             fabBottomMargin = lp.bottomMargin;
             distanceToScroll = fab.getHeight() + fabBottomMargin;
             ratio = dependency.getY()/(float)toolbarHeight;
-            fab.setTranslationY(-distanceToScroll * ratio/7);
+            fab.setTranslationY(-distanceToScroll * ratio/5);
         }
         if (dependency instanceof Snackbar.SnackbarLayout){
             float translationY = Math.min(0, dependency.getTranslationY() - dependency.getHeight());

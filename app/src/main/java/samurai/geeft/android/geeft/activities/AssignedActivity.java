@@ -1,17 +1,12 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.nvanbenschoten.motion.ParallaxImageView;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
@@ -22,17 +17,21 @@ import samurai.geeft.android.geeft.models.Geeft;
  */
 public class AssignedActivity extends AppCompatActivity implements GeeftReceivedListFragment.OnGeeftImageSelectedListener{
     private final String TAG = getClass().getName();
+
+    private final static String EXTRA_COLLECTION = "extra_collection";
+    private final static String EXTRA_SHOW_WINNER_DIALOG = "extra_show_winner_dialog";
+
     //info dialog attributes---------------------
-    private TextView mReceivedDialogUsername;
-    private TextView mReceivedDialogUserLocation;
-    private ImageView mReceivedDialogUserImage;
-    private ImageView mReceivedDialogFullImage;
-    private ParallaxImageView mReceivedDialogBackground;
-    private Button mReceivedStoryButton;
-    private Button mReceivedGeeftButton;
     private LayoutInflater inflater;
-    private Toolbar mToolbar;
     //-------------------------------------------
+
+    public static Intent newIntent(Context context, String collection, boolean showWinnerDialog) {
+        Intent intent = new Intent(context, AssignedActivity.class);
+        intent.putExtra(EXTRA_COLLECTION, collection);
+        intent.putExtra(EXTRA_SHOW_WINNER_DIALOG, showWinnerDialog);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +42,9 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            Bundle b = new Bundle();
-            b.putString("link_name","assigned");
-            fragment = GeeftReceivedListFragment.newInstance(b);
+            fragment = GeeftReceivedListFragment
+                    .newInstance(getIntent().getStringExtra(EXTRA_COLLECTION),
+                            getIntent().getBooleanExtra(EXTRA_SHOW_WINNER_DIALOG,false));
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

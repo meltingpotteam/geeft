@@ -20,6 +20,7 @@ import com.nvanbenschoten.motion.ParallaxImageView;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 15/02/16.
@@ -50,7 +51,8 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
         if (fragment == null) {
             Bundle b = new Bundle();
             b.putString("link_name","donated");
-            fragment = GeeftReceivedListFragment.newInstance(b);
+            fragment = GeeftReceivedListFragment
+                    .newInstance(TagsValue.LINK_NAME_DONATED, false);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

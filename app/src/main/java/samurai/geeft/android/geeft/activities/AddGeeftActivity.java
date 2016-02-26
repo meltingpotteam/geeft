@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -83,9 +82,8 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             public void onClick(DialogInterface dialog, int which) {
                 //here you can add functions
                 Log.d("DONE", "in startChooseStory");
-                Bundle b = new Bundle();
-                b.putString("link_name", "received");
-                GeeftReceivedListFragment fragment = GeeftReceivedListFragment.newInstance(b);
+                GeeftReceivedListFragment fragment =
+                        GeeftReceivedListFragment.newInstance("received",false);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);

@@ -1,13 +1,19 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -29,11 +35,15 @@ import com.facebook.share.Sharer;
 import com.facebook.share.widget.ShareDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -43,6 +53,7 @@ import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 public class MainActivity extends AppCompatActivity {
     private final String TAG ="MainActivity";
     private static final int REQUEST_CODE_LOGOUT = 0;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
@@ -51,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mTitles[]={"Geeftory","Geeft"};
     private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
@@ -63,6 +74,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**
+         *
+         */
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(TagsValue.SENT_TOKEN_TO_SERVER, false);
+                Log.d(TAG,"sent token? "+sentToken);
+            }
+        };
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+        /**
+         *
+         */
         mToolbar = (Toolbar)findViewById(R.id.main_app_bar);
         mViewPager = (ViewPager)findViewById(R.id.pager);
         setSupportActionBar(mToolbar);
@@ -161,6 +194,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(TagsValue.REGISTRATION_COMPLETE));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -235,6 +281,28 @@ public class MainActivity extends AppCompatActivity {
                         "Logout cancellato",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     private void startLoginActivity() {
