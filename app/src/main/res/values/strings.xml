@@ -289,6 +289,9 @@
     <string name="pref_title_vibrate">Vibrazione</string>
     <string name="assigned_gift_title">Assegnati</string>
     <string name="assigned_gift_description">Visualizza oggetti in attesa di essere ritirati</string>
+    <string name="reserved_gift_title">Prenotati</string>
+    <string name="reserved_gift_description">Visualizza oggetti a cui ti sei prenotato</string>
+
     <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa</string>
 
 </resources>

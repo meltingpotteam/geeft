@@ -59,6 +59,9 @@
         <!--Assigned geeft activity-->
         <activity android:name=".activities.AssignedActivity"/>
 
+        <!--Reserved geeft activity-->
+        <activity android:name=".activities.ReservedActivity"/>
+
         <!-- Send Report activity-->
         <activity android:name=".activities.SendReportActivity"/>
 
