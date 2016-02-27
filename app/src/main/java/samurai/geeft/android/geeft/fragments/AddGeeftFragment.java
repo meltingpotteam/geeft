@@ -49,6 +49,10 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  */
 public class AddGeeftFragment extends StatedFragment {
     private final String TAG = getClass().getName();
+
+    private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
+            +File.separator+"geeft";
+
     private static final String ARG_GEEFT = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftFragment_geeft";
     private final static String ARG_ARRAY_STRINGS = "samurai.geeft.android.geeft.fragments." +
@@ -166,8 +170,7 @@ public class AddGeeftFragment extends StatedFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                mGeeftImage = new File(Environment.getExternalStorageDirectory()
-                        +File.separator + "image.jpg");
+                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
@@ -373,8 +376,6 @@ public class AddGeeftFragment extends StatedFragment {
      **/
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
-            mGeeftImage = new File(Environment.getExternalStorageDirectory()
-                    +File.separator + "image.jpg");
             Picasso.with(getActivity()).load(mGeeftImage)
                     .fit()
                     .centerInside()
