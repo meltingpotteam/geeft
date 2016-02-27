@@ -28,7 +28,7 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
         private final int RESULT_SESSION_EXPIRED = -1;
         //-------------------
         public BaaSGetGeefterFullInformation(Context context, TaskCallbackBooleanStringArrayToken callback) {
-            mFullUserInformation = new String[6];
+            mFullUserInformation = new String[8];
             mContext = context;
             mCallback = callback;
 
@@ -54,6 +54,8 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
                 double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                 long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
                 long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
+                long submits_without = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_without");
+                long submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
                 String fbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
                 JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
                 String fbId = field.getObject("_social").getObject("facebook").getString("id");
@@ -62,9 +64,11 @@ public class BaaSGetGeefterFullInformation extends AsyncTask<Void,Void,Boolean> 
                 mFullUserInformation[0] = ""+feedback;
                 mFullUserInformation[1] = ""+given;
                 mFullUserInformation[2] = ""+received;
-                mFullUserInformation[3] = fbName;
-                mFullUserInformation[4] = profilePicUri;
-                mFullUserInformation[5] = fbId;
+                mFullUserInformation[3] = ""+submits_without;
+                mFullUserInformation[4] = ""+submits_active;
+                mFullUserInformation[5] = fbName;
+                mFullUserInformation[6] = profilePicUri;
+                mFullUserInformation[7] = fbId;
 
                 return true;
             }

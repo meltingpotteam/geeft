@@ -76,50 +76,65 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
 
         if (checkError(resLinks)) {
             links = resLinks.value();
-            BaasQuery.Criteria paginate = BaasQuery.builder()
-                    .orderBy("_creation_date asc").criteria();
-            BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
-            if (baasResult.isSuccess()) {
-                try {
-                    for (BaasDocument e : baasResult.get()) {
-                        mGeeft = new Geeft();
-                        mGeeft.setId(e.getId());
-                        mGeeft.setUsername(e.getString("name"));
-                        mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
-                        //Append ad image url your session token!
-                        mGeeft.setGeeftDescription(e.getString("description"));
-                        mGeeft.setUserProfilePic(e.getString("profilePic"));
-                        mGeeft.setCreationTime(getCreationTimestamp(e));
-                        mGeeft.setDeadLine(e.getLong("deadline"));
-                        mGeeft.setUserFbId(e.getString("userFbId"));
-//                    TODO verify the error; probably we need to erase and recharg all the object since i send another one field to baas
-                        mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
-                        mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+            Log.d(TAG, "Your links are here: " + links.size());
+            BaasUser currentUser = BaasUser.current();
+            BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
+            BaasResult<BaasUser> resUser = currentUser.saveSync();
+            if (resUser.isSuccess()) {
+                BaasQuery.Criteria paginate = BaasQuery.builder()
+                        .orderBy("_creation_date asc").criteria();
+                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
+                if (baasResult.isSuccess()) {
+                    try {
+                        for (BaasDocument e : baasResult.get()) {
+                            mGeeft = new Geeft();
+                            mGeeft.setId(e.getId());
+                            mGeeft.setUsername(e.getString("name"));
+                            mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                            //Append ad image url your session token!
+                            mGeeft.setGeeftDescription(e.getString("description"));
+                            mGeeft.setUserProfilePic(e.getString("profilePic"));
+                            mGeeft.setCreationTime(getCreationTimestamp(e));
+                            mGeeft.setDeadLine(e.getLong("deadline"));
+                            mGeeft.setUserFbId(e.getString("userFbId"));
+//
+                            mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+                            mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
 
-                        mGeeft.setUserLocation(e.getString("location"));
-                        mGeeft.setUserCap(e.getString("cap"));
-                        mGeeft.setGeeftTitle(e.getString("title"));
-                        for (BaasLink l : links) {
-                            //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-                            Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
-                            //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
-                            if (l.in().getId().equals(e.getId())) {
-                                mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
-                                // reserved)
-                                mGeeft.setLinkId(l.getId());
-                                Log.d(TAG, "link id is: " + l.getId());
+                            mGeeft.setUserLocation(e.getString("location"));
+                            mGeeft.setUserCap(e.getString("cap"));
+                            mGeeft.setGeeftTitle(e.getString("title"));
+                            for (BaasLink l : links) {
+                                //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+                                Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
+                                //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                if (l.in().getId().equals(e.getId())) {
+                                    mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                    // reserved)
+                                    mGeeft.setLinkId(l.getId());
+                                    Log.d(TAG, "link id is: " + l.getId());
+                                }
                             }
+                            mGeeftList.add(0, mGeeft);
+                            mResultToken = RESULT_OK;
+                            result = true;
                         }
-                        mGeeftList.add(0, mGeeft);
-                        mResultToken = RESULT_OK;
-                        result = true;
+                    } catch (BaasInvalidSessionException ise) {
+                        mResultToken = RESULT_SESSION_EXPIRED;
+                        return false;
+                    } catch (com.baasbox.android.BaasException ex) {
+                        Log.e("LOG", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
+                        Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                        mResultToken = RESULT_FAILED;
+                        return false;
                     }
-                } catch (BaasInvalidSessionException ise) {
+                }
+            } else {
+                if (resUser.error() instanceof BaasInvalidSessionException) {
                     mResultToken = RESULT_SESSION_EXPIRED;
                     return false;
-                } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("LOG", "Deal with error n " + BaaSTabGeeftTask.class + " " + ex.getMessage());
-                    Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e(TAG, "Cannot insert new valure of submits_active");
                     mResultToken = RESULT_FAILED;
                     return false;
                 }

@@ -145,7 +145,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                     if (resLink.isSuccess()) { //Link created
                         Log.d(TAG, "Link cloned");
                         submits_active = currentUser.getScope(BaasUser.Scope.REGISTERED).get("submits_active");
-                        submits_active--; //Created link,decrement currentUser's submits_active field
+                        submits_active = submits_active - 1; //Created link,decrement currentUser's submits_active field
                         currentUser.getScope(BaasUser.Scope.REGISTERED).put("submits_active",submits_active);
                         BaasResult<BaasUser> resUser = currentUser.saveSync();
                         if(resUser.isSuccess()) {
@@ -157,7 +157,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                                 return false;
                             }
                             else {
-                                Log.e(TAG, "Cannot insert new valure of submits_active");
+                                Log.e(TAG, "Cannot insert new value of submits_active");
                                 mResultToken = RESULT_FAILED;
                                 return false;
                             }

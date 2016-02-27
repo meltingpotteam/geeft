@@ -64,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="1">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -134,6 +135,57 @@
 
                 </FrameLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_weight="0.12">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="43dp"
+                            android:textSize="@dimen/standard_text_size"
+                            android:hint="Prenotazioni \nattive:"/>
+
+                        <TextView
+                            android:id="@+id/full_profile_page_submits_active"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:textSize="@dimen/standard_text_size"
+                            android:hint="\n#geeft"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/standard_text_size"
+                            android:hint="Prenotazioni \nsenza ricezione:"/>
+
+                        <TextView
+                            android:id="@+id/full_profile_page_submits_without"
+                            android:layout_width="wrap_content"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:textSize="@dimen/standard_text_size"
+                            android:hint="\n#geeft"/>
+                    </LinearLayout>
+                </FrameLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,6 +208,7 @@
                         android:textSize="@dimen/standard_text_size"
                         android:text="-"/>
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

@@ -32,6 +32,8 @@ public class FullProfileFragment extends AppCompatActivity implements TaskCallba
     private TextView mFullProfileUserRank;
     private TextView mFullProfileUserGiven;
     private TextView mFullProfileUserReceived;
+    private TextView mFullProfileUserSubmitsWithout;
+    private TextView mFullProfileUserSubmitsActive;
     private ParallaxImageView mFullProfileBackground;
     //-------------------------------------------
 
@@ -54,6 +56,8 @@ public class FullProfileFragment extends AppCompatActivity implements TaskCallba
         mFullProfileUserRank = (TextView) findViewById(R.id.full_profile_page_ranking_score);
         mFullProfileUserGiven = (TextView) findViewById(R.id.full_profile_page_given_geeft);
         mFullProfileUserReceived = (TextView) findViewById(R.id.full_profile_page_received_geeft);
+        mFullProfileUserSubmitsWithout = (TextView) findViewById(R.id.full_profile_page_submits_without);
+        mFullProfileUserSubmitsActive = (TextView) findViewById(R.id.full_profile_page_submits_active);
         mFullProfileUsername = (TextView) findViewById(R.id.full_profile_page_geefter_name);
         mFullProfilegUserImage = (ImageView) findViewById(R.id.full_profile_page_geefter_image);
         mFullProfileUserFbId = (TextView) findViewById(R.id.full_profile_page_geefter_fb_id);
@@ -67,17 +71,19 @@ public class FullProfileFragment extends AppCompatActivity implements TaskCallba
     }
 
     public void done(boolean result,String[] userInformations,int resultToken){
-        /* mFullInformation[i] with i = {0,..,5}
-            order = feedback,given,received,fbName,profilePicUri,fbId*/
+        /* mFullInformation[i] with i = {0,..,7}
+            order = feedback,given,received,submits_without,submits_active,fbName,profilePicUri,fbId*/
         if(result) {
             mFullProfileUserRank.setText(userInformations[0]);
             mFullProfileUserGiven.setText(userInformations[1]);
             mFullProfileUserReceived.setText(userInformations[2]);
-            mFullProfileUsername.setText(userInformations[3]);
-            Picasso.with(getApplicationContext()).load(Uri.parse(userInformations[4])).fit()
+            mFullProfileUserSubmitsWithout.setText(userInformations[3]);
+            mFullProfileUserSubmitsActive.setText(userInformations[4]);
+            mFullProfileUsername.setText(userInformations[5]);
+            Picasso.with(getApplicationContext()).load(Uri.parse(userInformations[6])).fit()
                     .centerInside()
                     .into(mFullProfilegUserImage);
-            mFullProfileUserFbId.setText(userInformations[5]);
+            mFullProfileUserFbId.setText(userInformations[7]);
         }
         else {
             Toast toast;
