@@ -38,9 +38,9 @@
                 android:text="Geeft name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:padding="@dimen/activity_horizontal_margin"
                 android:textColor="#222"
                 android:textStyle="bold"
                 android:textSize="@dimen/geeft_title_text_size" />

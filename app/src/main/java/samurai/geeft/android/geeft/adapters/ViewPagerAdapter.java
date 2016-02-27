@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import samurai.geeft.android.geeft.fragments.GeeftlandRecyclerFragment;
 import samurai.geeft.android.geeft.fragments.GeeftoryRecycleFragment;
 import samurai.geeft.android.geeft.fragments.PrenotableRecycleFragment;
 
@@ -33,9 +34,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         {
             return GeeftoryRecycleFragment.newInstance(new Bundle());
         }
-        else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
+        else if(position == 1)             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
             return PrenotableRecycleFragment.newInstance(new Bundle());
+        }
+        else
+        {
+            //REMOVE WHEN IMPLEMENT CORRECTLY THE FRAGMENT GEEFTLAND
+            return GeeftoryRecycleFragment.newInstance(new Bundle());
         }
 
 
