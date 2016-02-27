@@ -45,9 +45,7 @@ public class ReservedActivity extends AppCompatActivity implements GeeftReceived
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            Bundle b = new Bundle();
-            b.putString("link_name","reserve");
-            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RESERVED,false);
+            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RESERVE,false);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

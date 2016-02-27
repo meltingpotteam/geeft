@@ -24,6 +24,6 @@ public class TagsValue {
 
    public static final String LINK_NAME_ASSIGNED = "assigned";
 
-   public static final String LINK_NAME_RESERVED = "reserved";
+   public static final String LINK_NAME_RESERVE = "reserve";
 
 }

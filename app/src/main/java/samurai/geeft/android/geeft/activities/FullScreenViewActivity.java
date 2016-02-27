@@ -11,8 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.List;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.fragments.GeeftStoryFragment;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -38,7 +35,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     private ViewPager mViewPager;
     private List<Geeft> mGeeftList = new ArrayList<>();
-    private View mBallView;
     private Toolbar mToolbar;
     private static String mCollection;
     //-------------------Macros
@@ -75,7 +71,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     @Override
     public void done(boolean result,int resultToken) {
-        mBallView.setVisibility(View.GONE);
         if(result) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
