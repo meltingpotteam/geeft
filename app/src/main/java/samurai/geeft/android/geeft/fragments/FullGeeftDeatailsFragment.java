@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private ImageView mGeeftImageView;
     private ImageView mGeefterProfilePicImageView;
     private TextView mGeefterNameTextView;
+    private RatingBar mGeefterRank;
     private TextView mGeeftTitleTextView;
     private TextView mGeeftDescriptionTextView;
     private View mStoryView;
@@ -143,6 +145,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
+        mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
         mGeeftDescriptionTextView = (TextView)rootView
                 .findViewById(R.id.geeft_description_textview);
@@ -158,6 +161,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mGeefterNameTextView.setText(mGeeft.getUsername());
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
+
+            double rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
+            mGeefterRank.setRating((float)rank);
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
