@@ -22,14 +22,14 @@ import java.util.List;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftoryTask;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBoolean {
+public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBooleanToken {
 
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "2pref_file";
@@ -114,7 +114,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     }
 
 
-    public void done(boolean result) {
+    public void done(boolean result, int token) {
         Log.d(TAG, "done()");
 
         if (mRefreshLayout.isRefreshing()) {

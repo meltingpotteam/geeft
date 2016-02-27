@@ -19,9 +19,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasResult;
-import com.baasbox.android.BaasUser;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +29,6 @@ import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
@@ -41,7 +37,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBoolean{
+public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBooleanToken{
     public static final String KEY_LINK_NAME = "key_link_name";
     public static final String KEY_SHOW_WINNER_DIALOG = "key_show_winner_dialog";
     private static final String KEY_LIST_STATE = "key_list_state";

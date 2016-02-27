@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
@@ -31,7 +32,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class TabGeeftFragment extends StatedFragment implements TaskCallbackBoolean{
+public class TabGeeftFragment extends StatedFragment implements TaskCallbackBooleanToken {
 
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
@@ -123,7 +124,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
 
-    public void done(boolean result){
+    public void done(boolean result, int resultToken){
         Log.d(TAG, "done()");
 
         if(mRefreshLayout.isRefreshing()) {

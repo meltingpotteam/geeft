@@ -16,6 +16,7 @@ import com.nvanbenschoten.motion.ParallaxImageView;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 26/02/16.
@@ -46,7 +47,7 @@ public class ReservedActivity extends AppCompatActivity implements GeeftReceived
         if (fragment == null) {
             Bundle b = new Bundle();
             b.putString("link_name","reserve");
-            fragment = GeeftReceivedListFragment.newInstance(b);
+            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RESERVED,false);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

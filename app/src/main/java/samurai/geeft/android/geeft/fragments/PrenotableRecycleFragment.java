@@ -19,7 +19,7 @@ import java.util.List;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.database.BaaSFeedImageTask;
+import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
@@ -58,8 +58,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, " onCreateView()-> savedInstanceState is null? "+(savedInstanceState==null));
-        View rootView = inflater.inflate(R.layout.fragment_geeft_list, container, false);
-        mBallView = rootView.findViewById(R.id.loading_balls);
+        View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
@@ -83,7 +82,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh()");
-        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     public void done(boolean result,int resultToken){
@@ -125,7 +124,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
         Log.d(TAG, "onFirstTimeLaunched()");
-        new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     /**
@@ -165,7 +164,7 @@ public class PrenotableRecycleFragment extends StatedFragment
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            new BaaSFeedImageTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
         }
         else {
             mBallView.setVisibility(View.GONE);

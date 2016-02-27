@@ -14,7 +14,6 @@ import com.baasbox.android.BaasUser;
 
 import java.util.List;
 
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -74,7 +73,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 return false;
 
             }catch (com.baasbox.android.BaasException ex) {
-                Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                Log.e("CLASS", "Deal with error n " + BaaSGeeftHistoryArrayTask.class + " " + ex.getMessage());
                 Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                 mResultToken = RESULT_FAILED;
                 return false;
@@ -123,7 +122,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 }catch (BaasInvalidSessionException ise){
                     mResultToken = RESULT_SESSION_EXPIRED;
                 }catch (com.baasbox.android.BaasException ex) {
-                    Log.e("CLASS2", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Log.e("CLASS2", "Deal with error n " + BaaSGeeftHistoryArrayTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                     mResultToken = RESULT_FAILED;
                 }

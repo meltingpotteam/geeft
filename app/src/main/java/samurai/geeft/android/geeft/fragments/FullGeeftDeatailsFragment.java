@@ -29,7 +29,7 @@ import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -37,7 +37,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCallBackBooleanInt
-        , TaskCallbackBoolean{
+        , TaskCallbackBooleanToken{
     private final String TAG = getClass().getSimpleName();
 
     public static final String GEEFT_KEY = "geeft_key";
@@ -205,7 +205,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     @Override
-    public void done(boolean result) {
+    public void done(boolean result,int token) {
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
         }

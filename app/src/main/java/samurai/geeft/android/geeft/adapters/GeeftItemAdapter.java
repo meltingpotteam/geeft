@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -41,12 +40,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullGeeftDetailsActivity;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArray;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolder;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
@@ -96,15 +96,6 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     //-------------------
 
     //info dialog attributes---------------------
-    private TextView mProfileDialogUsername;
-    private TextView mProfileDialogUserLocation;
-    private ImageView mProfileDialogUserImage;
-    private TextView mProfileDialogUserRank;
-    private TextView mProfileDialogUserGiven;
-     * CONSTRUCTOR
-     * @param context the calling context
-     * @param geeftList the list of objects
-     */
     public GeeftItemAdapter(@NonNull Context context,@NonNull List<Geeft> geeftList) {
         inflater = LayoutInflater.from(context);
         this.mGeeftList = geeftList;
@@ -139,8 +130,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         private final int RESULT_FAILED = 0;
         private final int RESULT_SESSION_EXPIRED = -1;
         //-------------------
-         * VARIABLES
-         */
+
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
 

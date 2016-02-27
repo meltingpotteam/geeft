@@ -1,7 +1,6 @@
 package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,24 +13,23 @@ import com.baasbox.android.BaasUser;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class BaaSTabGeeftoryTask extends AsyncTask<Void,Void,Boolean> {
+public class BaaSTabGeeftoryTask extends BaaSCheckTask {
 
     private static final String TAG ="BaaSGeeftItemTask";
             Context mContext;
             List<Geeft> mGeeftList;
-            TaskCallbackBoolean mCallback;
+            TaskCallbackBooleanToken mCallback;
             StoryItemAdapter mGeeftStroryAdapter;
             boolean result;
     
     public BaaSTabGeeftoryTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
-                               TaskCallbackBoolean callback) {
+                               TaskCallbackBooleanToken callback) {
             mContext = context;
             mGeeftList = feedItems;
             mCallback = callback;
@@ -74,7 +72,7 @@ public class BaaSTabGeeftoryTask extends AsyncTask<Void,Void,Boolean> {
                     return false;
 
                 } catch (com.baasbox.android.BaasException ex) {
-                    Log.e("CLASS", "Deal with error n " + BaaSFeedImageTask.class + " " + ex.getMessage());
+                    Log.e("CLASS", "Deal with error n " + BaaSTabGeeftoryTask.class + " " + ex.getMessage());
                     Toast.makeText(mContext, "Exception during loading!", Toast.LENGTH_LONG).show();
                     mResultToken = RESULT_FAILED;
                     return false;

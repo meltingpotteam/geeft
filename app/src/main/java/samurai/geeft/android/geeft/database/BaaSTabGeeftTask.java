@@ -1,7 +1,6 @@
 package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -27,7 +25,12 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Task for populating GeeftItem cards
  * Update by danybr-dev on 17/01/16
  */
-public class BaaSTabGeeftTask extends AsyncTask<Void,Void,Boolean> {
+public class BaaSTabGeeftTask extends BaaSCheckTask{
+
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
 
     private static final String TAG ="BaaSGeeftItemTask";
     Context mContext;
@@ -37,7 +40,7 @@ public class BaaSTabGeeftTask extends AsyncTask<Void,Void,Boolean> {
     boolean result;
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            TaskCallbackBoolean callback) {
+                            TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
