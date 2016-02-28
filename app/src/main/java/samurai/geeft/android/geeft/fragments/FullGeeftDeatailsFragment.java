@@ -1,8 +1,10 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
+import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,20 +32,23 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
+import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
+import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCallBackBooleanInt
         , TaskCallbackBooleanToken{
-    private final String TAG = getClass().getSimpleName();
 
+    private final String TAG = getClass().getSimpleName();
     public static final String GEEFT_KEY = "geeft_key";
     private Geeft mGeeft;
     private Toolbar mToolbar;
@@ -54,6 +62,16 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private List<Geeft> mGeeftList = new ArrayList<>();
     private ProgressDialog mProgressDialog;
 
+    private TextView mProfileDialogUsername;
+    private TextView mProfileDialogUserLocation;
+    private ImageView mProfileDialogUserImage;
+    private TextView mProfileDialogUserRank;
+    private TextView mProfileDialogUserGiven;
+    private TextView mProfileDialogUserReceived;
+    private ImageButton mProfileDialogFbButton;
+    private ParallaxImageView mProfileDialogBackground;
+    private LayoutInflater inflater;
+
     public static FullGeeftDeatailsFragment newInstance(Bundle b) {
         FullGeeftDeatailsFragment fragment = new FullGeeftDeatailsFragment();
         fragment.setArguments(b);
@@ -66,6 +84,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         setHasOptionsMenu(true);
         if (savedInstanceState==null)
             mGeeft = (Geeft)getArguments().getSerializable(GEEFT_KEY);
+        inflater = LayoutInflater.from(getContext()); //prova
     }
 
 
@@ -174,6 +193,14 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
 
+            mGeefterNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { //TODO: Replace with clickableArea
+
+                    initGeefterDialog(mGeeft);
+
+                }
+            });
             mStoryView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,6 +235,81 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(mGeeft.getGeeftTitle());
+    }
+
+    private void initGeefterDialog(final Geeft geeft){
+        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(getContext()); //Read Update
+        View dialogLayout = inflater.inflate(R.layout.profile_dialog, null);
+        alertDialog.setView(dialogLayout);
+        //On click, the user visualize can visualize some infos about the geefter
+        android.app.AlertDialog dialog = alertDialog.create();
+
+        //profile dialog fields-----------------------
+        mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
+        mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
+        mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+
+        mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
+        mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
+        mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
+        mProfileDialogFbButton = (ImageButton) dialogLayout.findViewById(R.id.dialog_geefter_facebook_button);
+
+        //--------------------------------------------
+        mProfileDialogUsername
+                .setText(geeft
+                        .getUsername());
+        mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
+                (R.id.dialog_geefter_background);
+        //--------------------------------------------
+        mProfileDialogUsername
+                .setText(geeft
+                        .getUsername());
+        mProfileDialogUserLocation.setText(geeft.getUserLocation());
+        Picasso.with(getContext()).load(geeft.getUserProfilePic()).fit()
+                .centerInside()
+                .into(mProfileDialogUserImage);
+
+        //Show Facebook profile of geefter------------------------
+        if(geeft.isAllowCommunication()){
+            mProfileDialogFbButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent facebookIntent = getOpenFacebookProfileIntent(getContext(),geeft.getUserFbId());
+                    getContext().startActivity(facebookIntent);
+                }
+            });
+        }
+        else{
+            mProfileDialogFbButton.setVisibility(View.GONE);
+        }
+
+        //Parallax background -------------------------------------
+        mProfileDialogBackground.setTiltSensitivity(5);
+        mProfileDialogBackground.registerSensorManager();
+        mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse(TagsValue.WEBSITE_URL);
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                getContext().startActivity(launchBrowser);
+            }
+        });
+        //new BaaSGetGeefterInformation(getContext(),FullGeeftDeatailsFragment.this).execute();
+
+        //-------------------------
+        BaasUser currentUser = BaasUser.current();
+        double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+        long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
+        long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
+
+        mProfileDialogUserRank.setText(""+feedback);
+        mProfileDialogUserGiven.setText(""+given);
+        mProfileDialogUserReceived.setText(""+received);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
+        dialog.show();  //<-- See This!
+
     }
 
     @Override
@@ -246,7 +348,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             }
         }
         else{
-            Toast.makeText(getContext(),"C'è stato un errore nella segnalazione", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "C'è stato un errore nella segnalazione", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -264,5 +366,25 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 " \n" + "E' presente un Geeft non conforme al regolamento. " + "\n"
                 + "ID: " + docId);
         getContext().startActivity(Intent.createChooser(emailIntent, "Invia mail..."));
+    }
+
+    public Intent getOpenFacebookProfileIntent(Context context,String userFacebookId) { // THIS
+        // create a intent to user's facebook profile
+        try {
+            int versionCode = context.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            Log.d(TAG,"UserFacebookId is: " + userFacebookId);
+            if(versionCode >= 3002850) {
+                Uri uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/" + userFacebookId);
+                return  new Intent(Intent.ACTION_VIEW, uri);
+            }
+            else {
+                Uri uri = Uri.parse("fb://page/" + userFacebookId);
+                return  new Intent(Intent.ACTION_VIEW, uri);
+
+            }
+        } catch (Exception e) {
+            Log.d(TAG,"profileDialogFbButton i'm in catch!!");
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
+        }
     }
 }
