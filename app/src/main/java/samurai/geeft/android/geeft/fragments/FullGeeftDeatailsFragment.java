@@ -182,7 +182,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
 
             double rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
-            mGeefterRank.setRating((float)rank);
+            mGeefterRank.setRating((long)rank);
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
