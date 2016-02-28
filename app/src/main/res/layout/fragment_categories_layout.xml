@@ -52,7 +52,9 @@
                         android:id="@+id/categoy_cloth"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:layout_gravity="center_horizontal"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/cloth_accesories_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_cloth_id"
@@ -81,7 +83,9 @@
                         android:id="@+id/categoy_house"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:layout_gravity="center_horizontal"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/house_garden_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_house_id"
@@ -110,7 +114,9 @@
                         android:id="@+id/categoy_electronics"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:layout_gravity="center_horizontal"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/electronics_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_electronics_id"
@@ -139,7 +145,7 @@
                         android:id="@+id/categoy_media"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/films_books_music_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_media_id"
@@ -168,7 +174,7 @@
                         android:id="@+id/categoy_kids"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/child_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_kids_id"
@@ -197,7 +203,7 @@
                         android:id="@+id/categoy_sports"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/sports_free_time_games_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_sports_id"
@@ -226,7 +232,7 @@
                         android:id="@+id/categoy_motor"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/car_motorized_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_motor_id"
@@ -255,7 +261,7 @@
                         android:id="@+id/categoy_services"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/services_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_services_id"
@@ -284,7 +290,7 @@
                         android:id="@+id/categoy_other"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/geeft_background_blur"
+                        android:src="@drawable/other_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
                         android:id="@+id/categoy_other_id"
