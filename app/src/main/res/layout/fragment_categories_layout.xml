@@ -55,10 +55,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_cloth_text"
+                        android:id="@+id/categoy_cloth_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 1"
+                        android:text="@string/categories_cloth_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -84,10 +84,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_house_text"
+                        android:id="@+id/categoy_house_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 2"
+                        android:text="@string/categories_house_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -113,10 +113,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_electronics_text"
+                        android:id="@+id/categoy_electronics_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 3"
+                        android:text="@string/categories_electronics_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -142,10 +142,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_media_text"
+                        android:id="@+id/categoy_media_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 4"
+                        android:text="@string/categories_media_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -171,10 +171,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_kids_text"
+                        android:id="@+id/categoy_kids_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 5"
+                        android:text="@string/categories_kids_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -200,10 +200,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_sports_text"
+                        android:id="@+id/categoy_sports_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 6"
+                        android:text="@string/categories_sports_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -229,10 +229,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_motor_text"
+                        android:id="@+id/categoy_motor_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 7"
+                        android:text="@string/categories_motor_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -258,10 +258,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_services_text"
+                        android:id="@+id/categoy_services_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 8"
+                        android:text="@string/categories_services_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -287,10 +287,10 @@
                         android:src="@drawable/geeft_background_blur"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_other_text"
+                        android:id="@+id/categoy_other_id"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Category 9"
+                        android:text="@string/categories_other_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>

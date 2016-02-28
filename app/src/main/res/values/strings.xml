@@ -223,6 +223,17 @@
         <item>Altro</item>
     </string-array>
 
+    <!-- Strings for the Categories Screen-->
+    <string name="categories_cloth_text">Abbigliamento e accessori</string>
+    <string name="categories_house_text">Casa e giardino</string>
+    <string name="categories_electronics_text">Elettronica</string>
+    <string name="categories_media_text">Film, Libri e Musica</string>
+    <string name="categories_kids_text">Infanzia e Bambini</string>
+    <string name="categories_sports_text">Sport, Tempo Libero e Giochi</string>
+    <string name="categories_motor_text">Auto e Motori</string>
+    <string name="categories_services_text">Servizi</string>
+    <string name="categories_other_text">Altro</string>
+
     <!-- Strings related to fragment_add_geeft_fields -->
     <string name="allow_communication_string">Posso essere contattato</string>
     <string name="automatic_selection_text">Selezione automatica del Geefted</string>
