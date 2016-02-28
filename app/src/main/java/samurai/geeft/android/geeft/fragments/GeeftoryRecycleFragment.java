@@ -27,6 +27,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  */
 public class GeeftoryRecycleFragment extends StatedFragment
         implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
+
     private final String TAG = getClass().getSimpleName().toUpperCase();
     private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "GeeftoryRecycleFragment_geeftListState";

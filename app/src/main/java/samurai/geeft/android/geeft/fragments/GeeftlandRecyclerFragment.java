@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftlandAdapter;
-import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
+import samurai.geeft.android.geeft.database.BaaSGeeftlandGeeftTask;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -36,14 +38,19 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  * Created by gabriel-dev on 09/02/16.
  */
 
-public class GeeftlandRecyclerFragment extends StatedFragment {
+public class GeeftlandRecyclerFragment extends StatedFragment
+        implements  SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean{
+
+    private String TAG = "GeeftlandRecyclerFragment";
     private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private GeeftlandAdapter mAdapter;
-    private OnGeeftImageSelectedListener mCallback;
+//    private OnGeeftImageSelectedListener mCallback;
     private Geeft mGeeft;
     private Parcelable mGeeftlandState;
     private Toolbar mToolbar;
+    private SwipeRefreshLayout mRefreshLayout;
+    private View mBallView;
 
     private static final String GEEFTLAND_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
             "GeeftlandRecyclerFragment_geeftListState";
@@ -70,7 +77,7 @@ public class GeeftlandRecyclerFragment extends StatedFragment {
         mProgress.setIndeterminate(true);
         mProgress.setMessage("Attendere");
         //TODO: sobstitute with correct baas task, ask to UNO or Danibr
-        //new BaaSReceivedDonatedGeeftTask(getContext(), getArguments().getString("link_name"), mGeeftList, mAdapter, this).execute();
+        new BaaSGeeftlandGeeftTask(getContext(), mGeeftList, mAdapter, this).execute();
     }
 
     @Override
@@ -92,37 +99,45 @@ public class GeeftlandRecyclerFragment extends StatedFragment {
         mRecyclerView.setNestedScrollingEnabled(true);
 //        mRecyclerView.setHasFixedSize(true);
 
-
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
+        mRefreshLayout.setOnRefreshListener(this);
+        mBallView = rootView.findViewById(R.id.loading_balls);
         mAdapter = new GeeftlandAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
-                , mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
-                //TODO complete the fragment to start
-                mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-                mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
-            }
-        }));
+//        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
+//                , mRecyclerView, new ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+//                //TODO complete the fragment to start
+//                mGeeft = mGeeftList.get(position);
+//                mCallback.onImageSelected(mGeeft.getId());
+//                mCallback.onImageSelected(mGeeft);
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                //TODO what happens on long press
+//                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+//                mGeeft = mGeeftList.get(position);
+//                mCallback.onImageSelected(mGeeft.getId());
+//                mCallback.onImageSelected(mGeeft);
+//            }
+//        }));
         return rootView;
     }
 
-    public interface OnGeeftImageSelectedListener {
-        void onImageSelected(String id);
-        void onImageSelected(Geeft geeft);
+//    public interface OnGeeftImageSelectedListener {
+//        void onImageSelected(String id);
+//        void onImageSelected(Geeft geeft);
+//    }
+
+    @Override
+    public void onRefresh() {
+        Log.d(TAG,"onRefresh()");
+        new BaaSGeeftlandGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
     @Override
@@ -139,10 +154,24 @@ public class GeeftlandRecyclerFragment extends StatedFragment {
     }
 
     public void done(boolean result){
-        Toast toast;
-        Log.d("DONE", "in done");
+        Log.d(TAG, "done()");
         mProgress.dismiss();
+        mBallView.setVisibility(View.GONE);
+        if(mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+            Toast toast;
+            if (result) {
 
+                toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            } else {
+                toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     public GeeftlandRecyclerFragment getInstance(){
@@ -174,7 +203,7 @@ public class GeeftlandRecyclerFragment extends StatedFragment {
             if (array != null) {
                 mGeeftList.addAll(array);
             }
-            mGeeftListShowDialog();
+//            mGeeftListShowDialog();
         }
     }
 
@@ -191,24 +220,24 @@ public class GeeftlandRecyclerFragment extends StatedFragment {
     }
 
 
-    /**
-     * Show dialog saying no received geeft aviable if necessary
-     */
-    private boolean mGeeftListShowDialog() {
-        if (mGeeftList.size() == 0) {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Errore")
-                    .setMessage("Nessun oggetto ricevuto disponibile")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    })
-                    .show();
-            Log.d("DONE", "in done ==0");
-            return true;
-        }
-        return false;
-    }
+//    /**
+//     * Show dialog saying no received geeft aviable if necessary
+//     */
+//    private boolean mGeeftListShowDialog() {
+//        if (mGeeftList.size() == 0) {
+//            new AlertDialog.Builder(getContext())
+//                    .setTitle("Errore")
+//                    .setMessage("Nessun oggetto ricevuto disponibile")
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            getActivity().getSupportFragmentManager().popBackStack();
+//                        }
+//                    })
+//                    .show();
+//            Log.d("DONE", "in done ==0");
+//            return true;
+//        }
+//        return false;
+//    }
 }

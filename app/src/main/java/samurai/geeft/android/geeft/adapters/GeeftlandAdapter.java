@@ -3,10 +3,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -15,15 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +34,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by gabriel-dev on 25/02/16.
  */
-public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.ViewHolder> {
+public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.ViewHolder>      {
 
     private final LayoutInflater inflater;
     private final static String TAG ="GeeftlandAdapter";
@@ -62,7 +62,7 @@ public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.View
 
         public ImageView mGeeftlandGeeftImage;
 
-        public CardView mContainer;
+        public FrameLayout mContainer;
 
         public Geeft mGeeft;
 
@@ -72,7 +72,7 @@ public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mContainer = (CardView) itemView.findViewById(R.id.card_view);
+            mContainer = (FrameLayout) itemView.findViewById(R.id.container_view);
             mGeeftlandGeeftName = (TextView) itemView.findViewById(R.id.geeftland_geeft_name);
             mGeeftlandGeeftImage = (ImageView) itemView.findViewById(R.id.geeftland_geeft_image);
 
@@ -103,9 +103,18 @@ public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.View
         holder.mGeeftlandGeeftName.setText(item.getGeeftTitle());
         Picasso.with(mContext).load(item.getGeeftImage()).fit()
                 .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftlandGeeftImage);
-        Log.d("IMAGE", item.getUserProfilePic());
+//        Log.d("IMAGE", item.getUserProfilePic());
 
-        setAnimation(holder.mContainer);
+        holder.mGeeftlandGeeftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "Apre immagine allargata", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //--------------------------------------------------------------
+
+
+//        setAnimation(holder.mContainer);
     }
 
     @Override
@@ -116,15 +125,25 @@ public class GeeftlandAdapter extends RecyclerView.Adapter<GeeftlandAdapter.View
     /**
      * Here is the key method to apply the animation
      */
-    private void setAnimation(View viewToAnimate)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if ((mGeeftList.size()-lastSize)>0)
-        {
-            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-            animation.setDuration(350);
-            viewToAnimate.startAnimation(animation);
-            lastSize++;
+//    private void setAnimation(View viewToAnimate)
+//    {
+//        // If the bound view wasn't previously displayed on screen, it's animated
+//        if ((mGeeftList.size()-lastSize)>0)
+//        {
+//            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+//            animation.setDuration(350);
+//            viewToAnimate.startAnimation(animation);
+//            lastSize++;
+//        }
+//    }
+
+    public void done(boolean result){
+        // userInformation order is : Feedback,Given,Received
+        if(result){
+            Log.e(TAG,"CORRETTOOOOO!");
+        }
+        else{
+            Log.e(TAG,"ERROREEEEE!");
         }
     }
 

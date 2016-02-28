@@ -41,7 +41,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         else
         {
             //REMOVE WHEN IMPLEMENT CORRECTLY THE FRAGMENT GEEFTLAND
-            return GeeftoryRecycleFragment.newInstance(new Bundle());
+            return GeeftlandRecyclerFragment.newInstance(new Bundle());
         }
 
 
