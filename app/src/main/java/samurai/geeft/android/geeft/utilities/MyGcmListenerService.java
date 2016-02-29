@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -79,9 +78,6 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-
-        Vibrator v = (Vibrator) this.getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-
         Intent intent = AssignedActivity
                 .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -90,7 +86,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Vibrate for 500 milliseconds
-        v.vibrate(500);
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.gift)
                 .setColor(getResources().getColor(R.color.colorPrimary))
