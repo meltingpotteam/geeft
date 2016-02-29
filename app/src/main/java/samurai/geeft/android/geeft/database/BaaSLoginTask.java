@@ -105,7 +105,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                     BaasResult<BaasUser> userBaasResult = BaasUser.current().refreshSync();
                     if (userBaasResult.isSuccess()){
                         Log.d(TAG,"Successo");
-                        Log.d(TAG,BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("prova"));
                     }else{
                         Log.d(TAG,"Fallito");
                         return false;
