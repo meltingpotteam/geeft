@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 import java.io.Serializable;
 
-import samurai.geeft.android.geeft.database.BaaSBackgroundNewAssignment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanGeeft;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -31,11 +30,18 @@ public class InitialActivity extends Activity implements TaskCallbackBooleanGeef
         catch(BaasInvalidSessionException exception){
 
         }*/
-        if (BaasUser.current() != null) {
-            //new BaaSBackgroundNewAssignment(getApplicationContext(),this).execute(); TODO:Replace with
-            //a push notifications service
-            startMainActivity();
-        } else {
+        if(BaasUser.current()!=null){
+             BaasUser.current().refresh(new BaasHandler<BaasUser>() {
+                @Override
+                public void handle(BaasResult<BaasUser> baasResult) {
+                    if (baasResult.isSuccess()){
+                        startMainActivity();
+                    }else if(baasResult.isFailed()){
+                        startLoginActivity();
+                    }
+                }
+            });
+        }else{
             startLoginActivity();
         }
         finish();

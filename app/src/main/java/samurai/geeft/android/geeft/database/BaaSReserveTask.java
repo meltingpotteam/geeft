@@ -56,6 +56,9 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                 }*/
         //-----------------------
         BaasUser currentUser = BaasUser.current();
+        if (mDocUserId==null){
+            return false;
+        }
 
         BaasResult<BaasDocument> resDoc = BaasDocument.fetchSync("linkable_users", mDocUserId);
         if (resDoc.isSuccess()) { //fetch DocUser linked to USER (we have not the possibility

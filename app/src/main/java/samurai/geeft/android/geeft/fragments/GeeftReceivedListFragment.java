@@ -27,7 +27,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
-import samurai.geeft.android.geeft.database.BaaSReceivedDonatedGeeftTask;
+import samurai.geeft.android.geeft.database.BaaSFetchLinks;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -124,6 +124,8 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
             mProgressDialog.dismiss();
 
         if (result) {
+            if(mGeeftList!=null)
+            Log.d("GeeftReceivedList",mGeeftList.size()+"");
             if (mGeeftList==null || mGeeftList.size()==0) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Oops")
@@ -235,7 +237,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
 
     public void getData() {
         showProgressDialog();
-        new BaaSReceivedDonatedGeeftTask(getContext(),
+        new BaaSFetchLinks(getContext(),
                 linkName, mGeeftList, mAdapter, this).execute();
     }
 

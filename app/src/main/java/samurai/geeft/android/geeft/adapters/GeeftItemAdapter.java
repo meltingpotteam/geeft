@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.adapters;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -253,7 +254,12 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
 //              mProgress = ProgressDialog.show(mContext, "Attendere...",
 //                    "Prenotazione in corso", true);
+
                 String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                if(docUserId==null){
+                    startLoginActivity();
+                    ((Activity)mContext).finish();
+                }
                 Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + item.getId());
                 item.setIsSelected(!item.isSelected());
                 new BaaSReserveTask(mContext, docUserId, item, holder, GeeftItemAdapter.this).execute();
@@ -553,5 +559,9 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         //                dialog.setMessage("Some information that we can take from the facebook shared one");
         dialog.show();  //<-- See This!
         //
+    }
+
+    private void startLoginActivity() {
+        mContext.startActivity(new Intent(mContext, LoginActivity.class));
     }
 }

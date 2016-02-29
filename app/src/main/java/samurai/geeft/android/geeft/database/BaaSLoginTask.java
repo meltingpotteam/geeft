@@ -89,7 +89,9 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
             //Bypassed google
             BaasResult<BaasUser> baasResult = BaasUser
                     .signupWithProviderSync(mBaasProvider, mToken, mSecret);
-            //Log.d("LOG", BaasUser.current().toString());
+            Log.d(TAG, BaasUser.current().toString());
+            Log.d(TAG, baasResult.value().toString());
+
 
             /**
              * In case of success it returns true if not it shows Toast text
@@ -99,6 +101,15 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id"));
                 BaasUser user = BaasUser.current();
                 if (user != null) {
+                    Log.d(TAG, user.toString());
+                    BaasResult<BaasUser> userBaasResult = BaasUser.current().refreshSync();
+                    if (userBaasResult.isSuccess()){
+                        Log.d(TAG,"Successo");
+                        Log.d(TAG,BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("prova"));
+                    }else{
+                        Log.d(TAG,"Fallito");
+                        return false;
+                    }
                     String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                     if (UserDocId == null) {
                         BaasDocument doc = new BaasDocument("linkable_users");
@@ -138,6 +149,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                     }
                 }else{ // if user is null
                     Log.e(TAG,"Error,user is NULL!");
+                    return false;
                 }
             }
 

@@ -31,6 +31,7 @@ import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,7 +199,8 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent2);
                 break;
             case 3:
-                Intent intent3 = new Intent(getContext(), AssignedActivity.class);
+                Intent intent3 = AssignedActivity
+                        .newIntent(getContext(), TagsValue.LINK_NAME_ASSIGNED, false);
                 startActivity(intent3);
                 break;
             case 4:
