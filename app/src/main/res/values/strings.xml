@@ -47,6 +47,7 @@
     <string name="account_title">Profilo</string>
     <string name="gift_title">Regalati</string>
     <string name="recycle_title">Ricevuti</string>
+    <string name="categories_title">Categorie</string>
     <string name="settings_title">Impostazioni</string>
     <string name="mail_title">Contattaci</string>
     <string name="account_description">Visualizza il tuo profilo</string>
@@ -54,6 +55,7 @@
     <string name="settings_description">Modifica le tue impostazioni</string>
     <string name="mail_description">Contattaci per qualsiasi cosa</string>
     <string name="recycle_description">Visualizza oggetti ricevuti</string>
+    <string name="categories_description">Cerca Geeft per categoria</string>
 
 
     <string name="add_gift_name_hint" translatable="true">Scrivi il nome del tuo Geeft</string>

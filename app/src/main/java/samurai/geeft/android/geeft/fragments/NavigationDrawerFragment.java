@@ -22,6 +22,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
+import samurai.geeft.android.geeft.activities.CategoriesActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.ReservedActivity;
@@ -206,12 +207,16 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent4);
                 break;
             case 5:
-                Intent intent5 = new Intent(getContext(), SettingsActivity.class);
+                Intent intent5 = new Intent(getContext(), CategoriesActivity.class);
                 startActivity(intent5);
                 break;
             case 6:
-                Intent intent6 = new Intent(getContext(), SendReportActivity.class);
+                Intent intent6 = new Intent(getContext(), SettingsActivity.class);
                 startActivity(intent6);
+                break;
+            case 7:
+                Intent intent7 = new Intent(getContext(), SendReportActivity.class);
+                startActivity(intent7);
                 break;
             default:
                 Toast.makeText(getActivity(), "Azione non supportata",
