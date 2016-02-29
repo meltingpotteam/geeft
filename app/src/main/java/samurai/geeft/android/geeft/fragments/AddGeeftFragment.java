@@ -39,6 +39,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -170,7 +171,12 @@ public class AddGeeftFragment extends StatedFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg");
+                File folder = new File(GEEFT_FOLDER);
+                boolean success = true;
+                if (!folder.exists()) {
+                    success = folder.mkdir();
+                }
+                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"+new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date())+".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
@@ -392,7 +398,7 @@ public class AddGeeftFragment extends StatedFragment {
     public long getDeadlineTimestamp(int deltaExptime){ // I know,there is a delay between creation and upload time of document,
         //so we have a not matching timestamp (deadline and REAL deadline
         // calculated like creation data + exptime in days)
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         Calendar c = Calendar.getInstance();
         c.setTime(new Date()); // Now use today date.
         c.add(Calendar.DATE, deltaExptime); // Adding "expTime" days
