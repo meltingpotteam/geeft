@@ -83,7 +83,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Vibrator v = (Vibrator) this.getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         Intent intent = AssignedActivity
-                .newIntent(getApplicationContext(),TagsValue.LINK_NAME_ASSIGNED ,true);
+                .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -92,12 +92,16 @@ public class MyGcmListenerService extends GcmListenerService {
         // Vibrate for 500 milliseconds
         v.vibrate(500);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.geeft_logo)
-                .setContentTitle("ProvaPush")
+                .setSmallIcon(R.drawable.gift)
+                .setColor(getResources().getColor(R.color.colorPrimary))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(new long[] {1, 1, 1})
+                .setContentTitle("Geeft")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setLights(getResources().getColor(R.color.colorPrimary),1,1);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
