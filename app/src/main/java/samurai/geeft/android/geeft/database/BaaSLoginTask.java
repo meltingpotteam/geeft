@@ -100,7 +100,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 BaasUser user = BaasUser.current();
                 if (user != null) {
                     String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-                    if (UserDocId == null || UserDocId.equals("")) {
+                    if (UserDocId == null) {
                         BaasDocument doc = new BaasDocument("linkable_users");
                         JsonArray JSONUserLinks = new JsonArray();
                         doc.put("prenoteLinks", JSONUserLinks);
