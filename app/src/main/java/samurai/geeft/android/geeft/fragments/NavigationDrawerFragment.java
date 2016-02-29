@@ -4,6 +4,7 @@ package samurai.geeft.android.geeft.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -11,11 +12,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.baasbox.android.BaasUser;
+import com.baasbox.android.json.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +47,8 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class NavigationDrawerFragment extends Fragment {
     // SharedPreferences file name
+    private static final String TAG = "NavigationDrawer";
+
     private static final  String PREF_FILE_NAME = "samurai.geeft.android.geeft.fragment." +
             "pref_name";
     private static final String KEY_USER_LEARNED_DRAWER = "samurai.geeft.android.geeft.fragment." +
@@ -50,7 +61,10 @@ public class NavigationDrawerFragment extends Fragment {
     private View mContainerView;
     private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
     private RecyclerView mRecyclerView;
+
     private LinearLayout mWelcomeLayout;
+    private FrameLayout mProfileLayout;
+    private ImageView mProfileImage;
 
     // indicates if user is aware that the NavigationBar exists
     private boolean mUserLearnedDrawer;
@@ -118,6 +132,7 @@ public class NavigationDrawerFragment extends Fragment {
                     saveToPreferences(getActivity(),
                             KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
                     mWelcomeLayout.setVisibility(View.GONE);
+                    mProfileLayout.setVisibility(View.VISIBLE);
                 }
             }
         };
@@ -127,6 +142,7 @@ public class NavigationDrawerFragment extends Fragment {
         if (!mUserLearnedDrawer) {
             mDrawerLayout.openDrawer(mContainerView);
             mWelcomeLayout.setVisibility(View.VISIBLE);
+            mProfileLayout.setVisibility(View.GONE);
         }
 
         mDrawerLayout.post(new Runnable() {
@@ -222,11 +238,25 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    private String getProfilePicFacebook(){ // return link of user's profile picture
+        JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
+        String id = field.getObject("_social").getObject("facebook").getString("id");
+        Log.d(TAG, "FB_id"+ id);
+        return "https://graph.facebook.com/" + id + "/picture?type=large";
+    }
+
     private  void initUI(View rootView){
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
         mRecyclerView.setHasFixedSize(false);
+
         mWelcomeLayout = (LinearLayout) rootView.
                 findViewById(R.id.navigation_drawer_welcome);
+        mProfileLayout = (FrameLayout) rootView.
+                findViewById(R.id.navigation_drawer_profile);
+        mProfileImage = (ImageView) rootView.findViewById(R.id.navigation_drawer_geefter_profile_image);
+
+
+
         // Set adapter data
         mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
 
