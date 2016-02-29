@@ -307,7 +307,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         //-------------------------- ShareButton implementation
         final String title = item.getGeeftTitle();
         final Uri app_url = Uri.parse(WEBSITE_URL);
-        final Uri imageUrl = holder.mGeeftImageUri;
+        final Uri imageUrl = Uri.parse(item.getGeeftImage());
 
         holder.mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
