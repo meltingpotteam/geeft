@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+                  android:layout_height="wrap_content">
         <android.support.design.widget.AppBarLayout
             android:id="@+id/fragment_appbar_layout"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/GridLayout1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
             android:rowCount="5"
@@ -38,29 +38,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_1"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_cloth"
+                    <ImageView
+                        android:id="@+id/category_cloth"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_gravity="center_horizontal"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/cloth_accesories_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_cloth_id"
+                        android:id="@+id/category_cloth_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_cloth_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -70,29 +66,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_2"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_house"
+                    <ImageView
+                        android:id="@+id/category_house"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_gravity="center_horizontal"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/house_garden_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_house_id"
+                        android:id="@+id/category_house_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_house_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -102,40 +94,37 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_3"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_electronics"
+                    <ImageView
+                        android:id="@+id/category_electronics"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_gravity="center_horizontal"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/electronics_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_electronics_id"
+                        android:id="@+id/category_electronics_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_electronics_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <android.support.v7.widget.CardView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_4"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
@@ -145,16 +134,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_media"
+                    <ImageView
+                        android:id="@+id/category_films"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/films_books_music_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_media_id"
+                        android:id="@+id/category_films_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_media_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -164,27 +152,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_5"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_kids"
+                    <ImageView
+                        android:id="@+id/category_kids"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/child_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_kids_id"
+                        android:id="@+id/category_kids_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_kids_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -194,27 +180,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_6"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_sports"
+                    <ImageView
+                        android:id="@+id/category_sports"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/sports_free_time_games_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_sports_id"
+                        android:id="@+id/category_sports_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_sports_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -225,26 +209,25 @@
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_7"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_motor"
+                    <ImageView
+                        android:id="@+id/category_motor"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/car_motorized_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_motor_id"
+                        android:id="@+id/category_motor_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_motor_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -254,27 +237,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_8"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_services"
+                    <ImageView
+                        android:id="@+id/category_services"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/services_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_services_id"
+                        android:id="@+id/category_services_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_services_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
@@ -284,27 +265,25 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/category_9"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 card:cardCornerRadius="2dp"
                 card:cardElevation="7dp"
                 >
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.nvanbenschoten.motion.ParallaxImageView
-                        android:id="@+id/categoy_other"
+                    <ImageView
+                        android:id="@+id/category_other"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/other_lq"
                         android:background="@color/colorPrimaryDark"/>
                     <TextView
-                        android:id="@+id/categoy_other_id"
+                        android:id="@+id/category_other_id"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="@string/categories_other_text"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"/>
