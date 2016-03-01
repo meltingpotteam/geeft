@@ -32,9 +32,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
-import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
-import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -181,7 +179,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
 
-            double rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
+            long rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
             mGeefterRank.setRating((long)rank);
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {

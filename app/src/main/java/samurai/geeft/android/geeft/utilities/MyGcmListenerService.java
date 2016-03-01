@@ -28,12 +28,17 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
 
 public class MyGcmListenerService extends GcmListenerService {
 
     private final String TAG = getClass().getSimpleName();
+    private int key;
+    private String doc_id;
     /**
      * Called when message is received.
      *
@@ -45,9 +50,14 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
-        Log.d(TAG,data.toString());
+        String custom = data.getString("custom");
+        Log.d(TAG, custom);
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
+
+        /**
+         * "custom": [num ,"doc_id"]
+         */
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
@@ -67,9 +77,11 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
+        parseCostum(custom, key, doc_id);
         sendNotification(message);
         // [END_EXCLUDE]
     }
+
     // [END receive_message]
 
     /**
@@ -97,11 +109,24 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
-                .setLights(getResources().getColor(R.color.colorPrimary),1,1);
+                .setLights(getResources().getColor(R.color.colorPrimary),2000,2000);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void parseCostum(String custom, int num, String doc_id) {
+        try {
+            JSONObject obj = new JSONObject(custom);
+            JSONArray array = obj.getJSONArray("custom");
+            key = array.getInt(0);
+            doc_id = array.getString(1);
+            Log.d(TAG, "key: "+key);
+            Log.d(TAG, "doc_id: "+doc_id);
+        } catch (org.json.JSONException t) {
+            Log.e(TAG, "Could not parse malformed JSON: \"" + custom + "\"");
+        }
     }
 }
