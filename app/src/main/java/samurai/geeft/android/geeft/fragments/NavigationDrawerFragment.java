@@ -24,11 +24,13 @@ import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
@@ -64,6 +66,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     private LinearLayout mWelcomeLayout;
     private FrameLayout mProfileLayout;
+//    private ImageView mProfileImage;
     private ImageView mProfileImage;
 
     // indicates if user is aware that the NavigationBar exists
@@ -92,6 +95,14 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
+        mRecyclerView.setHasFixedSize(false);
+
+        mWelcomeLayout = (LinearLayout) rootView.
+                findViewById(R.id.navigation_drawer_welcome);
+        mProfileLayout = (FrameLayout) rootView.
+                findViewById(R.id.navigation_drawer_profile);
 
         //initialize UI
         initUI(rootView);
@@ -246,15 +257,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private  void initUI(View rootView){
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
-        mRecyclerView.setHasFixedSize(false);
-
-        mWelcomeLayout = (LinearLayout) rootView.
-                findViewById(R.id.navigation_drawer_welcome);
-        mProfileLayout = (FrameLayout) rootView.
-                findViewById(R.id.navigation_drawer_profile);
-        mProfileImage = (ImageView) rootView.findViewById(R.id.navigation_drawer_geefter_profile_image);
-
 
 
         // Set adapter data
@@ -263,6 +265,13 @@ public class NavigationDrawerFragment extends Fragment {
         //set manager and adapter dor recycleview
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
+
+
+        mProfileImage = (ImageView) rootView.findViewById(R.id.navigation_drawer_geefter_profile_image);
+
+        Picasso.with(getContext()).load(getProfilePicFacebook()).fit()
+                .centerCrop().into(mProfileImage);
+
 
         //handle touch event of recycleview
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
