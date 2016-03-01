@@ -41,9 +41,4 @@ public class TagsValue {
    public static final String ASSETS_KIDS = "http://geeft1.cloudapp.net:9000/asset/child_lq?X-BAASBOX-APPCODE="+APPCODE;
    public static final String ASSETS_FILMS = "http://geeft1.cloudapp.net:9000/asset/films_books_music_lq?X-BAASBOX-APPCODE="+APPCODE;
 
-   public static final String ROLE_MODERATOR = "moderator";
-
-   public static final String ROLE_SUPERMODERATOR = "supermoderator";
-
-
 }
