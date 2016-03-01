@@ -25,6 +25,7 @@ public class FeedbackPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.fragment_feedback_page);
 
         mToolbar = (Toolbar) findViewById(R.id.feedback_page_toolbar);

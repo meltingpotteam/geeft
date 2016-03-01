@@ -30,4 +30,20 @@ public class TagsValue {
 
    public static final String ROLE_SUPERMODERATOR = "supermoderator";
 
+//   --Images for categories screen
+   public static final String ASSETS_CARS = "http://geeft1.cloudapp.net:9000/asset/car_motorized_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_CLOTH = "http://geeft1.cloudapp.net:9000/asset/cloth_accessories_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_HOUSE = "http://geeft1.cloudapp.net:9000/asset/house_garden_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_ELECTRONICS = "http://geeft1.cloudapp.net:9000/asset/electronics_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_SPORTS = "http://geeft1.cloudapp.net:9000/asset/sports_free_time_games_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_OTHER = "http://geeft1.cloudapp.net:9000/asset/other_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_SERVICES = "http://geeft1.cloudapp.net:9000/asset/services_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_KIDS = "http://geeft1.cloudapp.net:9000/asset/child_lq?X-BAASBOX-APPCODE="+APPCODE;
+   public static final String ASSETS_FILMS = "http://geeft1.cloudapp.net:9000/asset/films_books_music_lq?X-BAASBOX-APPCODE="+APPCODE;
+
+   public static final String ROLE_MODERATOR = "moderator";
+
+   public static final String ROLE_SUPERMODERATOR = "supermoderator";
+
+
 }
