@@ -20,6 +20,7 @@ import java.util.Date;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 31/01/16.
@@ -84,7 +85,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             BaasResult<BaasFile> resImage = image.uploadSync(mGeeft.getStreamImage());
             if (resImage.isSuccess()) {
                 Log.d(TAG, "Image uploaded");
-                BaasResult<Void> resGrant = image.grantAllSync(Grant.READ, Role.REGISTERED);
+                BaasResult<Void> resGrant = image.grantAllSync(Grant.READ, Role.ANONYMOUS);
                 if (resGrant.isSuccess()) {
                     Log.d(TAG, "Granted");
                     doc.put("image", getImageUrl(image));// Now imageUrl is cutted,append in
@@ -94,17 +95,24 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     if (resDoc.isSuccess()) {
                         mGeeft.setId(doc.getId());
                         Log.d(TAG, "Doc saved with success");
-                        BaasResult<Void> resDocGrant = doc.grantAllSync(Grant.READ, Role.REGISTERED);
-                        if (resDocGrant.isSuccess()) {
+                        BaasResult<Void> resDocGrantRead = doc.grantAllSync(Grant.READ, Role.REGISTERED);
+                        if (resDocGrantRead.isSuccess()) {
                             Log.d(TAG, "Doc granted with success");
-                            if(mOldGeeftId != null) {
-                                Log.d(TAG,"OLD GEEFT ID: "+mOldGeeftId);
-                                BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story",mGeeft.getId()
-                                        , mOldGeeftId);
+                            BaasResult<Void> resDocGrantDel = doc.grantAllSync(Grant.DELETE, TagsValue.ROLE_MODERATOR);
+                            if(resDocGrantDel.isSuccess()) {
+                                if (mOldGeeftId != null) {
+                                    Log.d(TAG, "OLD GEEFT ID: " + mOldGeeftId);
+                                    BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story", mGeeft.getId()
+                                            , mOldGeeftId);
+                                }
+                                return createDonatedLink(docUserId);
                             }
-                            return createDonatedLink(docUserId);
+                            else{
+                                Log.e(TAG,"Error with grant DELETE to MODERATOR");
+                                return false;
+                            }
                         } else {
-                            Log.e(TAG, "Error with grant of doc");
+                            Log.e(TAG, "Error with grant READ to REGISTERED");
                             return false;
                         }
                     } else {
@@ -112,7 +120,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                         return false;
                     }
                 } else {
-                    Log.e(TAG, "Fatal error grant");
+                    Log.e(TAG, "Error with grant ANONYMOUS to images");
                     return false;
                 }
             } else {

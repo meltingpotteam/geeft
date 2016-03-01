@@ -26,4 +26,8 @@ public class TagsValue {
 
    public static final String LINK_NAME_RESERVE = "reserve";
 
+   public static final String ROLE_MODERATOR = "moderator";
+
+   public static final String ROLE_SUPERMODERATOR = "supermoderator";
+
 }
