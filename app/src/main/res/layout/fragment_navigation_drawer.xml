@@ -1,15 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/navigation_drawer_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:background="@android:color/background_light"
                 android:clickable="true"
                 tools:context="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment">
     <LinearLayout
         android:id="@+id/navigation_drawer_welcome"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:orientation="vertical"
         android:background="@color/colorPrimary"
         android:visibility="gone"
@@ -34,11 +37,39 @@
             android:textColor="@color/white"
            />
     </LinearLayout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/tools"
+        android:id="@+id/navigation_drawer_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+        android:focusable="false">
+        <!-- TODO add the "signal to the moderator" -->
+
+        <ImageView
+            android:id="@+id/navigation_drawer_geefter_background"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:elevation="20dp"
+            android:src="@drawable/geeft_background"
+            android:scaleType="centerCrop"
+            android:background="@color/colorPrimaryDark">
+
+        </ImageView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/navigation_drawer_geefter_profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            app:border_color="@color/white"
+            android:layout_gravity="start|center"
+            />
+    </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navigation_drawer_recyclerview"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/navigation_drawer_welcome"/>
+        android:layout_height="match_parent"/>
 
-</RelativeLayout>
+</LinearLayout>
