@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,6 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +52,10 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  * Created by ugookeadu on 08/02/16.
  */
 public class AddGeeftFragment extends StatedFragment {
+    private static final String KEY_LOCATION_SPINNER = "key_location_spinner" ;
+    private static final String KEY_CATEGORY_SPINNER = "key_category_spinner";
+    private static final String KEY_EXPIRATION_TIME_SPINNER = "key_expiration_time_spinner";
+    private static final String ARG_MODIFY = "arg_modify";
     private final String TAG = getClass().getName();
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
@@ -100,17 +107,23 @@ public class AddGeeftFragment extends StatedFragment {
     private String cap;
     private String expTime;
     private String category;
+    private int categoryPos;
+    private int locationPos;
+    private int expirationDatePos;
     private boolean dimensionRead;
     private boolean automaticSelection;
     private boolean allowCommunication;
     private byte[] streamImage;
     private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
+    private boolean mModify;
 
-    public static AddGeeftFragment newInstance(Bundle b) {
+    public static AddGeeftFragment newInstance(@Nullable Geeft geeft, boolean modify) {
         AddGeeftFragment fragment = new AddGeeftFragment();
-        fragment.setArguments(b);
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_GEEFT, (Serializable) geeft);
+        bundle.putBoolean(ARG_MODIFY, modify);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -141,17 +154,72 @@ public class AddGeeftFragment extends StatedFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         Log.d("ADDGEEEFT", "onCreated");
+        mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
+        mModify = getArguments().getBoolean(ARG_MODIFY);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_geeft_page, container, false);
+
+
+        if (mGeeft != null) {
+            initUI(rootView);
+            fillUI(rootView);
+        }else{
+            mGeeft= new Geeft();
+            initUI(rootView);
+        }
+
+        initActionBar(rootView);
+
+
+        return rootView;
+    }
+
+    private void fillUI(View rootView) {
+        Picasso.with(getContext()).load(mGeeft.getGeeftImage())
+                .fit()
+                .centerInside()
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .into(mGeeftImageView);
+
+        mGeeftTitle.setText(mGeeft.getGeeftTitle());
+        mGeeftDescription.setText(mGeeft.getGeeftDescription());
+        mGeeftCAP.setText(mGeeft.getUserCap());
+
+
+        expirationDatePos = (int) mGeeft.getDeadLine();
+
+        if(mModify){
+            locationPos = getItemPosition(mGeeftLocation,mGeeft.getUserLocation());
+            categoryPos = getItemPosition(mGeeftCategory,mGeeft.getCategory().toLowerCase());
+        }
+        Log.d(TAG, "location = "+locationPos+" category = "+categoryPos);
+        mGeeftLocation.setSelection(locationPos);
+        mGeeftExpirationTime.setSelection(expirationDatePos);
+        mGeeftCategory.setSelection(categoryPos);
+
+        mAutomaticSelection.setChecked(mGeeft.isAutomaticSelection());
+        mAllowCommunication.setChecked(mGeeft.isAllowCommunication());
+        mDimensionRead.setChecked(mGeeft.isDimensionRead());
+
+
+
+
+    }
+
+    private void initActionBar(View rootView) {
         mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
         Log.d("TOOLBAR", "" + (mToolbar != null));
         if (mToolbar!=null)
             ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
 
+    }
+
+    private void initUI(View rootView) {
         mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
         mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
         mGeeftDescription = (TextView) rootView.findViewById
@@ -215,7 +283,7 @@ public class AddGeeftFragment extends StatedFragment {
         *///-----------------------------------------------------
 
 
-        
+
         //Listener for te imageView: -----------------------------------
         mGeeftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,7 +354,6 @@ public class AddGeeftFragment extends StatedFragment {
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
-        return rootView;
     }
 
     //
@@ -340,36 +407,7 @@ public class AddGeeftFragment extends StatedFragment {
                 }
                 else {
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
-                    mGeeft = new Geeft();
-                    //------- Create a byteStream of image
-                    Bitmap bitmap = ((BitmapDrawable) mGeeftImageView.getDrawable()).getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    Log.d(TAG,"image size before compression: "+bitmap.getByteCount());
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 95, stream);
-//                    Log.d(TAG,"image size after compression: "+stream.size());
-                    streamImage = stream.toByteArray();
-                    //--------
-                    mGeeft.setGeeftTitle(name);
-                    mGeeft.setGeeftDescription(description);
-                    mGeeft.setUserLocation(location);
-                    mGeeft.setUserCap(cap);
-                    mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
-                    mGeeft.setCategory(category);
-                    mGeeft.setAutomaticSelection(automaticSelection);
-                    mGeeft.setAllowCommunication(allowCommunication);
-                    mGeeft.setDimensionRead(dimensionRead);
-                    mGeeft.setStreamImage(streamImage);
-                    if(dimensionRead) {
-                        mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
-                        mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
-                        mGeeft.setGeeftDepth(Integer.parseInt(mGeeftDepth.getText().toString()));
-                    }
-                    else{
-                        mGeeft.setGeeftHeight(0);
-                        mGeeft.setGeeftWidth(0);
-                        mGeeft.setGeeftDepth(0);
-                    }
-                    ///////////////////////////////////////
+                    fillGeeft(mGeeft);
                     mCallback.onCheckSelected(true,mGeeft);
                     return true;
                 }
@@ -415,28 +453,64 @@ public class AddGeeftFragment extends StatedFragment {
     @Override
     protected void onSaveState(Bundle outState) {
         super.onSaveState(outState);
-        outState.putSerializable(ARG_FILE, mGeeftImage);
+        fillGeeft(mGeeft);
+        outState.putSerializable(ARG_GEEFT, mGeeft);
 
-        String arrayStrings[] = {
-                mGeeftTitle.getText().toString(),
-                mGeeftDescription.getText().toString(),
-                mGeeftCAP.getText().toString()
-        };
-        outState.putStringArray(ARG_ARRAY_STRINGS, arrayStrings);
+        if(mGeeftLocation.getSelectedItem()!=null) {
+            outState.putInt(KEY_LOCATION_SPINNER, mGeeftLocation.getSelectedItemPosition());
+        } else{
+            outState.putInt(KEY_LOCATION_SPINNER, 0);
+        }
 
-        int selectedItems[] = {
-                mGeeftLocation.getSelectedItemPosition(),
-                mGeeftExpirationTime.getSelectedItemPosition(),
-                mGeeftCategory.getSelectedItemPosition()
-        };
-        outState.putIntArray(ARG_SELECTED_ITEMS, selectedItems);
+        if(mGeeftCategory.getSelectedItem()!= null){
+            outState.putInt(KEY_CATEGORY_SPINNER, mGeeftCategory.getSelectedItemPosition());
+        }else{
+            outState.putInt(KEY_CATEGORY_SPINNER,0);
+        }
 
-        boolean checkedItems[] = {
-                mAutomaticSelection.isChecked(),
-                mAllowCommunication.isChecked(),
-                mDimensionRead.isChecked(),
-        };
-        outState.putBooleanArray(ARG_CHECKED_ITEMS, checkedItems);
+        if(mGeeftExpirationTime.getSelectedItem()!=null){
+            outState.putInt(KEY_EXPIRATION_TIME_SPINNER, mGeeftExpirationTime
+                    .getSelectedItemPosition());
+        }else{
+            outState.putInt(KEY_EXPIRATION_TIME_SPINNER, 0);
+        }
+    }
+
+    private void fillGeeft(Geeft geeft) {
+        //------- Create a byteStream of image
+        Drawable drawable = mGeeftImageView.getDrawable();
+        if(drawable != null) {
+            Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    Log.d(TAG,"image size before compression: "+bitmap.getByteCount());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 95, stream);
+//                    Log.d(TAG,"image size after compression: "+stream.size());
+            streamImage = stream.toByteArray();
+        }
+
+        //--------
+        mGeeft.setGeeftTitle(name);
+        mGeeft.setGeeftDescription(description);
+        mGeeft.setUserLocation(location);
+        mGeeft.setUserCap(cap);
+        mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
+        mGeeft.setCategory(category);
+        mGeeft.setAutomaticSelection(automaticSelection);
+        mGeeft.setAllowCommunication(allowCommunication);
+        mGeeft.setDimensionRead(dimensionRead);
+        mGeeft.setStreamImage(streamImage);
+        if(dimensionRead) {
+            mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
+            mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
+            mGeeft.setGeeftDepth(Integer.parseInt(mGeeftDepth.getText().toString()));
+        }
+        else{
+            mGeeft.setGeeftHeight(0);
+            mGeeft.setGeeftWidth(0);
+            mGeeft.setGeeftDepth(0);
+        }
+        ///////////////////////////////////////
+
     }
 
     /**
@@ -446,46 +520,30 @@ public class AddGeeftFragment extends StatedFragment {
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
-            mGeeftImage = (File) savedInstanceState.getSerializable(ARG_FILE);
-            if (mGeeftImage != null) {
-                Log.d("savedInstanceState", "is not " + mGeeftImage.toString());
-                Picasso.with(getActivity()).invalidate(mGeeftImage);
-                Picasso.with(getContext()).load(mGeeftImage)
-                        .fit()
-                        .centerInside()
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .into(mGeeftImageView);
-            }
-
-            String arrayStrings[] = savedInstanceState.getStringArray(ARG_ARRAY_STRINGS);
-            if (arrayStrings != null) {
-                mGeeftTitle.setText(arrayStrings[0]);
-                mGeeftDescription.setText(arrayStrings[1]);
-                mGeeftCAP.setText(arrayStrings[2]);
-            }
-
-
-            int selectedItems[] = savedInstanceState.getIntArray(ARG_SELECTED_ITEMS);
-            if (selectedItems != null) {
-                mGeeftLocation.setSelection(selectedItems[0]);
-                mGeeftExpirationTime.setSelection(selectedItems[1]);
-                mGeeftCategory.setSelection(selectedItems[2]);
-            }
-
-            boolean checkedItems[] = savedInstanceState.getBooleanArray(ARG_CHECKED_ITEMS);
-            if (checkedItems != null) {
-                mAutomaticSelection.setChecked(checkedItems[0]);
-                mAllowCommunication.setChecked(checkedItems[1]);
-                mDimensionRead.setChecked(checkedItems[2]);
-            }
+            mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
+            mGeeftLocation.setSelection(getArguments().getInt(KEY_LOCATION_SPINNER));
+            mGeeftCategory.setSelection(getArguments().getInt(KEY_CATEGORY_SPINNER));
+            mGeeftExpirationTime.setSelection(getArguments().getInt(KEY_EXPIRATION_TIME_SPINNER));
         }
     }
 
 
     protected void onFirstTimeLaunched() {
-
+        Log.d(TAG, mModify+"");
     }
+
+    private int getItemPosition(Spinner spinnerName,String itemName){
+        int spinnerName_length = spinnerName.getAdapter().getCount();
+        Log.d(TAG,"entratoooo");
+        for(int i = 0;i < spinnerName_length;i++){
+            if(spinnerName.getItemAtPosition(i).toString().equals(itemName)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+
 
     class CheckCap implements Runnable {
         private String postal_code;

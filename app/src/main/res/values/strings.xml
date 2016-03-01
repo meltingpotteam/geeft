@@ -296,7 +296,9 @@
     <string name="show_story">Visualizza la storia dell\'oggetto</string>
     <string name="geeft_title_text">Descrizione</string>
     <string name="geeft_description_text">Geeft description</string>
-    <string name="geeft_show_story">Visualizza storia del geeft</string>
+    <string name="geeft_show_story">Visualizza storia del Geeft</string>
+    <string name="geeft_modify">Modifica</string>
+    <string name="geeft_delete">Elimina</string>
     <string name="geeft_detail_action_bar">Dettagli oggetto</string>
     <string name="segnalate_dialog_positive_answer">Segnala</string>
     <string name="segnalate_dialog_message">Sei proprio sicuro di voler procedere con la

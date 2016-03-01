@@ -4,12 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+
+import java.io.Serializable;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.FullGeeftDeatailsFragment;
@@ -19,6 +22,7 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDetailsActivity extends AppCompatActivity{
+    private static final String EXTRA_CONTEXT = "extra_context";
     private final String TAG = getClass().getSimpleName();
 
     private Geeft mGeeft;
@@ -28,6 +32,7 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
     public static Intent newIntent(@NonNull Context context, @NonNull Geeft geeft) {
         Intent intent = new Intent(context, FullGeeftDetailsActivity.class);
         intent.putExtra(EXTRA_GEFFT, geeft);
+        intent.putExtra(EXTRA_CONTEXT,context.getClass().getSimpleName());
         return intent;
     }
 
@@ -52,7 +57,8 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
         if (fragment == null) {
             Bundle b = new Bundle();
             b.putSerializable(FullGeeftDeatailsFragment.GEEFT_KEY,mGeeft);
-            fragment = FullGeeftDeatailsFragment.newInstance(b);
+            fragment = FullGeeftDeatailsFragment.newInstance(mGeeft,
+                    getIntent().getStringExtra(EXTRA_CONTEXT));
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
