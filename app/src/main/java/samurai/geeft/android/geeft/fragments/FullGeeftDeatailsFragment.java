@@ -28,8 +28,11 @@ import android.widget.Toast;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasLink;
+import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.RequestOptions;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
@@ -44,11 +47,13 @@ import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
+import samurai.geeft.android.geeft.database.BaaSDeleteGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackDeletion;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -58,7 +63,7 @@ import samurai.geeft.android.geeft.utilities.Utils;
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCallBackBooleanInt
-        , TaskCallbackBooleanToken{
+        , TaskCallbackBooleanToken,TaskCallbackDeletion {
 
     private static final String KEY_CONTEXT = "key_context" ;
     private final String TAG = getClass().getSimpleName();
@@ -255,7 +260,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mDeleteView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteGeeft(mGeeft);
+                    deleteGeeft();
                 }
             });
         }
@@ -266,12 +271,74 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         startActivity(intent);
     }
 
-    private void deleteGeeft(Geeft geeft){
+    private void deleteGeeft(){
+        mProgressDialog = ProgressDialog.show(getContext(), "", "Attendere...");
+        new BaaSDeleteGeeftTask(getContext(),mGeeft,FullGeeftDeatailsFragment.this).execute();
+
+    }
+    /*
+    private void deleteGeeft(final Geeft geeft){
+        final String geeftId = geeft.getId();
         BaasDocument.delete("geeft", geeft.getId(), new BaasHandler<Void>() {
             @Override
             public void handle(BaasResult<Void> docResult) {
                 if (docResult.isSuccess()) {
-                    new AlertDialog.Builder(getContext())
+                    final String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                    BaasQuery.Criteria query = BaasQuery.builder().where("in.id = '" + docUserId + "'").criteria();
+                    BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                        @Override
+                        public void handle(BaasResult<List<BaasLink>> resLinks) {
+                            if (resLinks.isSuccess()) {
+                                List<BaasLink> links = resLinks.value();
+                                Log.d(TAG, "Your links are here: " + links.size());
+                                BaasLink.withId(links.).delete(RequestOptions.DEFAULT, new BaasHandler<Void>() {
+                                    @Override
+                                    public void handle(BaasResult<Void> resLinkDel) {
+                                        if(resLinkDel.isSuccess()){
+                                            BaasLink.create(TagsValue.LINK_NAME_WAS_DONATED, geeftId, docUserId,RequestOptions.DEFAULT,new BaasHandler<BaasLink>() {
+                                                @Override
+                                                public void handle(BaasResult<BaasLink> resLinkClone) {
+                                                    if (resLinkClone.isSuccess()){
+                                                        BaasLink value = resLinkClone.value();
+                                                        new AlertDialog.Builder(getContext())
+                                                                .setTitle("Successo")
+                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        startMainActivity();
+                                                                        getActivity().finish();
+                                                                    }
+                                                                })
+                                                                .setMessage("Il Geeft è stato eliminato con successo.").show();
+                                                    }
+                                                    else{
+                                                        Log.e(TAG, "Error while cloning links of Geeft donated");
+                                                        new AlertDialog.Builder(getContext())
+                                                                .setTitle("Errore")
+                                                                .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            Log.e(TAG, "Error while deleting links of Geeft donated");
+                                            new AlertDialog.Builder(getContext())
+                                                    .setTitle("Errore")
+                                                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                Log.e(TAG, "Error while fetching all links of Geeft donated");
+                                new AlertDialog.Builder(getContext())
+                                        .setTitle("Errore")
+                                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+
+                            }
+                        }
+                    });
+                    /*new AlertDialog.Builder(getContext())
                             .setTitle("Successo")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
@@ -295,6 +362,26 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             }
         });
     }
+*/
+    /*
+    private boolean deleteGeeftLink(){
+        boolean result;
+        String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+        BaasQuery.Criteria query =BaasQuery.builder().where("in.id = '" + docUserId + "'" ).criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+            @Override
+            public void handle(BaasResult<List<BaasLink>> res) {
+                if (res.isSuccess()) {
+                    List<BaasLink> links = res.value();
+                    Log.d(TAG, "Your links are here: " + links.size());
+
+                } else {
+                    Log.e(TAG, "Error while fetching all links of Geeft donated");
+
+                }
+            }
+        });
+    }*/
 
     private void startLoginActivity() {
         getContext().startActivity(new Intent(getContext(), LoginActivity.class));
@@ -409,6 +496,28 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             else {
                 startImageGallery(mGeeftList);
             }
+        }else {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Errore")
+                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+        }
+    }
+    @Override
+    public void doneDeletion(boolean result,int token) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        if(result) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Successo")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startMainActivity();
+                            getActivity().finish();
+                        }
+                    })
+                    .setMessage("Il Geeft è stato eliminato con successo.").show();
         }else {
             new AlertDialog.Builder(getContext())
                     .setTitle("Errore")

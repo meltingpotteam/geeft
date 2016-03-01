@@ -111,7 +111,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                                 if (l.in().getId().equals(e.getId())) {
                                     mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
                                     // reserved)
-                                    mGeeft.setLinkId(l.getId());
+                                    mGeeft.setReservedLinkId(l.getId());
                                     Log.d(TAG, "link id is: " + l.getId());
                                 }
                             }

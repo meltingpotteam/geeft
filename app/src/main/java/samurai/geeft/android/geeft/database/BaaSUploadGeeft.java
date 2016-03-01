@@ -32,15 +32,17 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     Context mContext;
     Geeft mGeeft;
     String mOldGeeftId;
+    boolean mModify;
     TaskCallbackBoolean mCallback;
 
     /**
      * Constructor to create an object Geeft to send to Baasbox
      **/
-    public BaaSUploadGeeft(Context context, Geeft geeft,
+    public BaaSUploadGeeft(Context context, Geeft geeft,boolean modify,
                            TaskCallbackBoolean callback) {
         mContext = context;
         mGeeft = geeft;
+        mModify = modify;
         mCallback = callback;
     }
 
@@ -50,6 +52,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mGeeft = geeft;
         mCallback = callback;
         mOldGeeftId = id;
+        mModify = false;
     }
 
 
@@ -60,7 +63,18 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     .getObject("facebook")
                     .get("id").toString();
             String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-            BaasDocument doc = new BaasDocument("geeft");
+
+            BaasDocument doc;
+
+            if(mModify){ //If we are in editing mode of geeft
+                doc = getExistedGeeft();
+                if(doc == null) //It doesn't happen, but check
+                    return false;
+            }
+            else{ // new Geeft
+                doc = new BaasDocument("geeft");
+            }
+
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
             doc.put("location", mGeeft.getUserLocation());
@@ -105,7 +119,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                                     BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story", mGeeft.getId()
                                             , mOldGeeftId);
                                 }
-                                return createDonatedLink(docUserId);
+                                return createDonatedLink(docUserId,mModify);
                             }
                             else{
                                 Log.e(TAG,"Error with grant DELETE to MODERATOR");
@@ -132,20 +146,43 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             return false;
         }
     }
-    private boolean createDonatedLink(String docUserId){
 
-        BaasResult<BaasLink> resLink = BaasLink.createSync("donated", mGeeft.getId(),docUserId);
-        //TODO : swap and Manage resLink
-        if (resLink.isSuccess()) { //Link created
-            BaasLink value = resLink.value();
-            Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
-            Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
-                    " OUT is: " + value.out().getId().equals(docUserId));
-            return true;
+    private BaasDocument getExistedGeeft(){ //Fetch existing geeft
+        BaasResult<BaasDocument> resDocFetched = BaasDocument.fetchSync("geeft",mGeeft.getId());
+        if(resDocFetched.isSuccess()){
+            return resDocFetched.value();
         }
         else{
-            return false;
+            if(resDocFetched.error() instanceof BaasInvalidSessionException){
+                Log.e(TAG,"Session Expired");
+                return null;
+            }
+            else{
+                Log.e(TAG,"Fatal error while fetching doc");
+                return null;
+            }
         }
+    }
+
+    private boolean createDonatedLink(String docUserId,boolean modify){
+        if(!modify) { // If is a new Geeft,create link in donate
+            BaasResult<BaasLink> resLink = BaasLink.createSync("donated", mGeeft.getId(), docUserId);
+            //TODO : swap and Manage resLink
+            if (resLink.isSuccess()) { //Link created
+                BaasLink value = resLink.value();
+                Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
+                Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
+                        " OUT is: " + value.out().getId().equals(docUserId));
+                mGeeft.setDonatedLinkId(value.getId()); //is for BaaSDeleteGeeftTask
+                Log.d(TAG,"link is:" + value.getId());
+                Log.d(TAG,"are same:" + value.getId().equals(mGeeft.getDonatedLinkId()));
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else // existing Geeft --> Existing link
+            return true;
     }
 
     private String getFacebookName(){// return display name of user's profile

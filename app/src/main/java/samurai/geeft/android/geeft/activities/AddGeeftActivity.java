@@ -90,7 +90,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     }
 
     @Override
-    public void onCheckSelected(boolean startChooseStory,final Geeft geeft) {
+    public void onCheckSelected(boolean startChooseStory,final Geeft geeft,final boolean modify) {
         mGeeft = geeft;
         final android.support.v7.app.AlertDialog.Builder builder =
                 new android.support.v7.app.AlertDialog.Builder(this,
@@ -125,7 +125,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                 mProgress.setCancelable(false);
                 mProgress.setIndeterminate(true);
                 mProgress.setMessage("Attendere");
-                new BaaSUploadGeeft(getApplicationContext(), geeft, AddGeeftActivity.this).execute();
+                new BaaSUploadGeeft(getApplicationContext(), geeft,modify, AddGeeftActivity.this).execute();
             }
         });
         //On click, the user visualize can visualize some infos about the geefter

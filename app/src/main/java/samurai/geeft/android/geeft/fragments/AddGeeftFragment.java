@@ -194,8 +194,9 @@ public class AddGeeftFragment extends StatedFragment {
         expirationDatePos = (int) mGeeft.getDeadLine();
 
         if(mModify){
-            locationPos = getItemPosition(mGeeftLocation,mGeeft.getUserLocation());
-            categoryPos = getItemPosition(mGeeftCategory,mGeeft.getCategory().toLowerCase());
+            locationPos = getItemPositionLocation(mGeeftLocation,mGeeft.getUserLocation());
+            Log.d(TAG,"Category: " + mGeeft.getCategory().toLowerCase());
+            categoryPos = getItemPositionCategory(mGeeftCategory,mGeeft.getCategory().toLowerCase());
         }
         Log.d(TAG, "location = "+locationPos+" category = "+categoryPos);
         mGeeftLocation.setSelection(locationPos);
@@ -205,7 +206,11 @@ public class AddGeeftFragment extends StatedFragment {
         mAutomaticSelection.setChecked(mGeeft.isAutomaticSelection());
         mAllowCommunication.setChecked(mGeeft.isAllowCommunication());
         mDimensionRead.setChecked(mGeeft.isDimensionRead());
-
+        if(mGeeft.isDimensionRead()){
+            mGeeftHeight.setText(mGeeft.getGeeftHeight()+"");
+            mGeeftWidth.setText(mGeeft.getGeeftWidth()+"");
+            mGeeftDepth.setText(mGeeft.getGeeftDepth()+"");
+        }
 
 
 
@@ -408,7 +413,7 @@ public class AddGeeftFragment extends StatedFragment {
                 else {
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
                     fillGeeft(mGeeft);
-                    mCallback.onCheckSelected(true,mGeeft);
+                    mCallback.onCheckSelected(true,mGeeft,mModify);
                     return true;
                 }
         }
@@ -430,7 +435,7 @@ public class AddGeeftFragment extends StatedFragment {
     }
 
     public interface OnCheckOkSelectedListener {
-        void onCheckSelected(boolean startChooseStory, Geeft mGeeft);
+        void onCheckSelected(boolean startChooseStory, Geeft mGeeft,boolean mModify);
     }
 
     public long getDeadlineTimestamp(int deltaExptime){ // I know,there is a delay between creation and upload time of document,
@@ -499,6 +504,7 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeft.setAllowCommunication(allowCommunication);
         mGeeft.setDimensionRead(dimensionRead);
         mGeeft.setStreamImage(streamImage);
+        Log.d(TAG,"DimensionRead is:" + dimensionRead+"");
         if(dimensionRead) {
             mGeeft.setGeeftHeight(Integer.parseInt(mGeeftHeight.getText().toString()));
             mGeeft.setGeeftWidth(Integer.parseInt(mGeeftWidth.getText().toString()));
@@ -529,12 +535,21 @@ public class AddGeeftFragment extends StatedFragment {
 
 
     protected void onFirstTimeLaunched() {
-        Log.d(TAG, mModify+"");
+        Log.d(TAG, mModify + "");
     }
 
-    private int getItemPosition(Spinner spinnerName,String itemName){
+    private int getItemPositionCategory(Spinner spinnerName,String itemName){
         int spinnerName_length = spinnerName.getAdapter().getCount();
-        Log.d(TAG,"entratoooo");
+        for(int i = 0;i < spinnerName_length;i++){
+            if(spinnerName.getItemAtPosition(i).toString().toLowerCase().equals(itemName)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private int getItemPositionLocation(Spinner spinnerName,String itemName){
+        int spinnerName_length = spinnerName.getAdapter().getCount();
         for(int i = 0;i < spinnerName_length;i++){
             if(spinnerName.getItemAtPosition(i).toString().equals(itemName)){
                 return i;

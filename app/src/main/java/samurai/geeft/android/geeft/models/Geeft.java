@@ -26,66 +26,20 @@ public class Geeft implements Serializable {
     private String id;
     private boolean isSelected;
     private String userProfilePic;
-    private String linkId;
 
-    public byte[] getStreamImage() {
-        return streamImage;
-    }
+    private String reservedLinkId;
+    private String donatedLinkId;
 
-    public void setStreamImage(byte[] streamImage) {
-        this.streamImage = streamImage;
-    }
 
-    private byte[] streamImage;
-
-    private String category;
+    private boolean assigned;
+    private boolean taken;
 
     public Geeft(){
     }
 
-    public String getUserFbId() {
-        return userFbId;
-    }
-
-    public void setUserFbId(String userFbId) {
-        this.userFbId = userFbId;
-    }
-
-    public int getGeeftHeight() {
-        return geeftHeight;
-    }
-
-    public void setGeeftHeight(int geeftHeight) {
-        this.geeftHeight = geeftHeight;
-    }
-
-    public int getGeeftWidth() {
-        return geeftWidth;
-    }
-
-    public void setGeeftWidth(int geeftWidth) {
-        this.geeftWidth = geeftWidth;
-    }
-
-    public int getGeeftDepth() {
-        return geeftDepth;
-    }
-
-    public void setGeeftDepth(int geeftDepth) {
-        this.geeftDepth = geeftDepth;
-    }
-
-    public String[] getGeeftArrayImage() {
-        return geeftArrayImage;
-    }
-
-    public void setGeeftArrayImage(String[] geeftArrayImage) {
-        this.geeftArrayImage = geeftArrayImage;
-    }
-
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String linkId,int geeftHeight, int geeftWidth,int geeftDepth) {
+                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftArrayImage = geeftArrayImage;
@@ -102,10 +56,13 @@ public class Geeft implements Serializable {
         this.userProfilePic = userProfilePic;
         this.id=id;
         this.deadLine = deadLine;
-        this.linkId = linkId;
+        this.reservedLinkId = reservedLinkId;
+        this.donatedLinkId = donatedLinkId;
         this.geeftHeight = geeftHeight;
         this.geeftWidth = geeftWidth;
         this.geeftDepth = geeftDepth;
+        this.assigned = assigned;
+        this.taken = taken;
 
     }
 
@@ -216,9 +173,17 @@ public class Geeft implements Serializable {
 
     public void setDeadLine(long deadLine){this.deadLine = deadLine;}
 
-    public String getLinkId(){ return linkId;}
+    public String getReservedLinkId(){ return reservedLinkId;}
 
-    public void setLinkId(String linkId){ this.linkId = linkId;}
+    public void setReservedLinkId(String reservedLinkId){ this.reservedLinkId = reservedLinkId;}
+
+    public String getDonatedLinkId() {
+        return donatedLinkId;
+    }
+
+    public void setDonatedLinkId(String donatedLinkId) {
+        this.donatedLinkId = donatedLinkId;
+    }
 
     public String getCategory() {
         return category;
@@ -227,5 +192,74 @@ public class Geeft implements Serializable {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public String getUserFbId() {
+        return userFbId;
+    }
+
+    public void setUserFbId(String userFbId) {
+        this.userFbId = userFbId;
+    }
+
+    public int getGeeftHeight() {
+        return geeftHeight;
+    }
+
+    public void setGeeftHeight(int geeftHeight) {
+        this.geeftHeight = geeftHeight;
+    }
+
+    public int getGeeftWidth() {
+        return geeftWidth;
+    }
+
+    public void setGeeftWidth(int geeftWidth) {
+        this.geeftWidth = geeftWidth;
+    }
+
+    public int getGeeftDepth() {
+        return geeftDepth;
+    }
+
+    public void setGeeftDepth(int geeftDepth) {
+        this.geeftDepth = geeftDepth;
+    }
+
+    public String[] getGeeftArrayImage() {
+        return geeftArrayImage;
+    }
+
+    public void setGeeftArrayImage(String[] geeftArrayImage) {
+        this.geeftArrayImage = geeftArrayImage;
+    }
+
+    public byte[] getStreamImage() {
+        return streamImage;
+    }
+
+    public void setStreamImage(byte[] streamImage) {
+        this.streamImage = streamImage;
+    }
+
+    private byte[] streamImage;
+
+    private String category;
+
+    public boolean isTaken() {
+        return taken;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
+
+    public boolean isAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+        this.assigned = assigned;
+    }
+
 
 }
