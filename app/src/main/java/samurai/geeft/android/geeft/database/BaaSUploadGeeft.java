@@ -12,11 +12,16 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.Grant;
 import com.baasbox.android.Role;
+import com.baasbox.android.json.JsonArray;
 import com.baasbox.android.json.JsonObject;
 
+import org.json.JSONArray;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -55,6 +60,21 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mModify = false;
     }
 
+    // create a JsonArray for baasbox that have a cleaned labels words
+    protected JsonArray arrayCreator(String labelsToClean){
+        String[] labels =labelsToClean.replaceAll(" ", "").toLowerCase().split(",");
+        StringBuilder checkString = new StringBuilder();
+        JsonArray labelsCleaned = new JsonArray();
+        for (String s : labels){
+            if (!s.equals("") || !s.equals(" ")){
+
+                checkString.append(s).append("_");
+                labelsCleaned.add(s);
+            }
+        }
+        Log.d(TAG, "ArrayCreator splitted String: " + checkString.toString());
+        return labelsCleaned;
+    }
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
@@ -95,7 +115,13 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("allowDimension",mGeeft.isDimensionRead());
             doc.put("deleted",false);
             doc.put("assigned",false);
-            doc.put("taken",false);
+            doc.put("taken", false);
+
+            // send labels in an array built splitting the label string
+            JsonArray labelsCleaned = arrayCreator(mGeeft.getGeeftLabels());
+            doc.put("labels", labelsCleaned);
+
+
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mGeeft.getStreamImage());
             if (resImage.isSuccess()) {
