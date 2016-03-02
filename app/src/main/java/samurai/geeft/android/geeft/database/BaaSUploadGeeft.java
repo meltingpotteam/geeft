@@ -81,6 +81,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("closed", false);
             doc.put("cap", mGeeft.getUserCap());
             doc.put("name", getFacebookName());
+            doc.put("baasboxUsername",BaasUser.current().getName());
             doc.put("userFbId",userFbId);
             doc.put("profilePic", getProfilePicFacebook());
             doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long

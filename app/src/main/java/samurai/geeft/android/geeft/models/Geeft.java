@@ -11,6 +11,7 @@ public class Geeft implements Serializable {
     private String userLocation;
     private String userCap;
     private String username;
+    private String baasboxUsername;
     private String userFbId;
     private String geeftDescription;
     private String geeftTitle;
@@ -39,7 +40,7 @@ public class Geeft implements Serializable {
 
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken) {
+                 String username,String baasboxUsername,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken) {
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
         this.geeftArrayImage = geeftArrayImage;
@@ -52,6 +53,7 @@ public class Geeft implements Serializable {
         this.userLocation = userLocation;
         this.userCap = userCap;
         this.username = username;
+        this.baasboxUsername = baasboxUsername;
         this.userFbId = userFbId;
         this.userProfilePic = userProfilePic;
         this.id=id;
@@ -64,6 +66,14 @@ public class Geeft implements Serializable {
         this.assigned = assigned;
         this.taken = taken;
 
+    }
+
+    public String getBaasboxUsername() {
+        return baasboxUsername;
+    }
+
+    public void setBaasboxUsername(String baasboxUsername) {
+        this.baasboxUsername = baasboxUsername;
     }
 
     public String getId() {

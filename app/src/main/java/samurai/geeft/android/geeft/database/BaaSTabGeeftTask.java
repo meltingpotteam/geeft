@@ -91,6 +91,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mGeeft = new Geeft();
                             mGeeft.setId(e.getId());
                             mGeeft.setUsername(e.getString("name"));
+                            mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
                             mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
                             //Append ad image url your session token!
                             mGeeft.setGeeftDescription(e.getString("description"));

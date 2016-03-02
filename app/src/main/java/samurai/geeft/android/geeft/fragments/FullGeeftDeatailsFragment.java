@@ -207,11 +207,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
 
-            double rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
-
-            float rankToset = getRoundedRank(rank);
-
-            mGeefterRank.setRating(rankToset);
+            setUserRaiting();
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -269,6 +265,48 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
     }
 
+    private void setUserRaiting() {
+        getUserFeedback(mGeeft.getBaasboxUsername());
+    }
+
+    private void getUserFeedback(String username){
+        BaasUser.fetch(username, new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> res) {
+                if (res.isSuccess()) {
+                    BaasUser user = res.value();
+                    Log.d("LOG", "The user: " + user);
+                    double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    float rankToset = getRoundedRank(rank);
+                    mGeefterRank.setRating(rankToset);
+                } else {
+                    Log.e("LOG", "Error", res.error());
+                }
+            }
+        });
+    }
+
+    private void setUserInformationDialog(String username){
+        BaasUser.fetch(username,new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> res) {
+                if(res.isSuccess()){
+                    BaasUser user = res.value();
+                    Log.d("LOG","The user: "+user);
+                    double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    long given = user.getScope(BaasUser.Scope.REGISTERED).get("n_given");
+                    long received = user.getScope(BaasUser.Scope.REGISTERED).get("n_received");
+
+                    mProfileDialogUserRank.setText(""+rank+"/5.0");
+                    mProfileDialogUserGiven.setText(""+given);
+                    mProfileDialogUserReceived.setText(""+received);
+
+                } else {
+                    Log.e("LOG","Error",res.error());
+                }
+            }
+        });
+    }
     private float getRoundedRank(double rank) {
 
         float iPart;
@@ -381,14 +419,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         //new BaaSGetGeefterInformation(getContext(),FullGeeftDeatailsFragment.this).execute();
 
         //-------------------------
-        BaasUser currentUser = BaasUser.current();
-        double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
-        long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
-        long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
-
-        mProfileDialogUserRank.setText(""+feedback+"/5.0");
-        mProfileDialogUserGiven.setText(""+given);
-        mProfileDialogUserReceived.setText(""+received);
+        setUserInformationDialog(mGeeft.getBaasboxUsername());
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
