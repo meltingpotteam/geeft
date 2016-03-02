@@ -6,8 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
 
     <android.support.design.widget.CoordinatorLayout
@@ -21,8 +20,7 @@
             android:layout_height="wrap_content">
 
             <include android:id="@+id/main_app_bar"
-                     layout="@layout/tool_bar"
-                     app:layout_scrollFlags="scroll|enterAlways"/>
+                     layout="@layout/tool_bar"/>
 
 
             <samurai.geeft.android.geeft.utilities.SlidingTabLayout

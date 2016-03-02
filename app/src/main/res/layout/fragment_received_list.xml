@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:id="@+id/fragment_geeft_story_layout"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:fitsSystemWindows="true">
+              android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/fragment_appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        >
+    <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
 
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
-
-    </android.support.design.widget.AppBarLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recyclerview"
         android:layout_width="match_parent"

@@ -16,6 +16,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 02/02/16.
@@ -97,7 +98,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
         do {
             BaasQuery.Criteria paginate = BaasQuery.builder().
                     where("out.id like '" + mPreviousGeeftId+"'").criteria();
-            BaasResult<List<BaasLink>> baasResult = BaasLink.fetchAllSync("geeft_story", paginate);
+            BaasResult<List<BaasLink>> baasResult = BaasLink.fetchAllSync(TagsValue.LINK_GEEFT_STORY, paginate);
             if (baasResult.isSuccess()) {
                 try {
                     List<BaasLink> list = baasResult.get();
