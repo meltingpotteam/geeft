@@ -212,7 +212,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
         }else {
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,TagsValue.CATEGORY_SPORTS,mAdapter,this).execute();
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,TagsValue.CATEGORY_ALL,mAdapter,this).execute();
         }
     }
 

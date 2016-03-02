@@ -91,7 +91,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                 }
                 else{
                     paginate = BaasQuery.builder()
-                            .where("category = "+ mCategoryName)
+                            .where("category = '"+ mCategoryName +"'")
                             .orderBy("_creation_date asc").criteria();
                 }
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);

@@ -85,7 +85,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh()");
-        categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+        categoryNameLocal = TagsValue.CATEGORY_ALL;
         new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
     }
 
@@ -128,7 +128,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
         Log.d(TAG, "onFirstTimeLaunched()");
-        categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+        categoryNameLocal = TagsValue.CATEGORY_ALL;
         new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
     }
 
@@ -169,7 +169,7 @@ public class PrenotableRecycleFragment extends StatedFragment
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+            categoryNameLocal = TagsValue.CATEGORY_ALL;
             new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
         }
         else {
