@@ -1,11 +1,7 @@
 package samurai.geeft.android.geeft.fragments;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,106 +17,75 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
-import samurai.geeft.android.geeft.database.BaaSTabGeeftoryTask;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
+import samurai.geeft.android.geeft.database.BaaSGeeftoryRecycleTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBooleanToken {
+public class GeeftoryRecycleFragment extends StatedFragment
+        implements SwipeRefreshLayout.OnRefreshListener, TaskCallbackBoolean {
 
-    private final String TAG = getClass().getSimpleName();
-    private final String PREF_FILE_NAME = "2pref_file";
-    private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
-    private static final String GEFFTORY_LIST_KEY = "geeftory_list_key";
-    private static final String GEFFTORY_LIST_PREF = "geeftory_list_pref";
+    private final String TAG = getClass().getSimpleName().toUpperCase();
+    private static final String GEEFT_LIST_STATE_KEY = "samurai.geeft.android.geeft.fragments." +
+            "GeeftoryRecycleFragment_geeftListState";
 
-    private List<Geeft> mGeeftoryList = new ArrayList<>();
+    private List<Geeft> mGeeftList;
     private RecyclerView mRecyclerView;
     private StoryItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
+    private View mBallView;
+
     private Parcelable mGeeftListState;
 
-    public static TabGeeftoryFragment newInstance(Bundle b) {
-        TabGeeftoryFragment fragment = new TabGeeftoryFragment();
+    public static GeeftoryRecycleFragment newInstance(Bundle b) {
+        GeeftoryRecycleFragment fragment = new GeeftoryRecycleFragment();
         fragment.setArguments(b);
         return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
+        View rootView = inflater.inflate(R.layout.fragment_geeft_list, container, false);
+        mBallView = rootView.findViewById(R.id.loading_balls);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
+        mRecyclerView.setNestedScrollingEnabled(true);
+        mRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new StoryItemAdapter(getActivity(), mGeeftList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
+        mRefreshLayout.setOnRefreshListener(this);
+        return rootView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
-
-        //inflates the view
-        View rootView = inflater.inflate(R.layout.fragment_tab_geeftory, container, false);
-
-        //initialize UI
-        initUI(rootView);
-
-        return rootView;
+        mGeeftList = new ArrayList<>();
     }
 
     @Override
-    protected void onFirstTimeLaunched() {
-        super.onFirstTimeLaunched();
-
-        Log.d(TAG, "onFirstTimeLaunched()");
-        getData();
+    public void onRefresh() {
+        Log.d(TAG,"onRefresh()");
+        new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
-    /**
-     * Save Fragment's State here
-     */
-
-    @Override
-    protected void onSaveState(Bundle outState) {
-        super.onSaveState(outState);
-        Log.d(TAG, "onSaveState()");
-        saveState(outState);
-    }
-
-    /**
-     * Restore Fragment's State here
-     */
-    @Override
-    protected void onRestoreState(Bundle savedInstanceState) {
-        super.onRestoreState(savedInstanceState);
-
-        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? " + (savedInstanceState == null));
-        restoreState(savedInstanceState);
-    }
-
-    /**
-     * Resume position of list
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume()");
-        if (mGeeftListState != null) {
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(mGeeftListState);
-        }
-    }
-
-
-    public void done(boolean result, int token) {
-        Log.d(TAG, "done()");
-
-        if (mRefreshLayout.isRefreshing()) {
+    public void done(boolean result){
+        Log.d(TAG,"done()");
+        mBallView.setVisibility(View.GONE);
+        if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
+
                 toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
@@ -133,82 +98,71 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         mAdapter.notifyDataSetChanged();
     }
 
-    private void initUI(View rootView) {
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
-        mRecyclerView.setNestedScrollingEnabled(true);
-
-        mAdapter = new StoryItemAdapter(getActivity(), mGeeftoryList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getData();
-            }
-        });
+    public GeeftoryRecycleFragment getInstance(){
+        return this;
     }
 
-    private void saveState(Bundle outState) {
-        outState.putParcelableArrayList(GEFFTORY_LIST_KEY, (ArrayList) mGeeftoryList);
+    @Override
+    protected void onFirstTimeLaunched() {
+        super.onFirstTimeLaunched();
+        Log.d(TAG, "onFirstTimeLaunched()");
+        new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
+    }
+
+    /**
+     * Save Fragment's State here
+     */
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        Log.d(TAG, "onSaveState()");
+        outState.putParcelableArrayList("mGeeftList", (ArrayList) mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
     }
 
-    private void restoreState(Bundle savedInstanceState) {
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+
+        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? "+(savedInstanceState==null));
+
         if (savedInstanceState != null) {
             mGeeftListState = savedInstanceState.getParcelable(GEEFT_LIST_STATE_KEY);
-            ArrayList<Geeft> arrayList =
-                    (ArrayList) savedInstanceState.getParcelableArrayList(GEFFTORY_LIST_KEY);
-            mGeeftoryList.addAll(arrayList);
+            ArrayList<Geeft> arrayList=
+                    (ArrayList)savedInstanceState.getParcelableArrayList("mGeeftList");
+            mGeeftList.addAll(arrayList);
         }
 
-        Log.d(TAG, "onRestoreState()-> mGeeftoryList==null || mGeeftoryList.size()==0? "
-                + (mGeeftoryList == null || mGeeftoryList.size() == 0));
-        if (mGeeftoryList != null)
-            Log.d(TAG, "onRestoreState()-> mGeeftoryList.size= "
-                    + (mGeeftoryList.size()));
+        Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
+                +(mGeeftList==null || mGeeftList.size()==0));
+        if (mGeeftList!=null)
+            Log.d(TAG, "onRestoreState()-> mGeeftList.size= "
+                    +(mGeeftList.size()));
 
-        if (mGeeftoryList == null || mGeeftoryList.size() == 0) {
-           getData();
-        } else {
+        if (mGeeftList==null || mGeeftList.size()==0){
+            new BaaSGeeftoryRecycleTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        }
+        else {
+            mBallView.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
         }
     }
 
-
-    private void getData() {
-
-        if (!isNetworkConnected()) {
-            mRefreshLayout.setRefreshing(false);
-            showSnackbar();
-        } else {
-            new BaaSTabGeeftoryTask(getActivity(), mGeeftoryList, mAdapter, this).execute();
+    /**
+     * Resume position of list
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+        if (mGeeftListState != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mGeeftListState);
         }
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-    }
-
-    private void showSnackbar() {
-        final Snackbar snackbar = Snackbar
-                .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                        "No Internet Connection!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getData();
-                    }
-                });
-        snackbar.show();
     }
 }

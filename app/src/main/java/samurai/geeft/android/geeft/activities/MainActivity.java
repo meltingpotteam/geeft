@@ -62,11 +62,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private SlidingTabLayout mSlidingTabLayoutTabs;
-    private CharSequence mTitles[]={"Geeftory","Geeft"};
+    private CharSequence mTitles[]={"Geeftory", "Geeft", "Geeftland"};
     private FloatingActionButton mActionNewGeeft;
-    private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private String mCategoryName;
+    private int mNumboftabs = 3;
+
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
