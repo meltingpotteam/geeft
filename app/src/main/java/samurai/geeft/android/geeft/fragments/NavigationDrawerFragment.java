@@ -269,7 +269,8 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent0);
                 break;
             case 1:
-                Intent intent1 = new Intent(getContext(), DonatedActivity.class);
+                Intent intent1 = DonatedActivity
+                        .newIntent(getContext(), TagsValue.LINK_NAME_DONATED, false);
                 startActivity(intent1);
                 break;
             case 2:

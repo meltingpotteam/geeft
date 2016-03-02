@@ -64,22 +64,11 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenFbButton = (ImageButton) findViewById(R.id.winner_screen_facebook_button);
         mWinnerScreenLocationButton = (ImageButton) findViewById(R.id.winner_screen_location_button);
         mIntent = getIntent();
-
+        /*
         final Geeft geeft = (Geeft) mIntent.getSerializableExtra("geeft");
         Log.d(TAG,"Geeft image is:" + geeft.getGeeftImage() );
 
-        /*mWinnerScreenFbButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(WinnerScreenActivity.this, "Start the communication with the Geefter", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mWinnerScreenFbShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(WinnerScreenActivity.this, "Show approximate position of the Geef", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+
         mWinnerScreenGeefterName.setText(geeft.getUsername());
         mWinnerScreenGeeftedName.setText("Gabriele Vecchia");
         Picasso.with(getApplicationContext()).load(geeft.getGeeftImage()).fit().centerCrop()
@@ -110,7 +99,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
             }
         });
 
-
+*/
 
     }
 

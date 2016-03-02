@@ -4,6 +4,7 @@ package samurai.geeft.android.geeft.activities;
  * Created by oldboy on 17/02/16.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,10 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
 public class DonatedActivity extends AppCompatActivity implements GeeftReceivedListFragment.OnGeeftImageSelectedListener{
 
     private final String TAG = getClass().getName();
+
+    private final static String EXTRA_COLLECTION = "extra_collection";
+    private final static String EXTRA_SHOW_WINNER_DIALOG = "extra_show_winner_dialog";
+
     //info dialog attributes---------------------
     private TextView mReceivedDialogUsername;
     private TextView mReceivedDialogUserLocation;
@@ -41,6 +46,14 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
     private LayoutInflater inflater;
     private Toolbar mToolbar;
     //-------------------------------------------
+
+    public static Intent newIntent(Context context, String collection, boolean showWinnerDialog) {
+        Intent intent = new Intent(context, AssignedActivity.class);
+        intent.putExtra(EXTRA_COLLECTION, collection);
+        intent.putExtra(EXTRA_SHOW_WINNER_DIALOG, showWinnerDialog);
+        return intent;
+    }
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +68,25 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
             b.putString("link_name","donated");
             fragment = GeeftReceivedListFragment
                     .newInstance(TagsValue.LINK_NAME_DONATED, false);
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
+                    .commit();
+        }
+    }*/
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //TODO da rivedere assolutamente la logica
+        setContentView(R.layout.container_for_fragment);
+        inflater = LayoutInflater.from(DonatedActivity.this);
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        Log.d(TAG, "" + getIntent().getStringExtra(EXTRA_COLLECTION));
+        if (fragment == null) {
+            fragment = GeeftReceivedListFragment
+                    .newInstance(getIntent().getStringExtra(EXTRA_COLLECTION),
+                            getIntent().getBooleanExtra(EXTRA_SHOW_WINNER_DIALOG,false));
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

@@ -33,6 +33,9 @@ import org.json.JSONObject;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
+import samurai.geeft.android.geeft.activities.DonatedActivity;
+import samurai.geeft.android.geeft.activities.MainActivity;
+import samurai.geeft.android.geeft.activities.WinnerScreenActivity;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -90,12 +93,20 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        Intent intent = AssignedActivity
-                .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent;
+        switch(key){
+            case 1:  intent = assignedCase();
+                break;
+            case 2:  intent = donatedCase();
+                break;
+            case 3: intent = contactFromUserCase();
+                break;
+            default:  intent = defaultCase();
+                break;
+        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Vibrate for 500 milliseconds
 
@@ -115,6 +126,29 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private Intent contactFromUserCase() { //TODO: Replace this with new activity
+        Intent intent = new Intent(getApplicationContext(),WinnerScreenActivity.class);
+        return intent;
+    }
+
+    private Intent defaultCase() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        return intent;
+    }
+
+    private Intent donatedCase() { //Case where you are geefter and your Geeft is assigned
+        Intent intent = DonatedActivity.newIntent(getApplicationContext(), TagsValue.LINK_NAME_DONATED, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return intent;
+    }
+
+    private Intent assignedCase() {//Case where you are geefted and Geeft is assigned to you
+        Intent intent = AssignedActivity
+                .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return intent;
     }
 
     private void parseCostum(String custom, int num, String doc_id) {
