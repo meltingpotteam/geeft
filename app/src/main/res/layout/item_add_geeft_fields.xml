@@ -43,7 +43,6 @@
             android:layout_alignParentEnd="true"/>
     </android.support.v7.widget.CardView>
 
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -102,6 +101,7 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="top"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:background="#00ffffff"
@@ -218,6 +218,69 @@
                     android:spinnerMode="dropdown"
                     >
                 </Spinner>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+
+        cardView:cardCornerRadius="0dp"
+        cardView:cardElevation="5dp"
+        cardView:cardPreventCornerOverlap="true"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:text="Geeft name"-->
+                <!--android:textSize="@dimen/geeft_title_text_size"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:paddingTop="@dimen/activity_vertical_margin"/>-->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:background="#00ffffff"
+                    android:src="@drawable/ic_label_black_24dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:textColor="@color/colorPrimaryText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_add_geeft_label_title"
+                        />
+
+                    <EditText
+                        android:id="@+id/fragment_add_geeft_labels"
+                        android:textColor="@color/colorPrimaryText"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/add_geeft_label_hint"
+                        android:textColorHint="@color/colorHintAccent"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -348,7 +411,7 @@
                         android:textColorHint="@color/colorHintAccent"/>
                 </LinearLayout>
             </RelativeLayout>
-
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
 </LinearLayout>
