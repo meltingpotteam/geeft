@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -20,12 +21,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,7 @@ public class NavigationDrawerFragment extends Fragment {
     private FrameLayout mProfileLayout;
 //    private ImageView mProfileImage;
     private ImageView mProfileImage;
+    private TextView mProfleName;
 
     // indicates if user is aware that the NavigationBar exists
     private boolean mUserLearnedDrawer;
@@ -100,15 +105,64 @@ public class NavigationDrawerFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
         mRecyclerView.setHasFixedSize(false);
 
+        //initialize UI
+        initUI(rootView);
+
+        return rootView;
+    }
+
+
+    private  void initUI(View rootView){
+        /**
+         * the method was called to initialize the ui of the navigation drawer in when the
+         * application starts;
+         **/
+
+        // Set adapter data
+        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
+
+        //set manager and adapter dor recycleview
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
+
+        // Initialization of the element in top of the navbar
         mWelcomeLayout = (LinearLayout) rootView.
                 findViewById(R.id.navigation_drawer_welcome);
         mProfileLayout = (FrameLayout) rootView.
                 findViewById(R.id.navigation_drawer_profile);
 
-        //initialize UI
-        initUI(rootView);
+        mProfileImage = (ImageView) rootView.findViewById(R.id.navigation_drawer_geefter_profile_image);
+        mProfleName = (TextView) rootView.findViewById(R.id.navigation_drawer_geefter_username);
 
-        return rootView;
+        // ask for the facebook image and username
+        String fbImage = getProfilePicFacebook();
+        String fbName = getFacebookName();
+
+        // set them in the layout
+        Picasso.with(getActivity()).load(Uri.parse(fbImage)).fit()
+                .centerCrop().into(mProfileImage);
+        Log.d(TAG, "profilePic loaded: " + fbImage);
+        mProfleName.setText(fbName);
+
+
+
+        //handle touch event of recycleview
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
+                , mRecyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
+                //TODO complete the fragment to start
+                startFragmentByPosition(position);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //TODO what happens on long press
+                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+
+            }
+        }));
     }
 
     //set up the Recyclerview on creation
@@ -254,46 +308,18 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+
+    private String getFacebookName(){// return display name of user's profile
+        String FbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
+        Log.d(TAG, "FB_Name is: " + FbName);
+        return FbName;
+    }
+
     private String getProfilePicFacebook(){ // return link of user's profile picture
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");
-        Log.d(TAG, "FB_id"+ id);
+        Log.d(TAG, "FB_id" + id);
         return "https://graph.facebook.com/" + id + "/picture?type=large";
     }
 
-    private  void initUI(View rootView){
-
-
-        // Set adapter data
-        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
-
-        //set manager and adapter dor recycleview
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mNavigationDrawerItemAdapter);
-
-
-        mProfileImage = (ImageView) rootView.findViewById(R.id.navigation_drawer_geefter_profile_image);
-
-        Picasso.with(getContext()).load(getProfilePicFacebook()).fit()
-                .centerCrop().into(mProfileImage);
-
-
-        //handle touch event of recycleview
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
-                , mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position, Toast.LENGTH_SHORT).show();
-                //TODO complete the fragment to start
-                startFragmentByPosition(position);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-
-            }
-        }));
-    }
 }
