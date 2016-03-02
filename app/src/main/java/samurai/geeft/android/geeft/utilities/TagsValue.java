@@ -20,11 +20,15 @@ public class TagsValue {
 
    public static final String LINK_NAME_DONATED = "donated";
 
+   public static final String LINK_NAME_WAS_DONATED = "wasDonated";
+
    public static final String LINK_NAME_RECEIVED = "received";
 
    public static final String LINK_NAME_ASSIGNED = "assigned";
 
    public static final String LINK_NAME_RESERVE = "reserve";
+
+   public static final String LINK_NAME_WAS_RESERVE = "wasReserve";
 
    public static final String ROLE_MODERATOR = "moderator";
 
@@ -59,4 +63,12 @@ public class TagsValue {
 
    public static final String ASSETS_FILMS =
            "http://geeft1.cloudapp.net:9000/asset/films_books_music_lq?X-BAASBOX-APPCODE="+APPCODE;
+
+   public final int RESULT_OK = 1;
+
+   public final int RESULT_FAILED = 0;
+
+   public final int RESULT_SESSION_EXPIRED = -1;
+
+
 }

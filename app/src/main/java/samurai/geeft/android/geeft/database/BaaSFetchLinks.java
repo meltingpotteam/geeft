@@ -75,12 +75,21 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setId(document.getId());
                             geeft.setUsername(document.getString("name"));
                             //Append ad image url your session token!
-
+                            geeft.setCategory(document.getString("category"));
                             geeft.setUserLocation(document.getString("location"));
                             geeft.setGeeftDescription(document.getString("description"));
                             geeft.setUserProfilePic(document.getString("profilePic"));
                             geeft.setUserCap(document.getString("cap"));
                             geeft.setGeeftTitle(document.getString("title"));
+                            geeft.setDimensionRead(document.getBoolean("allowDimension"));
+                            geeft.setAutomaticSelection(document.getBoolean("automaticSelection"));
+                            geeft.setAllowCommunication(document.getBoolean("allowCommunication"));
+                            geeft.setGeeftHeight(document.getInt("height"));
+                            geeft.setGeeftWidth(document.getInt("width"));
+                            geeft.setGeeftDepth(document.getInt("depth"));
+                            geeft.setDonatedLinkId(document.getString("donatedLinkId"));
+                            //TODO: Add all filds,taken,assigned...
+
                             mGeeftList.add(geeft);
                         }catch (BaasInvalidSessionException ise){
                             mResultToken = RESULT_SESSION_EXPIRED;

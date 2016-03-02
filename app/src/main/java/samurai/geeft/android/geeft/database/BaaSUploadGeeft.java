@@ -32,15 +32,17 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     Context mContext;
     Geeft mGeeft;
     String mOldGeeftId;
+    boolean mModify;
     TaskCallbackBoolean mCallback;
 
     /**
      * Constructor to create an object Geeft to send to Baasbox
      **/
-    public BaaSUploadGeeft(Context context, Geeft geeft,
+    public BaaSUploadGeeft(Context context, Geeft geeft,boolean modify,
                            TaskCallbackBoolean callback) {
         mContext = context;
         mGeeft = geeft;
+        mModify = modify;
         mCallback = callback;
     }
 
@@ -50,6 +52,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mGeeft = geeft;
         mCallback = callback;
         mOldGeeftId = id;
+        mModify = false;
     }
 
 
@@ -60,11 +63,22 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     .getObject("facebook")
                     .get("id").toString();
             String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-            BaasDocument doc = new BaasDocument("geeft");
+
+            BaasDocument doc;
+
+            if(mModify){ //If we are in editing mode of geeft
+                doc = getExistedGeeft();
+                if(doc == null) //It doesn't happen, but check
+                    return false;
+            }
+            else{ // new Geeft
+                doc = new BaasDocument("geeft");
+            }
+
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
             doc.put("location", mGeeft.getUserLocation());
-            doc.put("close", false);
+            doc.put("closed", false);
             doc.put("cap", mGeeft.getUserCap());
             doc.put("name", getFacebookName());
             doc.put("userFbId",userFbId);
@@ -79,6 +93,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("width",mGeeft.getGeeftWidth());
             doc.put("depth",mGeeft.getGeeftDepth());
             doc.put("allowDimension",mGeeft.isDimensionRead());
+            doc.put("deleted",false);
             doc.put("assigned",false);
             doc.put("taken",false);
             BaasFile image = new BaasFile();
@@ -105,7 +120,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                                     BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story", mGeeft.getId()
                                             , mOldGeeftId);
                                 }
-                                return createDonatedLink(docUserId);
+                                return createDonatedLink(doc,docUserId,mModify);
                             }
                             else{
                                 Log.e(TAG,"Error with grant DELETE to MODERATOR");
@@ -132,20 +147,51 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             return false;
         }
     }
-    private boolean createDonatedLink(String docUserId){
 
-        BaasResult<BaasLink> resLink = BaasLink.createSync("donated", mGeeft.getId(),docUserId);
-        //TODO : swap and Manage resLink
-        if (resLink.isSuccess()) { //Link created
-            BaasLink value = resLink.value();
-            Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
-            Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
-                    " OUT is: " + value.out().getId().equals(docUserId));
-            return true;
+    private BaasDocument getExistedGeeft(){ //Fetch existing geeft
+        BaasResult<BaasDocument> resDocFetched = BaasDocument.fetchSync("geeft",mGeeft.getId());
+        if(resDocFetched.isSuccess()){
+            return resDocFetched.value();
         }
         else{
-            return false;
+            if(resDocFetched.error() instanceof BaasInvalidSessionException){
+                Log.e(TAG,"Session Expired");
+                return null;
+            }
+            else{
+                Log.e(TAG,"Fatal error while fetching doc");
+                return null;
+            }
         }
+    }
+
+    private boolean createDonatedLink(BaasDocument doc,String docUserId,boolean modify){
+        if(!modify) { // If is a new Geeft,create link in donate
+            BaasResult<BaasLink> resLink = BaasLink.createSync("donated", mGeeft.getId(), docUserId);
+            //TODO : swap and Manage resLink
+            if (resLink.isSuccess()) { //Link created
+                BaasLink value = resLink.value();
+                Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
+                Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
+                        " OUT is: " + value.out().getId().equals(docUserId));
+                mGeeft.setDonatedLinkId(value.getId()); //is for BaaSDeleteGeeftTask
+                Log.d(TAG,"link is:" + value.getId());
+                Log.d(TAG, "are same:" + value.getId().equals(mGeeft.getDonatedLinkId()));
+                doc.put("donatedLinkId", mGeeft.getDonatedLinkId());
+                BaasResult<BaasDocument> resDoc = doc.saveSync();
+                if(resDoc.isSuccess()){
+                    return true;
+                }
+                else{
+                    Log.e(TAG,"error when put link in doc");
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        else // existing Geeft --> Existing link
+            return true;
     }
 
     private String getFacebookName(){// return display name of user's profile
@@ -153,6 +199,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         Log.d(TAG, "FB_Name is: " + FbName);
         return FbName;
     }
+
     private String getProfilePicFacebook(){ // return link of user's profile picture
         JsonObject field = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
         String id = field.getObject("_social").getObject("facebook").getString("id");

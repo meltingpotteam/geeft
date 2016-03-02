@@ -9,6 +9,7 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 16/02/2016.
@@ -42,7 +43,7 @@ public class BaaSSignalisationTask extends AsyncTask<Void,Void,Boolean> {
                         mAction = 1; //send an email
                         return true;
                     }
-                    else if (currentUser.hasRole("moderator")){ //Ok,i can delete directly
+                    else if (currentUser.hasRole(TagsValue.ROLE_MODERATOR)){ //Ok,i can delete it directly
                         BaasResult<Void> resDelete = docToBeDelete.deleteSync();
                         if(resDelete.isSuccess()){
                             mAction = 2; //show a toast
