@@ -36,7 +36,7 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_report_help_page);
 
-        mToolbar = (Toolbar) findViewById(R.id.fragment_feedback_help_page_toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("Invia Report");
         Bundle bundle = new Bundle();
@@ -63,6 +63,15 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
         // as you specify a parent activity in AndroidManifest.xml.
         super.onOptionsItemSelected(item);
         switch(item.getItemId()){
+                    // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+                return true;
             case R.id.fragment_add_geeft_ok_button:
                 //Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
                 mUserDisplayName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).get("name");

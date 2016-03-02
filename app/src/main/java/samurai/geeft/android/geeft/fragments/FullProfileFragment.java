@@ -49,7 +49,7 @@ public class FullProfileFragment extends AppCompatActivity implements TaskCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_profile);
 
-        mToolbar = (Toolbar) findViewById(R.id.full_profile_toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("Profilo"); //You are a Geefter if you donate
         setSupportActionBar(mToolbar);
 

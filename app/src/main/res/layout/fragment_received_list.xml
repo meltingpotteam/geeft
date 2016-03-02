@@ -16,7 +16,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         >
 
-        <include android:id="@+id/fragment_geeft_story_toolbar" layout="@layout/tool_bar"/>
+        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
 
     </android.support.design.widget.AppBarLayout>
     <android.support.v7.widget.RecyclerView

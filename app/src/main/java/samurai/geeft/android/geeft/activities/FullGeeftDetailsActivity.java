@@ -72,4 +72,6 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

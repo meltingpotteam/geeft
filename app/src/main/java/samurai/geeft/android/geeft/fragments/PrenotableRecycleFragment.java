@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +47,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
+    private Toolbar mToolbar;
     //-------------------
 
 
@@ -57,18 +60,13 @@ public class PrenotableRecycleFragment extends StatedFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, " onCreateView()-> savedInstanceState is null? "+(savedInstanceState==null));
+        Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
         View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
-        mRecyclerView.setNestedScrollingEnabled(true);
-        mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
+        initUI(rootView);
+        if (savedInstanceState==null)
+            initSupportActionBar(rootView);
 
-        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
-        mRefreshLayout.setOnRefreshListener(this);
         return rootView;
     }
 
@@ -155,6 +153,11 @@ public class PrenotableRecycleFragment extends StatedFragment
             ArrayList<Geeft> arrayList=
                     (ArrayList)savedInstanceState.getParcelableArrayList("mGeeftList");
             mGeeftList.addAll(arrayList);
+            View rootView = getView();
+            if (rootView!=null){
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
@@ -184,5 +187,25 @@ public class PrenotableRecycleFragment extends StatedFragment
         }
     }
 
+    private void initUI(View rootView) {
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
+        mRecyclerView.setNestedScrollingEnabled(true);
+        mRecyclerView.setHasFixedSize(true);
 
+        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
+        mRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
 }

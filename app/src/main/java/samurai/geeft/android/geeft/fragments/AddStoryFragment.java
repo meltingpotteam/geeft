@@ -112,86 +112,11 @@ public class AddStoryFragment extends StatedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story, container, false);
-        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        Log.d("TOOLBAR", "" + (mToolbar != null));
-        if (mToolbar!=null)
-            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-
-        mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
-        mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
-        mGeeftDescription = (TextView) rootView.findViewById
-                (R.id.fragment_add_geeft_form_description);
-        mGeeftCategory = (Spinner) rootView.findViewById(R.id.categories_spinner);
-        this.mAllowCommunication = (CheckBox) rootView
-                .findViewById(R.id.allow_communication_checkbox);
-
-        cameraButton = (FloatingActionButton) rootView.findViewById(R.id.geeft_photo_button);
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                mGeeftImage = new File(Environment.getExternalStorageDirectory()
-                        +File.separator + "image.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
-                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
-            }
-        });
-        //--------------------------------------------------------------
-
-
-        //Listener for te imageView: -----------------------------------
-        mGeeftImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity()); //Read Update
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
-                alertDialog.setView(dialogLayout);
-
-                //On click, the user visualize can visualize some infos about the geefter
-                AlertDialog dialog = alertDialog.create();
-                //the context i had to use is the context of the dialog! not the context of the app.
-                //"dialog.findVie..." instead "this.findView..."
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-                mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
-//                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
-
-                Picasso.with(getActivity()).load(mGeeftImage)
-                        .config(Bitmap.Config.ARGB_8888)
-                        .fit()
-                        .centerInside()
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .into(mDialogImageView);
-
-                dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
-                //dialog.setMessage("Some information that we can take from the facebook shared one");
-                dialog.show();  //<-- See This!
-                //Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
-
-            }
-        });
-        //--------------------------------------------------------------
-
-
-        // Spinner for the Geeft Categories-----------------------------
-        Spinner spinner_categories = (Spinner) rootView.findViewById(R.id.categories_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter_categories = ArrayAdapter.createFromResource
-                (getContext(), R.array.categories_array, R.layout.spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter_categories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner_categories.setAdapter(adapter_categories);
-        //--------------------------------------------------------------
-        Log.d("onCreateView", "onActivityCreated2");
+        initUI(rootView);
+        if (savedInstanceState==null)
+            initSupportActionBar(rootView);
         return rootView;
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -293,6 +218,11 @@ public class AddStoryFragment extends StatedFragment {
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
+            View rootView = getView();
+            if (rootView!=null){
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
             mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
             if(mGeeftImage!=null) {
                 Picasso.with(getActivity()).invalidate(mGeeftImage);
@@ -318,7 +248,92 @@ public class AddStoryFragment extends StatedFragment {
 
     }
 
+    @Override
     protected void onFirstTimeLaunched() {
 
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initUI(View rootView) {
+        mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
+        mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
+        mGeeftDescription = (TextView) rootView.findViewById
+                (R.id.fragment_add_geeft_form_description);
+        mGeeftCategory = (Spinner) rootView.findViewById(R.id.categories_spinner);
+        this.mAllowCommunication = (CheckBox) rootView
+                .findViewById(R.id.allow_communication_checkbox);
+
+        cameraButton = (FloatingActionButton) rootView.findViewById(R.id.geeft_photo_button);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                mGeeftImage = new File(Environment.getExternalStorageDirectory()
+                        +File.separator + "image.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
+                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
+            }
+        });
+        //--------------------------------------------------------------
+
+
+        //Listener for te imageView: -----------------------------------
+        mGeeftImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity()); //Read Update
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
+                alertDialog.setView(dialogLayout);
+
+                //On click, the user visualize can visualize some infos about the geefter
+                AlertDialog dialog = alertDialog.create();
+                //the context i had to use is the context of the dialog! not the context of the app.
+                //"dialog.findVie..." instead "this.findView..."
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
+//                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
+
+                Picasso.with(getActivity()).load(mGeeftImage)
+                        .config(Bitmap.Config.ARGB_8888)
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mDialogImageView);
+
+                dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
+                //dialog.setMessage("Some information that we can take from the facebook shared one");
+                dialog.show();  //<-- See This!
+                //Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
+
+            }
+        });
+        //--------------------------------------------------------------
+
+
+        // Spinner for the Geeft Categories-----------------------------
+        Spinner spinner_categories = (Spinner) rootView.findViewById(R.id.categories_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter_categories = ArrayAdapter.createFromResource
+                (getContext(), R.array.categories_array, R.layout.spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter_categories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner_categories.setAdapter(adapter_categories);
+        //--------------------------------------------------------------
+        Log.d("onCreateView", "onActivityCreated2");
     }
 }
