@@ -28,12 +28,14 @@ import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 20/01/16.
  */
 public class TabGeeftFragment extends StatedFragment implements TaskCallbackBooleanToken {
 
+    private static final String KEY_CATEGORY_NAME = "key_category_name" ;
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
@@ -51,9 +53,11 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private final int RESULT_SESSION_EXPIRED = -1;
     //-------------------
 
-    public static TabGeeftFragment newInstance(Bundle b) {
+    public static TabGeeftFragment newInstance(String categoryName) {
         TabGeeftFragment fragment = new TabGeeftFragment();
-        fragment.setArguments(b);
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_CATEGORY_NAME, categoryName);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -208,7 +212,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
         }else {
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,TagsValue.CATEGORY_SPORTS,mAdapter,this).execute();
         }
     }
 

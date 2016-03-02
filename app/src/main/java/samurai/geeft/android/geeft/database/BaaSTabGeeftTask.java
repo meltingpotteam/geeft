@@ -19,6 +19,7 @@ import java.util.List;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 07/01/16.
@@ -35,14 +36,16 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     private static final String TAG ="BaaSGeeftItemTask";
     Context mContext;
     List<Geeft> mGeeftList;
+    private String mCategoryName;
     TaskCallbackBooleanToken mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems,String categoryName, GeeftItemAdapter Adapter,
                             TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
+        mCategoryName = categoryName;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
@@ -81,8 +84,16 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
-                BaasQuery.Criteria paginate = BaasQuery.builder()
-                        .orderBy("_creation_date asc").criteria();
+                BaasQuery.Criteria paginate;
+                if(mCategoryName == TagsValue.CATEGORY_ALL) {
+                     paginate = BaasQuery.builder()
+                            .orderBy("_creation_date asc").criteria();
+                }
+                else{
+                    paginate = BaasQuery.builder()
+                            .where("category = "+ mCategoryName)
+                            .orderBy("_creation_date asc").criteria();
+                }
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
                     try {

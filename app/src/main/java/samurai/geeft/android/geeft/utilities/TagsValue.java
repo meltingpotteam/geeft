@@ -32,18 +32,49 @@ public class TagsValue {
 
 //   --Images for categories screen
    public static final String ASSETS_CARS = "http://geeft1.cloudapp.net:9000/asset/car_motorized_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_CLOTH = "http://geeft1.cloudapp.net:9000/asset/cloth_accessories_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_HOUSE = "http://geeft1.cloudapp.net:9000/asset/house_garden_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_ELECTRONICS = "http://geeft1.cloudapp.net:9000/asset/electronics_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_SPORTS = "http://geeft1.cloudapp.net:9000/asset/sports_free_time_games_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_OTHER = "http://geeft1.cloudapp.net:9000/asset/other_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_SERVICES = "http://geeft1.cloudapp.net:9000/asset/services_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_KIDS = "http://geeft1.cloudapp.net:9000/asset/child_lq?X-BAASBOX-APPCODE="+APPCODE;
+
    public static final String ASSETS_FILMS = "http://geeft1.cloudapp.net:9000/asset/films_books_music_lq?X-BAASBOX-APPCODE="+APPCODE;
 
-   public static final String ROLE_MODERATOR = "moderator";
+//   -- Tags for categories
+   public static final String CATEGORY_ALL = "ALL";
 
-   public static final String ROLE_SUPERMODERATOR = "supermoderator";
+   public static final String CATEGORY_CLOTH = "abbigliamento e accessori";
+
+   public static final String CATEGORY_CAR = "auto e motori";
+
+   public static final String CATEGORY_KIDS = "infanzia e bambini";
+
+   public static final String CATEGORY_SERVICES = "servizi";
+
+   public static final String CATEGORY_OTHER = "altro";
+
+   public static final String CATEGORY_ELECTRONICS = "elettronica";
+
+   public static final String CATEGORY_FILMS = "film, libri e musica";
+
+   public static final String CATEGORY_SPORTS = "sport, tempo libero e giochi";
+
+   public static final String CATEGORY_HOUSE = "casa e giardino";
+
+
+
 
 
 }
+
+
+

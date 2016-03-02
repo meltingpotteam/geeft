@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import samurai.geeft.android.geeft.activities.CategoriesActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
@@ -23,6 +24,7 @@ import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -47,6 +49,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     private final int RESULT_SESSION_EXPIRED = -1;
     //-------------------
 
+    private String categoryNameLocal;
 
     public static PrenotableRecycleFragment newInstance(Bundle b) {
         PrenotableRecycleFragment fragment = new PrenotableRecycleFragment();
@@ -82,7 +85,8 @@ public class PrenotableRecycleFragment extends StatedFragment
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh()");
-        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+        new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
     }
 
     public void done(boolean result,int resultToken){
@@ -124,7 +128,8 @@ public class PrenotableRecycleFragment extends StatedFragment
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
         Log.d(TAG, "onFirstTimeLaunched()");
-        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+        new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
     }
 
     /**
@@ -164,7 +169,8 @@ public class PrenotableRecycleFragment extends StatedFragment
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            categoryNameLocal = TagsValue.CATEGORY_SPORTS;
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,categoryNameLocal,mAdapter,this).execute();
         }
         else {
             mBallView.setVisibility(View.GONE);

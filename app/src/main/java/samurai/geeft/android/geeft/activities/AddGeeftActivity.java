@@ -128,7 +128,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("GEEFT_ID",mId);
-        outState.putSerializable("GEEFT", mGeeft);
+        outState.putSerializable("GEE1FT", mGeeft);
     }
 
     public void onImageSelected(Geeft geeft){}

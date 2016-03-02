@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private String mCategoryName;
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mCategoryName = TagsValue.CATEGORY_ALL;
         /**
          *
          */

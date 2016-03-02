@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 31/01/16.
@@ -35,7 +36,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            return TabGeeftFragment.newInstance(new Bundle());
+            return TabGeeftFragment.newInstance(TagsValue.CATEGORY_ALL);
         }
 
 
