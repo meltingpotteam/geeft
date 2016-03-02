@@ -8,5 +8,5 @@
     android:theme="@style/MyCustomToolBarTheme"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:background="@color/colorPrimary"
-    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+    app:layout_scrollFlags="scroll|enterAlways"
     />
