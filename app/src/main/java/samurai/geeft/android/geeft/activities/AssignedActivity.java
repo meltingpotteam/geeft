@@ -59,10 +59,11 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
     @Override
     public void onImageSelected(Geeft geeft) { // give id of image
         // launch full screen activity
-        Intent intent = FullScreenViewActivity.newIntent(AssignedActivity.this,
-                geeft.getId(),"geeft");
+        Intent intent = FullGeeftDetailsActivity.newIntent(AssignedActivity.this,
+                geeft);
         AssignedActivity.this.startActivity(intent);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

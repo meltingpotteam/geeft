@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:background="@android:color/holo_red_dark"
+        android:background="@android:color/holo_blue_dark"
         >
 
         <LinearLayout
@@ -26,7 +26,7 @@
                 android:id="@+id/show_geeft_story_tex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/geeft_delete"
+                android:text="@string/geeft_add_story"
                 android:textStyle="bold"
                 android:textSize="@dimen/geeft_title_text_size"
                 android:textColor="@android:color/white"

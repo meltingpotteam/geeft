@@ -59,10 +59,11 @@ public class ReservedActivity extends AppCompatActivity implements GeeftReceived
     @Override
     public void onImageSelected(Geeft geeft) { // give id of image
         // launch full screen activity
-        Intent intent = FullScreenViewActivity.newIntent(ReservedActivity.this,
-                geeft.getId(),"geeft");
+        Intent intent = FullGeeftDetailsActivity.newIntent(ReservedActivity.this,
+                geeft);
         ReservedActivity.this.startActivity(intent);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

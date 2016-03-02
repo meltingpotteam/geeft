@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +41,7 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
     private  LayoutInflater inflater;
     private Toolbar mToolbar;
     //-------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +58,17 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
                     .commit();
         }
     }
-
+    @Override
+    public void onImageSelected(Geeft geeft) { // give id of image
+        // launch full screen activity
+        Intent intent = FullGeeftDetailsActivity.newIntent(ReceivedActivity.this,
+                geeft);
+        ReceivedActivity.this.startActivity(intent);
+    }
     @Override
     public void onImageSelected(String id) {}
-    
-    @Override
+
+   /* @Override
     public void onImageSelected(Geeft geeft) { // give id of image
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(ReceivedActivity.this); //Read Update
         View dialogLayout = inflater.inflate(R.layout.received_geeft_dialog, null);
@@ -159,7 +167,7 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
         //Log.d(TAG,"Show!");
         dialog.show();  //<-- See This!
 
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

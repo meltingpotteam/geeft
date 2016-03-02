@@ -46,6 +46,7 @@ import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
+import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSDeleteGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
@@ -79,6 +80,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private View mStoryView;
     private View mModifyView;
     private View mDeleteView;
+    private View mAddStoryView;
+    private View mDonateReceivedGeeftView;
     private List<Geeft> mGeeftList = new ArrayList<>();
     private ProgressDialog mProgressDialog;
 
@@ -196,6 +199,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mStoryView = rootView.findViewById(R.id.item_geeft_story);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
+        mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
+        mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
+
         if(mGeeft!=null) {
             Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                     .fit().centerInside().into(mGeeftImageView);
@@ -246,6 +252,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     .equals(DonatedActivity.class.getSimpleName())){//TODO: Check this,and put it up
                 mModifyView.setVisibility(View.GONE);
                 mDeleteView.setVisibility(View.GONE);
+            }
+
+            if(!getArguments().getSerializable(KEY_CONTEXT)
+                    .equals(ReceivedActivity.class.getSimpleName())){//TODO: Check this,and put it up
+                mAddStoryView.setVisibility(View.GONE);
+                mDonateReceivedGeeftView.setVisibility(View.GONE);
             }
 
             mModifyView.setOnClickListener(new View.OnClickListener() {
