@@ -12,6 +12,10 @@ android {
         versionName "1.0"
         multiDexEnabled true
     }
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
+        preDexLibraries = false //delete the already predexed libraries
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -44,7 +48,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile files('libs/library-0.9.4-SNAPSHOT.jar')
-
     compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.android.support:appcompat-v7:23.1.1'

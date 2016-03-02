@@ -120,7 +120,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             //Insert in doc_id the id of docUser,linked with geefts
                             user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
                             //Insert Feedback,first registration is 5
-                            double initFeedback = 5.0;
+                            double initFeedback = 4.3;
                             user.getScope(BaasUser.Scope.REGISTERED).put("feedback",initFeedback);
                             //Insert n_given,first registration is 0
                             user.getScope(BaasUser.Scope.REGISTERED).put("n_given",0);

@@ -208,7 +208,10 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
 
             double rank = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("feedback");
-            mGeefterRank.setRating((float)rank);
+
+            float rankToset = getRoundedRank(rank);
+
+            mGeefterRank.setRating(rankToset);
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -266,6 +269,21 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
     }
 
+    private float getRoundedRank(double rank) {
+
+        float iPart;
+        double fPart;
+
+        iPart = (long) rank;
+        fPart = rank - iPart;
+        if(fPart > 0.49){
+            return ++iPart;
+        }
+        else{
+            return iPart;
+        }
+    }
+
     private void startAddGeeftActivity(Geeft geeft){
         Intent intent = AddGeeftActivity.newIntent(getContext(),geeft, true);
         startActivity(intent);
@@ -276,112 +294,6 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         new BaaSDeleteGeeftTask(getContext(),mGeeft,FullGeeftDeatailsFragment.this).execute();
 
     }
-    /*
-    private void deleteGeeft(final Geeft geeft){
-        final String geeftId = geeft.getId();
-        BaasDocument.delete("geeft", geeft.getId(), new BaasHandler<Void>() {
-            @Override
-            public void handle(BaasResult<Void> docResult) {
-                if (docResult.isSuccess()) {
-                    final String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-                    BaasQuery.Criteria query = BaasQuery.builder().where("in.id = '" + docUserId + "'").criteria();
-                    BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
-                        @Override
-                        public void handle(BaasResult<List<BaasLink>> resLinks) {
-                            if (resLinks.isSuccess()) {
-                                List<BaasLink> links = resLinks.value();
-                                Log.d(TAG, "Your links are here: " + links.size());
-                                BaasLink.withId(links.).delete(RequestOptions.DEFAULT, new BaasHandler<Void>() {
-                                    @Override
-                                    public void handle(BaasResult<Void> resLinkDel) {
-                                        if(resLinkDel.isSuccess()){
-                                            BaasLink.create(TagsValue.LINK_NAME_WAS_DONATED, geeftId, docUserId,RequestOptions.DEFAULT,new BaasHandler<BaasLink>() {
-                                                @Override
-                                                public void handle(BaasResult<BaasLink> resLinkClone) {
-                                                    if (resLinkClone.isSuccess()){
-                                                        BaasLink value = resLinkClone.value();
-                                                        new AlertDialog.Builder(getContext())
-                                                                .setTitle("Successo")
-                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        startMainActivity();
-                                                                        getActivity().finish();
-                                                                    }
-                                                                })
-                                                                .setMessage("Il Geeft è stato eliminato con successo.").show();
-                                                    }
-                                                    else{
-                                                        Log.e(TAG, "Error while cloning links of Geeft donated");
-                                                        new AlertDialog.Builder(getContext())
-                                                                .setTitle("Errore")
-                                                                .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        else{
-                                            Log.e(TAG, "Error while deleting links of Geeft donated");
-                                            new AlertDialog.Builder(getContext())
-                                                    .setTitle("Errore")
-                                                    .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-                                        }
-                                    }
-                                });
-
-                            } else {
-                                Log.e(TAG, "Error while fetching all links of Geeft donated");
-                                new AlertDialog.Builder(getContext())
-                                        .setTitle("Errore")
-                                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-
-                            }
-                        }
-                    });
-                    /*new AlertDialog.Builder(getContext())
-                            .setTitle("Successo")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startMainActivity();
-                                    getActivity().finish();
-                                }
-                            })
-                            .setMessage("Il Geeft è stato eliminato con successo.").show();
-                } else {
-                    if (docResult.error() instanceof BaasInvalidSessionException) {
-                        Log.e(TAG, "Invalid Session token");
-                        startLoginActivity();
-                        getActivity().finish();
-                    } else {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("Errore")
-                                .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-                    }
-                }
-            }
-        });
-    }
-*/
-    /*
-    private boolean deleteGeeftLink(){
-        boolean result;
-        String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-        BaasQuery.Criteria query =BaasQuery.builder().where("in.id = '" + docUserId + "'" ).criteria();
-        BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
-            @Override
-            public void handle(BaasResult<List<BaasLink>> res) {
-                if (res.isSuccess()) {
-                    List<BaasLink> links = res.value();
-                    Log.d(TAG, "Your links are here: " + links.size());
-
-                } else {
-                    Log.e(TAG, "Error while fetching all links of Geeft donated");
-
-                }
-            }
-        });
-    }*/
 
     private void startLoginActivity() {
         getContext().startActivity(new Intent(getContext(), LoginActivity.class));
@@ -470,11 +382,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
         //-------------------------
         BaasUser currentUser = BaasUser.current();
-        long feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+        double feedback = currentUser.getScope(BaasUser.Scope.REGISTERED).get("feedback");
         long given = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_given");
         long received = currentUser.getScope(BaasUser.Scope.REGISTERED).get("n_received");
 
-        mProfileDialogUserRank.setText(""+feedback);
+        mProfileDialogUserRank.setText(""+feedback+"/5.0");
         mProfileDialogUserGiven.setText(""+given);
         mProfileDialogUserReceived.setText(""+received);
 
