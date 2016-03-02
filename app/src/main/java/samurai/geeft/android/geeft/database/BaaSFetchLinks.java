@@ -87,6 +87,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setGeeftHeight(document.getInt("height"));
                             geeft.setGeeftWidth(document.getInt("width"));
                             geeft.setGeeftDepth(document.getInt("depth"));
+                            geeft.setDonatedLinkId(document.getString("donatedLinkId"));
                             //TODO: Add all filds,taken,assigned...
 
                             mGeeftList.add(geeft);

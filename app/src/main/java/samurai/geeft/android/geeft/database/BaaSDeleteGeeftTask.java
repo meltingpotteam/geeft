@@ -57,7 +57,8 @@ public class BaaSDeleteGeeftTask extends AsyncTask<Void,Void,Boolean> {
                     BaasResult<BaasDocument> resDocToBeClosed = BaasDocument.fetchSync("geeft",mItem.getId());
                     if(resDocToBeClosed.isSuccess()){
                         BaasDocument docToBeClosed = resDocToBeClosed.value();
-                        docToBeClosed.put("close",true);
+                        docToBeClosed.put("closed",true);
+                        docToBeClosed.put("deleted",true);
                         BaasResult<BaasDocument> resClosed = docToBeClosed.saveSync();
                         if(resClosed.isSuccess()){
                             return true;

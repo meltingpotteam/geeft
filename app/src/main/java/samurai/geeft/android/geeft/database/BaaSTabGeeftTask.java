@@ -82,6 +82,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate = BaasQuery.builder()
+                        .where("closed = false and deleted = false")
                         .orderBy("_creation_date asc").criteria();
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
