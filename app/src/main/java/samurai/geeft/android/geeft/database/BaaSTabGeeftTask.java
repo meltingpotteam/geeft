@@ -120,6 +120,8 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mResultToken = RESULT_OK;
                             result = true;
                         }
+                        mResultToken = RESULT_OK;
+                        result = true;
                     } catch (BaasInvalidSessionException ise) {
                         mResultToken = RESULT_SESSION_EXPIRED;
                         return false;

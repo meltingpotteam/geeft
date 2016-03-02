@@ -131,12 +131,19 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
-                toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
+                if(!(mGeeftList.size() == 0)) {
+                    toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+                else{
+                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
             } else {
                 if(resultToken == RESULT_OK) {
-                    toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
+                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
                 }
