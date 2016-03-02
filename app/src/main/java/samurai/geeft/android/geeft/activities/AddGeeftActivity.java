@@ -80,9 +80,9 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            if(mGeeft == null) {
-                mGeeft = new Geeft();
-            }
+//            if(mGeeft == null) {
+//                mGeeft = new Geeft();
+//            }
             fragment = AddGeeftFragment.newInstance(mGeeft, mModify);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();

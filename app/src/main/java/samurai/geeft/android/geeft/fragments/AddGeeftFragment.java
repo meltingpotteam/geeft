@@ -32,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.json.JsonArray;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -194,7 +195,9 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeftDescription.setText(mGeeft.getGeeftDescription());
         mGeeftCAP.setText(mGeeft.getUserCap());
 
-        mGeeftLabels.setText(mGeeft.getGeeftLabels());
+        //fill labels field
+        mGeeftLabels.setText(jsonToStringLabelsCreator(mGeeft.getGeeftArrayLabels()));
+        //-------------------------------------------------
 
 
         expirationDatePos = (int) mGeeft.getDeadLine();
@@ -512,7 +515,6 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeft.setUserCap(cap);
         mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
         mGeeft.setCategory(category);
-        mGeeft.setGeeftArrayLabels(labels);
         mGeeft.setAutomaticSelection(automaticSelection);
         mGeeft.setAllowCommunication(allowCommunication);
         mGeeft.setDimensionRead(dimensionRead);
@@ -528,6 +530,11 @@ public class AddGeeftFragment extends StatedFragment {
             mGeeft.setGeeftWidth(0);
             mGeeft.setGeeftDepth(0);
         }
+        if(mGeeft.getGeeftArrayLabels() == null){
+            mGeeft.setGeeftArrayLabels(new JsonArray());
+        }
+        else
+            mGeeft.setGeeftArrayLabels(arrayLabelsCreator(labels));
         ///////////////////////////////////////
 
     }
@@ -571,7 +578,31 @@ public class AddGeeftFragment extends StatedFragment {
         return 0;
     }
 
+    // create a JsonArray for baasbox that have a cleaned labels words
+    private JsonArray arrayLabelsCreator(String labelsToClean){
+        String[] labels =labelsToClean.replaceAll(" ", "").toLowerCase().split(",");
+        StringBuilder checkString = new StringBuilder();
+        JsonArray labelsCleaned = new JsonArray();
+        for (String s : labels){
+            if (!s.equals("") || !s.equals(" ")){
+                checkString.append(s).append("_");
+                labelsCleaned.add(s);
+            }
+        }
+        Log.d(TAG, "ArrayCreator splitted String: " + checkString.toString());
+        return labelsCleaned;
+    }
 
+    private String jsonToStringLabelsCreator(JsonArray jsonLabel){
+        //reverse the content of the JsonArray to recreate
+        // the string to set in the field Labels in addGeeft
+        StringBuilder labelString = new StringBuilder();
+        for (int i = 0; i < jsonLabel.size(); i++ ){
+            labelString.append(jsonLabel.getString(i)).append(",");
+        }
+        //-------------------------------------------------
+        return  labelString.toString();
+    }
 
     class CheckCap implements Runnable {
         private String postal_code;

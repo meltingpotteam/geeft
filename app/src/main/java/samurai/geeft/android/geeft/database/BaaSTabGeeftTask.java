@@ -105,6 +105,9 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mGeeft.setUserLocation(e.getString("location"));
                             mGeeft.setUserCap(e.getString("cap"));
                             mGeeft.setGeeftTitle(e.getString("title"));
+
+//                            mGeeft.setGeeftArrayLabels(e.getArray("labels"));
+
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
                                 Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());

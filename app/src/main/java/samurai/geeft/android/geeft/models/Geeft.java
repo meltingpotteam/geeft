@@ -1,5 +1,7 @@
 package samurai.geeft.android.geeft.models;
 
+import com.baasbox.android.json.JsonArray;
+
 import java.io.Serializable;
 
 /**
@@ -16,7 +18,7 @@ public class Geeft implements Serializable {
     private String geeftTitle;
     private String geeftImage;
     private String[] geeftArrayImage;
-    private String geeftLabels;
+    private JsonArray geeftArrayLabels;
     private boolean automaticSelection;
     private boolean allowCommunication;
     private boolean dimensionRead;
@@ -39,7 +41,7 @@ public class Geeft implements Serializable {
     }
 
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
-                 boolean isSelected, long creationTime, String geeftLabels, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
+                 boolean isSelected, long creationTime, JsonArray geeftArrayLabels, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
                  String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken) {
 
         this.geeftDescription = geeftDescription;
@@ -48,7 +50,7 @@ public class Geeft implements Serializable {
         this.geeftTitle = geeftTitle;
         this.isSelected = isSelected;
         this.creationTime = creationTime;
-        this.geeftLabels = geeftLabels;
+        this.geeftArrayLabels = geeftArrayLabels;
         this.automaticSelection = automaticSelection;
         this.allowCommunication = allowCommunication;
         this.dimensionRead = dimensionRead;
@@ -236,11 +238,11 @@ public class Geeft implements Serializable {
         this.geeftArrayImage = geeftArrayImage;
     }
 
-    public String getGeeftLabels() {
-        return geeftLabels;
+    public JsonArray getGeeftArrayLabels() {
+        return geeftArrayLabels;
     }
-    public void setGeeftArrayLabels(String geeftLabels) {
-        this.geeftLabels = geeftLabels;
+    public void setGeeftArrayLabels(JsonArray geeftLabels) {
+        this.geeftArrayLabels = geeftLabels;
     }
 
     public byte[] getStreamImage() {
