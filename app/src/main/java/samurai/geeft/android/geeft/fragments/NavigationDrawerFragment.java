@@ -144,8 +144,6 @@ public class NavigationDrawerFragment extends Fragment {
         Log.d(TAG, "profilePic loaded: " + fbImage);
         mProfleName.setText(fbName);
 
-
-
         //handle touch event of recycleview
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
                 , mRecyclerView, new ClickListener() {

@@ -60,13 +60,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_x2"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_x2"
             android:layout_gravity="start|center">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/navigation_drawer_geefter_profile_image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="7dp"
                 app:border_color="@color/white"
                 />
             <TextView
