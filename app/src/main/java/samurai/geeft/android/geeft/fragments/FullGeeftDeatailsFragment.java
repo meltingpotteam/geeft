@@ -219,12 +219,6 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
     }
 
-    private void startImageGallery(List<Geeft> geeftList) {
-        Intent intent =
-                FullScreenImageActivity.newIntent(getContext(), geeftList);
-        startActivity(intent);
-    }
-
     private void initSupportActionBar(View rootView) {
         mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
@@ -234,6 +228,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(mGeeft.getGeeftTitle());
     }
+
+    private void startImageGallery(List<Geeft> geeftList) {
+        Intent intent =
+                FullScreenImageActivity.newIntent(getContext(), geeftList);
+        startActivity(intent);
+    }
+
 
     private void initGeefterDialog(final Geeft geeft){
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(getContext()); //Read Update

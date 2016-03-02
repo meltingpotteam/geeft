@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -83,7 +84,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                 //here you can add functions
                 Log.d("DONE", "in startChooseStory");
                 GeeftReceivedListFragment fragment =
-                        GeeftReceivedListFragment.newInstance("received",false);
+                        GeeftReceivedListFragment.newInstance("received", false);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);
@@ -127,7 +128,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("GEEFT_ID",mId);
+        outState.putString("GEEFT_ID", mId);
         outState.putSerializable("GEEFT", mGeeft);
     }
 
@@ -144,6 +145,21 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             Toast.makeText(getApplicationContext(),
                     "E' accaduto un errore riprovare",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

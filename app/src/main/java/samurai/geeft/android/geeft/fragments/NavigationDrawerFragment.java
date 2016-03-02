@@ -4,7 +4,6 @@ package samurai.geeft.android.geeft.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -19,18 +18,15 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.CategoriesActivity;
@@ -97,15 +93,6 @@ public class NavigationDrawerFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
-        mRecyclerView.setHasFixedSize(false);
-
-        mWelcomeLayout = (LinearLayout) rootView.
-                findViewById(R.id.navigation_drawer_welcome);
-        mProfileLayout = (FrameLayout) rootView.
-                findViewById(R.id.navigation_drawer_profile);
-
-        //initialize UI
         initUI(rootView);
 
         return rootView;
@@ -262,7 +249,13 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private  void initUI(View rootView){
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.navigation_drawer_recyclerview);
+        mRecyclerView.setHasFixedSize(false);
 
+        mWelcomeLayout = (LinearLayout) rootView.
+                findViewById(R.id.navigation_drawer_welcome);
+        mProfileLayout = (FrameLayout) rootView.
+                findViewById(R.id.navigation_drawer_profile);
 
         // Set adapter data
         mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());

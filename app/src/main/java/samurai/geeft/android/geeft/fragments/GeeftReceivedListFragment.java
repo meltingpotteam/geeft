@@ -90,10 +90,9 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
-
-        initActionBar(rootView);
-
         initUI(rootView);
+        if (savedInstanceState==null)
+            initSupportActionBar(rootView);
 
         return rootView;
     }
@@ -133,10 +132,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                getActivity().getSupportFragmentManager().popBackStack();
                                 dialog.dismiss();
-                                startActivity(new Intent(getContext(), MainActivity.class));
-                                getActivity().finish();
+                                if(getActivity()
+                                        .getSupportFragmentManager().getBackStackEntryCount()>0){
+                                    getActivity().getSupportFragmentManager().popBackStack();
+                                }else {
+                                    getActivity().onBackPressed();
+                                }
                             }
                         })
                         .show();
@@ -191,6 +193,11 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
             ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable("mGeeftList2");
             mGeeftList.addAll(array);
             mGeeftListShowDialog();
+            View rootView = getView();
+            if (rootView!=null){
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
         }
     }
 
@@ -276,11 +283,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         mProgressDialog.setMessage("Attendere");
     }
 
-    private void initActionBar(View rootView) {
-        mToolbar = (Toolbar)rootView.findViewById(R.id.fragment_add_geeft_toolbar);
-        Log.d("TOOLBAR", "" + (mToolbar != null));
-        if (mToolbar!=null)
-            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initUI(View rootView) {

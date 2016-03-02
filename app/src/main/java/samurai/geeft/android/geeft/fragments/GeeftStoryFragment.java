@@ -1,6 +1,8 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ public class GeeftStoryFragment extends StatedFragment {
 
     private static final String GEEFT_KEY = "samurai.geeft.android.geeft.fragments."+
             "GeeftStoryFragment_geeft";
+    private Toolbar mToolbar;
 
     public static GeeftStoryFragment newInstance(Bundle b) {
         GeeftStoryFragment fragment = new GeeftStoryFragment();
@@ -43,6 +46,50 @@ public class GeeftStoryFragment extends StatedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_geeft_story_scrollableview, container, false);
+
+        initUI(rootView);
+        if (savedInstanceState==null)
+            initSupportActionBar(rootView);
+
+        return rootView;
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * Save Fragment's State here
+     */
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        // Save items for later restoring them on rotation
+        outState.putSerializable(GEEFT_KEY, mGeeft);
+    }
+
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mGeeft = (Geeft)savedInstanceState.getSerializable(GEEFT_KEY);
+            View rootView = getView();
+            if (rootView!=null){
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
+        }
+    }
+
+    private void initUI(View rootView) {
         mGeeftImage = (ImageView)rootView.findViewById(R.id.geeft_story_view);
         mUserProfilePic = (CircleImageView) rootView.findViewById(R.id.geefter_profile_image);
         mUserLocationTextView = (TextView) rootView.findViewById(R.id.location);
@@ -83,9 +130,6 @@ public class GeeftStoryFragment extends StatedFragment {
             });
             //////////////////////////////
         }
-
-
-        return rootView;
     }
 
     public void setGeeft(Geeft geeft){
@@ -97,24 +141,4 @@ public class GeeftStoryFragment extends StatedFragment {
     }
 
 
-    /**
-     * Save Fragment's State here
-     */
-    @Override
-    protected void onSaveState(Bundle outState) {
-        super.onSaveState(outState);
-        // Save items for later restoring them on rotation
-        outState.putSerializable(GEEFT_KEY, mGeeft);
-    }
-
-    /**
-     * Restore Fragment's State here
-     */
-    @Override
-    protected void onRestoreState(Bundle savedInstanceState) {
-        super.onRestoreState(savedInstanceState);
-        if (savedInstanceState != null) {
-            mGeeft = (Geeft)savedInstanceState.getSerializable(GEEFT_KEY);
-        }
-    }
 }

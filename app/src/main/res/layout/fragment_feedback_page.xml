@@ -20,7 +20,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <include
-                android:id="@+id/feedback_page_toolbar"
+                android:id="@+id/toolbar"
                 layout="@layout/tool_bar"
                 />
 

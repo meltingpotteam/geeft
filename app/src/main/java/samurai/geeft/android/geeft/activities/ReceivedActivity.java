@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -158,5 +159,20 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
         //Log.d(TAG,"Show!");
         dialog.show();  //<-- See This!
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

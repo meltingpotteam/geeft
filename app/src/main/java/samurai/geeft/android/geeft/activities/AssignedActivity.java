@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
@@ -42,7 +43,7 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
         inflater = LayoutInflater.from(AssignedActivity.this);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        Log.d(TAG,""+getIntent().getStringExtra(EXTRA_COLLECTION));
+        Log.d(TAG, "" + getIntent().getStringExtra(EXTRA_COLLECTION));
         if (fragment == null) {
             fragment = GeeftReceivedListFragment
                     .newInstance(getIntent().getStringExtra(EXTRA_COLLECTION),
@@ -61,5 +62,20 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
         Intent intent = FullScreenViewActivity.newIntent(AssignedActivity.this,
                 geeft.getId(),"geeft");
         AssignedActivity.this.startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,6 +62,21 @@ public class ReservedActivity extends AppCompatActivity implements GeeftReceived
         Intent intent = FullScreenViewActivity.newIntent(ReservedActivity.this,
                 geeft.getId(),"geeft");
         ReservedActivity.this.startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

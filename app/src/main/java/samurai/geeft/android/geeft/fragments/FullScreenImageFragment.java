@@ -1,6 +1,9 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,7 @@ public class FullScreenImageFragment extends StatedFragment {
     private static final String GEEFT_KEY = "samurai.geeft.android.geeft.fragments."+
             "GeeftStoryFragment_geeft";
     public static final String ARG_GEFFT = "arg_geeft";
+    private Toolbar mToolbar;
 
     public static FullScreenImageFragment newInstance(Bundle b) {
         FullScreenImageFragment fragment = new FullScreenImageFragment();
@@ -39,36 +43,11 @@ public class FullScreenImageFragment extends StatedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_full_screen_image, container, false);
-        mGeeftImage = (TouchImageView)rootView.findViewById(R.id.touch_image_view);
-        mProgressImageView = (ImageView)rootView.findViewById(R.id.anim_progress);
-
-        mGeeft = (Geeft)getArguments().getSerializable(ARG_GEFFT);
-        Log.d("mGeeft before create", "mGeeft val: " + mGeeft);
-        if (mGeeft != null){
-            Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
-                    .centerInside().into(mGeeftImage,new Callback() {
-                @Override
-                public void onSuccess() {
-                   mProgressImageView.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onError() {
-                    Log.e(TAG, "error");
-                    mProgressImageView.setVisibility(View.GONE);
-                }
-            });
-        }
-
-
+        initUI(rootView);
+        if (savedInstanceState==null)
+            initSupportActionBar(rootView);
         return rootView;
     }
-
-
-    public FullScreenImageFragment getInstance(){
-        return this;
-    }
-
 
     /**
      * Save Fragment's State here
@@ -88,6 +67,51 @@ public class FullScreenImageFragment extends StatedFragment {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
             mGeeft = (Geeft)savedInstanceState.getSerializable(GEEFT_KEY);
+            View rootView = getView();
+            if (rootView!=null){
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
         }
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        mToolbar.setBackgroundColor(Color.TRANSPARENT);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+    }
+
+    private void initUI(View rootView) {
+        mGeeftImage = (TouchImageView)rootView.findViewById(R.id.touch_image_view);
+        mProgressImageView = (ImageView)rootView.findViewById(R.id.anim_progress);
+
+        mGeeft = (Geeft)getArguments().getSerializable(ARG_GEFFT);
+        Log.d("mGeeft before create", "mGeeft val: " + mGeeft);
+        if (mGeeft != null){
+            Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
+                    .centerInside().into(mGeeftImage,new Callback() {
+                @Override
+                public void onSuccess() {
+                    mProgressImageView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onError() {
+                    Log.e(TAG, "error");
+                    mProgressImageView.setVisibility(View.GONE);
+                }
+            });
+        }
+
+    }
+
+
+    public FullScreenImageFragment getInstance(){
+        return this;
     }
 }

@@ -9,7 +9,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,10 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
@@ -55,7 +62,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
             public Fragment getItem(int position) {
                 Geeft geeft = mGeeftList.get(position);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(FullScreenImageFragment.ARG_GEFFT,geeft);
+                bundle.putSerializable(FullScreenImageFragment.ARG_GEFFT, geeft);
                 FullScreenImageFragment fullScreenImageFragment =
                         FullScreenImageFragment.newInstance(bundle);
                 return fullScreenImageFragment;
@@ -66,5 +73,20 @@ public class FullScreenImageActivity extends AppCompatActivity {
                 return mGeeftList.size();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

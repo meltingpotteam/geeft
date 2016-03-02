@@ -3,6 +3,8 @@ package samurai.geeft.android.geeft.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
@@ -15,6 +17,7 @@ import samurai.geeft.android.geeft.R;
  */
 public class FeedbackPageActivity extends AppCompatActivity {
 
+    private final String TAG = getClass().getSimpleName();
     private Toolbar mToolbar;
     private RatingBar mRatingCommunication;
     private RatingBar mRatingCourtesy;
@@ -58,9 +61,20 @@ public class FeedbackPageActivity extends AppCompatActivity {
         throw new RuntimeException("This is a crash");
     }
 
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d(TAG, "HOME");
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                }else {
+                    super.onBackPressed();
+                }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 /*
     public void done(boolean result){
         //enables all social buttons

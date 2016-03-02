@@ -13,7 +13,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         >
 
-        <include android:id="@+id/fragment_feedback_help_page_toolbar" layout="@layout/tool_bar"/>
+        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
 
 
     </android.support.design.widget.AppBarLayout>
