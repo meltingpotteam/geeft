@@ -42,6 +42,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AddGeeftActivity;
+import samurai.geeft.android.geeft.activities.AddStoryActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
@@ -274,6 +275,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     deleteGeeft();
                 }
             });
+
+            mDonateReceivedGeeftView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startAddGeeftActivity(mGeeft);
+                    getActivity().finish();
+                }
+            });
+
+            mAddStoryView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startAddStoryActivity();
+                    getActivity().finish();
+                }
+            });
         }
     }
 
@@ -336,6 +353,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private void startAddGeeftActivity(Geeft geeft){
         Intent intent = AddGeeftActivity.newIntent(getContext(),geeft, true);
+        startActivity(intent);
+    }
+
+    private void startAddStoryActivity(){ //TODO: FILL STORY ACTIVITY WITH GEEFT
+        Intent intent = new Intent(getContext(),AddStoryActivity.class);
         startActivity(intent);
     }
 
