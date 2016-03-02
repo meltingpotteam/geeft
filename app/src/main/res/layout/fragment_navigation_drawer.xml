@@ -9,6 +9,7 @@
                 android:background="@android:color/background_light"
                 android:clickable="true"
                 tools:context="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment">
+
     <LinearLayout
         android:id="@+id/navigation_drawer_welcome"
         android:layout_width="match_parent"
