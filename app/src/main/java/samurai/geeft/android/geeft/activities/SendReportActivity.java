@@ -19,6 +19,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 /**
  * Created by oldboy on 15/02/16.
  */
+
 public class SendReportActivity extends AppCompatActivity implements TaskCallbackBoolean {
 
     private static final String TAG = "SendReportActivity";

@@ -51,21 +51,35 @@
             android:id="@+id/navigation_drawer_geefter_background"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:elevation="20dp"
-            android:src="@drawable/geeft_background"
+            android:src="@drawable/galaxy_geeft_background"
             android:scaleType="centerCrop"
             android:background="@color/colorPrimaryDark">
 
         </ImageView>
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/navigation_drawer_geefter_profile_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            app:border_color="@color/white"
-            android:layout_gravity="start|center"
-            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_x2"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_x2"
+            android:layout_gravity="start|center">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/navigation_drawer_geefter_profile_image"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="7dp"
+                app:border_color="@color/white"
+                />
+            <TextView
+                android:id="@+id/navigation_drawer_geefter_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_name"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
+        </LinearLayout>
     </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navigation_drawer_recyclerview"
