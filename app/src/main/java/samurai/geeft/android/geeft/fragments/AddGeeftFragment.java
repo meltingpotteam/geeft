@@ -86,11 +86,14 @@ public class AddGeeftFragment extends StatedFragment {
     private TextView mGeeftCAP;     //cap of the area
     private Spinner mGeeftExpirationTime; //expire time of the Geeft
     private Spinner mGeeftCategory; //Category of the Geeft
+    private TextView mGeeftLabels; //Labels of the Geeft
+
 
     //filed for automatic selection of the geeft, geeft's dimension and for allowing the the message exchanges
     private CheckBox mAutomaticSelection;
     private CheckBox mAllowCommunication;
     private CheckBox mDimensionRead;
+
 
     private ImageView mGeeftImageView;
     private ImageView mDialogImageView;
@@ -107,6 +110,7 @@ public class AddGeeftFragment extends StatedFragment {
     private String cap;
     private String expTime;
     private String category;
+    private String labels;
     private int categoryPos;
     private int locationPos;
     private int expirationDatePos;
@@ -190,6 +194,8 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeftDescription.setText(mGeeft.getGeeftDescription());
         mGeeftCAP.setText(mGeeft.getUserCap());
 
+        mGeeftLabels.setText(mGeeft.getGeeftLabels());
+
 
         expirationDatePos = (int) mGeeft.getDeadLine();
 
@@ -234,9 +240,11 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeftCAP = (TextView) rootView.findViewById(R.id.form_field_location_cap);
         mGeeftExpirationTime = (Spinner) rootView.findViewById(R.id.expire_time_spinner);
         mGeeftCategory = (Spinner) rootView.findViewById(R.id.categories_spinner);
-        this.mAutomaticSelection = (CheckBox) rootView
+        mGeeftLabels = (TextView) rootView.findViewById(R.id.fragment_add_geeft_labels);
+
+        mAutomaticSelection = (CheckBox) rootView
                 .findViewById(R.id.automatic_selection_checkbox);
-        this.mAllowCommunication = (CheckBox) rootView
+        mAllowCommunication = (CheckBox) rootView
                 .findViewById(R.id.allow_communication_checkbox);
 
         cameraButton = (ImageButton) rootView.findViewById(R.id.geeft_photo_button);
@@ -389,6 +397,10 @@ public class AddGeeftFragment extends StatedFragment {
                 location = mGeeftLocation.getSelectedItem().toString();
                 cap = mGeeftCAP.getText().toString();
                 expTime = mGeeftExpirationTime.getSelectedItem().toString();
+
+                //label
+                labels = mGeeftLabels.getText().toString();
+
                 if(mGeeftExpirationTime.getSelectedItemPosition()>0)
                     deltaExptime = Integer.parseInt(expTime.split(" ")[0]);
                 category = mGeeftCategory.getSelectedItem().toString();
@@ -397,9 +409,9 @@ public class AddGeeftFragment extends StatedFragment {
                 allowCommunication = mAllowCommunication.isChecked();
 
                 Log.d(TAG, "name: " + name + " description: " + description + " location: " + location
-                        + " cap: " + cap + " expire time: " + expTime + " category: " + category +
-                        " automatic selection: " + automaticSelection + " allow communication: " +
-                        allowCommunication);
+                        + " cap: " + cap + " expire time: " + expTime + " category: " + category
+                        + " labels: " + labels + " automatic selection: "
+                        + automaticSelection + " allow communication: " + allowCommunication);
 
                 if(name.length() <= 1 || description.length() <= 1
                         || mGeeftImageView.getDrawable() == null
@@ -501,6 +513,7 @@ public class AddGeeftFragment extends StatedFragment {
         mGeeft.setUserCap(cap);
         mGeeft.setDeadLine(getDeadlineTimestamp(deltaExptime));
         mGeeft.setCategory(category);
+        mGeeft.setGeeftArrayLabels(labels);
         mGeeft.setAutomaticSelection(automaticSelection);
         mGeeft.setAllowCommunication(allowCommunication);
         mGeeft.setDimensionRead(dimensionRead);
