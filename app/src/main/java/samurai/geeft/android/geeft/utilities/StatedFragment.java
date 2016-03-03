@@ -11,6 +11,8 @@ public class StatedFragment extends Fragment {
 
     Bundle savedState;
 
+    private boolean saved;
+
     public StatedFragment() {
         super();
     }
@@ -33,6 +35,7 @@ public class StatedFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save State Here
+        saved = true;
         saveStateToArguments();
     }
 
@@ -40,7 +43,9 @@ public class StatedFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         // Save State Here
-        saveStateToArguments();
+        if(!saved) {
+            saveStateToArguments();
+        }
     }
 
     ////////////////////

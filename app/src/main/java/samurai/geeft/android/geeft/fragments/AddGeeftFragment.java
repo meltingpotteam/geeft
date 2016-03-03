@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -168,22 +169,25 @@ public class AddGeeftFragment extends StatedFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_geeft_page, container, false);
 
+        initActionBar(rootView);
 
         if (mGeeft != null) {
+            Log.d(TAG, "Geeft isn't null");
             initUI(rootView);
             fillUI(rootView);
         }else{
+            Log.d(TAG, "Geeft is null");
             mGeeft= new Geeft();
             initUI(rootView);
         }
 
-        initActionBar(rootView);
 
 
         return rootView;
     }
 
     private void fillUI(View rootView) {
+        Log.d(TAG, "fillUi called" );
         Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                 .fit()
                 .centerInside()
@@ -498,6 +502,7 @@ public class AddGeeftFragment extends StatedFragment {
 
     private void fillGeeft(Geeft geeft) {
         //------- Create a byteStream of image
+        Log.d(TAG, "fillGeeft called");
         Drawable drawable = mGeeftImageView.getDrawable();
         if(drawable != null) {
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
@@ -530,11 +535,13 @@ public class AddGeeftFragment extends StatedFragment {
             mGeeft.setGeeftWidth(0);
             mGeeft.setGeeftDepth(0);
         }
-        if(mGeeft.getGeeftArrayLabels() == null){
-            mGeeft.setGeeftArrayLabels(new JsonArray());
-        }
-        else
-            mGeeft.setGeeftArrayLabels(arrayLabelsCreator(labels));
+//        if(mGeeft.getGeeftArrayLabels() == null){
+//            Log.d(TAG, "label value: " + labels);
+//            mGeeft.setGeeftArrayLabels(new JsonArray());
+//        }else {
+//            Log.d(TAG, "label value: " + labels);
+//            mGeeft.setGeeftArrayLabels(arrayLabelsCreator(labels));
+//        }
         ///////////////////////////////////////
 
     }
@@ -593,7 +600,7 @@ public class AddGeeftFragment extends StatedFragment {
         return labelsCleaned;
     }
 
-    private String jsonToStringLabelsCreator(JsonArray jsonLabel){
+    protected String jsonToStringLabelsCreator(JsonArray jsonLabel){
         //reverse the content of the JsonArray to recreate
         // the string to set in the field Labels in addGeeft
         StringBuilder labelString = new StringBuilder();
