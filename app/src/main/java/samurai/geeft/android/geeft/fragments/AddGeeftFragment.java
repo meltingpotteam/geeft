@@ -218,10 +218,11 @@ public class AddGeeftFragment extends StatedFragment {
 
     private void initActionBar(View rootView) {
         mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        Log.d("TOOLBAR", "" + (mToolbar != null));
-        if (mToolbar!=null)
-            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initUI(View rootView) {
