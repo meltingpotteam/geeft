@@ -61,7 +61,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
-        View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
         initUI(rootView);
         if (savedInstanceState==null)

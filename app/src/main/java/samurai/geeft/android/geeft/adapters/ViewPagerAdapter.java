@@ -35,7 +35,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            return TabGeeftFragment.newInstance(new Bundle());
+            return TabGeeftFragment.newInstance(false);
         }
 
 

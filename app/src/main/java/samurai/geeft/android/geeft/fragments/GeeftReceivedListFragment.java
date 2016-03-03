@@ -89,7 +89,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_received_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         initUI(rootView);
         if (savedInstanceState==null)
             initSupportActionBar(rootView);

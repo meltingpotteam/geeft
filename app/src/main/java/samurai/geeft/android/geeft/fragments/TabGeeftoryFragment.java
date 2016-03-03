@@ -63,7 +63,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
 
         //inflates the view
-        View rootView = inflater.inflate(R.layout.fragment_tab_geeftory, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_no_toolbar, container, false);
 
         //initialize UI
         initUI(rootView);
