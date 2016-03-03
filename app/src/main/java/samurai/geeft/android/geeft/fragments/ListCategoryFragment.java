@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
 public class ListCategoryFragment extends StatedFragment {
 
     private static final String KEY_LIST_STATE = "key_list_state" ;
+    private final String TAG = getClass().getSimpleName();
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
@@ -71,10 +74,9 @@ public class ListCategoryFragment extends StatedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        Log.d(TAG,"savedInstanceState==null? "+(savedInstanceState==null));
         initUI(rootView);
-        if (savedInstanceState==null)
-            initSupportActionBar(rootView);
-
+        initSupportActionBar(rootView);
         return rootView;
     }
 
@@ -109,12 +111,7 @@ public class ListCategoryFragment extends StatedFragment {
         if (savedInstanceState != null) {
             mCategoriesList = new ArrayList<>();
             mCategoriesListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
-            View rootView = getView();
-            if (rootView!=null){
-                initList();
-                initUI(rootView);
-                initSupportActionBar(rootView);
-            }
+            initList();
         }
     }
 
@@ -123,6 +120,7 @@ public class ListCategoryFragment extends StatedFragment {
     }
 
     private void initUI(View rootView) {
+        Log.d(TAG,"initUI");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 //        mRecyclerView.setHasFixedSize(true);
@@ -136,7 +134,7 @@ public class ListCategoryFragment extends StatedFragment {
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "short click", Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mCategory = mCategoriesList.get(position);
                 mCallback.onCategorySelected(mCategory);
@@ -145,6 +143,7 @@ public class ListCategoryFragment extends StatedFragment {
             @Override
             public void onLongClick(View view, int position) {
                 //TODO what happens on long press
+                Toast.makeText(getActivity(), "Long click", Toast.LENGTH_LONG).show();
                 mCategory = mCategoriesList.get(position);
                 mCallback.onCategorySelected(mCategory);
             }

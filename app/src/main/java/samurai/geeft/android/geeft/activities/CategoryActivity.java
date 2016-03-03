@@ -35,12 +35,13 @@ public class CategoryActivity extends AppCompatActivity implements ListCategoryF
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        Log.d(TAG, "oncreate out entries: "+getSupportFragmentManager().getBackStackEntryCount());
         if (fragment == null) {
             Bundle b = new Bundle();
+            Log.d(TAG, "oncreate in entries: "+getSupportFragmentManager().getBackStackEntryCount());
             fragment = ListCategoryFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
-            transaction.commit();
+            fm.beginTransaction().add(R.id.fragment_container, fragment)
+                    .commit();
         }
     }
 
@@ -52,7 +53,7 @@ public class CategoryActivity extends AppCompatActivity implements ListCategoryF
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
-        Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
+        Log.d(TAG, getFragmentManager().getBackStackEntryCount() + "");
     }
 
     @Override
@@ -60,14 +61,20 @@ public class CategoryActivity extends AppCompatActivity implements ListCategoryF
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                Log.d(TAG, "HOME");
                 if(getSupportFragmentManager().getBackStackEntryCount()>0){
                     getSupportFragmentManager().popBackStack();
+                    Log.d(TAG, "back stack entries: " + getSupportFragmentManager().getBackStackEntryCount());
                 }else {
                     super.onBackPressed();
                 }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d(TAG, "back pressed entries: " + getSupportFragmentManager().getBackStackEntryCount());
+    }
 }
