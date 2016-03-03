@@ -18,6 +18,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
+import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
@@ -38,6 +39,8 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     TaskCallbackBooleanToken mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
+    boolean mIsCategoryTask;
+    Category mCategory;
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                             TaskCallbackBooleanToken callback) {
@@ -46,6 +49,18 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
+    }
+
+    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                            boolean isCategoryTask, Category category,
+                            TaskCallbackBooleanToken callback) {
+        mContext = context;
+        mGeeftList = feedItems;
+        mCallback = callback;
+        mGeeftItemAdapter = Adapter;
+        mGeeftList = feedItems;
+        mIsCategoryTask = isCategoryTask;
+        mCategory = category;
     }
 
     @Override
@@ -81,9 +96,17 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
-                BaasQuery.Criteria paginate = BaasQuery.builder()
-                        .where("closed = false and deleted = false")
-                        .orderBy("_creation_date asc").criteria();
+                BaasQuery.Criteria paginate;
+                if (mIsCategoryTask) {
+                    paginate = BaasQuery.builder()
+                            .where("closed = false and deleted = false and category = '"
+                                    +mCategory.getCategoryName().toLowerCase()+"'")
+                            .orderBy("_creation_date asc").criteria();
+                }else{
+                    paginate = BaasQuery.builder()
+                            .where("closed = false and deleted = false")
+                            .orderBy("_creation_date asc").criteria();
+                }
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
                     try {

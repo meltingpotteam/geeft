@@ -104,6 +104,8 @@
 
         <activity android:name=".activities.FullScreenImageActivity"/>
 
+        <activity android:name=".activities.CategoryActivity"/>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

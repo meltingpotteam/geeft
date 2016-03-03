@@ -4,7 +4,6 @@ package samurai.geeft.android.geeft.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +26,12 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
-import samurai.geeft.android.geeft.activities.CategoriesActivity;
+import samurai.geeft.android.geeft.activities.CategoryActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.ReservedActivity;
@@ -286,7 +282,7 @@ public class NavigationDrawerFragment extends Fragment {
                 startActivity(intent4);
                 break;
             case 5:
-                Intent intent5 = new Intent(getContext(), CategoriesActivity.class);
+                Intent intent5 = CategoryActivity.newIntent(getContext());
                 startActivity(intent5);
                 break;
             case 6:

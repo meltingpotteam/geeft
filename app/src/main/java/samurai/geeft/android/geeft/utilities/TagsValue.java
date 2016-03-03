@@ -66,6 +66,27 @@ public class TagsValue {
     public static final String ASSETS_FILMS =
            "http://geeft1.cloudapp.net:9000/asset/films_books_music_lq?X-BAASBOX-APPCODE="+APPCODE;
 
+
+    public static final String CATEGORY_ALL = "ALL";
+
+    public static final String CATEGORY_CLOTH = "abbigliamento e accessori";
+
+    public static final String CATEGORY_CAR = "auto e motori";
+
+    public static final String CATEGORY_KIDS = "infanzia e bambini";
+
+    public static final String CATEGORY_SERVICES = "servizi";
+
+    public static final String CATEGORY_OTHER = "altro";
+
+    public static final String CATEGORY_ELECTRONICS = "elettronica";
+
+    public static final String CATEGORY_FILMS = "film, libri e musica";
+
+    public static final String CATEGORY_SPORTS = "sport, tempo libero e giochi";
+
+    public static final String CATEGORY_HOUSE = "casa e giardino";
+
     public final int RESULT_OK = 1;
 
     public final int RESULT_FAILED = 0;

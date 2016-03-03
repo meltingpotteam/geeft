@@ -9,8 +9,10 @@ import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
+import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -34,6 +37,8 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
  */
 public class TabGeeftFragment extends StatedFragment implements TaskCallbackBooleanToken {
 
+    private static final String KEY_IS_CATEGORY_CALL = "key_is_category_call";
+    private static final String KEY_CATEGORY = "key_category" ;
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
@@ -49,18 +54,43 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
+    private boolean mIsCategoryCall;
+    private Category mCategory;
+    private Toolbar mToolbar;
     //-------------------
 
-    public static TabGeeftFragment newInstance(Bundle b) {
+    public static TabGeeftFragment newInstance(boolean isCategoryCall,Category category) {
         TabGeeftFragment fragment = new TabGeeftFragment();
-        fragment.setArguments(b);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_IS_CATEGORY_CALL, isCategoryCall);
+        bundle.putSerializable(KEY_CATEGORY, category);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static TabGeeftFragment newInstance(boolean isCategoryCall) {
+        TabGeeftFragment fragment = new TabGeeftFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_IS_CATEGORY_CALL, isCategoryCall);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initVariables();
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
+    }
+
+    private void initVariables() {
+        mIsCategoryCall = getArguments().getBoolean(KEY_IS_CATEGORY_CALL,false);
+        if (mIsCategoryCall){
+            mCategory = (Category)getArguments().getSerializable(KEY_CATEGORY);
+        }
+        else {
+            mCategory = new Category("","");
+        }
     }
 
 
@@ -71,10 +101,19 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
 
         //inflates the view
-        View rootView = inflater.inflate(R.layout.fragment_tab_geeftory, container, false);
+        View rootView;
 
-        //initialize UI
+        if(mIsCategoryCall){
+            rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_with_toolbar
+                    , container, false);
+        }else {
+            rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_no_toolbar
+                    , container, false);
+        }
+
         initUI(rootView);
+        if (savedInstanceState==null && mIsCategoryCall)
+            initSupportActionBar(rootView);
 
         return rootView;
     }
@@ -106,9 +145,15 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
 
-        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? "+(savedInstanceState==null));
-
+        Log.d(TAG, "onRestoreState()-> savedInstanceState is null? " + (savedInstanceState == null));
         restoreState(savedInstanceState);
+        View rootView = getView();
+        if (rootView!=null){
+            initUI(rootView);
+            if(mIsCategoryCall){
+                initSupportActionBar(rootView);
+            }
+        }
     }
 
     /**
@@ -185,6 +230,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
+        outState.putBoolean(KEY_IS_CATEGORY_CALL, mIsCategoryCall);
     }
 
     private void restoreState(Bundle savedInstanceState){
@@ -193,6 +239,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             ArrayList<Geeft> arrayList=
                     (ArrayList)savedInstanceState.getParcelableArrayList(GEFFT_LIST_KEY);
             mGeeftList.addAll(arrayList);
+            mIsCategoryCall = savedInstanceState.getBoolean(KEY_IS_CATEGORY_CALL);
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
@@ -214,8 +261,12 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         if(!isNetworkConnected()) {
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
-        }else {
+        }else if(!mIsCategoryCall){
             new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        }
+        else {
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
+                    mIsCategoryCall,mCategory,this).execute();
         }
     }
 
@@ -240,5 +291,14 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
                     }
                 });
         snackbar.show();
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 }
