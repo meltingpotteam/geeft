@@ -22,11 +22,9 @@ import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
- * Created by ugookeadu on 07/01/16.
- * Task for populating GeeftItem cards
- * Update by danybr-dev on 17/01/16
+ * Created by joseph on 04/03/16.
  */
-public class BaaSTabGeeftTask extends BaaSCheckTask{
+public class BaaSTabLimitedGeeftTask extends BaaSCheckTask{
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -40,19 +38,21 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
     boolean mIsCategoryTask;
+    String mLastPointed;
     Category mCategory;
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            TaskCallbackBooleanToken callback) {
+    public BaaSTabLimitedGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                                   String lastPointed, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
+        mLastPointed = lastPointed;
     }
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            boolean isCategoryTask, Category category,
+    public BaaSTabLimitedGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                            boolean isCategoryTask, Category category, String lastPointed,
                             TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -61,6 +61,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
         mGeeftList = feedItems;
         mIsCategoryTask = isCategoryTask;
         mCategory = category;
+        mLastPointed = lastPointed;
     }
 
     @Override
@@ -97,13 +98,14 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate;
+//                TODO change pagination to 10
                 if (mIsCategoryTask) {
-                    paginate = BaasQuery.builder()
+                    paginate = BaasQuery.builder().pagination(0, 4)
                             .where("closed = false and deleted = false and category = '"
-                                    +mCategory.getCategoryName().toLowerCase()+"'")
+                                    + mCategory.getCategoryName().toLowerCase() + "'")
                             .orderBy("_creation_date asc").criteria();
                 }else{
-                    paginate = BaasQuery.builder()
+                    paginate = BaasQuery.builder().pagination(0,4)
                             .where("closed = false and deleted = false")
                             .orderBy("_creation_date asc").criteria();
 
@@ -179,7 +181,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             Date creation_date = dateFormat.parse(date);
             return creation_date.getTime(); //Convert timestamp in string
         }catch (java.text.ParseException e){
-           Log.e(TAG,"ERRORE FATALE : " + e.toString());
+            Log.e(TAG,"ERRORE FATALE : " + e.toString());
         }
         return -1;
 

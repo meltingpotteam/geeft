@@ -27,6 +27,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
+import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -55,6 +56,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
     private boolean mIsCategoryCall;
+    private String mLastPointed;
     private Category mCategory;
     private Toolbar mToolbar;
     //-------------------
@@ -92,6 +94,11 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mCategory = new Category("","");
         }
     }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
 
 
     @Override
@@ -215,12 +222,40 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mLastPointed="";
                 getData();
+            }
+        });
+        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add null , so the adapter will check view_type and show progress bar at bottom
+                studentList.add(null);
+                mAdapter.notifyItemInserted(studentList.size() - 1);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   remove progress item
+                        studentList.remove(studentList.size() - 1);
+                        mAdapter.notifyItemRemoved(studentList.size());
+                        //add items one by one
+                        int start = studentList.size();
+                        int end = start + 20;
+
+                        for (int i = start + 1; i <= end; i++) {
+                            studentList.add(new Student("Student " + i, "AndroidStudent" + i + "@gmail.com"));
+                            mAdapter.notifyItemInserted(studentList.size());
+                        }
+                        mAdapter.setLoaded();
+                        //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+                    }
+                }, 2000);
+
             }
         });
     }
@@ -262,11 +297,11 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
         }else if(!mIsCategoryCall){
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            new BaaSTabLimitedGeeftTask(getActivity(),mGeeftList,mAdapter,mLastPointed,this).execute();
         }
         else {
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall,mCategory,this).execute();
+            new BaaSTabLimitedGeeftTask(getActivity(),mGeeftList,mAdapter,
+                    mIsCategoryCall,mCategory,mLastPointed,this).execute();
         }
     }
 
