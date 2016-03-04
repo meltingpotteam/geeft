@@ -147,4 +147,19 @@
             android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
     </application>
 
+    <!-- Search Activity -->
+    <activity
+        android:name=".SearchResultsActivity"
+        android:label="@string/title_activity_search_results">
+
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+
+    </activity>
+
 </manifest>

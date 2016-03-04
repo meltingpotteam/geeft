@@ -329,4 +329,8 @@
     <string name="fragment_add_geeft_label_title">Aggiungi dei TAG, separati da una virgola, che possano identificare meglio il tuo geeft</string>
     <string name="add_geeft_label_hint">(es. cucina, pentola, acciao, ... )</string>
 
+
+    <!-- Search activity-->
+    <string name="title_activity_search_results">Search Results</string>
+
 </resources>
