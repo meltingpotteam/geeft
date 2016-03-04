@@ -60,22 +60,6 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
         mModify = false;
     }
 
-    // create a JsonArray for baasbox that have a cleaned labels words
-    protected JsonArray arrayCreator(String labelsToClean){
-        String[] labels =labelsToClean.replaceAll(" ", "").toLowerCase().split(",");
-        StringBuilder checkString = new StringBuilder();
-        JsonArray labelsCleaned = new JsonArray();
-        for (String s : labels){
-            if (!s.equals("") || !s.equals(" ")){
-
-                checkString.append(s).append("_");
-                labelsCleaned.add(s);
-            }
-        }
-        Log.d(TAG, "ArrayCreator splitted String: " + checkString.toString());
-        return labelsCleaned;
-    }
-
     @Override
     protected Boolean doInBackground(Void... arg0) {
         if(BaasUser.current() !=null) {
@@ -119,9 +103,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("taken", false);
 
             // send labels in an array built splitting the label string
-            JsonArray labelsCleaned = arrayCreator(mGeeft.getGeeftLabels());
-            doc.put("labels", labelsCleaned);
-
+            doc.put("labels", mGeeft.getGeeftArrayLabels());
 
             BaasFile image = new BaasFile();
             BaasResult<BaasFile> resImage = image.uploadSync(mGeeft.getStreamImage());
