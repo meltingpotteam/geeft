@@ -83,7 +83,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     .getObject("facebook")
                     .get("id").toString();
             String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-
+            String displayName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
             BaasDocument doc;
 
             if(mModify){ //If we are in editing mode of geeft
@@ -95,6 +95,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                 doc = new BaasDocument("geeft");
             }
 
+            doc.put("username",displayName);
             doc.put("title", mGeeft.getGeeftTitle());
             doc.put("description", mGeeft.getGeeftDescription());
             doc.put("location", mGeeft.getUserLocation());

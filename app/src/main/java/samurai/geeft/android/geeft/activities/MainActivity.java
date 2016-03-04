@@ -315,6 +315,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public static void showToastError(Context context){
+        Toast.makeText(context,
+                "E' accaduto un errore imprevisto!", Toast.LENGTH_LONG).show();
+    }
+
     private void startLoginActivity() {
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
