@@ -145,10 +145,9 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         else{
             Intent intent = MainActivity.newIntent(getApplicationContext());
-            showToastError();
+            Log.e(TAG, "An error occurred,DEBUG: geeftId is: " + geeftId + " and docUserId is: " + docUserId);
             return intent;
         }
-
 
     }
 
@@ -161,7 +160,7 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         else{
             Intent intent = MainActivity.newIntent(getApplicationContext());
-            showToastError();
+            Log.e(TAG, "An error occurred,DEBUG: geeftId is: " + geeftId + " and docUserId is: " + docUserId);
             return intent;
         }
 
@@ -174,7 +173,7 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         else{
             Intent intent = MainActivity.newIntent(getApplicationContext());
-            showToastError();
+            Log.e(TAG, "An error occurred,DEBUG: geeftId is: " + geeftId + " and docUserId is: " + docUserId);
             return intent;
         }
     }
@@ -186,7 +185,7 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         else{
             Intent intent = MainActivity.newIntent(getApplicationContext());
-            showToastError();
+            Log.e(TAG,"An error occurred,DEBUG: geeftId is: " + geeftId + " and docUserId is: " + docUserId);
             return intent;
         }
     }
@@ -204,14 +203,11 @@ public class MyGcmListenerService extends GcmListenerService {
             Log.d(TAG, "doc_id: "+docUserId);
             if(docUserId.equals(""))
                 docUserId = null;
-        } catch (org.json.JSONException t) {
+        //} catch (org.json.JSONException t) {
+        } catch (Exception t) {
             Log.e(TAG, "Could not parse malformed JSON: \"" + custom + "\"");
-            startMainActivity();
+            //startMainActivity();
         }
-    }
-    private void showToastError(){
-        Toast.makeText(getApplicationContext(),
-                "E' accaduto un errore imprevisto!", Toast.LENGTH_LONG).show();
     }
     /*private void showAlertDialog() {
         new AlertDialog.Builder(getApplicationContext())
