@@ -13,6 +13,9 @@
     <permission android:name="samurai.geeft.android.geeft.permission.C2D_MESSAGE"
                 android:protectionLevel="signature" />
     <uses-permission android:name="samurai.geeft.android.geeft.permission.C2D_MESSAGE" />
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
+
 
 
     <application

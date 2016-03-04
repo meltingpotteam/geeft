@@ -56,6 +56,7 @@ public class AddGeeftFragment extends StatedFragment {
     private static final String KEY_CATEGORY_SPINNER = "key_category_spinner";
     private static final String KEY_EXPIRATION_TIME_SPINNER = "key_expiration_time_spinner";
     private static final String ARG_MODIFY = "arg_modify";
+    private static final String KEY_GEEFT_IMAGE = "key_geeft_image";
     private final String TAG = getClass().getName();
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
@@ -258,7 +259,9 @@ public class AddGeeftFragment extends StatedFragment {
                 if (!folder.exists()) {
                     success = folder.mkdir();
                 }
-                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"+new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date())+".jpg");
+                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"
+                        +new SimpleDateFormat("yyyyMMddHHmmss",
+                        Locale.getDefault()).format(new Date())+".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
@@ -438,7 +441,8 @@ public class AddGeeftFragment extends StatedFragment {
      **/
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
-            Picasso.with(getActivity()).load(mGeeftImage)
+            getArguments().putString(KEY_GEEFT_IMAGE,mGeeftImage.getAbsolutePath());
+            Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
                     .fit()
                     .centerInside()
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -540,10 +544,18 @@ public class AddGeeftFragment extends StatedFragment {
     protected void onRestoreState(Bundle savedInstanceState) {
         super.onRestoreState(savedInstanceState);
         if (savedInstanceState != null) {
-            mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
-            mGeeftLocation.setSelection(getArguments().getInt(KEY_LOCATION_SPINNER));
-            mGeeftCategory.setSelection(getArguments().getInt(KEY_CATEGORY_SPINNER));
-            mGeeftExpirationTime.setSelection(getArguments().getInt(KEY_EXPIRATION_TIME_SPINNER));
+            mGeeft = (Geeft)savedInstanceState.getSerializable(ARG_GEEFT);
+            mGeeftLocation.setSelection(savedInstanceState.getInt(KEY_LOCATION_SPINNER));
+            mGeeftCategory.setSelection(savedInstanceState.getInt(KEY_CATEGORY_SPINNER));
+            mGeeftExpirationTime.setSelection(savedInstanceState.getInt(KEY_EXPIRATION_TIME_SPINNER));
+
+            String path = getArguments().getString(KEY_GEEFT_IMAGE);
+            if (path!=null)
+                Picasso.with(getActivity())
+                        .load("file://"+path)
+                        .fit()
+                        .centerInside()
+                        .into(mGeeftImageView);
         }
     }
 
