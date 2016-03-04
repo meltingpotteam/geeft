@@ -550,9 +550,10 @@ public class AddGeeftFragment extends StatedFragment {
             mGeeftExpirationTime.setSelection(savedInstanceState.getInt(KEY_EXPIRATION_TIME_SPINNER));
 
             String path = getArguments().getString(KEY_GEEFT_IMAGE);
+            mGeeftImage = new File(path);
             if (path!=null)
                 Picasso.with(getActivity())
-                        .load("file://"+path)
+                        .load(mGeeftImage)
                         .fit()
                         .centerInside()
                         .into(mGeeftImageView);
