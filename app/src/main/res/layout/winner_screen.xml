@@ -55,7 +55,7 @@
                     android:id="@+id/winner_screen_geefted_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="#Geefdted"
+                    android:hint="#Geefted"
                     android:textColorHint="@android:color/darker_gray"
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="bold|italic"
@@ -82,7 +82,7 @@
                     android:id="@+id/winner_screen_geefter_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="#Geefdted"
+                    android:hint="#Geefted"
                     android:textColorHint="@android:color/darker_gray"
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="bold|italic"
@@ -97,6 +97,7 @@
                 android:paddingEnd="@dimen/activity_horizontal_margin_x2"
                 android:paddingRight="@dimen/activity_horizontal_margin_x2">
                 <TextView
+                    android:id="@+id/winner_screen_message_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/winner_screen_message"

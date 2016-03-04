@@ -19,12 +19,16 @@ package samurai.geeft.android.geeft.utilities;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -41,7 +45,8 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private final String TAG = getClass().getSimpleName();
     private int key;
-    private String doc_id;
+    private String geeftId;
+    private String docUserId;
     /**
      * Called when message is received.
      *
@@ -59,7 +64,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "Message: " + message);
 
         /**
-         * "custom": [num ,"doc_id"]
+         * "custom": [key,"geeftId" ,"docUserId"]
          */
 
         if (from.startsWith("/topics/")) {
@@ -80,7 +85,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        parseCostum(custom, key, doc_id);
+        parseCostum(custom);
         sendNotification(message);
         // [END_EXCLUDE]
     }
@@ -93,6 +98,7 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
+
         Intent intent;
         switch(key){
             case 1:  intent = assignedCase();
@@ -128,39 +134,99 @@ public class MyGcmListenerService extends GcmListenerService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    private Intent contactFromUserCase() { //TODO: Replace this with new activity
-        Intent intent = new Intent(getApplicationContext(),WinnerScreenActivity.class);
-        return intent;
-    }
 
-    private Intent defaultCase() {
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-        return intent;
+    private Intent assignedCase() {//Case where you are geefted and Geeft is assigned to you
+        /*Intent intent = AssignedActivity
+                .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
+        if(!(geeftId == null && docUserId == null)) {
+            Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, geeftId, docUserId);
+            return intent;
+        }
+        else{
+            Intent intent = MainActivity.newIntent(getApplicationContext());
+            showToastError();
+            return intent;
+        }
+
+
     }
 
     private Intent donatedCase() { //Case where you are geefter and your Geeft is assigned
-        Intent intent = DonatedActivity.newIntent(getApplicationContext(), TagsValue.LINK_NAME_DONATED, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return intent;
+        /*Intent intent = DonatedActivity.newIntent(getApplicationContext(), TagsValue.LINK_NAME_DONATED, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
+        if(!(geeftId == null && docUserId == null)) {
+            Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 2, geeftId, docUserId);
+            return intent;
+        }
+        else{
+            Intent intent = MainActivity.newIntent(getApplicationContext());
+            showToastError();
+            return intent;
+        }
+
     }
 
-    private Intent assignedCase() {//Case where you are geefted and Geeft is assigned to you
-        Intent intent = AssignedActivity
-                .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return intent;
+    private Intent contactFromUserCase() { //TODO: Replace this with new activity
+        if(!(geeftId== null && docUserId == null)) {
+            Intent intent = new Intent(getApplicationContext(), WinnerScreenActivity.class);
+            return intent;
+        }
+        else{
+            Intent intent = MainActivity.newIntent(getApplicationContext());
+            showToastError();
+            return intent;
+        }
     }
 
-    private void parseCostum(String custom, int num, String doc_id) {
+    private Intent defaultCase() {
+        if(!(geeftId== null && docUserId == null)) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            return intent;
+        }
+        else{
+            Intent intent = MainActivity.newIntent(getApplicationContext());
+            showToastError();
+            return intent;
+        }
+    }
+
+    private void parseCostum(String custom) {
         try {
             JSONObject obj = new JSONObject(custom);
             JSONArray array = obj.getJSONArray("custom");
             key = array.getInt(0);
-            doc_id = array.getString(1);
-            Log.d(TAG, "key: "+key);
-            Log.d(TAG, "doc_id: "+doc_id);
+            geeftId = array.getString(1);
+            docUserId = array.getString(2);
+
+            Log.d(TAG, "key: " + key);
+            Log.d(TAG, "geeftId:" + geeftId);
+            Log.d(TAG, "doc_id: "+docUserId);
+            if(docUserId.equals(""))
+                docUserId = null;
         } catch (org.json.JSONException t) {
             Log.e(TAG, "Could not parse malformed JSON: \"" + custom + "\"");
+            startMainActivity();
         }
+    }
+    private void showToastError(){
+        Toast.makeText(getApplicationContext(),
+                "E' accaduto un errore imprevisto!", Toast.LENGTH_LONG).show();
+    }
+    /*private void showAlertDialog() {
+        new AlertDialog.Builder(getApplicationContext())
+                .setTitle("Errore")
+                .setMessage("E' accaduto un errore non previsto.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startMainActivity();
+                    }
+                }).show();
+    }*/
+    private void startMainActivity(){
+        Intent intent = MainActivity.newIntent(getApplicationContext());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
