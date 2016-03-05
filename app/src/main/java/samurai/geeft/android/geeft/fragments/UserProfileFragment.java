@@ -257,8 +257,7 @@ public class UserProfileFragment extends StatedFragment implements
                 .show(getContext(), "Attendere", "Salvataggio in corso...");
         BaasUser user;
         if(mIsCurrentUser){
-            final String newDescrition = mUserDescriptionEditText.getText().toString().isEmpty()?
-                    "":mUserDescriptionEditText.getText().toString();
+            final String newDescrition = mUserDescriptionEditText.getText().toString();
 
             user =BaasUser.current();
             user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
