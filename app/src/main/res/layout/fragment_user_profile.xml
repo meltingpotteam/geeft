@@ -214,7 +214,6 @@
                             <EditText
                                 android:id="@+id/user_description_edit_text"
                                 android:textColor="@color/colorPrimaryText"
-                                android:singleLine="true"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/user_add_description"

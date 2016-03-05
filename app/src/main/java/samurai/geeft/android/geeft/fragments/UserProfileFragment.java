@@ -231,7 +231,7 @@ public class UserProfileFragment extends StatedFragment implements
         mUserDescriptionTextView.setText(mUser.getDescription());
         mUserDescriptionEditText.setText(mUser.getDescription());
         setLinkCountTextView(mUserReceivedTextView, mUser.getLinkReceivedCount());
-        setLinkCountTextView(mUserReceivedTextView,mUser.getLinkGivenCount());
+        setLinkCountTextView(mUserGivenTextView,mUser.getLinkGivenCount());
 
         Log.d(TAG, "on init is editing = " + mIsEditingDescription);
         changeButtonAdDescriptionState();
@@ -257,7 +257,9 @@ public class UserProfileFragment extends StatedFragment implements
                 .show(getContext(), "Attendere", "Salvataggio in corso...");
         BaasUser user;
         if(mIsCurrentUser){
-            final String newDescrition =  mUserDescriptionEditText.getText().toString();
+            final String newDescrition = mUserDescriptionEditText.getText().toString().isEmpty()?
+                    "":mUserDescriptionEditText.getText().toString();
+
             user =BaasUser.current();
             user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
             user.save(new BaasHandler<BaasUser>() {
@@ -381,7 +383,6 @@ public class UserProfileFragment extends StatedFragment implements
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("Profilo");
     }
 
     public void getData() {
