@@ -129,6 +129,15 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mGeeft.setUserLocation(e.getString("location"));
                             mGeeft.setUserCap(e.getString("cap"));
                             mGeeft.setGeeftTitle(e.getString("title"));
+                            mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
+                            mGeeft.setGeeftHeight(e.getInt("height"));
+                            mGeeft.setGeeftWidth(e.getInt("width"));
+                            mGeeft.setGeeftDepth(e.getInt("depth"));
+                            mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
+                            mGeeft.setAssigned(e.getBoolean("assigned"));
+                            mGeeft.setTaken(e.getBoolean("taken"));
+                            mGeeft.setGiven(e.getBoolean("given"));
+
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
                                 Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());

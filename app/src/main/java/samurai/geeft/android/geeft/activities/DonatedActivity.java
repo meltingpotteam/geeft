@@ -48,7 +48,7 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
     //-------------------------------------------
 
     public static Intent newIntent(Context context, String collection, boolean showWinnerDialog) {
-        Intent intent = new Intent(context, AssignedActivity.class);
+        Intent intent = new Intent(context, DonatedActivity.class);
         intent.putExtra(EXTRA_COLLECTION, collection);
         intent.putExtra(EXTRA_SHOW_WINNER_DIALOG, showWinnerDialog);
         return intent;

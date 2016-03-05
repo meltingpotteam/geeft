@@ -89,7 +89,9 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setGeeftWidth(document.getInt("width"));
                             geeft.setGeeftDepth(document.getInt("depth"));
                             geeft.setDonatedLinkId(document.getString("donatedLinkId"));
-                            //TODO: Add all filds,taken,assigned...
+                            geeft.setAssigned(document.getBoolean("assigned"));
+                            geeft.setTaken(document.getBoolean("taken"));
+                            geeft.setGiven(document.getBoolean("given"));
 
                             mGeeftList.add(geeft);
                         }catch (BaasInvalidSessionException ise){

@@ -35,13 +35,15 @@ public class Geeft implements Serializable {
 
     private boolean assigned;
     private boolean taken;
+    private boolean given;
 
     public Geeft(){
     }
 
+
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, String geeftLabels, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken) {
+                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken,boolean given) {
 
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
@@ -68,6 +70,7 @@ public class Geeft implements Serializable {
         this.geeftDepth = geeftDepth;
         this.assigned = assigned;
         this.taken = taken;
+        this.given = given;
 
     }
 
@@ -280,6 +283,17 @@ public class Geeft implements Serializable {
     public void setAssigned(boolean assigned) {
         this.assigned = assigned;
     }
+
+
+    public boolean isGiven() {
+        return given;
+    }
+
+    public void setGiven(boolean given) {
+        this.given = given;
+    }
+
+
 
 
 }
