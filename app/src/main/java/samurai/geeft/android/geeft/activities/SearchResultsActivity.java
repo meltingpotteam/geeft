@@ -36,7 +36,7 @@ public class SearchResultsActivity extends Activity {
 
     private void showResults(String query) {
         // Query your data set and show results
-        // ...
+        // ...xq
     }
 }
 

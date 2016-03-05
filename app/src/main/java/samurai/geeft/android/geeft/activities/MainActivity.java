@@ -297,6 +297,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //for the search activity
+        if (id == R.id.action_search) {
+            onSearchRequested();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
