@@ -4,6 +4,8 @@
     <dimen name="activity_horizontal_margin_x2">22dp</dimen>
     <dimen name="activity_vertical_margin">11dp</dimen>
     <dimen name="activity_vertical_margin_x2">22dp</dimen>
+    <dimen name="user_profile_avatar_size">88dp</dimen>
+    <dimen name="default_elevation">8dp</dimen>
 
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="feed_item_margin">10dp</dimen>

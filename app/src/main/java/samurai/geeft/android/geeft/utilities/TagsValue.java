@@ -87,11 +87,15 @@ public class TagsValue {
 
     public static final String CATEGORY_HOUSE = "casa e giardino";
 
-    public final int RESULT_OK = 1;
+    public static final int USER_LINK_COUNT_NOT_FINESHED = -2;
+    public static final int USER_LINK_COUNT_FINESHED_WITH_ERROR = -1;
 
-    public final int RESULT_FAILED = 0;
+    public static final int RESULT_OK = 1;
 
-    public final int RESULT_SESSION_EXPIRED = -1;
+    public static final int RESULT_FAILED = 0;
+
+    public static final int RESULT_SESSION_EXPIRED = -1;
 
 
+    public static final String COLLECTION_GEEFT = "geeft";
 }
