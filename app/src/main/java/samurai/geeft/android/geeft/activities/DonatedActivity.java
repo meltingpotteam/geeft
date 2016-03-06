@@ -97,9 +97,14 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
 
     @Override
     public void onImageSelected(Geeft geeft) { // give id of image
+        Intent intent;
         // launch full screen activity
-        Intent intent = FullGeeftDetailsActivity.newIntent(DonatedActivity.this,
-        geeft);
+        if(geeft.isAssigned() && !geeft.isGiven()){ // if geeft.isAssigned() && geeft.Feed
+            intent = CompactDialogActivity.newIntent(DonatedActivity.this,geeft);
+        }else {
+            intent = FullGeeftDetailsActivity.newIntent(DonatedActivity.this,
+                    geeft);
+        }
         DonatedActivity.this.startActivity(intent);
     }
 

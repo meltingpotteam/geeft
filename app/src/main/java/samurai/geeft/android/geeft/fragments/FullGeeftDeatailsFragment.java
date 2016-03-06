@@ -249,6 +249,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
 
+            if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
+                mModifyView.setVisibility(View.GONE);
+                mDeleteView.setVisibility(View.GONE);
+            }
+
             if(!getArguments().getSerializable(KEY_CONTEXT)
                     .equals(DonatedActivity.class.getSimpleName())){//TODO: Check this,and put it up
                 mModifyView.setVisibility(View.GONE);

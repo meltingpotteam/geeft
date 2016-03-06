@@ -327,6 +327,6 @@
     <string name="no_story_alert_dialog_message">Questo oggetto non ha ancora una storia...</string>
     <string name="progres_dialog_message">Attendere...</string>
     <string name="fragment_add_geeft_label_title">Aggiungi dei TAG, separati da una virgola, che possano identificare meglio il tuo geeft</string>
-    <string name="add_geeft_label_hint">(es. cucina, pentola, acciao, ... )</string>
+    <string name="add_geeft_label_hint">(es. cucina, pentola, acciaio, ... )</string>
 
 </resources>

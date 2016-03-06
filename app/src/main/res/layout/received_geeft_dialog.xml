@@ -71,7 +71,7 @@
                 android:layout_gravity="bottom"
                 >
                 <Button
-                    android:id="@+id/received_dialog_storyButton"
+                    android:id="@+id/received_dialog_givenButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -79,10 +79,10 @@
                     android:padding="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
                     android:textColor="@color/colorPrimaryText"
-                    android:text="Aggiorna Storia"
+                    android:text="Consegnato"
                     android:layout_weight="0.5"/>
                 <Button
-                    android:id="@+id/received_dialog_geeftButton"
+                    android:id="@+id/received_dialog_takenButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -90,7 +90,7 @@
                     android:padding="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
                     android:textColor="@color/colorPrimaryText"
-                    android:text="Regala"
+                    android:text="Ricevuto"
                     android:layout_weight="0.5"/>
             </LinearLayout>
         </FrameLayout>
