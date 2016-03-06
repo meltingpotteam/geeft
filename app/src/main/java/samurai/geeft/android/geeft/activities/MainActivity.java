@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,8 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.io.File;
+
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG ="MainActivity";
     private static final int REQUEST_CODE_LOGOUT = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
+            +File.separator+"geeft";
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
@@ -267,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
             startActivity(intent);
 
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -361,9 +368,16 @@ public class MainActivity extends AppCompatActivity {
         // You can call any combination of these three methods
         Crashlytics.setUserIdentifier("12345");
         String fbName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
-        Crashlytics.setUserEmail(fbName+"@fabric.io");
+        Crashlytics.setUserEmail(fbName + "@fabric.io");
         Crashlytics.setUserName(fbName);
     }
+
+//    @Override
+//    public void onDestroy(){
+//        super.onDestroy();
+//
+//    }
+
 
 
 }

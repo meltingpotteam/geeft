@@ -259,9 +259,17 @@ public class AddGeeftFragment extends StatedFragment {
                 if (!folder.exists()) {
                     success = folder.mkdir();
                 }
-                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"
-                        +new SimpleDateFormat("yyyyMMddHHmmss",
-                        Locale.getDefault()).format(new Date())+".jpg");
+                /**
+                 * delete entire contents in the geeft folder after the geeft upload
+                 * TODO: remove this if we will want to manage the photo storing
+                 */
+//                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"
+//                        +new SimpleDateFormat("yyyyMMddHHmmss",
+//                        Locale.getDefault()).format(new Date())+".jpg");
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
+//                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
+
+                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg"+".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
