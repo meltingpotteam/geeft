@@ -37,6 +37,7 @@ import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.ReservedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.activities.SettingsActivity;
+import samurai.geeft.android.geeft.activities.UserProfileActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
@@ -262,7 +263,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         switch (position){
             case 0:
-                Intent intent0 = new Intent(getContext(), FullProfileFragment.class);
+                Intent intent0 = new Intent(getContext(), UserProfileActivity.class);
                 startActivity(intent0);
                 break;
             case 1:

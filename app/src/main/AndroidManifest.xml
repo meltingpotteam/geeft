@@ -109,6 +109,8 @@
 
         <activity android:name=".activities.CategoryActivity"/>
 
+        <activity android:name=".activities.UserProfileActivity"/>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
