@@ -40,6 +40,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
     boolean mIsCategoryTask;
+    boolean mIsSearchTask;
     Category mCategory;
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
@@ -52,7 +53,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     }
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            boolean isCategoryTask, Category category,
+                            boolean isCategoryTask, boolean isSearchTask, Category category,
                             TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -60,6 +61,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
         mIsCategoryTask = isCategoryTask;
+        mIsSearchTask = isSearchTask;
         mCategory = category;
     }
 

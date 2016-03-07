@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container">
+<android.support.v4.widget.DrawerLayout
+
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_coordinator_layout"
@@ -79,6 +83,18 @@
                 fab:fab_label="Aggiungi storia"
                 fab:fab_size="mini"
                 />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/geeft_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_black_24dp"
+                fab:fab_colorNormal="@color/colorSubAccent"
+                fab:fab_colorPressed="@color/clickAccent"
+                fab:fab_showAnimation="@anim/fab_slide_in_from_right"
+                fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
+                fab:fab_label="Cerca Geeft"
+                fab:fab_size="mini"
+                />
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
     <fragment
@@ -90,3 +106,4 @@
         android:name="samurai.geeft.android.geeft.fragments.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer"/>
 </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

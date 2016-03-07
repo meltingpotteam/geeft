@@ -125,29 +125,6 @@ public class ListCategoryFragment extends StatedFragment {
         mRecyclerView.setNestedScrollingEnabled(true);
 //        mRecyclerView.setHasFixedSize(true);
 
-
-        mAdapter = new CategoriesListAdapter(getActivity(), mCategoriesList);
-        mRecyclerView.setLayoutManager(
-                new GridLayoutManager(getContext(),2));
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
-                , mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "short click", Toast.LENGTH_LONG).show();
-                //TODO complete the fragment to start
-                mCategory = mCategoriesList.get(position);
-                mCallback.onCategorySelected(mCategory);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long click", Toast.LENGTH_LONG).show();
-                mCategory = mCategoriesList.get(position);
-                mCallback.onCategorySelected(mCategory);
-            }
-        }));
     }
 
     private void initSupportActionBar(View rootView) {

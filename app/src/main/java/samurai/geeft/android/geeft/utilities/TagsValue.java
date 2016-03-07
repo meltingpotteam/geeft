@@ -36,6 +36,12 @@ public class TagsValue {
 
     public static final String ROLE_SUPERMODERATOR = "supermoderator";
 
+    //for managing the behaviour of a query to baasbox: each key has a different query
+    public static final String ACTIVITY_CALL_CATEGORIES = "categories";
+
+    public static final String ACTIVITY_CALL_SEARCH = "search";
+
+
     /**
     * Categories screen reference images
     */

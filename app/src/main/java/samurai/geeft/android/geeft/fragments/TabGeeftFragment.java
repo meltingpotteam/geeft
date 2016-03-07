@@ -266,7 +266,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         }
         else {
             new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall,mCategory,this).execute();
+                    mIsCategoryCall, false, mCategory,this).execute();
         }
     }
 

@@ -56,13 +56,22 @@
         <activity android:name=".activities.LogoutActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.MainActivity"/>
+        <activity
+            android:name=".activities.MainActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable">
+            </meta-data>
+        </activity>
 
 
 
 
         <!-- Add geeft activity-->
         <activity android:name=".activities.AddGeeftActivity"/>
+
+        <!-- Add geeft activity-->
+        <activity android:name=".activities.SearchGeeftActivity"/>
 
         <!--Donated geeft activity-->
         <activity android:name=".activities.DonatedActivity"/>

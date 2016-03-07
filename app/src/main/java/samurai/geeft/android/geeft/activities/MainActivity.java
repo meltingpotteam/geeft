@@ -1,7 +1,9 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
@@ -46,7 +50,9 @@ import java.io.File;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
+import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -72,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
@@ -164,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AddGeeftActivity.class);
                 startActivity(intent);
-                floatingActionMenu.close(false);
+                floatingActionMenu.close(true);
             }
         });
 
@@ -174,7 +181,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
-                floatingActionMenu.close(false);
+                floatingActionMenu.close(true);
+            }
+        });
+
+        FloatingActionButton mActionGeeftSearch = (FloatingActionButton) findViewById(R.id.geeft_search_button);
+        mActionGeeftSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
+                startActivity(intent);
+                floatingActionMenu.close(true);
             }
         });
         /**
@@ -226,8 +243,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

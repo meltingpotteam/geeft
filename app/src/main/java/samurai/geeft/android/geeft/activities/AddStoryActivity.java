@@ -39,6 +39,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         if (savedInstanceState!=null){
             mId = savedInstanceState.getString("STORY_ID");
         }
+
         setContentView(R.layout.container_for_fragment);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
