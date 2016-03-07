@@ -40,6 +40,7 @@ public class BaaSTabLimitedGeeftTask extends BaaSCheckTask{
     boolean mIsCategoryTask;
     String mLastPointed;
     Category mCategory;
+    private int mLastInt;
 
     public BaaSTabLimitedGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                                    String lastPointed, TaskCallbackBooleanToken callback) {
@@ -99,16 +100,32 @@ public class BaaSTabLimitedGeeftTask extends BaaSCheckTask{
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate;
 //                TODO change pagination to 10
-                if (mIsCategoryTask) {
-                    paginate = BaasQuery.builder().pagination(0, 4)
-                            .where("closed = false and deleted = false and category = '"
-                                    + mCategory.getCategoryName().toLowerCase() + "'")
-                            .orderBy("_creation_date asc").criteria();
-                }else{
-                    paginate = BaasQuery.builder().pagination(0,4)
-                            .where("closed = false and deleted = false")
-                            .orderBy("_creation_date asc").criteria();
-
+                if (mLastPointed=="") {
+                    if (mIsCategoryTask) {
+                        paginate = BaasQuery.builder().pagination(0, 2)
+                                .where("closed = false and deleted = false and category = '"
+                                        + mCategory.getCategoryName().toLowerCase() + "'")
+                                .orderBy("_creation_date asc").criteria();
+                    } else {
+                        paginate = BaasQuery.builder().pagination(0, 2)
+                                .where("closed = false and deleted = false")
+                                .orderBy("_creation_date asc").criteria();
+                    }
+                } else {
+                    BaasQuery.Criteria lastCriteria = BaasQuery.builder().pagination(0, 1)
+                            .where("id = '" + mLastPointed + "'").criteria();
+                    BaasResult<List<BaasDocument>> baasPointer = BaasDocument.fetchAllSync("geeft", lastCriteria);
+                    BaasDocument k = baasPointer.get();
+                    if (mIsCategoryTask) {
+                        paginate = BaasQuery.builder().pagination(0, 2).skip(mLastInt)
+                                .where("closed = false and deleted = false and category = '"
+                                        + mCategory.getCategoryName().toLowerCase() + "'")
+                                .orderBy("_creation_date asc").criteria();
+                    } else {
+                        paginate = BaasQuery.builder().pagination(0, 2).skip(mLastInt)
+                                .where("closed = false and deleted = false")
+                                .orderBy("_creation_date asc").criteria();
+                    }
                 }
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
@@ -116,6 +133,7 @@ public class BaaSTabLimitedGeeftTask extends BaaSCheckTask{
                         for (BaasDocument e : baasResult.get()) {
                             mGeeft = new Geeft();
                             mGeeft.setId(e.getId());
+                            mLastPointed = e.getId();
                             mGeeft.setUsername(e.getString("name"));
                             mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
                             mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());

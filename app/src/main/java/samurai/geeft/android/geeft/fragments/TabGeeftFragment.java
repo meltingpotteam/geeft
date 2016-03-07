@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
+import samurai.geeft.android.geeft.interfaces.OnLoadMoreListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -60,6 +62,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private Category mCategory;
     private Toolbar mToolbar;
     //-------------------
+    protected Handler handler;
 
     public static TabGeeftFragment newInstance(boolean isCategoryCall,Category category) {
         TabGeeftFragment fragment = new TabGeeftFragment();
@@ -83,6 +86,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         super.onCreate(savedInstanceState);
         initVariables();
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
+        handler = new Handler();
     }
 
     private void initVariables() {
@@ -219,7 +223,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
+        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList, mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
@@ -230,32 +234,34 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
                 getData();
             }
         });
-        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        Toast.makeText(getContext(), "ONLOAD", Toast.LENGTH_SHORT);
+        mAdapter.setOnLoadMoreListener(new samurai.geeft.android.geeft.interfaces.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 //add null , so the adapter will check view_type and show progress bar at bottom
-                studentList.add(null);
-                mAdapter.notifyItemInserted(studentList.size() - 1);
-
+                mGeeftList.add(null);
+                Toast.makeText(getContext(), "HOLA", Toast.LENGTH_SHORT);
+                mAdapter.notifyItemInserted(mGeeftList.size() - 1);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //   remove progress item
-                        studentList.remove(studentList.size() - 1);
-                        mAdapter.notifyItemRemoved(studentList.size());
+                        // remove progress item
+                        mGeeftList.remove(mGeeftList.size() - 1);
+                        mAdapter.notifyItemRemoved(mGeeftList.size());
                         //add items one by one
-                        int start = studentList.size();
+                        int start = mGeeftList.size();
                         int end = start + 20;
 
                         for (int i = start + 1; i <= end; i++) {
-                            studentList.add(new Student("Student " + i, "AndroidStudent" + i + "@gmail.com"));
-                            mAdapter.notifyItemInserted(studentList.size());
+                            mGeeftList.add(null);
+                            mAdapter.notifyItemInserted(mGeeftList.size());
                         }
+                        Toast.makeText(getContext(), "HOLA",Toast.LENGTH_SHORT);
+                        getData();
                         mAdapter.setLoaded();
                         //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
                     }
-                }, 2000);
-
+                },2000);
             }
         });
     }

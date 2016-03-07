@@ -200,7 +200,7 @@ public class PrenotableRecycleFragment extends StatedFragment
         mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
+        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList, mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 

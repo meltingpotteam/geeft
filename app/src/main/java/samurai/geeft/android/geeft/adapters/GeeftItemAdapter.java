@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
+import samurai.geeft.android.geeft.interfaces.OnLoadMoreListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
@@ -66,7 +69,8 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
      */
     private static final String TAG = "GeeftItemAdapter";
     private static final String WEBSITE_URL = TagsValue.WEBSITE_URL;
-
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
     /**
      *  BINDING
      */
@@ -89,6 +93,11 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     private long mLastClickTime;
     private Context mContext;
     private List<Geeft> mGeeftList;
+    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position
+                                      // before loading more.
+    private int lastVisibleItem, totalItemCount;
+    private OnLoadMoreListener onLoadMoreListener;
+    private boolean loading;
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -97,12 +106,41 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
     //-------------------
 
     //info dialog attributes---------------------
-    public GeeftItemAdapter(@NonNull Context context,@NonNull List<Geeft> geeftList) {
+    public GeeftItemAdapter(@NonNull Context context,@NonNull List<Geeft> geeftList, RecyclerView recyclerView) {
         inflater = LayoutInflater.from(context);
         this.mGeeftList = geeftList;
         this.mContext = context;
         mLastSize = 0;
         mLastClickTime=0;
+
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
+                    .getLayoutManager();
+
+
+            recyclerView
+                    .addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView,
+                                               int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+
+                            totalItemCount = linearLayoutManager.getItemCount();
+                            lastVisibleItem = linearLayoutManager
+                                    .findLastVisibleItemPosition();
+                            if (!loading
+                                    && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                                // End has been reached
+                                // Do something
+                                if (onLoadMoreListener != null) {
+                                    onLoadMoreListener.onLoadMore();
+                                }
+                                loading = true;
+                            }
+                        }
+                    });
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -135,6 +173,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         public Uri mGeeftImageUri;
         public Geeft mGeeft;
 
+
         /**
          * CONSTRUCTOR
          * @param itemView parent view
@@ -144,6 +183,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
 
             ButterKnife.bind(this, itemView);
         }
+        public ProgressViewHolder ProgHolder;
     }
 
 
@@ -154,11 +194,25 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         View mGeeftView = inflater.inflate(R.layout.geeft_list_item, parent, false);
 
         //  Inflate a new view hierarchy from the specified xml resource.
+//        RecyclerView.ViewHolder vh;
+//        if (viewType == VIEW_ITEM) {
+//            View v = LayoutInflater.from(parent.getContext()).inflate(
+//                    R.layout.list_row, parent, false);
+//
+//            vh = new StudentViewHolder(v);
+//        } else {
+//            View v = LayoutInflater.from(parent.getContext()).inflate(
+//                    R.layout.progress_item, parent, false);
+//
+//            vh = new ProgressViewHolder(v);
+//        }
+//        return vh;
+
         return new ViewHolder(mGeeftView);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final GeeftItemAdapter.ViewHolder holder, final int position) {
 
         //  Get element of the data model from list at this position
         final Geeft item = mGeeftList.get(position);
@@ -351,6 +405,24 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
             }
         });
 
+//        if (!(holder instanceof ViewHolder)) {
+//            ((GeeftItemAdapter.ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+//        }
+    }
+
+//    ---- For Load More Action on TabGeeftFragment
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public void setLoaded() {
+        loading = false;
+    }
+//
+
+    @Override
+    public int getItemViewType(int position) {
+        return mGeeftList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
@@ -559,6 +631,14 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         //                dialog.setMessage("Some information that we can take from the facebook shared one");
         dialog.show();  //<-- See This!
         //
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
+        }
     }
 
     private void startLoginActivity() {

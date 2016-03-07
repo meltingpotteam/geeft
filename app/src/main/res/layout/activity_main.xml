@@ -39,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
         <!-- floating action menu button: -->
         <com.github.clans.fab.FloatingActionMenu
             xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -80,6 +81,11 @@
                 fab:fab_size="mini"
                 />
         </com.github.clans.fab.FloatingActionMenu>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:text="More"/>
     </android.support.design.widget.CoordinatorLayout>
     <fragment
         android:layout_width="@dimen/navigation_drawer_width"
