@@ -8,6 +8,8 @@ import android.widget.Toast;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.Grant;
+import com.baasbox.android.Role;
 import com.baasbox.android.json.JsonArray;
 
 import samurai.geeft.android.geeft.R;
@@ -116,30 +118,39 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         doc.put("prenoteLinks", JSONUserLinks);
                         BaasResult<BaasDocument> resDoc = doc.saveSync();
                         if (resDoc.isSuccess()) {
-                            Log.d(TAG, "Doc ID is: " + doc.getId());
-                            //Insert in doc_id the id of docUser,linked with geefts
-                            user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
-                            //Insert Feedback,first registration is 5
-                            double initFeedback = 4.99;
-                            user.getScope(BaasUser.Scope.REGISTERED).put("feedback",initFeedback);
-                            //Insert n_feedback,first registration is 0
-                            user.getScope(BaasUser.Scope.REGISTERED).put("n_feedback",1);
-                            //Insert n_given,first registration is 0
-                            user.getScope(BaasUser.Scope.REGISTERED).put("n_given",0);
-                            //Insert n_received,first registration is 0
-                            user.getScope(BaasUser.Scope.REGISTERED).put("n_received",0);
-                            //Insert submits_without,first registration is 0
-                            user.getScope(BaasUser.Scope.REGISTERED).put("submits_without",0);
-                            //Insert submits_active,first registration is 0
-                            user.getScope(BaasUser.Scope.REGISTERED).put("submits_active",0);
-                            //Insert in doc_id the id of docUser,linked with geefts
-                            user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
-                            BaasResult<BaasUser> resUser = user.saveSync();
-                            if (resUser.isSuccess()) {
-                                Log.d(TAG, "New user, document created");
-                                return  true;
-                            } else {
-                                Log.e(TAG, "FATAL ERROR userScope not update");
+                            BaasResult<Void> resGrantDoc = doc.grantSync(Grant.READ, Role.REGISTERED);
+                            //TODO: Check this,if doesn't works,replace with grantAllSync
+                            if(resGrantDoc.isSuccess()){
+                                Log.d(TAG, "Doc ID is: " + doc.getId());
+                                //Insert in doc_id the id of docUser,linked with geefts
+                                user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
+                                //Insert Feedback,first registration is 5
+                                double initFeedback = 4.99;
+                                user.getScope(BaasUser.Scope.REGISTERED).put("feedback", initFeedback);
+                                //Insert n_feedback,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("n_feedback", 1);
+                                //Insert n_given,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("n_given", 0);
+                                //Insert n_received,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("n_received", 0);
+                                //Insert submits_without,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("submits_without", 0);
+                                //Insert submits_active,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("submits_active", 0);
+                                //Insert in doc_id the id of docUser,linked with geefts
+                                user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
+                                BaasResult<BaasUser> resUser = user.saveSync();
+                                if (resUser.isSuccess()) {
+                                    Log.d(TAG, "New user, document created");
+                                    return true;
+                                } else {
+                                    Log.e(TAG, "FATAL ERROR userScope not update");
+                                    return false;
+                                }
+
+                            }
+                            else{
+                                Log.e(TAG, "FATAL ERROR document not GRANTED");
                                 return false;
                             }
                         } else {

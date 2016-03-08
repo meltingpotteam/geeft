@@ -169,6 +169,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
             }
             else{
                 Log.e(TAG,"Error while fetching user");
+                Log.e(TAG,resUser.error().toString());
                 mResultToken = RESULT_FAILED;
                 return false;
             }
@@ -199,8 +200,8 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
     }
 
     private boolean putNewUserFeedbackInBaasbox(double newUserFeedback,float n_feedback) {
-        mBaasUser.getScope(BaasUser.Scope.REGISTERED).put("feedback",newUserFeedback);
-        mBaasUser.getScope(BaasUser.Scope.REGISTERED).put("n_feedback",n_feedback + 1);
+        mBaasUser.getScope(BaasUser.Scope.PUBLIC).put("feedback",newUserFeedback);
+        mBaasUser.getScope(BaasUser.Scope.PUBLIC).put("n_feedback",n_feedback + 1);
         BaasResult<BaasUser> resSaveScope = mBaasUser.saveSync();
         if(resSaveScope.isSuccess()){
             return true;
@@ -212,7 +213,8 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
                 return false;
             }
             else{
-                Log.e(TAG,"Error while fetching user");
+                Log.e(TAG,"Error while saving new feedback to user");
+                Log.e(TAG,resSaveScope.error().toString());
                 mResultToken = RESULT_FAILED;
                 return false;
             }

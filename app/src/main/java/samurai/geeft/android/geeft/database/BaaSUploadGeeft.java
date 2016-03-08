@@ -139,7 +139,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                     if (resDoc.isSuccess()) {
                         mGeeft.setId(doc.getId());
                         Log.d(TAG, "Doc saved with success");
-                        BaasResult<Void> resDocGrantRead = doc.grantAllSync(Grant.READ, Role.REGISTERED);
+                        BaasResult<Void> resDocGrantRead = doc.grantSync(Grant.READ, Role.REGISTERED);
                         if (resDocGrantRead.isSuccess()) {
                             Log.d(TAG, "Doc granted with success");
                             BaasResult<Void> resDocGrantDel = doc.grantAllSync(Grant.DELETE, TagsValue.ROLE_MODERATOR);
