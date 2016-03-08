@@ -28,6 +28,8 @@ public class TagsValue {
 
     public static final String LINK_NAME_RESERVE = "reserve";
 
+    public static final String LINK_NAME_FEEDBACK = "feedback";
+
     public static final String LINK_GEEFT_STORY = "geeft_story";
 
     public static final String LINK_NAME_WAS_RESERVE = "wasReserve";
@@ -35,6 +37,15 @@ public class TagsValue {
     public static final String ROLE_MODERATOR = "moderator";
 
     public static final String ROLE_SUPERMODERATOR = "supermoderator";
+
+    public static final String COLLECTION_USERS_FEEDBACKS = "usersFeedbacks";
+
+    public static final String FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER = "is_feedback_left_by_geefter";
+
+    public static final String FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED = "is_feedback_left_by_geefted";
+
+
+
 
     /**
     * Categories screen reference images

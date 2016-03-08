@@ -122,6 +122,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             //Insert Feedback,first registration is 5
                             double initFeedback = 4.99;
                             user.getScope(BaasUser.Scope.REGISTERED).put("feedback",initFeedback);
+                            //Insert n_feedback,first registration is 0
+                            user.getScope(BaasUser.Scope.REGISTERED).put("n_feedback",1);
                             //Insert n_given,first registration is 0
                             user.getScope(BaasUser.Scope.REGISTERED).put("n_given",0);
                             //Insert n_received,first registration is 0
@@ -130,6 +132,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             user.getScope(BaasUser.Scope.REGISTERED).put("submits_without",0);
                             //Insert submits_active,first registration is 0
                             user.getScope(BaasUser.Scope.REGISTERED).put("submits_active",0);
+                            //Insert in doc_id the id of docUser,linked with geefts
+                            user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
                             BaasResult<BaasUser> resUser = user.saveSync();
                             if (resUser.isSuccess()) {
                                 Log.d(TAG, "New user, document created");

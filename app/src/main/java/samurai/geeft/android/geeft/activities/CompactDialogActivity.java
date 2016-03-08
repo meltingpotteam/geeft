@@ -22,10 +22,15 @@ import android.widget.TextView;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasLink;
+import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.RequestOptions;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
@@ -37,6 +42,8 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class CompactDialogActivity extends AppCompatActivity {
 
+    private static final String KEY_TAKEN = "taken";
+    private static final String KEY_GIVEN = "given";
     private final String TAG = getClass().getName();
     //info dialog attributes---------------------
     private TextView mReceivedDialogUsername;
@@ -54,11 +61,13 @@ public class CompactDialogActivity extends AppCompatActivity {
     private static final String EXTRA_CONTEXT = "extra_context";
 
     private Geeft mGeeft;
+    private boolean mIamGeefter;
+    private String mHisBaasboxName;
 
     public static Intent newIntent(@NonNull Context context, @NonNull Geeft geeft) {
         Intent intent = new Intent(context, CompactDialogActivity.class);
         intent.putExtra(EXTRA_GEFFT, geeft);
-        intent.putExtra(EXTRA_CONTEXT,context.getClass().getSimpleName());
+        intent.putExtra(EXTRA_CONTEXT, context.getClass().getSimpleName());
         return intent;
     }
 
@@ -79,15 +88,19 @@ public class CompactDialogActivity extends AppCompatActivity {
         } else {
             mGeeft = (Geeft) savedInstanceState.getSerializable(EXTRA_GEFFT);
         }
+
         BaasUser currentUser = BaasUser.current();
-        boolean iAmGeefter = currentUser.getScope(BaasUser.Scope.PRIVATE).get("name").equals(mGeeft.getUsername());
-        Log.d(TAG,"iAmGeefter flag is:" + iAmGeefter);
-        if(iAmGeefter && !mGeeft.isGiven()){ // if I'm the Geefter and Geeft isn't given,show
+        mIamGeefter = currentUser.getScope(BaasUser.Scope.PRIVATE).get("name").equals(mGeeft.getUsername());
+        Log.d(TAG,"currentUser name: " + currentUser.getScope(BaasUser.Scope.PRIVATE).get("name") );
+        Log.d(TAG, "Geefter name: " + mGeeft.getUsername());
+
+        Log.d(TAG, "iAmGeefter flag is:" + mIamGeefter);
+        if(mIamGeefter && !mGeeft.isGiven()){ // if I'm the Geefter and Geeft isn't given,show
                             // dialog to set given
             showDialogTakenGiven(mGeeft, true); // I'm the Geefter,so I send "true"
 
         }
-        else if(!iAmGeefter && !mGeeft.isTaken()){ //if I'm the Geefted and Geeft isn't taken,show
+        else if(!mIamGeefter && !mGeeft.isTaken()){ //if I'm the Geefted and Geeft isn't taken,show
                             //dialog to set taken
             showDialogTakenGiven(mGeeft,false);
         }
@@ -214,7 +227,7 @@ public class CompactDialogActivity extends AppCompatActivity {
             public void handle(BaasResult<BaasDocument> resGeeft) {
                 if (resGeeft.isSuccess()) {
                     BaasDocument geeft = resGeeft.value();
-                    geeft.put("taken", true); //Flag taken is true
+                    geeft.put(KEY_TAKEN, true); //Flag taken is true
                     setTakenInBaasbox(geeft);
                 } else {
                     if (resGeeft.error() instanceof BaasInvalidSessionException) {
@@ -263,7 +276,7 @@ public class CompactDialogActivity extends AppCompatActivity {
             public void handle(BaasResult<BaasDocument> resGeeft) {
                 if (resGeeft.isSuccess()) {
                     BaasDocument geeft = resGeeft.value();
-                    geeft.put("given", true); //Flag taken is true
+                    geeft.put(KEY_GIVEN, true); //Flag taken is true
                     setGivenInBaasbox(geeft);
                 } else {
                     if (resGeeft.error() instanceof BaasInvalidSessionException) {
@@ -314,7 +327,9 @@ public class CompactDialogActivity extends AppCompatActivity {
                     .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startFeedbackActivity(); // Feedback enabled;
+
+                            getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
+
                             finish();
                         }
                     })
@@ -335,8 +350,68 @@ public class CompactDialogActivity extends AppCompatActivity {
     }
 
     private void startFeedbackActivity(){
-        Intent intent = new Intent(CompactDialogActivity.this,FeedbackPageActivity.class);
+
+        Intent intent = FeedbackPageActivity.newIntent(getApplicationContext(), mGeeft, mHisBaasboxName, mIamGeefter);
         startActivity(intent);
+    }
+
+    private void getHisBaasboxNameAndStartFeedbackActivity(boolean iamGeefter) {
+        BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '"+ mGeeft.getId() + "'").criteria();
+        if(iamGeefter) { // I'm Geefter,so I need BaasboxUsername of Geefted
+            BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                @Override
+                public void handle(BaasResult<List<BaasLink>> resLink) {
+                    if (resLink.isSuccess()) {
+                        List<BaasLink> links = resLink.value();
+                        Log.d(TAG,"Size should be one: " + links.size());
+                        Log.d(TAG,"Link id is: " + links.get(0).getId());
+                        Log.d(TAG,"link: " + links.get(0).in().toJson());
+                        Log.d(TAG,"link: " + links.get(0).out().toJson());
+                        try {
+                            Log.d(TAG, "link out: " + links.get(0).in().toString());
+                            Log.d(TAG, "link out: " + links.get(0).out().toString());
+                        }
+                        catch(Exception e){
+                            Log.e(TAG,e.toString());
+                        }
+                        mHisBaasboxName = links.get(0).out().getAuthor();//Get doc_id of user from get(0)
+                        //so, get baasboxName from getAuthor
+                        startFeedbackActivity(); // Feedback enabled;
+                    } else {
+                        Log.d(TAG,"Error while fetching link");
+                        showDialogError();
+                    }
+                }
+            });
+        }
+        else{// I'm Geefted,so I need BaasboxUsername of Geefter
+            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                @Override
+                public void handle(BaasResult<List<BaasLink>> resLink) {
+                    if (resLink.isSuccess()) {
+                        List<BaasLink> links = resLink.value();
+                        Log.d(TAG,"Size should be one: " + links.size());
+                        Log.d(TAG,"link: " + links.get(0).toString());
+                        Log.d(TAG,"link out: " + links.get(0).in().toString());
+                        Log.d(TAG,"link out: " + links.get(0).out().toString());
+                        mHisBaasboxName = links.get(0).out().getAuthor(); //Get doc_id of user from get(0)
+                                    //so, get baasboxName from getAuthor
+                        startFeedbackActivity(); // Feedback enabled;
+
+                    } else {
+                        Log.d(TAG,"Error while fetching link");
+                        showDialogError();
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void showDialogError(){
+        new AlertDialog.Builder(CompactDialogActivity.this)
+                .setTitle("Errore")
+                .setMessage("Operazione non possibile. Riprovare più tardi.").show();
     }
 
     @Override
