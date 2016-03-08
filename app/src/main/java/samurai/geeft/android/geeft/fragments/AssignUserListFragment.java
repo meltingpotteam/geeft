@@ -53,7 +53,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         super.onCreate(savedInstanceState);
         mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
         mUserList = new ArrayList<>();
-        Log.d(TAG,"IN ASSIGN");
+        Log.d(TAG, "IN ASSIGN");
     }
 
     @Nullable
@@ -82,7 +82,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
             public void onClick(View view, int position) {
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
-                startUserProfileFragmet(mUserList.get(position),false);
+                startUserProfileFragmet(mUserList.get(position), false);
             }
 
             @Override
@@ -95,12 +95,9 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
 
     private void startUserProfileFragmet(User user, boolean isCurrentUser) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = UserProfileFragment.newInstance(user,isCurrentUser);
-            fm.beginTransaction().add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+        Fragment fragment = UserProfileFragment.newInstance(user, mGeeft,isCurrentUser);
+        fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                .commit();
 
     }
 
@@ -129,9 +126,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
     @Override
     public void done(boolean isOK) {
         if (isOK){
-            Log.d(TAG, "" + mUserList.size());
             mAdapter.notifyDataSetChanged();
-            Log.d(TAG, "" + mAdapter.getItemCount());
         }
     }
 }

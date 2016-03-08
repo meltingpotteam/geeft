@@ -94,8 +94,6 @@
         <!-- Categories Activity-->
 
 
-        <activity android:name=".fragments.FullProfileFragment"/>
-
         <!-- FeedbackPage Activity-->
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>

@@ -19,16 +19,12 @@ package samurai.geeft.android.geeft.utilities;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -36,8 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.AssignedActivity;
-import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.WinnerScreenActivity;
 
@@ -57,6 +51,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        Log.d(TAG,data.toString());
         String message = data.getString("message");
         String custom = data.getString("custom");
         Log.d(TAG, custom);
@@ -126,6 +121,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setLights(getResources().getColor(R.color.colorPrimary),2000,2000);
 
         NotificationManager notificationManager =
