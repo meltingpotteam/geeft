@@ -140,6 +140,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
     }
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mResultToken);
+        mCallback.done(result,"",mResultToken);
+        //TODO change for firstID
     }
 }

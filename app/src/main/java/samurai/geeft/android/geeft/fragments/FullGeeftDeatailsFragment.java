@@ -462,7 +462,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     @Override
-    public void done(boolean result,int token) {
+    public void done(boolean result,String firstID,int token) {
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
         }

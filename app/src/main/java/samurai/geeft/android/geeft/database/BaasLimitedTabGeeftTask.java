@@ -22,11 +22,9 @@ import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
- * Created by ugookeadu on 07/01/16.
- * Task for populating GeeftItem cards
- * Update by danybr-dev on 17/01/16
+ * Created by joseph on 08/03/16.
  */
-public class BaaSTabGeeftTask extends BaaSCheckTask{
+public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -34,6 +32,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     private final int RESULT_SESSION_EXPIRED = -1;
 
     private static final String TAG ="BaaSGeeftItemTask";
+    private static final String TAG2 ="BaaSGeeftItemTask2";
     Context mContext;
     List<Geeft> mGeeftList;
     TaskCallbackBooleanToken mCallback;
@@ -41,19 +40,24 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     boolean result;
     boolean mIsCategoryTask;
     Category mCategory;
+    private int mGeeftQuantityShow = 3;
+    private String mFirstID;
+    private boolean mIsFirstLoop;
+    private int k,initVal; //Counter
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            TaskCallbackBooleanToken callback) {
+    public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                                   String firstID, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
+        mFirstID = firstID;
     }
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+    public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                             boolean isCategoryTask, Category category,
-                            TaskCallbackBooleanToken callback) {
+                            String firstID, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -61,11 +65,14 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
         mGeeftList = feedItems;
         mIsCategoryTask = isCategoryTask;
         mCategory = category;
+        mFirstID = firstID;
     }
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
         Geeft mGeeft;
+        mIsFirstLoop = true;
+        Log.d(TAG2, "The current id: " + mFirstID);
         Log.d(TAG, BaasUser.current().toString());
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
         //find all links with the doc_id (User id <--> doc id )
@@ -101,57 +108,69 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                     paginate = BaasQuery.builder()
                             .where("closed = false and deleted = false and category = '"
                                     +mCategory.getCategoryName().toLowerCase()+"'")
-                            .orderBy("_creation_date asc").criteria();
+                            .orderBy("_creation_date desc").criteria();
                 }else{
                     paginate = BaasQuery.builder()
                             .where("closed = false and deleted = false")
-                            .orderBy("_creation_date asc").criteria();
+                            .orderBy("_creation_date desc").criteria();
                 }
+                initVal=Integer.valueOf(mFirstID);
+                Log.d(TAG2, "The ENTERING id: " + mFirstID);
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
                     try {
+                        k=0;
                         for (BaasDocument e : baasResult.get()) {
-                            mGeeft = new Geeft();
-                            mGeeft.setId(e.getId());
-                            mGeeft.setUsername(e.getString("name"));
-                            mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
-                            mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
-                            //Append ad image url your session token!
-                            mGeeft.setGeeftDescription(e.getString("description"));
-                            mGeeft.setUserProfilePic(e.getString("profilePic"));
-                            mGeeft.setCreationTime(getCreationTimestamp(e));
-                            mGeeft.setDeadLine(e.getLong("deadline"));
-                            mGeeft.setUserFbId(e.getString("userFbId"));
+                            k++;
+                            if ((k>=initVal)&&(k<initVal+mGeeftQuantityShow)) {
+                                mGeeft = new Geeft();
+                                mGeeft.setId(e.getId());
+//                              THIS IS GOING TO BE USED LATER, DO NOT ERASE
+//                                if (mIsFirstLoop) {
+//                                    //mFirstID = e.getId();
+//                                    Log.d(TAG2, "The SAVED id: " + mFirstID);
+//                                    mIsFirstLoop = false;
+//                                }
+                                mGeeft.setUsername(e.getString("name"));
+                                mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
+                                mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                                //Append ad image url your session token!
+                                mGeeft.setGeeftDescription(e.getString("description"));
+                                mGeeft.setUserProfilePic(e.getString("profilePic"));
+                                mGeeft.setCreationTime(getCreationTimestamp(e));
+                                mGeeft.setDeadLine(e.getLong("deadline"));
+                                mGeeft.setUserFbId(e.getString("userFbId"));
 //
-                            mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
-                            mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+                                mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+                                mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
 
-                            mGeeft.setUserLocation(e.getString("location"));
-                            mGeeft.setUserCap(e.getString("cap"));
-                            mGeeft.setGeeftTitle(e.getString("title"));
-                            mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
-                            mGeeft.setGeeftHeight(e.getInt("height"));
-                            mGeeft.setGeeftWidth(e.getInt("width"));
-                            mGeeft.setGeeftDepth(e.getInt("depth"));
-                            mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
-                            mGeeft.setAssigned(e.getBoolean("assigned"));
-                            mGeeft.setTaken(e.getBoolean("taken"));
-                            mGeeft.setGiven(e.getBoolean("given"));
+                                mGeeft.setUserLocation(e.getString("location"));
+                                mGeeft.setUserCap(e.getString("cap"));
+                                mGeeft.setGeeftTitle(e.getString("title"));
+                                mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
+                                mGeeft.setGeeftHeight(e.getInt("height"));
+                                mGeeft.setGeeftWidth(e.getInt("width"));
+                                mGeeft.setGeeftDepth(e.getInt("depth"));
+                                mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
+                                mGeeft.setAssigned(e.getBoolean("assigned"));
+                                mGeeft.setTaken(e.getBoolean("taken"));
+                                mGeeft.setGiven(e.getBoolean("given"));
 
-                            for (BaasLink l : links) {
-                                //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-                                Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
-                                //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
-                                if (l.in().getId().equals(e.getId())) {
-                                    mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
-                                    // reserved)
-                                    mGeeft.setReservedLinkId(l.getId());
-                                    Log.d(TAG, "link id is: " + l.getId());
+                                for (BaasLink l : links) {
+                                    //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+                                    Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
+                                    //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                    if (l.in().getId().equals(e.getId())) {
+                                        mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                        // reserved)
+                                        mGeeft.setReservedLinkId(l.getId());
+                                        Log.d(TAG, "link id is: " + l.getId());
+                                    }
                                 }
+                                mGeeftList.add(mGeeftList.size(), mGeeft);
+                                mResultToken = RESULT_OK;
+                                result = true;
                             }
-                            mGeeftList.add(0, mGeeft);
-                            mResultToken = RESULT_OK;
-                            result = true;
                         }
                         mResultToken = RESULT_OK;
                         result = true;
@@ -176,6 +195,9 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                 }
             }
         }
+        initVal+=mGeeftQuantityShow;
+        mFirstID=Integer.toString(initVal);
+        Log.d(TAG2, "The SAVED id before the end: " + mFirstID);
         return result;
     }
 
@@ -187,7 +209,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             Date creation_date = dateFormat.parse(date);
             return creation_date.getTime(); //Convert timestamp in string
         }catch (java.text.ParseException e){
-           Log.e(TAG,"ERRORE FATALE : " + e.toString());
+            Log.e(TAG,"ERRORE FATALE : " + e.toString());
         }
         return -1;
 
@@ -195,6 +217,6 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,"",mResultToken);
+        mCallback.done(result,mFirstID,mResultToken);
     }
 }

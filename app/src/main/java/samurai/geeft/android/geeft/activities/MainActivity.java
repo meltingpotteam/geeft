@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -46,7 +47,9 @@ import java.io.File;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
+import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mActionNewGeeft;
     private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          *
          */
+
         mToolbar = (Toolbar)findViewById(R.id.main_app_bar);
         mViewPager = (ViewPager)findViewById(R.id.pager);
         setSupportActionBar(mToolbar);
@@ -117,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         // TODO: Move this to where you establish a user session
         logUser();
-
 
         /**
         * Facebook shareButton implementation
