@@ -92,7 +92,6 @@
         <activity android:name=".activities.WinnerScreenActivity"/>
 
         <!-- Categories Activity-->
-        <activity android:name=".activities.CategoriesActivity"/>
 
 
         <activity android:name=".fragments.FullProfileFragment"/>

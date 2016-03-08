@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -309,17 +311,21 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
+                fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                        .commit();
+               // mCallback.onImageSelected(mGeeft.getId());
+                //mCallback.onImageSelected(mGeeft);
             }
 
             @Override
             public void onLongClick(View view, int position) {
                 //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-                mGeeft = mGeeftList.get(position);
-                mCallback.onImageSelected(mGeeft.getId());
-                mCallback.onImageSelected(mGeeft);
+                //Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+               // mGeeft = mGeeftList.get(position);
+                //mCallback.onImageSelected(mGeeft.getId());
+                //mCallback.onImageSelected(mGeeft);
             }
         }));
     }
