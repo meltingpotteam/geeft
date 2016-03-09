@@ -20,6 +20,7 @@ import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 07/01/16.
@@ -137,6 +138,8 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mGeeft.setAssigned(e.getBoolean("assigned"));
                             mGeeft.setTaken(e.getBoolean("taken"));
                             mGeeft.setGiven(e.getBoolean("given"));
+                            mGeeft.setIsFeedbackLeftByGeefted(e.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
+                            mGeeft.setIsFeedbackLeftByGeefter(e.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
 
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());

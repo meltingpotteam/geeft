@@ -320,6 +320,18 @@ public class CompactDialogActivity extends AppCompatActivity {
     }
 
     private void checkConditionForFeedback(){
+        if(mIamGeefter){
+            if(mGeeft.isFeedbackLeftByGeefter()){
+                showDialogLeftFeedback();
+            }
+        }
+        else{
+            if(mGeeft.isFeedbackLeftByGeefted()){
+                showDialogLeftFeedback();
+            }
+        }
+
+
         if(mGeeft.isTaken() && mGeeft.isGiven()){
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Evviva!")
@@ -413,6 +425,25 @@ public class CompactDialogActivity extends AppCompatActivity {
                 .setTitle("Errore")
                 .setMessage("Operazione non possibile. Riprovare più tardi.").show();
     }
+
+    private void showDialogLeftFeedback(){
+        new AlertDialog.Builder(CompactDialogActivity.this)
+                .setTitle("Errore")
+                .setMessage("Hai già lasciato il tuo feedback per questo Geeft. Grazie.")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startMainActivity();
+                    }
+                })
+                .show();
+    }
+
+    private void startMainActivity(){
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

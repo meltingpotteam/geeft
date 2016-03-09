@@ -119,6 +119,9 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("assigned",false);
             doc.put("taken", false);
             doc.put("given",false);
+            doc.put(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED,false);
+            doc.put(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER,false);
+
 
             // send labels in an array built splitting the label string
             JsonArray labelsCleaned = arrayCreator(mGeeft.getGeeftLabels());

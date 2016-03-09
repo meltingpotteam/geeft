@@ -18,6 +18,7 @@ import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 09/02/16.
@@ -92,6 +93,8 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setAssigned(document.getBoolean("assigned"));
                             geeft.setTaken(document.getBoolean("taken"));
                             geeft.setGiven(document.getBoolean("given"));
+                            geeft.setIsFeedbackLeftByGeefted(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
+                            geeft.setIsFeedbackLeftByGeefter(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
 
                             mGeeftList.add(geeft);
                         }catch (BaasInvalidSessionException ise){

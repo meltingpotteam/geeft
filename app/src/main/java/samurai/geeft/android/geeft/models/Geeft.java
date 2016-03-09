@@ -36,14 +36,16 @@ public class Geeft implements Serializable {
     private boolean assigned;
     private boolean taken;
     private boolean given;
+    private boolean isFeedbackLeftByGeefted;
+    private boolean isFeedbackLeftByGeefter;
+
 
     public Geeft(){
     }
 
-
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, String geeftLabels, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth,boolean assigned,boolean taken,boolean given) {
+                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth, boolean assigned,boolean taken,boolean given,boolean isFeedbackLeftByGeefted, boolean isFeedbackLeftByGeefter) {
 
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
@@ -68,9 +70,12 @@ public class Geeft implements Serializable {
         this.geeftHeight = geeftHeight;
         this.geeftWidth = geeftWidth;
         this.geeftDepth = geeftDepth;
+
         this.assigned = assigned;
         this.taken = taken;
         this.given = given;
+        this.isFeedbackLeftByGeefted = isFeedbackLeftByGeefted;
+        this.isFeedbackLeftByGeefter = isFeedbackLeftByGeefter;
 
     }
 
@@ -293,6 +298,21 @@ public class Geeft implements Serializable {
         this.given = given;
     }
 
+    public boolean isFeedbackLeftByGeefted() {
+        return isFeedbackLeftByGeefted;
+    }
+
+    public void setIsFeedbackLeftByGeefted(boolean isFeedbackLeftByGeefted) {
+        this.isFeedbackLeftByGeefted = isFeedbackLeftByGeefted;
+    }
+
+    public boolean isFeedbackLeftByGeefter() {
+        return isFeedbackLeftByGeefter;
+    }
+
+    public void setIsFeedbackLeftByGeefter(boolean isFeedbackLeftByGeefter) {
+        this.isFeedbackLeftByGeefter = isFeedbackLeftByGeefter;
+    }
 
 
 

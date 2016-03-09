@@ -5,11 +5,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonObject;
+
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -57,17 +61,14 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
             BaasResult<BaasUser> resUser = BaasUser.fetchSync(mHisBaasboxUsername);
             if(resUser.isSuccess()){
                 BaasUser user = resUser.value();
-                double currentFeedback = user.getScope(BaasUser.Scope.REGISTERED).getDouble("feedback");
-                float n_feedback = user.getScope(BaasUser.Scope.REGISTERED).getFloat("n_feedback");
-
-                double newUserFeedback = calculateFeedback(currentFeedback, n_feedback);
+                double newSingleFeedback = calculateSingleFeedback();
 
                 BaasDocument userFeedbackDocument = new BaasDocument(TagsValue.COLLECTION_USERS_FEEDBACKS);
                 createUserFeedbackDocument(userFeedbackDocument);
                 if(saveUserFeedbackDocument(userFeedbackDocument)){
                     if(getBaasUser(mHisBaasboxUsername)) {
                         if (createLinkBetweenUserAndFeedback(userFeedbackDocument)) {
-                           if(putNewUserFeedbackInBaasbox(newUserFeedback,n_feedback)){
+                           if(putNewUserFeedbackInBaasbox(newSingleFeedback)){
                                if(setFeedbackLeft()){
                                    return true;
                                }
@@ -103,7 +104,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
         mCallback.done(result, mResultToken);
     }
 
-    private double calculateFeedback(double oldUserFeedback,float n_feedback){
+    private double calculateSingleFeedback(){
         double userRatingCommunication = mFeedbackArray[0];
         double userRatingReliability =  mFeedbackArray[1];
         double userRatingCourtesy =  mFeedbackArray[2];
@@ -121,9 +122,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
             newFeedback = userRatingCommunication * 0.2 + userRatingDescription * 0.3 + userRatingReliability * 0.3 + userRatingCourtesy * 0.2;
         }
 
-        double newUserFeedback = (oldUserFeedback + newFeedback) / (n_feedback+1);
-
-        return newUserFeedback;
+        return newFeedback;
     }
 
     private void createUserFeedbackDocument(BaasDocument userFeedbackDocument) {
@@ -199,6 +198,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
         }
     }
 
+    /*
     private boolean putNewUserFeedbackInBaasbox(double newUserFeedback,float n_feedback) {
         mBaasUser.getScope(BaasUser.Scope.PUBLIC).put("feedback",newUserFeedback);
         mBaasUser.getScope(BaasUser.Scope.PUBLIC).put("n_feedback",n_feedback + 1);
@@ -219,6 +219,23 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
                 return false;
             }
         }
+    }*/
+
+    private boolean putNewUserFeedbackInBaasbox(double newSingleFeedback) { //this is for the new feed
+        BaasResult<JsonObject> resFeedback = BaasBox.rest().sync(Rest.Method.GET, "plugin/update.userFeedback?" +
+                "baasboxUsername=" + mHisBaasboxUsername + "&newSingleFeedback=" + newSingleFeedback);
+
+        if(resFeedback.isSuccess()){
+            Log.d(TAG,"Successo");
+            Log.d(TAG,resFeedback.toString());
+            return true;
+        }
+        else{
+            Log.d(TAG,"Errore");
+            Log.d(TAG,resFeedback.toString());
+            return false;
+        }
+
     }
 
     private boolean setFeedbackLeft(){

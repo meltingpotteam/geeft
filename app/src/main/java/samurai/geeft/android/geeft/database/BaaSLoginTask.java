@@ -129,6 +129,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                                 user.getScope(BaasUser.Scope.REGISTERED).put("feedback", initFeedback);
                                 //Insert n_feedback,first registration is 0
                                 user.getScope(BaasUser.Scope.REGISTERED).put("n_feedback", 1);
+                                //Insert n_feedback,first registration is 0
+                                user.getScope(BaasUser.Scope.REGISTERED).put("feedback_sum", initFeedback);
                                 //Insert n_given,first registration is 0
                                 user.getScope(BaasUser.Scope.REGISTERED).put("n_given", 0);
                                 //Insert n_received,first registration is 0

@@ -88,6 +88,17 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
             mIsGeefter = savedInstanceState.getBoolean(EXTRA_IS_GEEFTER);
         }
 
+        if(mIsGeefter){
+            if(mGeeft.isFeedbackLeftByGeefter()){
+                showDialogLeftFeedback();
+            }
+        }
+        else{
+            if(mGeeft.isFeedbackLeftByGeefted()){
+                showDialogLeftFeedback();
+            }
+        }
+
         initUI();
 
         mFeedbackButton.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +212,19 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     private void startMainActivity(){
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+    }
+
+    private void showDialogLeftFeedback(){
+        new AlertDialog.Builder(FeedbackPageActivity.this)
+                .setTitle("Errore")
+                .setMessage("Hai già lasciato il tuo feedback per questo Geeft. Grazie.")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startMainActivity();
+                    }
+                })
+                .show();
     }
 /*
     public void done(boolean result){
