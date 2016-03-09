@@ -66,10 +66,16 @@ public class UserProfileFragment extends StatedFragment implements
             if (result.isFailed()){
                 handleFailure(result.error());
             }
-            else{
-                Log.d(TAG,"SUCCESSO");
-            }
+        }
+    };
 
+    private BaasHandler<BaasLink>  linkCreateRequest = new BaasHandler<BaasLink>() {
+        @Override
+        public void handle(BaasResult<BaasLink> result) {
+            mLinkCreateRequest = null;
+            if (result.isFailed()){
+                handleFailure(result.error());
+            }
         }
     };
 
@@ -92,6 +98,7 @@ public class UserProfileFragment extends StatedFragment implements
     private View mLayoutDonatedView;
     private View mLayoutReceivedView;
     private RequestToken mCurrentRequest;
+    private RequestToken mLinkCreateRequest;
     private Geeft mGeeft;
 
 
@@ -356,13 +363,20 @@ public class UserProfileFragment extends StatedFragment implements
         jsonArray.add(mUser.getDocId());
 
         if(BaasUser.current()!=null) {
+            ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Attendere",
+                    "Operazione in corso");
+            mLinkCreateRequest = BaasLink.create(TagsValue.LINK_NAME_ASSIGNED,
+                    mGeeft.getId(), mUser.getID(), RequestOptions.PRIORITY_HIGH, linkCreateRequest);
+
             mCurrentRequest = service.newMessage()
                     .extra(jsonArray)
                     .text("Ti è stato assegnato il Geeft " + mGeeft.getGeeftTitle() + " da "
                             + fillUser(BaasUser.current()).getUsername())
                     .to(BaasUser.withUserName(mUser.getID()))
                     .send(sendToUserHandler);
+
         }
+
     }
 
     private void changeButtonAdDescriptionState() {
