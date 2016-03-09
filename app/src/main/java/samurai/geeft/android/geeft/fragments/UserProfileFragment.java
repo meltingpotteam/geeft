@@ -27,6 +27,7 @@ import com.baasbox.android.RequestOptions;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
@@ -227,7 +228,7 @@ public class UserProfileFragment extends StatedFragment implements
                 .transform(new CircleTransformation())
                 .into(mUserProfileImage);
         mUsernameTextView.setText(mUser.getUsername());
-        mUserFeedbackTextView.setText(mUser.getRank() + "");
+        mUserFeedbackTextView.setText(new DecimalFormat("#.##").format(mUser.getRank()));
         mUserDescriptionTextView.setText(mUser.getDescription());
         mUserDescriptionEditText.setText(mUser.getDescription());
         setLinkCountTextView(mUserReceivedTextView, mUser.getLinkReceivedCount());
