@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasBox;
-import com.baasbox.android.BaasCloudMessagingService;
 import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
@@ -28,10 +27,11 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.RequestToken;
-import com.baasbox.android.json.JsonArray;
+import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
@@ -59,26 +59,6 @@ public class UserProfileFragment extends StatedFragment implements
     private static final String ARG_GEEFT = "arg_geeft" ;
     private static final String KEY_GEEFT = "key_geeft" ;
 
-    private BaasHandler<Void> sendToUserHandler = new BaasHandler<Void>() {
-        @Override
-        public void handle(BaasResult<Void> result) {
-            mCurrentRequest=null;
-            if (result.isFailed()){
-                handleFailure(result.error());
-            }
-        }
-    };
-
-    private BaasHandler<BaasLink>  linkCreateRequest = new BaasHandler<BaasLink>() {
-        @Override
-        public void handle(BaasResult<BaasLink> result) {
-            mLinkCreateRequest = null;
-            if (result.isFailed()){
-                handleFailure(result.error());
-            }
-        }
-    };
-
     private  final String TAG = getClass().getSimpleName();
 
     private TextView mUsernameTextView;
@@ -100,6 +80,7 @@ public class UserProfileFragment extends StatedFragment implements
     private RequestToken mCurrentRequest;
     private RequestToken mLinkCreateRequest;
     private Geeft mGeeft;
+    private ProgressDialog progressDialog;
 
 
     public static UserProfileFragment newInstance(@Nullable User user,
@@ -289,7 +270,11 @@ public class UserProfileFragment extends StatedFragment implements
                 } else if (mIsCurrentUser && mIsEditingDescription) {
                     updateDescription();
                 } else {
-                    assignCurrentGeeft();
+                    try {
+                        assignCurrentGeeft();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 changeButtonAdDescriptionState();
                 Log.d(TAG, "onClick is editing = " + mIsEditingDescription);
@@ -309,11 +294,11 @@ public class UserProfileFragment extends StatedFragment implements
             user.save(new BaasHandler<BaasUser>() {
                 @Override
                 public void handle(BaasResult<BaasUser> baasResult) {
-                    if(baasResult.isSuccess()){
+                    if (baasResult.isSuccess()) {
                         BaasUser.current().refresh(new BaasHandler<BaasUser>() {
                             @Override
                             public void handle(BaasResult<BaasUser> baasResult) {
-                                if (progressDialog!=null){
+                                if (progressDialog != null) {
                                     progressDialog.dismiss();
                                 }
                                 if (baasResult.isSuccess()) {
@@ -324,12 +309,12 @@ public class UserProfileFragment extends StatedFragment implements
                                     Log.d(TAG, BaasUser.current()
                                             .getScope(BaasUser.Scope.REGISTERED)
                                             .put("user_description", newDescrition).toString());
-                                }else if(baasResult.isFailed()){
+                                } else if (baasResult.isFailed()) {
                                     showDescriptionFailDailog();
                                 }
                             }
                         });
-                    }else {
+                    } else {
                         showDescriptionFailDailog();
                     }
                 }
@@ -355,28 +340,73 @@ public class UserProfileFragment extends StatedFragment implements
                 });
     }
 
-    private void assignCurrentGeeft(){
-        BaasCloudMessagingService service = BaasBox.messagingService();
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(1);
-        jsonArray.add(mGeeft.getId());
-        jsonArray.add(mUser.getDocId());
-
+    private void assignCurrentGeeft() throws MalformedURLException {
         if(BaasUser.current()!=null) {
-            ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Attendere",
+            mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
                     "Operazione in corso");
-            mLinkCreateRequest = BaasLink.create(TagsValue.LINK_NAME_ASSIGNED,
-                    mGeeft.getId(), mUser.getID(), RequestOptions.PRIORITY_HIGH, linkCreateRequest);
 
-            mCurrentRequest = service.newMessage()
-                    .extra(jsonArray)
-                    .text("Ti è stato assegnato il Geeft " + mGeeft.getGeeftTitle() + " da "
-                            + fillUser(BaasUser.current()).getUsername())
-                    .to(BaasUser.withUserName(mUser.getID()))
-                    .send(sendToUserHandler);
-
+            mLinkCreateRequest = BaasBox.rest().async(Rest.Method.GET, "plugin/manual" +
+                    ".geeftedChoose?" +
+                    "s_id=" + mGeeft.getId() +
+                    "&d_id=" + mUser.getDocId() +
+                    "&label=" + TagsValue.LINK_NAME_ASSIGNED +
+                    "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
+                    "&geeftedName=" + mUser.getID()+
+                    "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
+                    .replace(" ", "%20")
+                    , new BaasHandler<JsonObject>() {
+                @Override
+                public void handle(BaasResult<JsonObject> result) {
+                    mLinkCreateRequest = null;
+                    if (result.isFailed()) {
+                        handleFailureLink(result.error());
+                        showFailureAlert();
+                    } else if (result.isSuccess()) {
+                        showSuccessAlert();
+                        Log.d(TAG, "IN HANDLER SUCCES");
+                    }
+                }
+        });
         }
+    }
 
+    private void showSuccessAlert() {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Successo");
+        builder.setMessage("Oggetto Assegnato. Verrai contattato dall'utente su Facebook.");
+    }
+
+
+    private void showFailureAlert() {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Errore");
+        builder.setMessage("Errore durante assegnazione.\nRiprovare ");
+        builder.setPositiveButton("Riprovare", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    assignCurrentGeeft();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void changeButtonAdDescriptionState() {
@@ -460,6 +490,9 @@ public class UserProfileFragment extends StatedFragment implements
 
     private void handleFailure(BaasException e){
         Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_LONG).show();
-        Log.e(TAG, e.getMessage());
+        Log.e(TAG, e.getCause().toString() + " " + e.getMessage().toString() );
+    }
+
+    private void handleFailureLink(BaasException error) {
     }
 }

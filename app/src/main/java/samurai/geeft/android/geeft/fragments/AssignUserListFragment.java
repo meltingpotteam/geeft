@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,15 +79,11 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
-                //TODO complete the fragment to start
-                startUserProfileFragmet(mUserList.get(position), false);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
+
             }
         }));
     }
