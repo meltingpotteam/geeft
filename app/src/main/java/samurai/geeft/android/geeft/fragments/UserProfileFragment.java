@@ -32,6 +32,7 @@ import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
