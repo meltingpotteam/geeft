@@ -51,13 +51,16 @@ public class InitialActivity extends Activity  {
                         public void handle(BaasResult<BaasUser> baasResult) {
                             if (baasResult.isSuccess()){
                                 startMainActivity();
+                                finish();
                             }else if(baasResult.isFailed()){
                                 startLoginActivity();
+                                finish();
                             }
                         }
                     });
                 }else{
                     startLoginActivity();
+                    finish();
                 }
 //                    finish();
 //                InitialActivity.this.finish();
