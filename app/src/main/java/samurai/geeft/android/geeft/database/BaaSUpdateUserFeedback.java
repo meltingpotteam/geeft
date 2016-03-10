@@ -101,7 +101,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result, mResultToken);
+        mCallback.done(result,"",0, mResultToken);
     }
 
     private double calculateSingleFeedback(){

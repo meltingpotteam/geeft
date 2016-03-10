@@ -176,7 +176,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         return super.onOptionsItemSelected(item);
     }
 
-    public void done(boolean result,int resultToken){
+    public void done(boolean result,String firstID,long firstTimeStamp,int resultToken){
         if(result){
             new AlertDialog.Builder(FeedbackPageActivity.this)
                     .setTitle("Successo")
