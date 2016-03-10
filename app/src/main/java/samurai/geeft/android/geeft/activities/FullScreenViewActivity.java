@@ -86,7 +86,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     }
 
     @Override
-    public void done(boolean result,int resultToken) {
+    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken) {
         if(result) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {

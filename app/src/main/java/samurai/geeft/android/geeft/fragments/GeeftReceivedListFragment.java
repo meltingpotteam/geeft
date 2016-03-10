@@ -117,7 +117,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
     }
 
-    public void done(boolean result,int resultToken){
+    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
         Log.d("DONE", "in done");
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();

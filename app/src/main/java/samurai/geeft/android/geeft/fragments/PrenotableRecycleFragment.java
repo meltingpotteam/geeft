@@ -83,7 +83,7 @@ public class PrenotableRecycleFragment extends StatedFragment
         new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
-    public void done(boolean result,int resultToken){
+    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
         Log.d(TAG,"done()");
         mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {
@@ -168,7 +168,7 @@ public class PrenotableRecycleFragment extends StatedFragment
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
-                +(mGeeftList==null || mGeeftList.size()==0));
+                + (mGeeftList == null || mGeeftList.size() == 0));
         if (mGeeftList!=null)
             Log.d(TAG, "onRestoreState()-> mGeeftList.size= "
                     +(mGeeftList.size()));
