@@ -27,7 +27,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
     private String mFeedbackComment;
     private Context mContext;
     private String mHisBaasboxUsername;
-    private boolean mIsGeefter;
+    private boolean mIamGeefter;
     private double[] mFeedbackArray;
     private TaskCallbackBooleanToken mCallback;
     private int mResultToken;
@@ -43,13 +43,13 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
      *
      **/
     public BaaSUpdateUserFeedback(Context context, String geeftId ,String hisBaasboxUsername, double[] feedbackArray,String feedbackComment,
-                                  boolean isGeefter,TaskCallbackBooleanToken callback) {
+                                  boolean iAmGeefter,TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftId = geeftId;
         mHisBaasboxUsername = hisBaasboxUsername;
         mFeedbackArray = feedbackArray;
         mFeedbackComment = feedbackComment;
-        mIsGeefter = isGeefter;
+        mIamGeefter = iAmGeefter;
         mCallback = callback;
     }
 
@@ -114,7 +114,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
 
         //-- Geefted Feedback calculation. Communication 30% Reliability 40% Courtesy 30%
         //if(mCallingActivity.equals("AssignedActivity")) {
-        if(!mIsGeefter){
+        if(mIamGeefter){ //I'm Geefter,calculate feedback for geefted
             newFeedback = userRatingCommunication * 0.3 + userRatingReliability * 0.4 + userRatingCourtesy * 0.3;
         }
         //-- Geefter Feedback calculation. Communication 20% Reliability 30% Description 30% Courtesy 20%
@@ -242,7 +242,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
         BaasResult<BaasDocument> resGeeft = BaasDocument.fetchSync("geeft", mGeeftId);
         if(resGeeft.isSuccess()){
             BaasDocument geeft = resGeeft.value();
-            if(mIsGeefter){
+            if(mIamGeefter){
                 geeft.put(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER,true);
             }
             else{

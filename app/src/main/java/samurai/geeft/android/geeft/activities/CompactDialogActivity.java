@@ -320,38 +320,34 @@ public class CompactDialogActivity extends AppCompatActivity {
     }
 
     private void checkConditionForFeedback(){
-        if(mIamGeefter){
-            if(mGeeft.isFeedbackLeftByGeefter()){
-                showDialogLeftFeedback();
+        if(mIamGeefter && mGeeft.isFeedbackLeftByGeefter()){
+            Log.d(TAG, "Show dialog left feedback for geefter");
+            showDialogLeftFeedback();
+        }
+        else if (!mIamGeefter && mGeeft.isFeedbackLeftByGeefted()) {
+            showDialogLeftFeedback();
+        }
+        else { // if feedback isn't left
+
+            if (mGeeft.isTaken() && mGeeft.isGiven()) {
+                new AlertDialog.Builder(CompactDialogActivity.this)
+                        .setTitle("Evviva!")
+                        .setMessage("Avete confermato lo scambio a mano del Geeft. Lasciatevi un feedback.")
+                        .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
+
+                                finish();
+                            }
+                        })
+                        .show();
+            } else if (mGeeft.isTaken() && !mGeeft.isGiven()) {
+                //Send push notification to Geefter. One per day!
+            } else if (mGeeft.isGiven() && !mGeeft.isTaken()) {
+                //Send push notification to Geefted. One per day!
             }
-        }
-        else{
-            if(mGeeft.isFeedbackLeftByGeefted()){
-                showDialogLeftFeedback();
-            }
-        }
-
-
-        if(mGeeft.isTaken() && mGeeft.isGiven()){
-            new AlertDialog.Builder(CompactDialogActivity.this)
-                    .setTitle("Evviva!")
-                    .setMessage("Avete confermato lo scambio a mano del Geeft. Lasciatevi un feedback.")
-                    .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
-
-                            finish();
-                        }
-                    })
-                    .show();
-        }
-        else if(mGeeft.isTaken() && !mGeeft.isGiven()){
-            //Send push notification to Geefter. One per day!
-        }
-        else if(mGeeft.isGiven() && !mGeeft.isTaken()){
-            //Send push notification to Geefted. One per day!
         }
 
     }

@@ -47,7 +47,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     private Geeft mGeeft;
     private String mCallingActivity;
     private String mUsername;
-    private boolean mIsGeefter;
+    private boolean mIamGeefter;
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -78,17 +78,17 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
                 mGeeft = (Geeft)extras.getSerializable(EXTRA_GEEFT);
                 mCallingActivity = extras.getString(EXTRA_CONTEXT);
                 mUsername = extras.getString(EXTRA_BAASBOX_NAME);
-                mIsGeefter = extras.getBoolean(EXTRA_IS_GEEFTER);
+                mIamGeefter = extras.getBoolean(EXTRA_IS_GEEFTER);
 
             }
         } else {
             mGeeft = (Geeft) savedInstanceState.getSerializable(EXTRA_GEEFT);
             mCallingActivity = savedInstanceState.getString(EXTRA_CONTEXT);
             mUsername = savedInstanceState.getString(EXTRA_BAASBOX_NAME);
-            mIsGeefter = savedInstanceState.getBoolean(EXTRA_IS_GEEFTER);
+            mIamGeefter = savedInstanceState.getBoolean(EXTRA_IS_GEEFTER);
         }
 
-        if(mIsGeefter){
+        if(mIamGeefter){
             if(mGeeft.isFeedbackLeftByGeefter()){
                 showDialogLeftFeedback();
             }
@@ -126,7 +126,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
         Log.d(TAG, "getSimpleName su questa classe:" + TAG);
        // if(mCallingActivity.equals("AssignedActivity")){
-        if(mIsGeefter){
+        if(mIamGeefter){
             mRatingDescription.setVisibility(View.GONE);
             Log.d(TAG, "is null? " + (mTextViewFeedbackDescription == null));
             mTextViewFeedbackDescription.setVisibility(View.GONE);
@@ -143,7 +143,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
 
         //if(mCallingActivity.equals("AssignedActivity")){ // I'm Geefter,I can't set Geeft description
-        if(!mIsGeefter){
+        if(mIamGeefter){
             userRatingDescription = 0;
         }
         else{
@@ -158,7 +158,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         };
 
         //TODO: ASyncTask
-        new BaaSUpdateUserFeedback(getApplicationContext(),mGeeft.getId(),mUsername,feedbackArray,userRatingComment,mIsGeefter,this).execute();
+        new BaaSUpdateUserFeedback(getApplicationContext(),mGeeft.getId(),mUsername,feedbackArray,userRatingComment,mIamGeefter,this).execute();
     }
 
     @Override
