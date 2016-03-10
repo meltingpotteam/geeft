@@ -67,8 +67,8 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                 for (BaasLink link : links) {
                     BaasResult<BaasDocument> result = BaasDocument.fetchSync("geeft", link.in().getId());
                     Log.d(TAG,"geeftID: " + link.in().getId());
+                    Log.d(TAG, "Your links are here: " + links.size());
                     if (result.isSuccess()) {
-                        Log.d(TAG, "Your links are here: " + links.size());
                         try {
                             BaasDocument document = result.get().asDocument();
                             Geeft geeft = new Geeft();
