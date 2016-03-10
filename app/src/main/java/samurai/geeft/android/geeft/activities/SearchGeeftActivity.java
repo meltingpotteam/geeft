@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,11 +16,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragments.ListCategoryFragment;
-import samurai.geeft.android.geeft.fragments.SearchGeeftFragment;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
-import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
-import samurai.geeft.android.geeft.models.Category;
+import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by gabriel-dev on 06/03/16.
@@ -32,6 +27,7 @@ public class SearchGeeftActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName() ;
 
     private Toolbar mToolbar;
+    private Fragment mFragment;
 
     //for the search activity
     private SearchView searchView;
@@ -51,6 +47,10 @@ public class SearchGeeftActivity extends AppCompatActivity {
         mToolbar.setTitle("Cerca Geeft");
         setSupportActionBar(mToolbar);
         //for the fragment
+        if (mFragment == null) {
+            FragmentManager fm = getSupportFragmentManager();
+            mFragment = fm.findFragmentById(R.id.fragment_container);
+        }
         if (mToolbar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -70,6 +70,14 @@ public class SearchGeeftActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState!=null){
+
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
@@ -84,6 +92,8 @@ public class SearchGeeftActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO rotation error, implement on restore for the toolbar elements
 
 
     @Override
@@ -113,14 +123,10 @@ public class SearchGeeftActivity extends AppCompatActivity {
                 //MAGHEGGIO PER EVITARE QUERY DOPPIE
 //                searchView.clearFocus();
                 searchView.setIconified(true);
-                FragmentManager fm = getSupportFragmentManager();
-                Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-                if (fragment == null) {
-                    Log.d(TAG, "FRAGMENT_CALLED");
-                    fragment = TabGeeftFragment.newInstance(false );
-                    fm.beginTransaction().add(R.id.fragment_container, fragment)
-                            .commit();
-                }
+                Log.d(TAG, "FRAGMENT_CALLED");
+                mFragment = TabGeeftFragment.newInstance(true, query );
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+                        .commit();
                 return true;
             }
 
