@@ -112,6 +112,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         return false;
                     }
                     String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                    String name = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
                     if (UserDocId == null) {
                         BaasDocument doc = new BaasDocument("linkable_users");
                         JsonArray JSONUserLinks = new JsonArray();
@@ -141,6 +142,9 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                                 user.getScope(BaasUser.Scope.REGISTERED).put("submits_active", 0);
                                 //Insert in doc_id the id of docUser,linked with geefts
                                 user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
+                                //Insert username
+                                user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
+
                                 BaasResult<BaasUser> resUser = user.saveSync();
                                 if (resUser.isSuccess()) {
                                     Log.d(TAG, "New user, document created");
