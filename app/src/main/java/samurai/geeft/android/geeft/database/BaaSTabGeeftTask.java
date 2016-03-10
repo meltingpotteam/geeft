@@ -195,6 +195,6 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,"",mResultToken);
+        mCallback.done(result,"",0,mResultToken);
     }
 }

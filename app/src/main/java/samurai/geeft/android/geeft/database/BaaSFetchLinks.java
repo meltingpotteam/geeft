@@ -127,7 +127,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,"",mResultToken);
+        mCallback.done(result,"",0,mResultToken);
         //If not working modify "" for firstID
     }
 }

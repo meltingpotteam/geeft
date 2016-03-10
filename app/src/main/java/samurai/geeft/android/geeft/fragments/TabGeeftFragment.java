@@ -43,6 +43,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 
     private static final String KEY_IS_CATEGORY_CALL = "key_is_category_call";
     private static final String KEY_CATEGORY = "key_category" ;
+    private static final String FIRST_ID_KEY = "key_firstID";
+    private static final String FIRST_TIME_STAMP = "key_firstTimeStamp";
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
@@ -68,6 +70,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 //      TODO:  QUERY TEST !!REMOVE!!
 //
     private Button mButtonQuery;
+    private long mFirstTimeStamp;
 
 
     public static TabGeeftFragment newInstance(boolean isCategoryCall,Category category) {
@@ -93,6 +96,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         initVariables();
         Log.d("BaaSGeeftItemTask2", "ESTO PASA SIEMPRE? ");
         mFirstID = "1";
+        mFirstTimeStamp = Long.MAX_VALUE;
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
     }
 
@@ -182,9 +186,10 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
 
-    public void done(boolean result, String firstID, int resultToken){
+    public void done(boolean result, String firstID, long firstTimeStamp, int resultToken){
         Log.d(TAG, "done()");
         mFirstID=firstID;
+        mFirstTimeStamp=firstTimeStamp;
         if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
@@ -238,8 +243,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-
-        //
+//
 //      TODO:  QUERY TEST !!REMOVE!!
 //
 //
@@ -253,7 +257,6 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 //
 //
 //
-
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -267,6 +270,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 
     private void saveState(Bundle outState){
         outState.putParcelableArrayList(GEFFT_LIST_KEY, (ArrayList) mGeeftList);
+        outState.putString(FIRST_ID_KEY, mFirstID);
+        outState.putLong(FIRST_TIME_STAMP, mFirstTimeStamp);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
@@ -302,11 +307,11 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
         }else if(!mIsCategoryCall){
-            new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,mFirstID,this).execute();
+            new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,mFirstID,mFirstTimeStamp,this).execute();
         }
         else {
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall,mCategory,mFirstID,this).execute();
+                    mIsCategoryCall,mCategory,mFirstID,mFirstTimeStamp,this).execute();
         }
     }
 

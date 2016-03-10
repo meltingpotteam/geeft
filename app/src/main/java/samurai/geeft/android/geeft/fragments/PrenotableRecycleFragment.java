@@ -83,7 +83,7 @@ public class PrenotableRecycleFragment extends StatedFragment
         new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
     }
 
-    public void done(boolean result,String firstID, int resultToken){
+    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
         Log.d(TAG,"done()");
         mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {

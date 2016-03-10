@@ -43,21 +43,26 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
     private int mGeeftQuantityShow = 3;
     private String mFirstID;
     private boolean mIsFirstLoop;
-    private int k,initVal; //Counter
+    private int k, mInitVal; //Counter
+    private long mFirstTimeStamp;
+    private long mActualTimeStamp;
+    private long mFirstActualTimeStamp;
+
 
     public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                                   String firstID, TaskCallbackBooleanToken callback) {
+                                   String firstID,  long firstTimeStamp, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
         mFirstID = firstID;
+        mFirstTimeStamp = firstTimeStamp;
     }
 
     public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                             boolean isCategoryTask, Category category,
-                            String firstID, TaskCallbackBooleanToken callback) {
+                            String firstID, long firstTimeStamp, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -66,6 +71,7 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
         mIsCategoryTask = isCategoryTask;
         mCategory = category;
         mFirstID = firstID;
+        mFirstTimeStamp = firstTimeStamp;
     }
 
     @Override
@@ -104,6 +110,7 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate;
+
                 if (mIsCategoryTask) {
                     paginate = BaasQuery.builder()
                             .where("closed = false and deleted = false and category = '"
@@ -114,7 +121,7 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                             .where("closed = false and deleted = false")
                             .orderBy("_creation_date desc").criteria();
                 }
-                initVal=Integer.valueOf(mFirstID);
+                mInitVal =Integer.valueOf(mFirstID);
                 Log.d(TAG2, "The ENTERING id: " + mFirstID);
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
@@ -122,15 +129,17 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                         k=0;
                         for (BaasDocument e : baasResult.get()) {
                             k++;
-                            if ((k>=initVal)&&(k<initVal+mGeeftQuantityShow)) {
+                            mActualTimeStamp = getCreationTimestamp(e);
+                            if (mIsFirstLoop) {
+                                mIsFirstLoop = false;
+                                mFirstActualTimeStamp = mActualTimeStamp;
+                                Log.d(TAG2, "Before SAVED timestamp: " + mFirstTimeStamp);
+                                Log.d(TAG2, "Before ACTUAL timestamp: " + mActualTimeStamp);
+                            }
+                            if (((k>= mInitVal)&&(k< mInitVal +mGeeftQuantityShow))||(mActualTimeStamp>mFirstTimeStamp)) {
+                                Log.d(TAG2, "The ACTUAL timestamp (writing on the list) : " + mActualTimeStamp);
                                 mGeeft = new Geeft();
                                 mGeeft.setId(e.getId());
-//                              THIS IS GOING TO BE USED LATER, DO NOT ERASE
-//                                if (mIsFirstLoop) {
-//                                    //mFirstID = e.getId();
-//                                    Log.d(TAG2, "The SAVED id: " + mFirstID);
-//                                    mIsFirstLoop = false;
-//                                }
                                 mGeeft.setUsername(e.getString("name"));
                                 mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
                                 mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
@@ -140,10 +149,8 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                                 mGeeft.setCreationTime(getCreationTimestamp(e));
                                 mGeeft.setDeadLine(e.getLong("deadline"));
                                 mGeeft.setUserFbId(e.getString("userFbId"));
-//
                                 mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
                                 mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
-
                                 mGeeft.setUserLocation(e.getString("location"));
                                 mGeeft.setUserCap(e.getString("cap"));
                                 mGeeft.setGeeftTitle(e.getString("title"));
@@ -167,7 +174,12 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                                         Log.d(TAG, "link id is: " + l.getId());
                                     }
                                 }
-                                mGeeftList.add(mGeeftList.size(), mGeeft);
+                                if (mActualTimeStamp>mFirstTimeStamp) {
+                                    mGeeftList.add(0, mGeeft);
+                                    mInitVal++;
+                                } else {
+                                    mGeeftList.add(mGeeftList.size(), mGeeft);
+                                }
                                 mResultToken = RESULT_OK;
                                 result = true;
                             }
@@ -195,9 +207,11 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                 }
             }
         }
-        initVal+=mGeeftQuantityShow;
-        mFirstID=Integer.toString(initVal);
+        mInitVal +=mGeeftQuantityShow;
+        mFirstID=Integer.toString(mInitVal);
         Log.d(TAG2, "The SAVED id before the end: " + mFirstID);
+        mFirstTimeStamp=mFirstActualTimeStamp;
+        Log.d(TAG2, "The SAVED timestamp before the end: " + mFirstTimeStamp);
         return result;
     }
 
@@ -207,7 +221,8 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         try {
             Date creation_date = dateFormat.parse(date);
-            return creation_date.getTime(); //Convert timestamp in string
+
+            return creation_date.getTime();
         }catch (java.text.ParseException e){
             Log.e(TAG,"ERRORE FATALE : " + e.toString());
         }
@@ -217,6 +232,6 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mFirstID,mResultToken);
+        mCallback.done(result,mFirstID,mFirstTimeStamp,mResultToken);
     }
 }
