@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.LoginActivity;
+import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
@@ -326,16 +327,18 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
     private void showSnackbar(){
-        Snackbar snackbar = Snackbar
-                .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                        "No Internet Connection!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getData();
-                    }
-                });
-        snackbar.show();
+        if(getActivity().getClass().equals(MainActivity.class)) {
+            Snackbar snackbar = Snackbar
+                    .make(getActivity().findViewById(R.id.main_coordinator_layout),
+                            "No Internet Connection!", Snackbar.LENGTH_LONG)
+                    .setAction("RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getData();
+                        }
+                    });
+            snackbar.show();
+        }
     }
 
     private void initSupportActionBar(View rootView) {

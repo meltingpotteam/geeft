@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
@@ -24,18 +26,20 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
+import com.baasbox.android.RequestToken;
+import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
-import samurai.geeft.android.geeft.database.BaaSGetUserData;
 import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
+import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.CircleTransformation;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
@@ -46,11 +50,14 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class UserProfileFragment extends StatedFragment implements
         TaskCallbackBoolean, LinkCountListener{
+
     private static final String KEY_USER = "key_user";
     private static final String ARG_USER = "arg_user";
     private static final String KEY_IS_CURRENT_USER = "key_is_current_user" ;
     private static final java.lang.String ARG_IS_CURRENT_USER = "arg_is_current_user" ;
     private static final String KEY_IS_EDITING_DESCRIPTION = "key_is_editing_description";
+    private static final String ARG_GEEFT = "arg_geeft" ;
+    private static final String KEY_GEEFT = "key_geeft" ;
 
     private  final String TAG = getClass().getSimpleName();
 
@@ -70,11 +77,28 @@ public class UserProfileFragment extends StatedFragment implements
     private EditText mUserDescriptionEditText;
     private View mLayoutDonatedView;
     private View mLayoutReceivedView;
+    private RequestToken mCurrentRequest;
+    private RequestToken mLinkCreateRequest;
+    private Geeft mGeeft;
+    private ProgressDialog progressDialog;
 
-    public static UserProfileFragment newInstance(@Nullable User user, boolean isCUrrentUser) {
+
+    public static UserProfileFragment newInstance(@Nullable User user,
+                                                  boolean isCUrrentUser) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
+        bundle.putBoolean(ARG_IS_CURRENT_USER, isCUrrentUser);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static UserProfileFragment newInstance(@Nullable User user, @Nullable Geeft geeft,
+                                                  boolean isCUrrentUser) {
+        UserProfileFragment fragment = new UserProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_USER, user);
+        bundle.putSerializable(ARG_GEEFT, geeft);
         bundle.putBoolean(ARG_IS_CURRENT_USER, isCUrrentUser);
         fragment.setArguments(bundle);
         return fragment;
@@ -84,13 +108,15 @@ public class UserProfileFragment extends StatedFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "PROVA USER");
         if (savedInstanceState!=null){
             mUser = (User)savedInstanceState.getSerializable(KEY_USER);
             mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
+            mGeeft = (Geeft)savedInstanceState.getSerializable(KEY_GEEFT);
         }else {
             mUser = (User)getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
+            mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
         }
     }
 
@@ -110,10 +136,10 @@ public class UserProfileFragment extends StatedFragment implements
             mUser.setLinkGivenCount(TagsValue.USER_LINK_COUNT_NOT_FINESHED);
             mUser.setLinkReceivedCount(TagsValue.USER_LINK_COUNT_NOT_FINESHED);
             if(BaasUser.current()!=null) {
-                fillUser(BaasUser.current());
-                fillUI();
+                mUser = fillUser(BaasUser.current());
             }
         }
+        fillUI();
         getData();
     }
 
@@ -142,24 +168,23 @@ public class UserProfileFragment extends StatedFragment implements
         }
     }
 
-    private void fillUser(BaasUser baasUser) {
-        Log.d(TAG,"IN FILL USER ");
+    private User fillUser(BaasUser baasUser) {
+        User user = new User(baasUser.getName());
         JsonObject registeredFields = baasUser.getScope(BaasUser.Scope.REGISTERED);
-        JsonObject privateFields = baasUser.getScope(BaasUser.Scope.PRIVATE);
 
         String fbID = registeredFields.getObject("_social").getObject("facebook").getString("id");
+        String username = registeredFields.getString("username");
         String description = registeredFields.getString("user_description");
-        String username = privateFields.getString("name");
-        String docId = privateFields.getString("doc_id");
+        String docId = registeredFields.getString("doc_id");
         double userRank = registeredFields.get("feedback");
 
-        Log.d(TAG, "docId= " + docId);
+        user.setFbID(fbID);
+        user.setUsername(username);
+        user.setDescription(description);
+        user.setDocId(docId);
+        user.setRank(userRank);
 
-        mUser.setFbID(fbID);
-        mUser.setUsername(username);
-        mUser.setDocId(docId);
-        mUser.setRank(userRank);
-        mUser.setDescription(description);
+        return user;
     }
 
     private void countLinks(BaasQuery.Criteria query, final String linkName) {
@@ -245,7 +270,11 @@ public class UserProfileFragment extends StatedFragment implements
                 } else if (mIsCurrentUser && mIsEditingDescription) {
                     updateDescription();
                 } else {
-                    assignCurrentGeeft();
+                    try {
+                        assignCurrentGeeft();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 changeButtonAdDescriptionState();
                 Log.d(TAG, "onClick is editing = " + mIsEditingDescription);
@@ -265,11 +294,11 @@ public class UserProfileFragment extends StatedFragment implements
             user.save(new BaasHandler<BaasUser>() {
                 @Override
                 public void handle(BaasResult<BaasUser> baasResult) {
-                    if(baasResult.isSuccess()){
+                    if (baasResult.isSuccess()) {
                         BaasUser.current().refresh(new BaasHandler<BaasUser>() {
                             @Override
                             public void handle(BaasResult<BaasUser> baasResult) {
-                                if (progressDialog!=null){
+                                if (progressDialog != null) {
                                     progressDialog.dismiss();
                                 }
                                 if (baasResult.isSuccess()) {
@@ -277,14 +306,15 @@ public class UserProfileFragment extends StatedFragment implements
                                     mUser.setDescription(newDescrition);
                                     mIsEditingDescription = !mIsEditingDescription;
                                     changeButtonAdDescriptionState();
-                                    Log.d(TAG, BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
+                                    Log.d(TAG, BaasUser.current()
+                                            .getScope(BaasUser.Scope.REGISTERED)
                                             .put("user_description", newDescrition).toString());
-                                }else if(baasResult.isFailed()){
+                                } else if (baasResult.isFailed()) {
                                     showDescriptionFailDailog();
                                 }
                             }
                         });
-                    }else {
+                    } else {
                         showDescriptionFailDailog();
                     }
                 }
@@ -310,8 +340,73 @@ public class UserProfileFragment extends StatedFragment implements
                 });
     }
 
-    private void assignCurrentGeeft(){
-        Log.d(TAG, "Prova assigna oggetto");
+    private void assignCurrentGeeft() throws MalformedURLException {
+        if(BaasUser.current()!=null) {
+            mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
+                    "Operazione in corso");
+
+            mLinkCreateRequest = BaasBox.rest().async(Rest.Method.GET, "plugin/manual" +
+                    ".geeftedChoose?" +
+                    "s_id=" + mGeeft.getId() +
+                    "&d_id=" + mUser.getDocId() +
+                    "&label=" + TagsValue.LINK_NAME_ASSIGNED +
+                    "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
+                    "&geeftedName=" + mUser.getID()+
+                    "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
+                    .replace(" ", "%20")
+                    , new BaasHandler<JsonObject>() {
+                @Override
+                public void handle(BaasResult<JsonObject> result) {
+                    mLinkCreateRequest = null;
+                    if (result.isFailed()) {
+                        handleFailureLink(result.error());
+                        showFailureAlert();
+                    } else if (result.isSuccess()) {
+                        showSuccessAlert();
+                        Log.d(TAG, "IN HANDLER SUCCES");
+                    }
+                }
+        });
+        }
+    }
+
+    private void showSuccessAlert() {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Successo");
+        builder.setMessage("Oggetto Assegnato. Verrai contattato dall'utente su Facebook.");
+    }
+
+
+    private void showFailureAlert() {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Errore");
+        builder.setMessage("Errore durante assegnazione.\nRiprovare ");
+        builder.setPositiveButton("Riprovare", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    assignCurrentGeeft();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void changeButtonAdDescriptionState() {
@@ -386,12 +481,18 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     public void getData() {
-        if(!mIsCurrentUser){
-            new BaaSGetUserData(getContext(),mUser,this).execute();
-        }
+
         BaasQuery.Criteria query =BaasQuery.builder()
                 .where("in.id like '" + mUser.getDocId() + "'" ).criteria();
         countLinks(query, TagsValue.LINK_NAME_RECEIVED);
         countLinks(query, TagsValue.LINK_NAME_DONATED);
+    }
+
+    private void handleFailure(BaasException e){
+        Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_LONG).show();
+        Log.e(TAG, e.getCause().toString() + " " + e.getMessage().toString() );
+    }
+
+    private void handleFailureLink(BaasException error) {
     }
 }
