@@ -186,7 +186,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+ BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
-        mLocation = docGeeft.getString("location");
+        mLocation = docGeeft.getString("location").concat(","+ docGeeft.getString("cap"));
         mUserFbId = docGeeft.getString("userFbId");
         mWinnerMessage.setText("ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa");
         if (mProgressDialog != null)

@@ -283,7 +283,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         ////
 
         //--------------------- Location Button implementation
-        final String location = item.getUserLocation();
+        final String location = item.getUserLocation().concat(","+ item.getUserCap());
         holder.mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

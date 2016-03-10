@@ -58,15 +58,16 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
 
     @Override
     public void onImageSelected(Geeft geeft) { // give id of image
-        // launch full screen activity
-        /*Intent intent = FullGeeftDetailsActivity.newIntent(AssignedActivity.this,
-                geeft);*/
-        if(!geeft.isTaken()) { //Coerent with cloud beacuse link,TODO: the same in manual choose
-            Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, geeft.getId(), geeft.getBaasboxUsername());
+        Intent intent;
+        Log.d(TAG,"geeft is assigned? " + geeft.isAssigned() + " and is taken? " + geeft.isTaken());
+        if(geeft.isAssigned()) { //Coerent with cloud beacuse link,TODO: the same in manual choose
+            Log.d(TAG,"ENTRATO IF");
+            intent = CompactDialogActivity.newIntent(AssignedActivity.this,geeft);
             AssignedActivity.this.startActivity(intent);
         }
         else{
-            Intent intent = FullGeeftDetailsActivity.newIntent(AssignedActivity.this,
+            Log.d(TAG,"ENTRATO ELSE");
+            intent = FullGeeftDetailsActivity.newIntent(AssignedActivity.this,
                     geeft);
             AssignedActivity.this.startActivity(intent);
         }

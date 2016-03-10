@@ -35,7 +35,6 @@ public class ApplicationInit extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
-        //Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         /**
          * BaasBox initialization
          */
