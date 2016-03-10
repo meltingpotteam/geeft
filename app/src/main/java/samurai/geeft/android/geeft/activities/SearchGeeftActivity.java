@@ -54,6 +54,7 @@ public class SearchGeeftActivity extends AppCompatActivity {
         if (mToolbar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        Log.d(TAG, "ON_CREATE_SEARCH_CALLED");
 
 //
 //        FragmentManager fm = getSupportFragmentManager();
@@ -84,6 +85,7 @@ public class SearchGeeftActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -100,20 +102,26 @@ public class SearchGeeftActivity extends AppCompatActivity {
                 getSearchableInfo(getComponentName()));
 //        searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show(); 
+                Log.d(TAG, "ON_QUERY_TEXT_SUBMIT_CALLED");
+                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
                 /**
                  * Start a fragment
                  */
+                //MAGHEGGIO PER EVITARE QUERY DOPPIE
+//                searchView.clearFocus();
+                searchView.setIconified(true);
                 FragmentManager fm = getSupportFragmentManager();
                 Fragment fragment = fm.findFragmentById(R.id.fragment_container);
                 if (fragment == null) {
-                    fragment = TabGeeftoryFragment.newInstance(new Bundle());
+                    Log.d(TAG, "FRAGMENT_CALLED");
+                    fragment = TabGeeftFragment.newInstance(false );
                     fm.beginTransaction().add(R.id.fragment_container, fragment)
                             .commit();
                 }
-                return false;
+                return true;
             }
 
             @Override

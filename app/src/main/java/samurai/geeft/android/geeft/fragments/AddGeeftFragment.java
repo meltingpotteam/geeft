@@ -558,6 +558,7 @@ public class AddGeeftFragment extends StatedFragment {
             mGeeftExpirationTime.setSelection(savedInstanceState.getInt(KEY_EXPIRATION_TIME_SPINNER));
 
             String path = getArguments().getString(KEY_GEEFT_IMAGE);
+            //TODO: crash on restore/ rotation. Obviously needs a control before calling FIle(path) if path exist
             mGeeftImage = new File(path);
             if (path!=null)
                 Picasso.with(getActivity())
