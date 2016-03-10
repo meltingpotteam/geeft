@@ -118,7 +118,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         doc.put("prenoteLinks", JSONUserLinks);
                         BaasResult<BaasDocument> resDoc = doc.saveSync();
                         if (resDoc.isSuccess()) {
-                            BaasResult<Void> resGrantDoc = doc.grantSync(Grant.READ, Role.REGISTERED);
+                            BaasResult<Void> resGrantDoc = doc.grantAllSync(Grant.READ, Role.REGISTERED);
                             //TODO: Check this,if doesn't works,replace with grantAllSync
                             if(resGrantDoc.isSuccess()){
                                 Log.d(TAG, "Doc ID is: " + doc.getId());
