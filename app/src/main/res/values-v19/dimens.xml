@@ -2,6 +2,6 @@
 <resources>
     <dimen name="app_bar_padding_top">24dp</dimen>
 
-    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="app_bar_height">56dp</dimen>
     <dimen name="add_geeft_card_margin_bottom">25dp</dimen>
 </resources>

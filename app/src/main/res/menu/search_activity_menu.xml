@@ -5,11 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.SearchGeeftActivity">
 
-    <item android:id="@+id/action_search"
+    <item android:id="@+id/action_searchactivity_search"
           android:title="Search"
+
           android:icon="@drawable/ic_search_black_24dp"
-
           app:showAsAction="always"
-
           app:actionViewClass="android.support.v7.widget.SearchView" />
 </menu>

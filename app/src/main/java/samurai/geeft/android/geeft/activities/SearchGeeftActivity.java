@@ -13,11 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
-import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by gabriel-dev on 06/03/16.
@@ -45,7 +43,8 @@ public class SearchGeeftActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar)findViewById(R.id.search_bar);
         mToolbar.setTitle("Cerca Geeft");
-        setSupportActionBar(mToolbar);
+        if (mToolbar != null)
+            setSupportActionBar(mToolbar);
         //for the fragment
         if (mFragment == null) {
             FragmentManager fm = getSupportFragmentManager();
@@ -70,14 +69,6 @@ public class SearchGeeftActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState!=null){
-
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
@@ -95,19 +86,34 @@ public class SearchGeeftActivity extends AppCompatActivity {
 
     //TODO rotation error, implement on restore for the toolbar elements
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+//        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+//        super.onRestoreInstanceState(savedInstanceState);
+//        mToolbar = (Toolbar)findViewById(R.id.search_bar);
+//        mToolbar.setTitle("Cerca Geeft");
+//        if (mToolbar != null)
+//            setSupportActionBar(mToolbar);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search_activity_menu, menu);
+        this.getMenuInflater().inflate(R.menu.search_activity_menu, menu);
 
 
         SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
-        searchMenuItem = menu.findItem(R.id.action_search);
+        searchMenuItem = menu.findItem(R.id.action_searchactivity_search);
         searchView = (SearchView) searchMenuItem.getActionView();
         //to have the bar always open
         searchView.setIconified(false);
+
         searchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getComponentName()));
 //        searchView.setSubmitButtonEnabled(true);
@@ -116,13 +122,13 @@ public class SearchGeeftActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "ON_QUERY_TEXT_SUBMIT_CALLED");
-                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
                 /**
                  * Start a fragment
                  */
                 //MAGHEGGIO PER EVITARE QUERY DOPPIE
 //                searchView.clearFocus();
-                searchView.setIconified(true);
+                searchView.clearFocus();
                 Log.d(TAG, "FRAGMENT_CALLED");
                 mFragment = TabGeeftFragment.newInstance(true, query );
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)

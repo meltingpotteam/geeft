@@ -83,18 +83,18 @@
                 fab:fab_label="Aggiungi storia"
                 fab:fab_size="mini"
                 />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/geeft_search_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_black_24dp"
-                fab:fab_colorNormal="@color/colorSubAccent"
-                fab:fab_colorPressed="@color/clickAccent"
-                fab:fab_showAnimation="@anim/fab_slide_in_from_right"
-                fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-                fab:fab_label="Cerca Geeft"
-                fab:fab_size="mini"
-                />
+            <!--<com.github.clans.fab.FloatingActionButton-->
+                <!--android:id="@+id/geeft_search_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_search_black_24dp"-->
+                <!--fab:fab_colorNormal="@color/colorSubAccent"-->
+                <!--fab:fab_colorPressed="@color/clickAccent"-->
+                <!--fab:fab_showAnimation="@anim/fab_slide_in_from_right"-->
+                <!--fab:fab_hideAnimation="@anim/fab_slide_out_to_right"-->
+                <!--fab:fab_label="Cerca Geeft"-->
+                <!--fab:fab_size="mini"-->
+                <!--/>-->
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
     <fragment

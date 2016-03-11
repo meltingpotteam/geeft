@@ -5,6 +5,11 @@ xmlns:tools="http://schemas.android.com/tools"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 tools:context=".activity.MainActivity">
 
+    <item android:id="@+id/action_search"
+          android:title="Search"
+          android:icon="@drawable/ic_search_black_24dp"
+          app:showAsAction="always"/>
+
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"

@@ -73,6 +73,8 @@
 
         <!-- Add geeft activity-->
         <activity android:name=".activities.SearchGeeftActivity"/>
+                  <!--android:theme="@style/Theme.Transparent"-->
+            />
 
         <!--Donated geeft activity-->
         <activity android:name=".activities.DonatedActivity"/>
