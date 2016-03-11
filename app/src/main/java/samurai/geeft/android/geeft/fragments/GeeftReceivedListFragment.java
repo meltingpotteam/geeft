@@ -312,9 +312,15 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
-                fm.beginTransaction().replace(R.id.fragment_container, fragment)
-                        .commit();
+                if(mGeeft.isAutomaticSelection()){
+                    mCallback.onImageSelected(mGeeft.getId());
+                    mCallback.onImageSelected(mGeeft);
+                }
+                else {
+                    Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
+                    fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                            .commit();
+                }
                // mCallback.onImageSelected(mGeeft.getId());
                 //mCallback.onImageSelected(mGeeft);
             }
