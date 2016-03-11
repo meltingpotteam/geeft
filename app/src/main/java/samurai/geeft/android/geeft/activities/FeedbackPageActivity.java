@@ -152,9 +152,9 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
         double[] feedbackArray = {
                 userRatingCommunication,
-                userRatingDescription,
                 userRatingReliability,
-                userRatingCourtesy
+                userRatingCourtesy,
+                userRatingDescription
         };
 
         //TODO: ASyncTask

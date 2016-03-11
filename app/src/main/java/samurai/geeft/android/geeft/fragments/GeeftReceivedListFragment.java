@@ -43,6 +43,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     public static final String KEY_LINK_NAME = "key_link_name";
     public static final String KEY_SHOW_WINNER_DIALOG = "key_show_winner_dialog";
     private static final String KEY_LIST_STATE = "key_list_state";
+    private final String TAG = getClass().getSimpleName();
 
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
@@ -120,13 +121,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     }
 
     public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
-        Log.d("DONE", "in done");
+        Log.d(TAG, "in done");
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
 
         if (result) {
             if(mGeeftList!=null)
-            Log.d("GeeftReceivedList",mGeeftList.size()+"");
+            Log.d(TAG,"GeeftReceivedList size:" + mGeeftList.size()+"");
             if (mGeeftList==null || mGeeftList.size()==0) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Oops")
@@ -232,7 +233,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                         }
                     })
                     .show();
-            Log.d("DONE", "in done ==0");
+            Log.d(TAG, "in done ==0");
             return true;
         }
         return false;

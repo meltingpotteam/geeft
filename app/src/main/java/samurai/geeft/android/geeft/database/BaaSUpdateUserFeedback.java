@@ -110,6 +110,9 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
         double userRatingCourtesy =  mFeedbackArray[2];
         double userRatingDescription =  mFeedbackArray[3];
 
+        Log.d(TAG,"userRatingCommunication: "+ userRatingCommunication +", userRatingReliability: "+
+                userRatingReliability + ", userRatingCourtesy: " + userRatingCourtesy +
+                ", userRatingDescription: "+userRatingDescription);
         double newFeedback;
 
         //-- Geefted Feedback calculation. Communication 30% Reliability 40% Courtesy 30%
