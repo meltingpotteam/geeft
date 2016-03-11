@@ -26,6 +26,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 07/01/16.
  * Task for populating GeeftItem cards
  * Update by danybr-dev on 17/01/16
+ * Updated by gabriel-dev on 10/03/16
  */
 public class BaaSTabGeeftTask extends BaaSCheckTask{
 
@@ -42,6 +43,9 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     boolean result;
     boolean mIsCategoryTask;
     Category mCategory;
+    //---search query
+    boolean mIsSearchTask;
+    String mSearchQuery;
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                             TaskCallbackBooleanToken callback) {
@@ -53,7 +57,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     }
 
     public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            boolean isCategoryTask, Category category,
+                            boolean isCategoryTask, boolean isSearchTask, Category category,
                             TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -61,7 +65,23 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
         mIsCategoryTask = isCategoryTask;
+        mIsSearchTask = isSearchTask;
         mCategory = category;
+    }
+
+    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
+                            boolean isCategoryTask, boolean isSearchTask, String query,
+                            TaskCallbackBooleanToken callback) {
+        mContext = context;
+        mGeeftList = feedItems;
+        mCallback = callback;
+        mGeeftItemAdapter = Adapter;
+        mGeeftList = feedItems;
+        mIsCategoryTask = isCategoryTask;
+        mIsSearchTask = isSearchTask;
+        mSearchQuery = query;
+
+        Log.d(TAG, "CATEGORY: "+mIsCategoryTask+"; "+"SEARCH: "+mIsSearchTask+"; "+"SEARCH: "+query);
     }
 
     @Override
@@ -103,7 +123,8 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             .where("closed = false and deleted = false and category = '"
                                     +mCategory.getCategoryName().toLowerCase()+"'")
                             .orderBy("_creation_date asc").criteria();
-                }else{
+                }else
+                {
                     paginate = BaasQuery.builder()
                             .where("closed = false and deleted = false")
                             .orderBy("_creation_date asc").criteria();
@@ -111,53 +132,107 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
                     try {
-                        for (BaasDocument e : baasResult.get()) {
-                            mGeeft = new Geeft();
-                            mGeeft.setId(e.getId());
-                            mGeeft.setUsername(e.getString("name"));
-                            mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
-                            mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
-                            //Append ad image url your session token!
-                            mGeeft.setGeeftDescription(e.getString("description"));
-                            mGeeft.setUserProfilePic(e.getString("profilePic"));
-                            mGeeft.setCreationTime(getCreationTimestamp(e));
-                            mGeeft.setDeadLine(e.getLong("deadline"));
-                            mGeeft.setUserFbId(e.getString("userFbId"));
+                        if (mIsSearchTask) {
+                            for (BaasDocument e : baasResult.get()) {
+
+                                mGeeft = new Geeft();
+                                mGeeft.setId(e.getId());
+                                mGeeft.setUsername(e.getString("name"));
+                                mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
+                                mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                                //Append ad image url your session token!
+                                mGeeft.setGeeftDescription(e.getString("description"));
+                                mGeeft.setUserProfilePic(e.getString("profilePic"));
+                                mGeeft.setCreationTime(getCreationTimestamp(e));
+                                mGeeft.setDeadLine(e.getLong("deadline"));
+                                mGeeft.setUserFbId(e.getString("userFbId"));
 //
-                            mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
-                            mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+                                mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+                                mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
 
-                            mGeeft.setUserLocation(e.getString("location"));
-                            mGeeft.setUserCap(e.getString("cap"));
-                            mGeeft.setGeeftTitle(e.getString("title"));
-                            mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
-                            mGeeft.setGeeftHeight(e.getInt("height"));
-                            mGeeft.setGeeftWidth(e.getInt("width"));
-                            mGeeft.setGeeftDepth(e.getInt("depth"));
-                            mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
-                            mGeeft.setAssigned(e.getBoolean("assigned"));
-                            mGeeft.setTaken(e.getBoolean("taken"));
-                            mGeeft.setGiven(e.getBoolean("given"));
-                            mGeeft.setIsFeedbackLeftByGeefted(e.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
-                            mGeeft.setIsFeedbackLeftByGeefter(e.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
+                                mGeeft.setUserLocation(e.getString("location"));
+                                mGeeft.setUserCap(e.getString("cap"));
+                                mGeeft.setGeeftTitle(e.getString("title"));
+                                mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
+                                mGeeft.setGeeftHeight(e.getInt("height"));
+                                mGeeft.setGeeftWidth(e.getInt("width"));
+                                mGeeft.setGeeftDepth(e.getInt("depth"));
+                                mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
+                                mGeeft.setAssigned(e.getBoolean("assigned"));
+                                mGeeft.setTaken(e.getBoolean("taken"));
+                                mGeeft.setGiven(e.getBoolean("given"));
 
-                            for (BaasLink l : links) {
-                                //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-                                Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
-                                //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
-                                if (l.in().getId().equals(e.getId())) {
-                                    mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
-                                    // reserved)
-                                    mGeeft.setReservedLinkId(l.getId());
-                                    Log.d(TAG, "link id is: " + l.getId());
+                                // i build the string to compare with the query
+                                StringBuilder strToCompareBuilder = new StringBuilder();
+                                strToCompareBuilder.append(mGeeft.getGeeftTitle()).append(mGeeft.getGeeftDescription());
+                                String strToCompare = strToCompareBuilder.toString().toLowerCase().replace(" ", "");
+
+                                for (BaasLink l : links) {
+                                    //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+                                    Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
+                                    //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                    if (l.in().getId().equals(e.getId())) {
+                                        mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                        // reserved)
+                                        mGeeft.setReservedLinkId(l.getId());
+                                        Log.d(TAG, "link id is: " + l.getId());
+                                    }
+                                }
+                                if (strToCompare.contains(mSearchQuery)) {
+                                    mGeeftList.add(0, mGeeft);
+                                    mResultToken = RESULT_OK;
+                                    result = true;
                                 }
                             }
-                            mGeeftList.add(0, mGeeft);
+                        } else {
+
+                            for (BaasDocument e : baasResult.get()) {
+                                mGeeft = new Geeft();
+                                mGeeft.setId(e.getId());
+                                mGeeft.setUsername(e.getString("name"));
+                                mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
+                                mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                                //Append ad image url your session token!
+                                mGeeft.setGeeftDescription(e.getString("description"));
+                                mGeeft.setUserProfilePic(e.getString("profilePic"));
+                                mGeeft.setCreationTime(getCreationTimestamp(e));
+                                mGeeft.setDeadLine(e.getLong("deadline"));
+                                mGeeft.setUserFbId(e.getString("userFbId"));
+//
+                                mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+                                mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+
+                                mGeeft.setUserLocation(e.getString("location"));
+                                mGeeft.setUserCap(e.getString("cap"));
+                                mGeeft.setGeeftTitle(e.getString("title"));
+                                mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
+                                mGeeft.setGeeftHeight(e.getInt("height"));
+                                mGeeft.setGeeftWidth(e.getInt("width"));
+                                mGeeft.setGeeftDepth(e.getInt("depth"));
+                                mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
+                                mGeeft.setAssigned(e.getBoolean("assigned"));
+                                mGeeft.setTaken(e.getBoolean("taken"));
+                                mGeeft.setGiven(e.getBoolean("given"));
+
+                                for (BaasLink l : links) {
+                                    //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+                                    Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
+                                    //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                    if (l.in().getId().equals(e.getId())) {
+                                        mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                        // reserved)
+                                        mGeeft.setReservedLinkId(l.getId());
+                                        Log.d(TAG, "link id is: " + l.getId());
+                                    }
+                                }
+                                mGeeftList.add(0, mGeeft);
+                                mResultToken = RESULT_OK;
+                                result = true;
+                            }
                             mResultToken = RESULT_OK;
                             result = true;
                         }
-                        mResultToken = RESULT_OK;
-                        result = true;
+
                     } catch (BaasInvalidSessionException ise) {
                         mResultToken = RESULT_SESSION_EXPIRED;
                         return false;

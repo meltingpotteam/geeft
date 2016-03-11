@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "Activity to 'Add Geeft' started", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AddGeeftActivity.class);
                 startActivity(intent);
-                floatingActionMenu.close(false);
+                floatingActionMenu.close(true);
             }
         });
 
@@ -178,9 +178,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
-                floatingActionMenu.close(false);
+                floatingActionMenu.close(true);
             }
         });
+
+//        FloatingActionButton mActionGeeftSearch = (FloatingActionButton) findViewById(R.id.geeft_search_button);
+//        mActionGeeftSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
+//                startActivity(intent);
+//                floatingActionMenu.close(true);
+//            }
+//        });
         /**
          * End implementation
          */
@@ -230,8 +240,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -277,7 +290,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
             startActivity(intent);
 
+        }
 
+        if(id == R.id.action_search){
+            Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
+
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

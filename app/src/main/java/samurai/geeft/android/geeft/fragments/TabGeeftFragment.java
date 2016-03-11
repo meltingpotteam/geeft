@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -46,6 +47,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private static final String KEY_CATEGORY = "key_category" ;
     private static final String FIRST_ID_KEY = "key_firstID";
     private static final String FIRST_TIME_STAMP = "key_firstTimeStamp";
+    private static final String KEY_IS_SEARCH_CALL = "ke_is_a_search_call";
+    private static final String KEY_SEARCH = "key_search" ;
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
@@ -67,18 +70,32 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private String mFirstID;
     //-------------------
 
+
     //
 //      TODO:  QUERY TEST !!REMOVE!!
 //
     private Button mButtonQuery;
     private long mFirstTimeStamp;
 
+    //---for the search activity
+    private boolean mIsSearchCall;
+    private String mSearchQuery;
 
     public static TabGeeftFragment newInstance(boolean isCategoryCall,Category category) {
         TabGeeftFragment fragment = new TabGeeftFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(KEY_IS_CATEGORY_CALL, isCategoryCall);
         bundle.putSerializable(KEY_CATEGORY, category);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    // instance for the search
+    public static TabGeeftFragment newInstance(boolean isSearchCall,String query) {
+        TabGeeftFragment fragment = new TabGeeftFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_IS_SEARCH_CALL, isSearchCall);
+        bundle.putSerializable(KEY_SEARCH, query.toLowerCase());
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -103,11 +120,16 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 
     private void initVariables() {
         mIsCategoryCall = getArguments().getBoolean(KEY_IS_CATEGORY_CALL,false);
+        mIsSearchCall = getArguments().getBoolean(KEY_IS_SEARCH_CALL,false);
         if (mIsCategoryCall){
             mCategory = (Category)getArguments().getSerializable(KEY_CATEGORY);
+        } else if (mIsSearchCall){
+            mSearchQuery = (String)getArguments().getSerializable(KEY_SEARCH);
+            Log.d(TAG, "QUERY_SETTED"+mSearchQuery);
         }
         else {
             mCategory = new Category("","");
+            mSearchQuery = "";
         }
     }
 
@@ -116,7 +138,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
+        Log.d(TAG, " onCreateView() -> savedInstanceState is null? " + (savedInstanceState == null));
 
         //inflates the view
         View rootView;
@@ -197,18 +219,18 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             if (result) {
                 if(!(mGeeftList.size() == 0)) {
                     toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
                 else{
                     toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
             } else {
                 if(resultToken == RESULT_OK) {
                     toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
                 else if (resultToken == RESULT_SESSION_EXPIRED) {
@@ -277,6 +299,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(GEEFT_LIST_STATE_KEY, mGeeftListState);
         outState.putBoolean(KEY_IS_CATEGORY_CALL, mIsCategoryCall);
+
+        outState.putBoolean(KEY_IS_SEARCH_CALL, mIsSearchCall);
     }
 
     private void restoreState(Bundle savedInstanceState){
@@ -286,6 +310,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
                     (ArrayList)savedInstanceState.getParcelableArrayList(GEFFT_LIST_KEY);
             mGeeftList.addAll(arrayList);
             mIsCategoryCall = savedInstanceState.getBoolean(KEY_IS_CATEGORY_CALL);
+            mIsSearchCall = savedInstanceState.getBoolean(KEY_IS_SEARCH_CALL);
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
@@ -313,6 +338,17 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         else {
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,
                     mIsCategoryCall,mCategory,mFirstID,mFirstTimeStamp,this).execute();
+        }else if(!mIsCategoryCall && mIsSearchCall){
+            //for the search activity
+            Log.d(TAG, "SEARCH CALLED RIGHT ");
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
+                    mIsCategoryCall, mIsSearchCall, mSearchQuery,this).execute();
+        }
+        else if (mIsCategoryCall && !mIsSearchCall){
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
+                    mIsCategoryCall, mIsSearchCall, mCategory,this).execute();
+        } else{
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
         }
     }
 

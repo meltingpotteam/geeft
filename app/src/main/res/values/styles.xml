@@ -74,5 +74,18 @@
     <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
     </style>
+
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    </style>
+
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>
+
+
 

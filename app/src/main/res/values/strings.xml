@@ -31,7 +31,7 @@
 
     <string name="description">Prova</string>
     <string name="action_navigate">Next</string>
-    <string name="action_search">Search</string>
+    <!--<string name="action_search">Search</string>-->
     <string name="action_compose">Compose</string>
 
     <string name="drawer_open">Open</string>
