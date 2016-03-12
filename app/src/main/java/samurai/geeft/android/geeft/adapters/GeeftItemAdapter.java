@@ -413,7 +413,7 @@ public class GeeftItemAdapter extends RecyclerView.Adapter<GeeftItemAdapter.View
         else {
             new AlertDialog.Builder(mContext)
                     .setTitle("Successo")
-                    .setMessage("Operazione completata con successo.").show();
+                    .setMessage("Prenotazione effettuata con successo.").show();
             Log.d("NOTATO", "" + item.isSelected());
             if(item.isSelected())
                 holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);
