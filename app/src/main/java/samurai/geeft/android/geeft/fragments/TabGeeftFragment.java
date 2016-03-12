@@ -332,13 +332,13 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         if(!isNetworkConnected()) {
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
-        }else if(!mIsCategoryCall){
+        }/*else if(!mIsCategoryCall){
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,mFirstID,mFirstTimeStamp,this).execute();
         }
         else {
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,
                     mIsCategoryCall,mCategory,mFirstID,mFirstTimeStamp,this).execute();
-        }else if(!mIsCategoryCall && mIsSearchCall){
+        }*/else if(!mIsCategoryCall && mIsSearchCall){
             //for the search activity
             Log.d(TAG, "SEARCH CALLED RIGHT ");
             new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
