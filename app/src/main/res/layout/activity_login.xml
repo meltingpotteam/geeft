@@ -1,41 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:lib="http://schemas.android.com/apk/res-auto"
-              android:gravity="center_horizontal"
-              tools:context=".activities.LoginActivity">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    >
 
-    <samurai.geeft.android.geeft.views.MyTextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="80dp"
-        android:text="geeft"
-        />
-
-    <com.github.glomadrian.loadingballs.BallView
-        android:id="@+id/ball_view"
-        android:layout_margin="30dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        lib:balls="5"
-        lib:movement_cycle_time="1500"
-        lib:enable_size_animation="true"
-        lib:size_cycle_time="500"
-        lib:min_ball_size="5dp"
-        lib:max_ball_size="12dp"
-        lib:ball_colors="@array/colors"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        />
+        android:background="@color/white"
+        android:src="@drawable/logo_motto_shadow"
+        android:padding="@dimen/activity_horizontal_margin_x2"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center">
+        >
 
         <Button
             android:layout_width="310dp"
@@ -63,15 +45,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:layout_margin="10dp"
-            />
-
-        <samurai.geeft.android.geeft.views.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:text="Dona e ricevi oggetti di ogni tipo gratuitamente."
+            android:visibility="gone"
             />
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

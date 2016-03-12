@@ -360,7 +360,6 @@ public class UserProfileFragment extends StatedFragment implements
                 public void handle(BaasResult<JsonObject> result) {
                     mLinkCreateRequest = null;
                     if (result.isFailed()) {
-                        handleFailureLink(result.error());
                         showFailureAlert();
                     } else if (result.isSuccess()) {
                         showSuccessAlert();
@@ -377,9 +376,22 @@ public class UserProfileFragment extends StatedFragment implements
         }
         final android.support.v7.app.AlertDialog.Builder builder =
                 new android.support.v7.app.AlertDialog.Builder(getContext(),
-                        R.style.AppCompatAlertDialogStyle); //Read Update
+                        R.style.AppCompatAlertDialogStyle).
+                        setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                }); //Read Update
         builder.setTitle("Successo");
         builder.setMessage("Oggetto Assegnato. Verrai contattato dall'utente su Facebook.");
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                getActivity().finish();
+            }
+        });
+        builder.show();
     }
 
 
@@ -391,8 +403,8 @@ public class UserProfileFragment extends StatedFragment implements
                 new android.support.v7.app.AlertDialog.Builder(getContext(),
                         R.style.AppCompatAlertDialogStyle); //Read Update
         builder.setTitle("Errore");
-        builder.setMessage("Errore durante assegnazione.\nRiprovare ");
-        builder.setPositiveButton("Riprovare", new DialogInterface.OnClickListener() {
+        builder.setMessage("Errore durante assegnazione.\nRiprovare?");
+        builder.setPositiveButton("Riprova", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
@@ -407,7 +419,7 @@ public class UserProfileFragment extends StatedFragment implements
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
-        });
+        }).show();
     }
 
     private void changeButtonAdDescriptionState() {
@@ -478,7 +490,8 @@ public class UserProfileFragment extends StatedFragment implements
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Lista prenotati");
     }
 
     public void getData() {
@@ -489,11 +502,8 @@ public class UserProfileFragment extends StatedFragment implements
         countLinks(query, TagsValue.LINK_NAME_DONATED);
     }
 
-    private void handleFailure(BaasException e){
-        Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_LONG).show();
-        Log.e(TAG, e.getCause().toString() + " " + e.getMessage().toString() );
-    }
-
-    private void handleFailureLink(BaasException error) {
+    private void handleFailure(BaasException e) {
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        Log.e(TAG, e.getCause().toString() + " " + e.getMessage().toString());
     }
 }

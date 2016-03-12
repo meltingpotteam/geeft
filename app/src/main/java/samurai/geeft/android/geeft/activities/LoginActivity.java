@@ -151,7 +151,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                         Toast.makeText(getApplicationContext(),
                                 getResources().getString(R.string.toast_fb_login_canc),
                                 Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override

@@ -1,11 +1,15 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +41,8 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
     private RecyclerView mRecyclerView;
     private AssignUserListAdapter mAdapter;
     private Geeft mGeeft;
+    private ProgressDialog mProgressDialog;
+    private Toolbar mToolbar;
 
 
     public static AssignUserListFragment newInstance(Geeft geeft) {
@@ -62,6 +68,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         View rootView = inflater.inflate(R.layout.fragment_recyclerview
                 , container, false);
         initUI(rootView);
+        initSupportActionBar(rootView);
         return rootView;
     }
 
@@ -79,6 +86,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                startUserProfileFragmet(mUserList.get(position), false);
             }
 
             @Override
@@ -86,6 +94,16 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
 
             }
         }));
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
     }
 
     private void startUserProfileFragmet(User user, boolean isCurrentUser) {
@@ -114,14 +132,55 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
     }
 
     public void getData() {
+        mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
+                "Operazione in corso");
         new BaaSFetchUsersFromLink(getContext(), mGeeft, TagsValue.LINK_NAME_RESERVE
                 , mUserList,this).execute();
     }
 
     @Override
     public void done(boolean isOK) {
-        if (isOK){
-            mAdapter.notifyDataSetChanged();
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
         }
+        if (isOK){
+            if(mUserList.isEmpty()){
+                showEmptyListAlert();
+            }
+            mAdapter.notifyDataSetChanged();
+        }else{
+            showFailureAlert();
+        }
+    }
+
+    private void showEmptyListAlert() {
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Nessun prenotato");
+        builder.setMessage("Nessun utente si è prenotato all'oggetto");
+        builder.show();
+    }
+
+    private void showFailureAlert() {
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Errore");
+        builder.setMessage("Errore durante caricamento della lista dei prenotati.\nRiprovare?");
+        builder.setPositiveButton("Riprova", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getData();
+            }
+        });
+        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                getActivity().onBackPressed();
+            }
+        });
+        builder.show();
     }
 }

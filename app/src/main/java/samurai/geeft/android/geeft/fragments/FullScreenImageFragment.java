@@ -44,8 +44,7 @@ public class FullScreenImageFragment extends StatedFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_full_screen_image, container, false);
         initUI(rootView);
-        if (savedInstanceState==null)
-            initSupportActionBar(rootView);
+        initSupportActionBar(rootView);
         return rootView;
     }
 
