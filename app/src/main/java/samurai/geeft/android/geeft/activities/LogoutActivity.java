@@ -17,12 +17,11 @@ import samurai.geeft.android.geeft.R;
 public class LogoutActivity extends Activity {
     private static final String EXTRA_LOGOUT_OK =
             "com.bignerdranch.android.geoquiz.logout_ok";
-    private static boolean sLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logout);
+        setContentView(R.layout.splash_screen);
 
         BaasUser.current().logout(new BaasHandler<Void>() {
             @Override
