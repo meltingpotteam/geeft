@@ -312,12 +312,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                if(mGeeft.isAutomaticSelection()){
+                if(mGeeft.isAutomaticSelection() || mGeeft.isAssigned()){ //if isAssigned,return in callback,
+                            //then,launch CompactDialogActivity
                     mCallback.onImageSelected(mGeeft.getId());
                     mCallback.onImageSelected(mGeeft);
                 }
                 else {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
                     Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
                     fm.beginTransaction().replace(R.id.fragment_container, fragment)
                             .commit();

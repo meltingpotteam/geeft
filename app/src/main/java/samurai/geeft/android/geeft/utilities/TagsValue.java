@@ -49,6 +49,13 @@ public class TagsValue {
 
     public static final String ACTIVITY_CALL_SEARCH = "search";
 
+    public static final String SCOPE_VALUE_N_GIVEN = "n_given";
+
+    public static final String SCOPE_VALUE_N_RECEIVED = "n_received";
+
+    public static final String FLAG_GEEFTER_HAS_EXCHANGED = "geefter_has_exchanged";
+
+    public static final String FLAG_GEEFTED_HAS_EXCHANGED = "geefted_has_exchanged";
 
     /**
     * Categories screen reference images
@@ -112,4 +119,6 @@ public class TagsValue {
 
 
     public static final String COLLECTION_GEEFT = "geeft";
+
+
 }

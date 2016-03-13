@@ -15,7 +15,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
- * Created by Daniele on 01/03/2016.
+ * Created by danybr-dev on 01/03/2016.
  */
 public class BaaSDeleteGeeftTask extends AsyncTask<Void,Void,Boolean> {
     private final String TAG = getClass().getSimpleName();

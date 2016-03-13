@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
@@ -33,14 +34,16 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.database.BaaSExchangeCompletedTask;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackExchange;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by daniele on 05/03/16.
  */
-public class CompactDialogActivity extends AppCompatActivity {
+public class CompactDialogActivity extends AppCompatActivity implements TaskCallbackExchange {
 
     private static final String KEY_TAKEN = "taken";
     private static final String KEY_GIVEN = "given";
@@ -59,7 +62,12 @@ public class CompactDialogActivity extends AppCompatActivity {
     //-------------------------------------------
     private final static String EXTRA_GEFFT = "geeft";
     private static final String EXTRA_CONTEXT = "extra_context";
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
 
+    //-------------------
     private Geeft mGeeft;
     private boolean mIamGeefter;
     private String mHisBaasboxName;
@@ -137,6 +145,13 @@ public class CompactDialogActivity extends AppCompatActivity {
         mReceivedDialogBackground.setTiltSensitivity(5);
         mReceivedDialogBackground.registerSensorManager();
 
+        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+
         Log.d(TAG,"geefter flag is:" +geefter);
         if(geefter){ //Geefter can see "consegnato" (given) button
             mTakenButton.setVisibility(View.GONE);
@@ -171,7 +186,7 @@ public class CompactDialogActivity extends AppCompatActivity {
         mReceivedDialogBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPicture();
+                //showPicture();
             }
         });
 
@@ -260,7 +275,7 @@ public class CompactDialogActivity extends AppCompatActivity {
                         Log.e(TAG, "Invalid Session Token");
                         startLoginActivity();
                     } else {
-                        Log.e(TAG, "Error while saving geeft doc");
+                        Log.e(TAG, "Error while saving geeft doc:" + resSaveGeeft.error());
                         new AlertDialog.Builder(CompactDialogActivity.this)
                                 .setTitle("Errore")
                                 .setMessage("Operazione non possibile. Riprovare più tardi.").show();
@@ -309,7 +324,7 @@ public class CompactDialogActivity extends AppCompatActivity {
                         Log.e(TAG, "Invalid Session Token");
                         startLoginActivity();
                     } else {
-                        Log.e(TAG, "Error while saving geeft doc");
+                        Log.e(TAG, "Error while saving geeft doc:" + resSaveGeeft.error());
                         new AlertDialog.Builder(CompactDialogActivity.this)
                                 .setTitle("Errore")
                                 .setMessage("Operazione non possibile. Riprovare più tardi.").show();
@@ -330,19 +345,10 @@ public class CompactDialogActivity extends AppCompatActivity {
         else { // if feedback isn't left
 
             if (mGeeft.isTaken() && mGeeft.isGiven()) {
-                new AlertDialog.Builder(CompactDialogActivity.this)
-                        .setTitle("Evviva!")
-                        .setMessage("Avete confermato lo scambio a mano del Geeft. Lasciatevi un feedback.")
-                        .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                new BaaSExchangeCompletedTask(getApplicationContext(),mGeeft,mIamGeefter,this).execute();
+                             // create link in "ricevuti",delete link in "assegnati" and update
+                            //n_given and n_received
 
-                                getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
-
-                                finish();
-                            }
-                        })
-                        .show();
             } else if (mGeeft.isTaken() && !mGeeft.isGiven()) {
                 //Send push notification to Geefter. One per day!
             } else if (mGeeft.isGiven() && !mGeeft.isTaken()) {
@@ -350,6 +356,37 @@ public class CompactDialogActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void exchangeCompleted(boolean result,int resultToken){ //CALLBACK METHOD
+        if(result){
+            new AlertDialog.Builder(CompactDialogActivity.this)
+                    .setTitle("Evviva!")
+                    .setMessage("Avete confermato lo scambio a mano del Geeft. Lasciatevi un feedback.")
+                    .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
+
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+        else{
+            Toast toast;
+            if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(getApplicationContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                toast.show();
+            } else {
+                new AlertDialog.Builder(getApplicationContext())
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
+        }
     }
 
     private void startLoginActivity(){
