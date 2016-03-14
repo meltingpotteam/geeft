@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.R;
@@ -39,6 +41,12 @@ public class UserProfileActivity extends AppCompatActivity {
         if (fragment == null) {
             Bundle b = new Bundle();
             Log.d(TAG, "oncreate in entries: "+getSupportFragmentManager().getBackStackEntryCount());
+            BaasUser.current().refresh(new BaasHandler<BaasUser>() {
+                @Override
+                public void handle(BaasResult<BaasUser> baasResult) {
+
+                }
+            });
             fragment = UserProfileFragment.newInstance(new User(BaasUser.current().getName()),true);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();

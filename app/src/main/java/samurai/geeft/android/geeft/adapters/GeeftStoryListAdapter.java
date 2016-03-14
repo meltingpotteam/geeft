@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,9 +47,11 @@ public class GeeftStoryListAdapter extends
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView mGeeftImage;
+        public TextView mGeeftTitle;
         public ViewHolder(View itemView) {
             super(itemView);
             mGeeftImage = (ImageView)itemView.findViewById(R.id.geeft_image);
+            mGeeftTitle = (TextView)itemView.findViewById(R.id.geeft_title);
         }
     }
     @Override
@@ -71,6 +74,7 @@ public class GeeftStoryListAdapter extends
                 .fit().centerInside()
                 .placeholder(R.drawable.ic_image_multiple)
                 .into(holder.mGeeftImage);
+        holder.mGeeftTitle.setText(item.getGeeftTitle());
 
     }
 

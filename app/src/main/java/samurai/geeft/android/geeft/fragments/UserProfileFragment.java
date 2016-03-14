@@ -298,27 +298,18 @@ public class UserProfileFragment extends StatedFragment implements
             user.save(new BaasHandler<BaasUser>() {
                 @Override
                 public void handle(BaasResult<BaasUser> baasResult) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (baasResult.isSuccess()) {
-                        BaasUser.current().refresh(new BaasHandler<BaasUser>() {
-                            @Override
-                            public void handle(BaasResult<BaasUser> baasResult) {
-                                if (progressDialog != null) {
-                                    progressDialog.dismiss();
-                                }
-                                if (baasResult.isSuccess()) {
-                                    mUserDescriptionTextView.setText(newDescrition);
-                                    mUser.setDescription(newDescrition);
-                                    mIsEditingDescription = !mIsEditingDescription;
-                                    changeButtonAdDescriptionState();
-                                    Log.d(TAG, BaasUser.current()
-                                            .getScope(BaasUser.Scope.REGISTERED)
-                                            .put("user_description", newDescrition).toString());
-                                } else if (baasResult.isFailed()) {
-                                    showDescriptionFailDailog();
-                                }
-                            }
-                        });
-                    } else {
+                        mUserDescriptionTextView.setText(newDescrition);
+                        mUser.setDescription(newDescrition);
+                        mIsEditingDescription = !mIsEditingDescription;
+                        changeButtonAdDescriptionState();
+                        Log.d(TAG, BaasUser.current()
+                                .getScope(BaasUser.Scope.REGISTERED)
+                                .put("user_description", newDescrition).toString());
+                    } else if (baasResult.isFailed()) {
                         showDescriptionFailDailog();
                     }
                 }

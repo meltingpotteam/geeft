@@ -54,6 +54,8 @@ public class BaaSExchangeCompletedTask extends AsyncTask<Void,Void,Boolean> {
         if (currentUser != null) {
             mDocUserId = currentUser.getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
             if (fetchGeeft()) {
+                //Log.d(TAG,"DEBUG,mDocumentGeeft id: " + mDocumentGeeft.getId() +
+                 //       " ,title: " + mDocumentGeeft.getString("title"));
                 boolean geefterHasExchanged = mDocumentGeeft.getBoolean(TagsValue.FLAG_GEEFTER_HAS_EXCHANGED);
                 boolean geeftedHasExchanged = mDocumentGeeft.getBoolean(TagsValue.FLAG_GEEFTED_HAS_EXCHANGED);
                 if (geeftedHasExchanged && geeftedHasExchanged) {
@@ -92,6 +94,7 @@ public class BaaSExchangeCompletedTask extends AsyncTask<Void,Void,Boolean> {
         BaasResult<BaasDocument> resGeeft = BaasDocument.fetchSync(TagsValue.COLLECTION_GEEFT, mGeeft.getId());
         if (resGeeft.isSuccess()) {
             mDocumentGeeft = resGeeft.value();
+           // Log.d(TAG,"Geeft document fetched: " + mDocumentGeeft.getId() + " ," + mDocumentGeeft.getString("title"));
             return true;
         } else {
             if (resGeeft.error() instanceof BaasInvalidSessionException) {

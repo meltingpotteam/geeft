@@ -268,7 +268,16 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     new AlertDialog.Builder(CompactDialogActivity.this)
                             .setTitle("Successo")
                             .setMessage("Appena il Geefter confermerà la consegna,verranno " +
-                                    "abilitati i feedback. Grazie.").show();
+                                    "abilitati i feedback. Grazie.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                    startMainActivity();
+                                }
+                            })
+                            .show();
                     //send push notification to Geefter
                 } else {
                     if (resSaveGeeft.error() instanceof BaasInvalidSessionException) {
@@ -317,7 +326,16 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     new AlertDialog.Builder(CompactDialogActivity.this)
                             .setTitle("Successo")
                             .setMessage("Appena il Geefted confermerà il ritiro,verranno " +
-                                    "abilitati i feedback. Grazie.").show();
+                                    "abilitati i feedback. Grazie.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                    startMainActivity();
+                                }
+                            })
+                            .show();
                     //send push notification to Geefter
                 } else {
                     if (resSaveGeeft.error() instanceof BaasInvalidSessionException) {
@@ -401,28 +419,48 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     }
 
     private void getHisBaasboxNameAndStartFeedbackActivity(boolean iamGeefter) {
-        BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '"+ mGeeft.getId() + "'").criteria();
+        final BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '"+ mGeeft.getId() + "'").criteria();
         if(iamGeefter) { // I'm Geefter,so I need BaasboxUsername of Geefted
             BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
                 @Override
-                public void handle(BaasResult<List<BaasLink>> resLink) {
+                public void handle(final BaasResult<List<BaasLink>> resLink) {
                     if (resLink.isSuccess()) {
                         List<BaasLink> links = resLink.value();
+                        if(links.size() <= 0){
+                            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                                @Override
+                                public void handle(BaasResult<List<BaasLink>> resLinkBis) {
+                                    if(resLinkBis.isSuccess()){
+                                        List<BaasLink> linksBis = resLinkBis.value();
+                                        mHisBaasboxName = linksBis.get(0).out().getAuthor();//Get doc_id of user from get(0)
+                                        //so, get baasboxName from getAuthor
+                                        startFeedbackActivity(); // Feedback enabled;
+                                    }
+                                    else {
+                                        Log.d(TAG,"Error while fetching link");
+                                        showDialogError();
+                                    }
+
+                                }
+                            });
+                        }
+                        else {
+                        /*
                         Log.d(TAG,"Size should be one: " + links.size());
                         Log.d(TAG,"Link id is: " + links.get(0).getId());
                         Log.d(TAG,"link: " + links.get(0).in().toJson());
-                        Log.d(TAG,"link: " + links.get(0).out().toJson());
-                        try {
-                            Log.d(TAG, "link out: " + links.get(0).in().toString());
-                            Log.d(TAG, "link out: " + links.get(0).out().toString());
+                        Log.d(TAG,"link: " + links.get(0).out().toJson());*/
+                            try {
+                                Log.d(TAG, "link out: " + links.get(0).in().toString());
+                                Log.d(TAG, "link out: " + links.get(0).out().toString());
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            mHisBaasboxName = links.get(0).out().getAuthor();//Get doc_id of user from get(0)
+                            //so, get baasboxName from getAuthor
+                            startFeedbackActivity(); // Feedback enabled;
                         }
-                        catch(Exception e){
-                            Log.e(TAG,e.toString());
-                        }
-                        mHisBaasboxName = links.get(0).out().getAuthor();//Get doc_id of user from get(0)
-                        //so, get baasboxName from getAuthor
-                        startFeedbackActivity(); // Feedback enabled;
-                    } else {
+                    }else {
                         Log.d(TAG,"Error while fetching link");
                         showDialogError();
                     }

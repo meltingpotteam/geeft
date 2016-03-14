@@ -28,7 +28,7 @@
             android:background="#96000000"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/expire_time"
+                android:id="@+id/geeft_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
