@@ -112,6 +112,13 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             //dialog to set taken
             showDialogTakenGiven(mGeeft,false);
         }
+        else if(mIamGeefter && mGeeft.isGiven()){
+            showDialogFeedbackDisabled();
+        }
+        else if(!mIamGeefter && mGeeft.isTaken()){ //is redoundant,but necessary. If IAmGeefter,
+            // show dialog for geefter,else,show dialog for geefted
+            showDialogFeedbackDisabled();
+        }
         else{
             checkConditionForFeedback(); //check for feedback
         }
@@ -277,6 +284,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                     startMainActivity();
                                 }
                             })
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                    startMainActivity();
+                                }
+                            })
                             .show();
                     //send push notification to Geefter
                 } else {
@@ -335,6 +350,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                     startMainActivity();
                                 }
                             })
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                    startMainActivity();
+                                }
+                            })
                             .show();
                     //send push notification to Geefter
                 } else {
@@ -350,6 +373,56 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 }
             }
         });
+    }
+
+    private void showDialogFeedbackDisabled(){
+        if(mIamGeefter){
+            new AlertDialog.Builder(CompactDialogActivity.this)
+                    .setTitle("Attenzione")
+                    .setMessage("Appena il Geefter confermerà la consegna,verranno " +
+                            "abilitati i feedback. Grazie.")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                            startMainActivity();
+                        }
+                    })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            dialog.dismiss();
+                            finish();
+                            startMainActivity();
+                        }
+                    })
+                    .show();
+        }
+        else{
+            new AlertDialog.Builder(CompactDialogActivity.this)
+                    .setTitle("Successo")
+                    .setMessage("Appena il Geefted confermerà il ritiro,verranno " +
+                            "abilitati i feedback. Grazie.")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                            startMainActivity();
+                        }
+                    })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            dialog.dismiss();
+                            finish();
+                            startMainActivity();
+                        }
+                    })
+                    .show();
+        }
+
     }
 
     private void checkConditionForFeedback(){

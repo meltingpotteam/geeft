@@ -51,10 +51,10 @@
     <string name="settings_title">Impostazioni</string>
     <string name="mail_title">Contattaci</string>
     <string name="account_description">Visualizza il tuo profilo</string>
-    <string name="gift_description">Visualizza oggetti regalati</string>
+    <string name="gift_description">Visualizza gli oggetti che hai regalato</string>
     <string name="settings_description">Modifica le tue impostazioni</string>
     <string name="mail_description">Contattaci per qualsiasi cosa</string>
-    <string name="recycle_description">Visualizza oggetti ricevuti</string>
+    <string name="recycle_description">Visualizza gli oggetti che hai ricevuto</string>
     <string name="categories_description">Cerca Geeft per categoria</string>
 
 
@@ -301,9 +301,10 @@
 
     <string name="pref_title_vibrate">Vibrazione</string>
     <string name="assigned_gift_title">Assegnati</string>
-    <string name="assigned_gift_description">Visualizza oggetti in attesa di essere ritirati</string>
+    <string name="assigned_gift_description">Visualizza gli oggetti che ti sono stati assegnati e
+        ancora in attesa di ritiro</string>
     <string name="reserved_gift_title">Prenotati</string>
-    <string name="reserved_gift_description">Visualizza oggetti a cui ti sei prenotato</string>
+    <string name="reserved_gift_description">Visualizza gli oggetti a cui ti sei prenotato</string>
 
     <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa</string>
     <string name="show_story">Visualizza la storia dell\'oggetto</string>

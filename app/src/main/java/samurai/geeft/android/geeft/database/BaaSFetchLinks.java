@@ -96,7 +96,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setIsFeedbackLeftByGeefted(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
                             geeft.setIsFeedbackLeftByGeefter(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
 
-                            mGeeftList.add(geeft);
+                            mGeeftList.add(0,geeft);
                         }catch (BaasInvalidSessionException ise){
                             mResultToken = RESULT_SESSION_EXPIRED;
                             return false;

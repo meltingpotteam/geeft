@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.CategoriesListAdapter;
+import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
@@ -29,8 +31,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class ListCategoryFragment extends StatedFragment {
 
-    private static final String KEY_LIST_STATE = "key_list_state" ;
-    private final String TAG = getClass().getSimpleName();
+    private static final String KEY_LIST_STATE = "key_list_state";
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
@@ -65,7 +66,7 @@ public class ListCategoryFragment extends StatedFragment {
                 new Category(TagsValue.ASSETS_OTHER, TagsValue.CATEGORY_OTHER)
         };
 
-        for(Category c : categories){
+        for (Category c : categories) {
             mCategoriesList.add(c);
         }
     }
@@ -74,9 +75,10 @@ public class ListCategoryFragment extends StatedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
-        Log.d(TAG,"savedInstanceState==null? "+(savedInstanceState==null));
         initUI(rootView);
-        initSupportActionBar(rootView);
+        if (savedInstanceState == null)
+            initSupportActionBar(rootView);
+
         return rootView;
     }
 
@@ -111,7 +113,12 @@ public class ListCategoryFragment extends StatedFragment {
         if (savedInstanceState != null) {
             mCategoriesList = new ArrayList<>();
             mCategoriesListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
-            initList();
+            View rootView = getView();
+            if (rootView != null) {
+                initList();
+                initUI(rootView);
+                initSupportActionBar(rootView);
+            }
         }
     }
 
@@ -120,21 +127,42 @@ public class ListCategoryFragment extends StatedFragment {
     }
 
     private void initUI(View rootView) {
-        Log.d(TAG,"initUI");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 //        mRecyclerView.setHasFixedSize(true);
 
+
+        mAdapter = new CategoriesListAdapter(getActivity(), mCategoriesList);
+        mRecyclerView.setLayoutManager(
+                new GridLayoutManager(getContext(), 2));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity()
+                , mRecyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
+                //TODO complete the fragment to start
+                mCategory = mCategoriesList.get(position);
+                mCallback.onCategorySelected(mCategory);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //TODO what happens on long press
+                mCategory = mCategoriesList.get(position);
+                mCallback.onCategorySelected(mCategory);
+            }
+        }));
     }
 
     private void initSupportActionBar(View rootView) {
-        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+        mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity())
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
-
-
 }
+
+
