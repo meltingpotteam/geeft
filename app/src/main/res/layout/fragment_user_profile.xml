@@ -17,13 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            >
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentScrim="?attr/colorPrimary"
+                app:collapsedTitleGravity="center"
+
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:expandedTitleTextAppearance="@android:color/transparent"
                 app:titleEnabled="false">
@@ -31,11 +33,12 @@
                 <LinearLayout
                     android:id="@+id/vUserProfileRoot"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary"
+                    android:layout_height="250dp"
+                    android:background="@drawable/galaxy_geeft_background"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:orientation="vertical"
+                    android:layout_marginTop="@dimen/app_bar_height"
                     android:paddingBottom="24dp"
                     android:paddingLeft="24dp"
                     android:paddingRight="24dp"

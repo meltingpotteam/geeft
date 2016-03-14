@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     public static final String GEEFT_KEY = "geeft_key";
     private Geeft mGeeft;
     private Toolbar mToolbar;
+    private LinearLayout mGeefterProfileCard;
     private ImageView mGeeftImageView;
     private ImageView mGeefterProfilePicImageView;
     private TextView mGeefterNameTextView;
@@ -84,8 +86,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private View mAddStoryView;
     private View mDonateReceivedGeeftView;
     private List<Geeft> mGeeftList = new ArrayList<>();
-    private ProgressDialog mProgressDialog;
 
+    private ProgressDialog mProgressDialog;
     private TextView mProfileDialogUsername;
     private TextView mProfileDialogUserLocation;
     private ImageView mProfileDialogUserImage;
@@ -192,6 +194,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void initUI(View rootView) {
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
+        mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
         mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
@@ -225,9 +228,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
 
-            mGeefterNameTextView.setOnClickListener(new View.OnClickListener() {
+            mGeefterProfileCard.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) { //TODO: Replace with clickableArea
+                public void onClick(View v) {
 
                     initGeefterDialog(mGeeft);
 
@@ -242,7 +245,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     } else if (mGeeftList.size() > 1) {
                         startImageGallery(mGeeftList);
                     } else {
-                        mProgressDialog = ProgressDialog.show(getContext(), "", "Attendere...");
+                        mProgressDialog = new ProgressDialog(getContext());
+                        mProgressDialog.show();
+                        mProgressDialog.setMessage("Attendere...");
                         new BaaSGeeftHistoryArrayTask(getContext(), mGeeftList,
                                 mGeeft.getId(), "geeft", FullGeeftDeatailsFragment.this).execute();
                     }
@@ -367,7 +372,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     private void deleteGeeft(){
-        mProgressDialog = ProgressDialog.show(getContext(), "", "Attendere...");
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.show();
+        mProgressDialog.setMessage("Attendere...");
         new BaaSDeleteGeeftTask(getContext(),mGeeft,FullGeeftDeatailsFragment.this).execute();
 
     }

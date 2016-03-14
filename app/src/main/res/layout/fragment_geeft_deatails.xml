@@ -24,6 +24,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="vertical">
+
+            <include
+                android:id="@+id/item_user_profile_card"
+                layout="@layout/item_user_profile_and_rating_card"
+                />
+
+            <include
+                android:id="@+id/item_geeft_title_and_description"
+                layout="@layout/item_geeft_title_and_description_card"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,6 +63,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,16 +93,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <include
-                android:id="@+id/item_user_profile_card"
-                layout="@layout/item_user_profile_and_rating_card"
-                />
-
-            <include
-                android:id="@+id/item_geeft_title_and_description"
-                layout="@layout/item_geeft_title_and_description_card"
-                />
 
             <include
                 android:id="@+id/item_geeft_story"

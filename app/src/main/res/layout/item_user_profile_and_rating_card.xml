@@ -8,6 +8,7 @@
     android:layout_margin="@dimen/card_margin">
     <LinearLayout
         style="@style/Widget.CardContent"
+        android:id="@+id/geeft_item_profile_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

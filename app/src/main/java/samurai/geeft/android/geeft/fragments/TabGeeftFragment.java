@@ -270,13 +270,13 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 //      TODO:  QUERY TEST !!REMOVE!!
 //
 //
-        mButtonQuery = (Button) rootView.findViewById(R.id.buttonquery);
-        mButtonQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+//        mButtonQuery = (Button) rootView.findViewById(R.id.buttonquery);
+//        mButtonQuery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getData();
+//            }
+//        });
 //
 //
 //

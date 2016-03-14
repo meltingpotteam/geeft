@@ -15,9 +15,11 @@
         android:layout_height="match_parent"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:contentScrim="?attr/colorPrimary"
-        app:expandedTitleTextAppearance="@android:color/black"
-        android:fitsSystemWindows="true"
-        >
+        android:fitsSystemWindows="true">
+
+        <!--removed to solve the problem of the different text when the toolbar collapse -->
+        <!--app:expandedTitleTextAppearance="@android:color/black"-->
+        <!-->-->
 
         <ImageView
             android:id="@+id/collapsing_toolbar_image"

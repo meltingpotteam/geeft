@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -284,8 +285,10 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void updateDescription() {
-        final ProgressDialog progressDialog = ProgressDialog
-                .show(getContext(), "Attendere", "Salvataggio in corso...");
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.show();
+        progressDialog.setMessage("Salvataggio in corso...");
         BaasUser user;
         if(mIsCurrentUser){
             final String newDescrition = mUserDescriptionEditText.getText().toString();
@@ -491,7 +494,7 @@ public class UserProfileFragment extends StatedFragment implements
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Lista prenotati");
+        actionBar.setTitle("Profilo");
     }
 
     public void getData() {
