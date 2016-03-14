@@ -80,8 +80,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private RatingBar mGeefterRank;
     private TextView mGeeftTitleTextView;
     private TextView mGeeftDescriptionTextView;
+
+
+    private LinearLayout mDonatedButtonField;
     private View mStoryView;
     private View mModifyView;
+
+    private LinearLayout mReceivedButtonField;
     private View mDeleteView;
     private View mAddStoryView;
     private View mDonateReceivedGeeftView;
@@ -200,6 +205,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
         mGeeftDescriptionTextView = (TextView)rootView
                 .findViewById(R.id.geeft_description_textview);
+
+        mDonatedButtonField = (LinearLayout)rootView.findViewById(R.id.fragment_details_donated_buttons_layout);
+        mReceivedButtonField = (LinearLayout)rootView.findViewById(R.id.fragment_details_received_buttons_layout);
         mStoryView = rootView.findViewById(R.id.item_geeft_story);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
@@ -255,20 +263,23 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             });
 
             if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
-                mModifyView.setVisibility(View.GONE);
-                mDeleteView.setVisibility(View.GONE);
+                mDonatedButtonField.setVisibility(View.GONE);
+//                mModifyView.setVisibility(View.GONE);
+//                mDeleteView.setVisibility(View.GONE);
             }
 
             if(!getArguments().getSerializable(KEY_CONTEXT)
                     .equals(DonatedActivity.class.getSimpleName())){//TODO: Check this,and put it up
-                mModifyView.setVisibility(View.GONE);
-                mDeleteView.setVisibility(View.GONE);
+                mDonatedButtonField.setVisibility(View.GONE);
+//                mModifyView.setVisibility(View.GONE);
+//                mDeleteView.setVisibility(View.GONE);
             }
 
             if(!getArguments().getSerializable(KEY_CONTEXT)
                     .equals(ReceivedActivity.class.getSimpleName())){//TODO: Check this,and put it up
-                mAddStoryView.setVisibility(View.GONE);
-                mDonateReceivedGeeftView.setVisibility(View.GONE);
+                mReceivedButtonField.setVisibility(View.GONE);
+//                mAddStoryView.setVisibility(View.GONE);
+//                mDonateReceivedGeeftView.setVisibility(View.GONE);
             }
 
             mModifyView.setOnClickListener(new View.OnClickListener() {
