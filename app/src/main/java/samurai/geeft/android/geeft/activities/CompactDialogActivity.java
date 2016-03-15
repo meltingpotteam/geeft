@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
@@ -28,6 +29,8 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
+import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonObject;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
@@ -110,7 +113,11 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         }
         else if(!mIamGeefter && !mGeeft.isTaken()){ //if I'm the Geefted and Geeft isn't taken,show
                             //dialog to set taken
-            showDialogTakenGiven(mGeeft,false);
+            showDialogTakenGiven(mGeeft, false);
+        }
+
+        else if(mGeeft.isGiven() && mGeeft.isTaken()){
+            checkConditionForFeedback(); //check for feedback
         }
         else if(mIamGeefter && mGeeft.isGiven()){
             showDialogFeedbackDisabled();
@@ -118,9 +125,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         else if(!mIamGeefter && mGeeft.isTaken()){ //is redoundant,but necessary. If IAmGeefter,
             // show dialog for geefter,else,show dialog for geefted
             showDialogFeedbackDisabled();
-        }
-        else{
-            checkConditionForFeedback(); //check for feedback
         }
     }
 
@@ -376,7 +380,9 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     }
 
     private void showDialogFeedbackDisabled(){
-        if(mIamGeefter){
+        if(!mIamGeefter){
+            /*sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
+                    "di confermare il ritiro");*/
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Attenzione")
                     .setMessage("Appena il Geefter confermerà la consegna,verranno " +
@@ -400,6 +406,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     .show();
         }
         else{
+            /*sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
+                    "di confermare la consegna");*/
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Successo")
                     .setMessage("Appena il Geefted confermerà il ritiro,verranno " +
@@ -435,18 +443,40 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         }
         else { // if feedback isn't left
 
-            if (mGeeft.isTaken() && mGeeft.isGiven()) {
+            if (mGeeft.isTaken() && !mGeeft.isGiven()) {
+                //Send push notification to Geefter. One per day!
+                sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
+                        "di confermare la consegna");
+            } else if (mGeeft.isGiven() && !mGeeft.isTaken()) {
+                //Send push notification to Geefted. One per day!
+                sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
+                        "di confermare il ritiro");
+            }
+            else if (mGeeft.isTaken() && mGeeft.isGiven()) {
                 new BaaSExchangeCompletedTask(getApplicationContext(),mGeeft,mIamGeefter,this).execute();
                              // create link in "ricevuti",delete link in "assegnati" and update
                             //n_given and n_received
 
-            } else if (mGeeft.isTaken() && !mGeeft.isGiven()) {
-                //Send push notification to Geefter. One per day!
-            } else if (mGeeft.isGiven() && !mGeeft.isTaken()) {
-                //Send push notification to Geefted. One per day!
             }
+
+
         }
 
+    }
+
+    private void sendPush(String receiverUsername,String message){
+
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + mHisBaasboxName + "&message=" + message, new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if(baasResult.isSuccess()){
+                    Log.d(TAG,"Push notification sended to: " + mHisBaasboxName);
+                }
+                else{
+                    Log.e(TAG,"Error while sending push notification:" + baasResult.error());
+                }
+            }
+        });
     }
 
     public void exchangeCompleted(boolean result,int resultToken){ //CALLBACK METHOD
@@ -463,19 +493,36 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             finish();
                         }
                     })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            dialog.dismiss();
+                            finish();
+                            startMainActivity();
+                        }
+                    })
                     .show();
         }
         else{
             Toast toast;
             if (resultToken == RESULT_SESSION_EXPIRED) {
-                toast = Toast.makeText(getApplicationContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                toast = Toast.makeText(CompactDialogActivity.this, "Sessione scaduta,è necessario effettuare di nuovo" +
                         " il login", Toast.LENGTH_LONG);
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 toast.show();
             } else {
-                new AlertDialog.Builder(getApplicationContext())
+                new AlertDialog.Builder(CompactDialogActivity.this)
                         .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                        .setMessage("Operazione non possibile. Riprovare più tardi.")
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                dialog.dismiss();
+                                finish();
+                                startMainActivity();
+                            }
+                        })
+                        .show();
             }
         }
     }

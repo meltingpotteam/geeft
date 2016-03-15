@@ -113,15 +113,15 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
         //--------------------- Location Button implementation
          mWinnerScreenLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mLocation.equals("")) {
-                    parseLocation(mLocation);
-                } else
-                    Toast.makeText(mContext,
-                            "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
-            }
-        });
+             @Override
+             public void onClick(View v) {
+                 if (!mLocation.equals("")) {
+                     parseLocation(mLocation);
+                 } else
+                     Toast.makeText(mContext,
+                             "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
+             }
+         });
         //-----------------------
         mWinnerScreenFbButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +133,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     }
 
     private void initUI(){
+
         mToolbar = (Toolbar) findViewById(R.id.winner_screen_toolbar);
         if(mAction == 1) {
             mToolbar.setTitle("Geefted"); //You are a Geefter if you donate
@@ -142,6 +143,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         }//Else other cases
 
         setSupportActionBar(mToolbar);
+        //initActionBar();
 
         mContext = getApplicationContext();
         mAction = getIntent().getIntExtra(EXTRA_ACTION, -1);
@@ -157,6 +159,14 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mIntent = getIntent();
         showProgressDialog();
     }
+
+    /*private void initActionBar() { DOESN'T WORKS
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        WinnerScreenActivity.this.setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }*/
 
     private void geeftedCase() {
         String GeeftDocId = mGeeftId;
@@ -364,14 +374,18 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         return super.onOptionsItemSelected(item);
     }
     private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog = new ProgressDialog(WinnerScreenActivity.this);
         try {
 //                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Attendere");
             mProgressDialog.show();
         } catch (WindowManager.BadTokenException e) {
-        }
+            Log.e(TAG,"error: " + e.toString());
+        }/*
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Attendere");
+        mProgressDialog.setMessage("Attendere");*/
     }
 }
