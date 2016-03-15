@@ -110,7 +110,7 @@ public class BaaSExchangeCompletedTask extends AsyncTask<Void,Void,Boolean> {
 
     private boolean updateNumberOfGiven(){
         BaasUser currentUser = BaasUser.current();
-        float n_given = currentUser.getScope(BaasUser.Scope.REGISTERED).getFloat(TagsValue.SCOPE_VALUE_N_GIVEN);
+        long n_given = currentUser.getScope(BaasUser.Scope.REGISTERED).getLong(TagsValue.SCOPE_VALUE_N_GIVEN);
         currentUser.getScope(BaasUser.Scope.REGISTERED).put(TagsValue.SCOPE_VALUE_N_GIVEN,n_given+1);
         BaasResult<BaasUser> resSaveUser = currentUser.saveSync();
         if(resSaveUser.isSuccess()){
@@ -196,8 +196,8 @@ public class BaaSExchangeCompletedTask extends AsyncTask<Void,Void,Boolean> {
 
     private boolean updateNumberOfReceived(){
         BaasUser currentUser = BaasUser.current();
-        float n_received = currentUser.getScope(BaasUser.Scope.REGISTERED).getFloat(TagsValue.SCOPE_VALUE_N_RECEIVED);
-        currentUser.getScope(BaasUser.Scope.REGISTERED).put(TagsValue.SCOPE_VALUE_N_GIVEN,n_received+1);
+        long n_received = currentUser.getScope(BaasUser.Scope.REGISTERED).getLong(TagsValue.SCOPE_VALUE_N_RECEIVED);
+        currentUser.getScope(BaasUser.Scope.REGISTERED).put(TagsValue.SCOPE_VALUE_N_RECEIVED,n_received+1);
         BaasResult<BaasUser> resSaveUser = currentUser.saveSync();
         if(resSaveUser.isSuccess()){
             mDocumentGeeft.put(TagsValue.FLAG_GEEFTED_HAS_EXCHANGED,true);

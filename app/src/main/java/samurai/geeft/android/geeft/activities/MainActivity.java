@@ -67,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private SlidingTabLayout mSlidingTabLayoutTabs;
-    private CharSequence mTitles[]={"Geeftory","Geeft"};
+    private CharSequence mTitles[]={"Geeft","Geeftory"};
+    //private CharSequence mTitles[]={"","Geeftory"};
     private FloatingActionButton mActionNewGeeft;
-    private int mNumboftabs =2;
+    private int mNumboftabs =1;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     /**
@@ -172,9 +173,15 @@ public class MainActivity extends AppCompatActivity {
         mActionGeeftStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
+                /*Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
-                floatingActionMenu.close(true);
+                floatingActionMenu.close(true);*/ //TODO: Enable this after is stable,in beta version
+
+                //TODO: This is for the alpha versione. Delete this before.
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Spiacenti")
+                        .setMessage("Al momento stai usando la versione alpha, questa " +
+                                "funzionalità non è ancora attiva.").show();
             }
         });
 

@@ -33,6 +33,7 @@
                    android:value="@string/facebook_app_id"/>
 
         <activity android:name=".activities.InitialActivity"
+                  android:screenOrientation="portrait"
                   android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -44,6 +45,7 @@
                   android:configChanges=
                       "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:screenOrientation="portrait"
                   android:label="@string/app_name" />
 
         <provider android:authorities="com.facebook.app.FacebookContentProvider1537015443283612"
@@ -58,50 +60,63 @@
                   android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activities.MainActivity">
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable">
             </meta-data>
         </activity>
 
-        <activity android:name=".activities.CompactDialogActivity"/>
+        <activity android:name=".activities.CompactDialogActivity"
+                  android:screenOrientation="portrait"/>
 
 
         <!-- Add geeft activity-->
-        <activity android:name=".activities.AddGeeftActivity"/>
+        <activity android:name=".activities.AddGeeftActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- Add geeft activity-->
-        <activity android:name=".activities.SearchGeeftActivity"/>
+        <activity android:name=".activities.SearchGeeftActivity"
+                  android:screenOrientation="portrait"/>
                   <!--android:theme="@style/Theme.Transparent"-->
             />
 
         <!--Donated geeft activity-->
-        <activity android:name=".activities.DonatedActivity"/>
+        <activity android:name=".activities.DonatedActivity"
+                  android:screenOrientation="portrait"/>
 
         <!--Received geeft activity-->
-        <activity android:name=".activities.ReceivedActivity"/>
+        <activity android:name=".activities.ReceivedActivity"
+                  android:screenOrientation="portrait"/>
 
         <!--Assigned geeft activity-->
-        <activity android:name=".activities.AssignedActivity"/>
+        <activity android:name=".activities.AssignedActivity"
+                  android:screenOrientation="portrait"/>
 
         <!--Reserved geeft activity-->
-        <activity android:name=".activities.ReservedActivity"/>
+        <activity android:name=".activities.ReservedActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- Send Report activity-->
-        <activity android:name=".activities.SendReportActivity"/>
+        <activity android:name=".activities.SendReportActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- Settings activity-->
         <activity android:name=".activities.SettingsActivity"
+                  android:screenOrientation="portrait"
             android:theme="@style/AppThemeSettings"/>
 
         <!-- FullScreenViewActivity-->
-        <activity android:name=".activities.FullScreenViewActivity"/>
+        <activity android:name=".activities.FullScreenViewActivity"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.FullGeeftDetailsActivity"/>
+        <activity android:name=".activities.FullGeeftDetailsActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- Winner Screen-->
-        <activity android:name=".activities.WinnerScreenActivity"/>
+        <activity android:name=".activities.WinnerScreenActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- Categories Activity-->
 
@@ -110,15 +125,20 @@
         <activity android:name=".activities.FeedbackPageActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.AddStoryActivity"/>
+        <activity android:name=".activities.AddStoryActivity"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.HowToDoActivity"/>
+        <activity android:name=".activities.HowToDoActivity"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.FullScreenImageActivity"/>
+        <activity android:name=".activities.FullScreenImageActivity"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.CategoryActivity"/>
+        <activity android:name=".activities.CategoryActivity"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.UserProfileActivity"/>
+        <activity android:name=".activities.UserProfileActivity"
+                  android:screenOrientation="portrait"/>
 
         <activity android:name=".activities.ActivityRecylerAnimators"/>
 

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -35,6 +37,7 @@ import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -132,6 +135,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -300,7 +304,11 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
 
                     try {
-                        if( !location.equals("")) {
+                        if(!isGoogleMapsInstalled()) {
+                            Toast.makeText(mContext,
+                                    "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
+                        }
+                        else if( !location.equals("")) {
                             Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
                                     URLEncoder.encode(location, "UTF-8"));
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -414,6 +422,8 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+
+
     public void done(boolean result, GeeftItemAdapter.GeeftViewHolder holder,Geeft item,int resultToken){
         //enables all social buttons
         mProgress.dismiss();
@@ -448,7 +458,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     public void done(boolean result,double[] userInformation,int resultToken){
         // userInformation order is : Feedback,Given,Received
         if(result){
-            mProfileDialogUserRank.setText(String.valueOf(userInformation[0]) + "/5.0");
+            mProfileDialogUserRank.setText(String.valueOf(new DecimalFormat("#.##").format(userInformation[0])) + "/5.0");
             mProfileDialogUserGiven.setText(String.valueOf((int)userInformation[1]));
             mProfileDialogUserReceived.setText(String.valueOf((int)userInformation[2]));
 
@@ -583,6 +593,20 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         dialog.show();  //<-- See This!
         //
     }
+    public boolean isGoogleMapsInstalled()
+    {
+        try
+        {
+            ApplicationInfo info = mContext.getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0 );
+            return true;
+        }
+        catch(PackageManager.NameNotFoundException e)
+        {
+            return false;
+        }
+    }
+
+
 
     private void startLoginActivity() {
         mContext.startActivity(new Intent(mContext, LoginActivity.class));
@@ -629,6 +653,8 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             ButterKnife.bind(this, itemView);
         }
     }
+
+
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
