@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,17 +39,52 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
 
         if (savedInstanceState!=null){
             mId = savedInstanceState.getString("STORY_ID");
+        }else{
+            askIfIsAGefft();
         }
 
         setContentView(R.layout.container_for_fragment);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
-                    false);
-            fm.beginTransaction().add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+    }
+
+    private void askIfIsAGefft() {
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(AddStoryActivity.this,
+                        R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Hey!");
+        builder.setMessage("Stai per pubblicare la storia di un oggetto ricevuto tramite Geeft?");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startFragmentGeeftList();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startFragmentGeeftory();
+            }
+        });
+        builder.show();
+    }
+
+    private void startFragmentGeeftList() {
+        Fragment fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
+                false);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                .commit();
+    }
+
+    private void startFragmentGeeftory() {
+        AddStoryFragment fragment = AddStoryFragment.newInstance(new Bundle());
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -56,12 +92,9 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         mId = id;
-        AddStoryFragment fragment = AddStoryFragment.newInstance(new Bundle());
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        startFragmentGeeftory();
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

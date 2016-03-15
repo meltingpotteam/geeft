@@ -1,6 +1,5 @@
 package samurai.geeft.android.geeft.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,7 +19,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -267,18 +265,21 @@ public class TabGeeftFragment extends StatedFragment
         mAdapter = new GeeftItemAdapter(getContext(),mGeeftList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         final Handler handler = new Handler() ;
-        mAdapter.setOnLoadMoreListener(new GeeftItemAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //add progress item
-                if(mGeeftList.get(mGeeftList.size()-1)==null)
-                    return;
-                mGeeftList.add(null);
-                mAdapter.notifyItemInserted(mGeeftList.size() - 1);
-                getData(true);
-                System.out.println("load");
-            }
-        });
+
+        if(!mIsCategoryCall||!mIsSearchCall) {
+            mAdapter.setOnLoadMoreListener(new GeeftItemAdapter.OnLoadMoreListener() {
+                @Override
+                public void onLoadMore() {
+                    //add progress item
+                    if (mGeeftList.get(mGeeftList.size() - 1) == null)
+                        return;
+                    mGeeftList.add(null);
+                    mAdapter.notifyItemInserted(mGeeftList.size() - 1);
+                    getData(true);
+                    System.out.println("load");
+                }
+            });
+        }
 //
 //      TODO:  QUERY TEST !!REMOVE!!
 //
@@ -291,12 +292,14 @@ public class TabGeeftFragment extends StatedFragment
 //            }
 //        });
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getData();
-            }
-        });
+        if(!mIsSearchCall||!mIsCategoryCall) {
+            mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    getData();
+                }
+            });
+        }
     }
 
 
@@ -445,11 +448,23 @@ public class TabGeeftFragment extends StatedFragment
                             .setTitle("Errore")
                             .setMessage("Operazione non possibile. Riprovare più tardi.").show();
                 }
+                mAdapter.notifyDataSetChanged();
             }
         }else{
-            mAdapter.setLoaded();
+            boolean trovato = false;
+            for (int i = 0; i < mGeeftList.size() && !trovato; i++) {
+                if (mGeeftList.get(i) == null) {
+                    Log.d(TAG, "elemento " + mGeeftList.get(i));
+                    mGeeftList.remove(i);
+                    trovato = true;
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+            if (result) {
+                mAdapter.notifyDataSetChanged();
+                mAdapter.setLoaded();
+            }
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     /*private void showProgressDialog() {

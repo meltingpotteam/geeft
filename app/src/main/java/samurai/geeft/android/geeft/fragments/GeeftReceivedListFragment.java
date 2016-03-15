@@ -177,7 +177,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     @Override
     protected void onSaveState(Bundle outState) {
         super.onSaveState(outState);
-        outState.putSerializable("mGeeftList2", (Serializable)mGeeftList);
+        outState.putSerializable(TAG, (Serializable)mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(KEY_LIST_STATE, mGeeftListState);

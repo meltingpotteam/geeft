@@ -26,12 +26,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasUser;
-
 import com.crashlytics.android.Crashlytics;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -47,9 +45,7 @@ import java.io.File;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
-import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
-import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;

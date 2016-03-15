@@ -36,7 +36,6 @@ import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.activities.ReservedActivity;
 import samurai.geeft.android.geeft.activities.SendReportActivity;
-import samurai.geeft.android.geeft.activities.SettingsActivity;
 import samurai.geeft.android.geeft.activities.UserProfileActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
@@ -152,8 +151,6 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onLongClick(View view, int position) {
                 //TODO what happens on long press
-                Toast.makeText(getActivity(), "Long press" + position, Toast.LENGTH_SHORT).show();
-
             }
         }));
     }

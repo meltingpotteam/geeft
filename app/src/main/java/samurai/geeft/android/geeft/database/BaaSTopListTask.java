@@ -40,6 +40,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
     boolean isEmpty;
     String mTopRid;
     String mButtomRid;
+    int mListSize;
 
     public BaaSTopListTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                      String topRid,String buttomRid, boolean isButtomRefresh,
@@ -100,9 +101,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
                     String rid;
                     if(mIsButtomRefresh) {
                         rid = mButtomRid;
-                        if(mGeeftList.get(mGeeftList.size()-1) ==null){
-                            mGeeftList.remove(mGeeftList.size()-1);
-                        }
+                        mListSize = mGeeftList.size();
                         Log.d(TAG, "mIsButtomRefresh rid= "+rid);
                     }else {
                         rid = mTopRid;
@@ -163,18 +162,14 @@ public class BaaSTopListTask extends BaaSCheckTask{
                             Log.d(TAG, e.toString());
                             mGeeft = new Geeft();
                             mGeeft.fillGeeft(e,links);
-                            if(BaasUser.current()!=null) {
-                                if (mGeeft.getId() == BaasUser.current().getName()) {
-
-
-                                }
-                            }
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
                                 Log.d(TAG, "e id: " + e.getString("id") + " inId: " + l.in().getId());
-                                //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                //if(l.out().getId().equals(e.getId())){
+                                // TODO: LOGIC IS THIS,but BaasLink.create have a bug
                                 if (l.in().getId().equals(e.getString("id"))) {
-                                    mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                    mGeeft.setIsSelected(true);
+                                    // set prenoteButton selected (I'm already
                                     // reserved)
                                     mGeeft.setReservedLinkId(l.getId());
                                     Log.d(TAG, "link id is: " + l.getId());

@@ -120,6 +120,8 @@
 
         <activity android:name=".activities.UserProfileActivity"/>
 
+        <activity android:name=".activities.ActivityRecylerAnimators"/>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

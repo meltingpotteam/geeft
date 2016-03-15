@@ -36,11 +36,8 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_report_help_page);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitle("Invia Report");
         Bundle bundle = new Bundle();
+        initActionBar();
 
         mReportTitle = (TextView) findViewById(R.id.fragment_feedback_help_page_title);
         mReportDesription = (TextView) findViewById(R.id.fragment_feedback_help_page_description);
@@ -95,6 +92,14 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private void initActionBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle("Manda un report");
+    }
 
     public void done(boolean result){
         //enables all social buttons
