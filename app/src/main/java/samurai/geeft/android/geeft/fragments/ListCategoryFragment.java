@@ -5,21 +5,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.CategoriesListAdapter;
-import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
@@ -113,12 +109,7 @@ public class ListCategoryFragment extends StatedFragment {
         if (savedInstanceState != null) {
             mCategoriesList = new ArrayList<>();
             mCategoriesListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
-            View rootView = getView();
-            if (rootView != null) {
-                initList();
-                initUI(rootView);
-                initSupportActionBar(rootView);
-            }
+            initList();
         }
     }
 
@@ -148,9 +139,7 @@ public class ListCategoryFragment extends StatedFragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                //TODO what happens on long press
-                mCategory = mCategoriesList.get(position);
-                mCallback.onCategorySelected(mCategory);
+                //TODO what happens on long pres
             }
         }));
     }

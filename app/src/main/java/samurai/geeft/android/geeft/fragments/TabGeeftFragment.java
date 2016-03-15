@@ -239,7 +239,7 @@ public class TabGeeftFragment extends StatedFragment
         mRecyclerView.setAdapter(mAdapter);
         final Handler handler = new Handler() ;
 
-        if(!mIsCategoryCall||!mIsSearchCall) {
+        if(!mIsCategoryCall&&!mIsSearchCall) {
             mAdapter.setOnLoadMoreListener(new GeeftItemAdapter.OnLoadMoreListener() {
                 @Override
                 public void onLoadMore() {
@@ -265,14 +265,12 @@ public class TabGeeftFragment extends StatedFragment
 //            }
 //        });
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
-        if(!mIsSearchCall||!mIsCategoryCall) {
             mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     getData();
                 }
             });
-        }
     }
 
 
