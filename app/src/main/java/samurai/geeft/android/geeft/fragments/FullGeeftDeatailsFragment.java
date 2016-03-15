@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,18 +24,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
-import com.baasbox.android.BaasInvalidSessionException;
-import com.baasbox.android.BaasLink;
-import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
-import com.baasbox.android.RequestOptions;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +41,8 @@ import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
-import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSDeleteGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
-import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -60,7 +50,6 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackDeletion;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
-import samurai.geeft.android.geeft.utilities.Utils;
 
 /**
  * Created by ugookeadu on 20/02/16.
@@ -485,7 +474,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     @Override
-    public void done(boolean result,String firstID, long firstTimeStamp, int token) {
+    public void done(boolean result, int token) {
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
         }

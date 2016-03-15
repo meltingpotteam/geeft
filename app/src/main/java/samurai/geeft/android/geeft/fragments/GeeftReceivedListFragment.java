@@ -120,7 +120,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
     }
 
-    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
+    public void done(boolean result, int resultToken){
         Log.d(TAG, "in done");
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
@@ -135,13 +135,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                if(getActivity()
-                                        .getSupportFragmentManager().getBackStackEntryCount()>0){
-                                    getActivity().getSupportFragmentManager().popBackStack();
-                                }else {
-                                    getActivity().onBackPressed();
-                                }
+                            dialog.dismiss();
+                            if(getActivity()
+                                    .getSupportFragmentManager().getBackStackEntryCount()>0){
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }else {
+                                getActivity().onBackPressed();
+                            }
                             }
                         })
                         .show();

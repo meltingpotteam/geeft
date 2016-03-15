@@ -248,6 +248,6 @@ public class BaaSTabLimitedGeeftTask  extends BaaSCheckTask {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mFirstID,0,mResultToken);
+        mCallback.done(result,mResultToken);
     }
 }

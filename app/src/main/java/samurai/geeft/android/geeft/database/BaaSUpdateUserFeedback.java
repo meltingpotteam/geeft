@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
 import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasInvalidSessionException;
@@ -15,7 +14,6 @@ import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
 
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
-import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
@@ -101,7 +99,7 @@ public class BaaSUpdateUserFeedback extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,"",0, mResultToken);
+        mCallback.done(result, mResultToken);
     }
 
     private double calculateSingleFeedback(){

@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -80,10 +82,10 @@ public class PrenotableRecycleFragment extends StatedFragment
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh()");
-        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        getData();
     }
 
-    public void done(boolean result,String firstID, long firstTimeStamp, int resultToken){
+    public void done(boolean result, int resultToken){
         Log.d(TAG,"done()");
         mBallView.setVisibility(View.GONE);
         if(mRefreshLayout.isRefreshing()) {
@@ -129,7 +131,7 @@ public class PrenotableRecycleFragment extends StatedFragment
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
         Log.d(TAG, "onFirstTimeLaunched()");
-        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+        getData();
     }
 
     /**
@@ -174,7 +176,7 @@ public class PrenotableRecycleFragment extends StatedFragment
                     +(mGeeftList.size()));
 
         if (mGeeftList==null || mGeeftList.size()==0){
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            getData();
         }
         else {
             mBallView.setVisibility(View.GONE);
@@ -199,8 +201,8 @@ public class PrenotableRecycleFragment extends StatedFragment
         mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new GeeftItemAdapter(getContext(),mGeeftList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
@@ -214,5 +216,13 @@ public class PrenotableRecycleFragment extends StatedFragment
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void getData() {
+        BaasQuery.Criteria paginate;
+        paginate = BaasQuery.builder()
+                .where("closed = false and deleted = false")
+                .orderBy("_creation_date asc").criteria();
+        new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,paginate,this).execute();
     }
 }

@@ -18,16 +18,12 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
-import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
- * Created by ugookeadu on 07/01/16.
- * Task for populating GeeftItem cards
- * Update by danybr-dev on 17/01/16
- * Updated by gabriel-dev on 10/03/16
+ * Created by ugookeadu on 14/03/16.
  */
-public class BaaSTabGeeftTask extends BaaSCheckTask{
+public class BaaSSearchTask extends BaaSCheckTask{
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -40,49 +36,48 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
     TaskCallbackBooleanToken mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
     boolean result;
-    boolean mIsCategoryTask;
-    Category mCategory;
-    //---search query
-    boolean mIsSearchTask;
     String mSearchQuery;
-    BaasQuery.Criteria mCriteria;
 
-    public BaaSTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter
-            , BaasQuery.Criteria criteria, TaskCallbackBooleanToken callback) {
+    public BaaSSearchTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter
+            , String query, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
-        mCriteria = criteria;
+        mSearchQuery = query;
     }
 
-
     @Override
-    protected Boolean doInBackground(Void... arg0) {
+    protected Boolean doInBackground(Void... params) {
         Geeft mGeeft;
         Log.d(TAG, BaasUser.current().toString());
-        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
+        //retrieve doc_is attached at user
+        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
         //find all links with the doc_id (User id <--> doc id )
         Log.d(TAG, "Doc_id is: " + docId);
         //TODO: change when baasbox fix issue with BaasLink.create
-        BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'").criteria();
+        BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'").
+                criteria();
         BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
         List<BaasLink> links;
-
-
         if (checkError(resLinks)) {
             links = resLinks.value();
             Log.d(TAG, "Your links are here: " + links.size());
             BaasUser currentUser = BaasUser.current();
-            BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
+            BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
+                    .put("submits_active", links.size());
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
-                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft",
-                        mCriteria);
+                BaasQuery.Criteria paginate;
+                paginate = BaasQuery.builder()
+                        .where("closed = false and deleted = false")
+                        .orderBy("_creation_date asc").criteria();
+                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
                 if (baasResult.isSuccess()) {
                     try {
                         for (BaasDocument e : baasResult.get()) {
+
                             mGeeft = new Geeft();
                             mGeeft.setId(e.getId());
                             mGeeft.setUsername(e.getString("name"));
@@ -110,6 +105,11 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                             mGeeft.setTaken(e.getBoolean("taken"));
                             mGeeft.setGiven(e.getBoolean("given"));
 
+                            // i build the string to compare with the query
+                            StringBuilder strToCompareBuilder = new StringBuilder();
+                            strToCompareBuilder.append(mGeeft.getGeeftTitle()).append(mGeeft.getGeeftDescription());
+                            String strToCompare = strToCompareBuilder.toString().toLowerCase().replace(" ", "");
+
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
                                 Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
@@ -121,12 +121,12 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                                     Log.d(TAG, "link id is: " + l.getId());
                                 }
                             }
-                            mGeeftList.add(0, mGeeft);
-                            mResultToken = RESULT_OK;
-                            result = true;
+                            if (strToCompare.contains(mSearchQuery)) {
+                                mGeeftList.add(0, mGeeft);
+                                mResultToken = RESULT_OK;
+                                result = true;
+                            }
                         }
-                        mResultToken = RESULT_OK;
-                        result = true;
                     } catch (BaasInvalidSessionException ise) {
                         mResultToken = RESULT_SESSION_EXPIRED;
                         return false;
@@ -137,7 +137,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
                         return false;
                     }
                 }
-            } else {
+            }else {
                 if (resUser.error() instanceof BaasInvalidSessionException) {
                     mResultToken = RESULT_SESSION_EXPIRED;
                     return false;
@@ -159,7 +159,7 @@ public class BaaSTabGeeftTask extends BaaSCheckTask{
             Date creation_date = dateFormat.parse(date);
             return creation_date.getTime(); //Convert timestamp in string
         }catch (java.text.ParseException e){
-           Log.e(TAG,"ERRORE FATALE : " + e.toString());
+            Log.e(TAG,"ERRORE FATALE : " + e.toString());
         }
         return -1;
 

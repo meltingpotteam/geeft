@@ -47,10 +47,11 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
     private long mFirstTimeStamp;
     private long mActualTimeStamp;
     private long mFirstActualTimeStamp;
+    BaasQuery.Criteria mCriteria;
 
-
-    public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                                   String firstID,  long firstTimeStamp, TaskCallbackBooleanToken callback) {
+    public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter
+            ,String firstID, long firstTimeStamp, BaasQuery.Criteria paginate,
+                                   TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
@@ -58,20 +59,10 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
         mGeeftList = feedItems;
         mFirstID = firstID;
         mFirstTimeStamp = firstTimeStamp;
-    }
-
-    public BaasLimitedTabGeeftTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                            boolean isCategoryTask, Category category,
-                            String firstID, long firstTimeStamp, TaskCallbackBooleanToken callback) {
-        mContext = context;
-        mGeeftList = feedItems;
-        mCallback = callback;
-        mGeeftItemAdapter = Adapter;
-        mGeeftList = feedItems;
-        mIsCategoryTask = isCategoryTask;
-        mCategory = category;
-        mFirstID = firstID;
-        mFirstTimeStamp = firstTimeStamp;
+        mCriteria = paginate;
+        if (mGeeftList.size()>0 && mGeeftList.get(mGeeftList.size()-1)==null){
+            mGeeftList.remove(mGeeftList.size()-1);
+        }
     }
 
     @Override
@@ -109,21 +100,8 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
             BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
-                BaasQuery.Criteria paginate;
-
-                if (mIsCategoryTask) {
-                    paginate = BaasQuery.builder()
-                            .where("closed = false and deleted = false and category = '"
-                                    +mCategory.getCategoryName().toLowerCase()+"'")
-                            .orderBy("_creation_date desc").criteria();
-                }else{
-                    paginate = BaasQuery.builder()
-                            .where("closed = false and deleted = false")
-                            .orderBy("_creation_date desc").criteria();
-                }
-                mInitVal =Integer.valueOf(mFirstID);
-                Log.d(TAG2, "The ENTERING id: " + mFirstID);
-                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
+                BaasResult<List<BaasDocument>> baasResult = BaasDocument
+                        .fetchAllSync("geeft", mCriteria);
                 if (baasResult.isSuccess()) {
                     try {
                         k=0;
@@ -136,13 +114,16 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                                 Log.d(TAG2, "Before SAVED timestamp: " + mFirstTimeStamp);
                                 Log.d(TAG2, "Before ACTUAL timestamp: " + mActualTimeStamp);
                             }
-                            if (((k>= mInitVal)&&(k< mInitVal +mGeeftQuantityShow))||(mActualTimeStamp>mFirstTimeStamp)) {
-                                Log.d(TAG2, "The ACTUAL timestamp (writing on the list) : " + mActualTimeStamp);
+                            if (((k>= mInitVal)&&(k< mInitVal +mGeeftQuantityShow))||
+                                    (mActualTimeStamp>mFirstTimeStamp)) {
+                                Log.d(TAG2, "The ACTUAL timestamp (writing on the list) : "
+                                        + mActualTimeStamp);
                                 mGeeft = new Geeft();
                                 mGeeft.setId(e.getId());
                                 mGeeft.setUsername(e.getString("name"));
                                 mGeeft.setBaasboxUsername(e.getString("baasboxUsername"));
-                                mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
+                                mGeeft.setGeeftImage(e.getString("image")
+                                        + BaasUser.current().getToken());
                                 //Append ad image url your session token!
                                 mGeeft.setGeeftDescription(e.getString("description"));
                                 mGeeft.setUserProfilePic(e.getString("profilePic"));
@@ -166,9 +147,11 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
                                 for (BaasLink l : links) {
                                     //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
                                     Log.d(TAG, "e id: " + e.getId() + " inId: " + l.in().getId());
-                                    //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+                                    //if(l.out().getId().equals(e.getId())){
+                                    // TODO: LOGIC IS THIS,but BaasLink.create have a bug
                                     if (l.in().getId().equals(e.getId())) {
-                                        mGeeft.setIsSelected(true);// set prenoteButton selected (I'm already
+                                        mGeeft.setIsSelected(true);
+                                        // set prenoteButton selected (I'm already
                                         // reserved)
                                         mGeeft.setReservedLinkId(l.getId());
                                         Log.d(TAG, "link id is: " + l.getId());
@@ -215,7 +198,8 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
         return result;
     }
 
-    private static long getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+    private static long getCreationTimestamp(BaasDocument d){
+        //return timestamp of _creation_date of document
         String date = d.getCreationDate();
         //Log.d(TAG,"_creation_date is:" + date);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -232,6 +216,6 @@ public class BaasLimitedTabGeeftTask extends BaaSCheckTask{
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mFirstID,mFirstTimeStamp,mResultToken);
+        mCallback.done(result,mResultToken);
     }
 }

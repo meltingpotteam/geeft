@@ -1,11 +1,24 @@
 package samurai.geeft.android.geeft.models;
 
+import android.util.Log;
+
+import com.baasbox.android.BaasLink;
+import com.baasbox.android.BaasUser;
+import com.baasbox.android.json.JsonObject;
+
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 20/01/16.
  */
 public class Geeft implements Serializable {
+    private final String TAG = getClass().getSimpleName() ;
     private long creationTime;
     private long deadLine;
     private String userLocation;
@@ -314,6 +327,60 @@ public class Geeft implements Serializable {
         this.isFeedbackLeftByGeefter = isFeedbackLeftByGeefter;
     }
 
+    public void fillGeeft(JsonObject doc, List<BaasLink> links) {
+        this.setId(doc.getString("id"));
+        this.setUsername(doc.getString("name"));
+        this.setBaasboxUsername(doc.getString("baasboxUsername"));
+        this.setGeeftImage(doc.getString("image") + BaasUser.current().getToken());
+        //Append ad image url your session token!
+        this.setGeeftDescription(doc.getString("description"));
+        this.setUserProfilePic(doc.getString("profilePic"));
+        this.setCreationTime(getCreationTimestamp(doc));
+        this.setDeadLine(doc.getLong("deadline"));
+        this.setUserFbId(doc.getString("userFbId"));
+//
+        this.setAutomaticSelection(doc.getBoolean("automaticSelection"));
+        this.setAllowCommunication(doc.getBoolean("allowCommunication"));
 
+        this.setUserLocation(doc.getString("location"));
+        this.setUserCap(doc.getString("cap"));
+        this.setGeeftTitle(doc.getString("title"));
+        this.setDimensionRead(doc.getBoolean("allowDimension"));
+        this.setGeeftHeight(doc.getInt("height"));
+        this.setGeeftWidth(doc.getInt("width"));
+        this.setGeeftDepth(doc.getInt("depth"));
+        this.setDonatedLinkId(doc.getString("donatedLinkId"));
+        this.setAssigned(doc.getBoolean("assigned"));
+        this.setTaken(doc.getBoolean("taken"));
+        this.setGiven(doc.getBoolean("given"));
+        this.setIsFeedbackLeftByGeefted(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
+        this.setIsFeedbackLeftByGeefter(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
 
+        for (BaasLink l : links) {
+            //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
+            Log.d(TAG, "e id: " + doc.getString("id") + " inId: " + l.in().getId());
+            //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
+            if (l.in().getId().equals(doc.getString("id"))) {
+                this.setIsSelected(true);// set prenoteButton selected (I'm already
+                // reserved)
+                this.setReservedLinkId(l.getId());
+                Log.d(TAG, "link id is: " + l.getId());
+            }
+        }
+
+    }
+
+    private long getCreationTimestamp(JsonObject doc){ //return timestamp of _creation_date of document
+        String date = doc.getString("_creation_date");
+        //Log.doc(TAG,"_creation_date is:" + date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        try {
+            Date creation_date = dateFormat.parse(date);
+            return creation_date.getTime(); //Convert timestamp in string
+        }catch (java.text.ParseException e){
+            Log.e(TAG, "ERRORE FATALE : " + e.toString());
+        }
+        return -1;
+
+    }
 }

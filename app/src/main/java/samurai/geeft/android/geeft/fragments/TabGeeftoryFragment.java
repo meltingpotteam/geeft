@@ -114,7 +114,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     }
 
 
-    public void done(boolean result,String firstID, long firstTimeStamp, int token) {
+    public void done(boolean result, int token) {
         Log.d(TAG, "done()");
 
         if (mRefreshLayout.isRefreshing()) {

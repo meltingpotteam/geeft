@@ -15,13 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.baasbox.android.BaasUser;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -176,7 +172,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         return super.onOptionsItemSelected(item);
     }
 
-    public void done(boolean result,String firstID,long firstTimeStamp,int resultToken){
+    public void done(boolean result,int resultToken){
         if(result){
             new AlertDialog.Builder(FeedbackPageActivity.this)
                     .setTitle("Successo")

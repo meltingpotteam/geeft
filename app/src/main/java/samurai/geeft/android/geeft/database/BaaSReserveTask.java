@@ -27,7 +27,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private TaskCallbackBooleanHolderToken mCallback;
     private BaasDocument mDocUser;
     private JsonArray mJSONUserLinks;
-    private GeeftItemAdapter.ViewHolder mHolder;
+    private GeeftItemAdapter.GeeftViewHolder mHolder;
     private long submits_active;
     private int mResultToken;
     //-------------------Macros
@@ -36,7 +36,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
     private final int RESULT_SESSION_EXPIRED = -1;
     //-------------------
 
-    public BaaSReserveTask(Context context, String docUserId, Geeft item,GeeftItemAdapter.ViewHolder holder,
+    public BaaSReserveTask(Context context, String docUserId, Geeft item,GeeftItemAdapter.GeeftViewHolder holder,
                            TaskCallbackBooleanHolderToken callback) {
         mContext = context;
         mDocUserId = docUserId;

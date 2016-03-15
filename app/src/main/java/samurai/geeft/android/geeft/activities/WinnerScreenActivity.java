@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,9 +32,7 @@ import java.net.URLEncoder;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArrayToken;
-import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by oldboy on 18/02/16.
@@ -306,7 +302,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
      * @param userFbId
      */
     public void launchFbIntent(String userFbId){
-        Intent facebookIntent = GeeftItemAdapter.getOpenFacebookProfileIntent(mContext,userFbId);
+        Intent facebookIntent = GeeftItemAdapter.getOpenFacebookProfileIntent(mContext, userFbId);
         startActivity(facebookIntent);
 
     }

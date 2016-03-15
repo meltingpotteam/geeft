@@ -15,7 +15,6 @@ import com.baasbox.android.BaasUser;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -130,7 +129,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,"",0,mResultToken);
+        mCallback.done(result,mResultToken);
         //If not working modify "" for firstID
     }
 }

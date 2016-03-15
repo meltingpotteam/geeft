@@ -1,11 +1,11 @@
 package samurai.geeft.android.geeft.fragments;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,17 +22,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
+import samurai.geeft.android.geeft.database.BaaSSearchTask;
 import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
-import samurai.geeft.android.geeft.database.BaaSTabLimitedGeeftTask;
-import samurai.geeft.android.geeft.database.BaasLimitedTabGeeftTask;
+import samurai.geeft.android.geeft.database.BaaSTopListTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -41,7 +43,8 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 20/01/16.
  */
-public class TabGeeftFragment extends StatedFragment implements TaskCallbackBooleanToken {
+public class TabGeeftFragment extends StatedFragment
+        implements TaskCallbackBooleanToken, TaskCallbackBooleanStringStringToken {
 
     private static final String KEY_IS_CATEGORY_CALL = "key_is_category_call";
     private static final String KEY_CATEGORY = "key_category" ;
@@ -49,6 +52,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private static final String FIRST_TIME_STAMP = "key_firstTimeStamp";
     private static final String KEY_IS_SEARCH_CALL = "ke_is_a_search_call";
     private static final String KEY_SEARCH = "key_search" ;
+    private static final String KEY_FIRST_RID = "key_first_rid";
+    private static final String KEY_LAST_RID = "key_last_rid";
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "1pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
@@ -68,6 +73,7 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     private Category mCategory;
     private Toolbar mToolbar;
     private String mFirstID;
+    private int mListOldSize;
     //-------------------
 
 
@@ -80,6 +86,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     //---for the search activity
     private boolean mIsSearchCall;
     private String mSearchQuery;
+    private String mLastRId;
+    private String mFirstRId;
 
     public static TabGeeftFragment newInstance(boolean isCategoryCall,Category category) {
         TabGeeftFragment fragment = new TabGeeftFragment();
@@ -112,7 +120,6 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initVariables();
-        Log.d("BaaSGeeftItemTask2", "ESTO PASA SIEMPRE? ");
         mFirstID = "1";
         mFirstTimeStamp = Long.MAX_VALUE;
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
@@ -209,28 +216,27 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
 
-    public void done(boolean result, String firstID, long firstTimeStamp, int resultToken){
+    public void done(boolean result, int resultToken){
         Log.d(TAG, "done()");
-        mFirstID=firstID;
-        mFirstTimeStamp=firstTimeStamp;
         if(mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
             Toast toast;
             if (result) {
-                if(!(mGeeftList.size() == 0)) {
-                    toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
+                int newSize = mGeeftList.size();
+                if(newSize==0 || newSize==mListOldSize) {
+                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
                 }
                 else{
-                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast = Toast.makeText(getContext(), "Nuovi annunci scorri", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
                 }
             } else {
                 if(resultToken == RESULT_OK) {
                     toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
                 }
                 else if (resultToken == RESULT_SESSION_EXPIRED) {
@@ -248,24 +254,27 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         mAdapter.notifyDataSetChanged();
     }
 
-
-    public void clearData() {
-        int size = this.mGeeftList.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                this.mGeeftList.remove(0);
-            }
-            mAdapter.notifyItemRangeRemoved(0, size);
-        }
-    }
     private  void initUI(View rootView){
         Log.d(TAG, "INITUI GEEFT");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
-
-        mAdapter = new GeeftItemAdapter(getActivity(), mGeeftList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mAdapter = new GeeftItemAdapter(getContext(),mGeeftList, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+        final Handler handler = new Handler() ;
+        mAdapter.setOnLoadMoreListener(new GeeftItemAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add progress item
+                if(mGeeftList.get(mGeeftList.size()-1)==null)
+                    return;
+                mGeeftList.add(null);
+                mAdapter.notifyItemInserted(mGeeftList.size() - 1);
+                getData(true);
+                System.out.println("load");
+            }
+        });
 //
 //      TODO:  QUERY TEST !!REMOVE!!
 //
@@ -277,19 +286,15 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
 //                getData();
 //            }
 //        });
-//
-//
-//
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                clearData();
-                mFirstID="1";
                 getData();
             }
         });
     }
+
 
     private void saveState(Bundle outState){
         outState.putParcelableArrayList(GEFFT_LIST_KEY, (ArrayList) mGeeftList);
@@ -301,6 +306,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
         outState.putBoolean(KEY_IS_CATEGORY_CALL, mIsCategoryCall);
 
         outState.putBoolean(KEY_IS_SEARCH_CALL, mIsSearchCall);
+        outState.putString(KEY_FIRST_RID, mFirstID);
+        outState.putString(KEY_LAST_RID, mLastRId);
     }
 
     private void restoreState(Bundle savedInstanceState){
@@ -311,6 +318,8 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             mGeeftList.addAll(arrayList);
             mIsCategoryCall = savedInstanceState.getBoolean(KEY_IS_CATEGORY_CALL);
             mIsSearchCall = savedInstanceState.getBoolean(KEY_IS_SEARCH_CALL);
+            mFirstID = savedInstanceState.getString(KEY_FIRST_RID);
+            mLastRId = savedInstanceState.getString(KEY_LAST_RID);
         }
 
         Log.d(TAG, "onRestoreState()-> mGeeftList==null || mGeeftList.size()==0? "
@@ -328,6 +337,11 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 // CHANGED TO PUBLIC FOR TESTING, NOT REALLY SURE IF IT CAN REMAIN LIKE THIS
     public void getData(){
+        getData(false);
+    }
+
+    public void getData(boolean isButtomRefresh){
+        mListOldSize = mGeeftList.size();
         Log.d("BaaSGeeftItemTask2", "ID from TabGeeftFragment: " + mFirstID);
         if(!isNetworkConnected()) {
             mRefreshLayout.setRefreshing(false);
@@ -336,19 +350,24 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,mFirstID,mFirstTimeStamp,this).execute();
         }
         else {
-            new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall,mCategory,mFirstID,mFirstTimeStamp,this).execute();
-        }*/else if(!mIsCategoryCall && mIsSearchCall){
+
+                    */
+        BaasQuery.Criteria paginate;
+        if(mIsSearchCall){
             //for the search activity
             Log.d(TAG, "SEARCH CALLED RIGHT ");
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall, mIsSearchCall, mSearchQuery,this).execute();
-        }
-        else if (mIsCategoryCall && !mIsSearchCall){
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,
-                    mIsCategoryCall, mIsSearchCall, mCategory,this).execute();
-        } else{
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter,this).execute();
+            new BaaSSearchTask(getActivity(),mGeeftList,mAdapter,mSearchQuery,this).execute();
+        } else if(mIsCategoryCall){
+            paginate = BaasQuery.builder()
+                    .where("closed = false and deleted = false and category = '"
+                            +mCategory.getCategoryName().toLowerCase()+"'")
+                    .orderBy("_creation_date asc").criteria();
+
+            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter
+                    , paginate,this).execute();
+        } else {
+            new BaaSTopListTask(getContext(), mGeeftList, mAdapter
+                    , mFirstRId, mLastRId, isButtomRefresh, this).execute();
         }
     }
 
@@ -384,5 +403,48 @@ public class TabGeeftFragment extends StatedFragment implements TaskCallbackBool
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void done(boolean result, String firstRId, String lastRId, int resultToken) {
+        Log.d(TAG, "done()");
+        mFirstRId = firstRId;
+        mLastRId = lastRId;
+        if(mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+            Toast toast;
+            if (result) {
+                int newSize = mGeeftList.size();
+                if(newSize==0 || newSize==mListOldSize) {
+                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+                else{
+                    toast = Toast.makeText(getContext(), "Nuovi annunci scorri", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+            } else {
+                if(resultToken == RESULT_OK) {
+                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+                else if (resultToken == RESULT_SESSION_EXPIRED) {
+                    toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                            " il login", Toast.LENGTH_LONG);
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    toast.show();
+                } else {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Errore")
+                            .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                }
+            }
+        }else{
+            mAdapter.setLoaded();
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }
