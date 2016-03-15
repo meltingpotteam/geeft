@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -112,7 +114,11 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
          mWinnerScreenLocationButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if (!mLocation.equals("")) {
+                 if(!isGoogleMapsInstalled()) {
+                     Toast.makeText(mContext,
+                             "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
+                 }
+                 else if (!mLocation.equals("")) {
                      parseLocation(mLocation);
                  } else
                      Toast.makeText(mContext,
@@ -349,6 +355,18 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         }
 
     }
+    public boolean isGoogleMapsInstalled()
+    {
+        try
+        {
+            ApplicationInfo info = getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0 );
+            return true;
+        }
+        catch(PackageManager.NameNotFoundException e)
+        {
+            return false;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -364,6 +382,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void showProgressDialog() {
         mProgressDialog = new ProgressDialog(WinnerScreenActivity.this);
         try {

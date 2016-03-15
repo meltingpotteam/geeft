@@ -59,6 +59,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private ParallaxImageView mReceivedDialogBackground;
     private Button mTakenButton;
     private Button mGivenButton;
+    private Button mInfoButton;
     private LayoutInflater inflater;
     private Toolbar mToolbar;
     private android.app.AlertDialog mDialog;
@@ -193,6 +194,23 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         });
         //------------------------
 
+        mInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mIamGeefter){
+                    Intent intent = FullGeeftDetailsActivity.newIntent(CompactDialogActivity.this,
+                            mGeeft);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, mGeeft.getId(), "");
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+
         //Listener for the imageView: -----------------------------------
         mReceivedDialogBackground.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,6 +242,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mReceivedDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
         mTakenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_takenButton);
         mGivenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_givenButton);
+        mInfoButton = (Button) dialogLayout.findViewById(R.id.received_dialog_showWinnerScreenButton);
     }
 
     private void showPicture(){

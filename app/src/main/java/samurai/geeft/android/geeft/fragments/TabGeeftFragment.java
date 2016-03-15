@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -19,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -65,6 +67,7 @@ public class TabGeeftFragment extends StatedFragment
     private GeeftItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private Parcelable mGeeftListState;
+    //private ProgressDialog mProgressDialog;
     //-------------------Macros
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
@@ -119,6 +122,7 @@ public class TabGeeftFragment extends StatedFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //showProgressDialog();
         initVariables();
         mFirstID = "1";
         mFirstTimeStamp = Long.MAX_VALUE;
@@ -447,4 +451,17 @@ public class TabGeeftFragment extends StatedFragment
         }
         mAdapter.notifyDataSetChanged();
     }
+
+    /*private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(getContext());
+        try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Attendere");
+            mProgressDialog.show();
+        } catch (WindowManager.BadTokenException e) {
+            Log.e(TAG,"error: " + e.toString());
+        }
+    }*/
 }
