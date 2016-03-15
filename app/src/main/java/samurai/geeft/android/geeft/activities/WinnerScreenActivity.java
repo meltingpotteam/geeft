@@ -97,6 +97,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         setContentView(R.layout.winner_screen);
 
         initUI();
+        initActionBar();
 
         switch(mAction){
             case 1: geeftedCase();
@@ -129,18 +130,6 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     }
 
     private void initUI(){
-
-        mToolbar = (Toolbar) findViewById(R.id.winner_screen_toolbar);
-        if(mAction == 1) {
-            mToolbar.setTitle("Geefted"); //You are a Geefter if you donate
-        }
-        else if(mAction == 2){
-            mToolbar.setTitle("Geefter");
-        }//Else other cases
-
-        setSupportActionBar(mToolbar);
-        //initActionBar();
-
         mContext = getApplicationContext();
         mAction = getIntent().getIntExtra(EXTRA_ACTION, -1);
         mGeeftId = getIntent().getStringExtra(EXTRA_GEEFT_ID);
@@ -156,13 +145,19 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         showProgressDialog();
     }
 
-    /*private void initActionBar() { DOESN'T WORKS
+    private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        WinnerScreenActivity.this.setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-    }*/
+        if(mAction == 1) {
+            mToolbar.setTitle("Geefted"); //You are a Geefter if you donate
+        }
+        else if(mAction == 2) {
+            mToolbar.setTitle("Geefter");
+        }
+    }
 
     private void geeftedCase() {
         String GeeftDocId = mGeeftId;
