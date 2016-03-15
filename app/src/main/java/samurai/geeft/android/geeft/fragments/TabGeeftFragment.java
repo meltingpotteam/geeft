@@ -1,7 +1,6 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSSearchTask;
@@ -172,7 +169,13 @@ public class TabGeeftFragment extends StatedFragment
         super.onFirstTimeLaunched();
 
         Log.d(TAG, "onFirstTimeLaunched()");
-        getData();
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                getData();
+            }
+        });
     }
 
     /**
@@ -217,43 +220,13 @@ public class TabGeeftFragment extends StatedFragment
         }
     }
 
-
-    public void done(boolean result, int resultToken){
-        Log.d(TAG, "done()");
-        if(mRefreshLayout.isRefreshing()) {
-            mRefreshLayout.setRefreshing(false);
-            Toast toast;
-            if (result) {
-                int newSize = mGeeftList.size();
-                if(newSize==0 || newSize==mListOldSize) {
-                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-                else{
-                    toast = Toast.makeText(getContext(), "Nuovi annunci scorri", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-            } else {
-                if(resultToken == RESULT_OK) {
-                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-                else if (resultToken == RESULT_SESSION_EXPIRED) {
-                    toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
-                            " il login", Toast.LENGTH_LONG);
-                    startActivity(new Intent(getContext(), LoginActivity.class));
-                    toast.show();
-                } else {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Errore")
-                            .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-                }
-            }
+    private void showToast(String message) {
+        Toast toast;
+        if(getActivity()!=null){
+            toast = Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     private  void initUI(View rootView){
@@ -344,16 +317,18 @@ public class TabGeeftFragment extends StatedFragment
     }
 // CHANGED TO PUBLIC FOR TESTING, NOT REALLY SURE IF IT CAN REMAIN LIKE THIS
     public void getData(){
-        getData(false);
+        if(!isNetworkConnected()) {
+            mRefreshLayout.setRefreshing(false);
+            showSnackbar();
+        }else {
+            getData(false);
+        }
     }
 
     public void getData(boolean isButtomRefresh){
         mListOldSize = mGeeftList.size();
         Log.d("BaaSGeeftItemTask2", "ID from TabGeeftFragment: " + mFirstID);
-        if(!isNetworkConnected()) {
-            mRefreshLayout.setRefreshing(false);
-            showSnackbar();
-        }/*else if(!mIsCategoryCall){
+        /*else if(!mIsCategoryCall){
             new BaasLimitedTabGeeftTask(getActivity(),mGeeftList,mAdapter,mFirstID,mFirstTimeStamp,this).execute();
         }
         else {
@@ -373,7 +348,7 @@ public class TabGeeftFragment extends StatedFragment
             new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter
                     , paginate,this).execute();
         } else {
-            new BaaSTopListTask(getContext(), mGeeftList, mAdapter
+            new BaaSTopListTask(getActivity(), mGeeftList, mAdapter
                     , mFirstRId, mLastRId, isButtomRefresh, this).execute();
         }
     }
@@ -388,20 +363,6 @@ public class TabGeeftFragment extends StatedFragment
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private void showSnackbar(){
-        if(getActivity().getClass().equals(MainActivity.class)) {
-            Snackbar snackbar = Snackbar
-                    .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                            "No Internet Connection!", Snackbar.LENGTH_LONG)
-                    .setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            getData();
-                        }
-                    });
-            snackbar.show();
-        }
-    }
 
     private void initSupportActionBar(View rootView) {
         mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
@@ -412,44 +373,22 @@ public class TabGeeftFragment extends StatedFragment
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    public void done(boolean result, int resultToken){
+        Log.d(TAG, "done()");
+        String message = new String();
+        if(mRefreshLayout.isRefreshing()) {
+           stopRefreshOperations(result,resultToken);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void done(boolean result, String firstRId, String lastRId, int resultToken) {
         Log.d(TAG, "done()");
         mFirstRId = firstRId;
         mLastRId = lastRId;
         if(mRefreshLayout.isRefreshing()) {
-            mRefreshLayout.setRefreshing(false);
-            Toast toast;
-            if (result) {
-                int newSize = mGeeftList.size();
-                if(newSize==0 || newSize==mListOldSize) {
-                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-                else{
-                    toast = Toast.makeText(getContext(), "Nuovi annunci scorri", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-            } else {
-                if(resultToken == RESULT_OK) {
-                    toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
-                }
-                else if (resultToken == RESULT_SESSION_EXPIRED) {
-                    toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
-                            " il login", Toast.LENGTH_LONG);
-                    startActivity(new Intent(getContext(), LoginActivity.class));
-                    toast.show();
-                } else {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Errore")
-                            .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-                }
-                mAdapter.notifyDataSetChanged();
-            }
+            stopRefreshOperations(result, resultToken);
         }else{
             boolean trovato = false;
             for (int i = 0; i < mGeeftList.size() && !trovato; i++) {
@@ -460,10 +399,50 @@ public class TabGeeftFragment extends StatedFragment
                     mAdapter.notifyDataSetChanged();
                 }
             }
-            if (result) {
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
+            mAdapter.setLoaded();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void stopRefreshOperations(boolean result, int resultToken) {
+        String message = new String();
+        mRefreshLayout.setRefreshing(false);
+        Toast toast;
+        if (result) {
+            int newSize = mGeeftList.size();
+            if(newSize==0 || newSize==mListOldSize) {
+                if(getContext()!=null) {
+                    message = "Nessun nuovo annuncio";
+                }
             }
+            else {
+                message = "Nuovi annunci scorri";
+            }
+        } else {
+            if(resultToken == RESULT_OK) {
+                message= "Nessun nuovo annuncio";
+            }
+            else if (resultToken == RESULT_SESSION_EXPIRED) {
+                message= "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login";
+            } else {
+                message="Operazione non possibile. Riprovare.";
+            }
+        }
+        showToast(message);
+    }
+    private void showSnackbar(){
+        if(getActivity().getClass().equals(MainActivity.class)) {
+            Snackbar snackbar = Snackbar
+                    .make(getActivity().findViewById(R.id.main_coordinator_layout),
+                            "No Internet Connection!", Snackbar.LENGTH_SHORT)
+                    .setAction("RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getData();
+                        }
+                    });
+            snackbar.show();
         }
     }
 

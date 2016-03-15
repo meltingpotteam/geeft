@@ -76,7 +76,13 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         super.onFirstTimeLaunched();
 
         Log.d(TAG, "onFirstTimeLaunched()");
-        getData();
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                getData();
+            }
+        });
     }
 
     /**
@@ -119,16 +125,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
         if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
-            Toast toast;
-            if (result) {
-                toast = Toast.makeText(getContext(), "Nuove storie, scorri", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-            } else {
-                toast = Toast.makeText(getContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-            }
+            stopRefreshOperations(result,token);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -202,7 +199,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     private void showSnackbar() {
         final Snackbar snackbar = Snackbar
                 .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                        "No Internet Connection!", Snackbar.LENGTH_LONG)
+                        "No Internet Connection!", Snackbar.LENGTH_SHORT)
                 .setAction("RETRY", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -210,5 +207,25 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                     }
                 });
         snackbar.show();
+    }
+
+    private void stopRefreshOperations(boolean result, int resultToken) {
+        String message = new String();
+        mRefreshLayout.setRefreshing(false);
+        if (result) {
+            message = "Nuove storie, scorri";
+        } else {
+            message = "Nessuna nuova storia";
+        }
+        showToast(message);
+    }
+
+    private void showToast(String message) {
+        Toast toast;
+        if(getActivity()!=null){
+            toast = Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+        }
     }
 }
