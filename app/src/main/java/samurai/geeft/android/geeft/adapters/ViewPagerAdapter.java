@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 
 /**
  * Created by ugookeadu on 31/01/16.
@@ -28,16 +28,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     //This method return the fragment for the every position in the View Pager
     @Override
     public Fragment getItem(int position) {
-        return TabGeeftFragment.newInstance(false);
-
-        /*if(position == 0) // if the position is 0 we are returning the First tab
+        if(position == 0) // if the position is 0 we are returning the First tab
         {
             return TabGeeftoryFragment.newInstance(new Bundle());
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
             return TabGeeftFragment.newInstance(false);
-        }*/
+        }
 
 
     }

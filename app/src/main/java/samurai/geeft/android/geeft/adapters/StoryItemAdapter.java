@@ -7,14 +7,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullScreenViewActivity;
-import samurai.geeft.android.geeft.activities.HowToDoActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackStoryItem;
@@ -94,7 +91,7 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
         //-------------------------------------------
         public CardView mContainer;
 
-        public Button mMoreButton;
+        //public Button mMoreButton;
 
         public Geeft mGeeft;
         private String app_url ="http://geeft.tk"; //Replace with direct link to Geeft in Play Store
@@ -112,7 +109,7 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
 
             //mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
             mGeeftImage = (ImageView) itemView.findViewById(R.id.geeft_image);
-            mMoreButton = (Button)itemView.findViewById(R.id.see_more_button);
+            //mMoreButton = (Button)itemView.findViewById(R.id.see_more_button);
         }
 
     }
@@ -252,14 +249,14 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
             }
         });
 
-        holder.mMoreButton.setOnClickListener(new View.OnClickListener() {
+       /* holder.mMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = HowToDoActivity.newIntent(mContext,
                         item.getId());
                 mContext.startActivity(intent);
             }
-        });
+        });*/
 
     }
 

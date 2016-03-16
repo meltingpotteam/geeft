@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import samurai.geeft.android.geeft.ApplicationInit;
@@ -109,7 +107,6 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                         GeeftReceivedListFragment.newInstance("received", false);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
-                transaction.addToBackStack(null);
                 transaction.commit();
                 Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
 
@@ -126,7 +123,17 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                 mProgress.setCancelable(false);
                 mProgress.setIndeterminate(true);
                 mProgress.setMessage("Attendere");
-                new BaaSUploadGeeft(getApplicationContext(), geeft,modify, AddGeeftActivity.this).execute();
+                new BaaSUploadGeeft(getApplicationContext(), geeft, modify, AddGeeftActivity.this).execute();
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                } else{
+                    onBackPressed();
+                }
             }
         });
         //On click, the user visualize can visualize some infos about the geefter
