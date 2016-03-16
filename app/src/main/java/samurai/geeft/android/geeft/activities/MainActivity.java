@@ -289,12 +289,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if(id == R.id.action_feedback_geefted){
-            Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
-            startActivity(intent);
-
-        }
-
         if(id == R.id.action_search){
             Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
 

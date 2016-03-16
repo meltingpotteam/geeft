@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
@@ -312,16 +313,17 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
-                if(mGeeft.isAutomaticSelection() || mGeeft.isAssigned()){ //if isAssigned,return in callback,
-                            //then,launch CompactDialogActivity
-                    mCallback.onImageSelected(mGeeft.getId());
-                    mCallback.onImageSelected(mGeeft);
+                if(getActivity().getClass().equals(DonatedActivity.class)){
+                    if(!mGeeft.isAutomaticSelection() && !mGeeft.isAssigned()){
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
+                        fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                                .commit();
+                    }
                 }
                 else {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
-                    fm.beginTransaction().replace(R.id.fragment_container, fragment)
-                            .commit();
+                    mCallback.onImageSelected(mGeeft.getId());
+                    mCallback.onImageSelected(mGeeft);
                 }
                // mCallback.onImageSelected(mGeeft.getId());
                 //mCallback.onImageSelected(mGeeft);

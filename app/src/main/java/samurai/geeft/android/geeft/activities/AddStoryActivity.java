@@ -42,10 +42,6 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         }else{
             askIfIsAGefft();
         }
-
-        setContentView(R.layout.container_for_fragment);
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
     }
 
     private void askIfIsAGefft() {
@@ -83,7 +79,6 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         AddStoryFragment fragment = AddStoryFragment.newInstance(new Bundle());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
