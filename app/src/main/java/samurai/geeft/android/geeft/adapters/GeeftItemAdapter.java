@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -248,7 +249,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             //--------------------------- Prenote button implementation
             // TODO: Use this Asyntask to check if is pressed or not,and create or delete link
 
-            myHolder.mPrenoteButton.setOnClickListener(new View.OnClickListener() {
+            myHolder.mPrenoteButtonTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -299,7 +300,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
             //--------------------- Location Button implementation
             final String location = item.getUserLocation().concat(","+ item.getUserCap());
-            myHolder.mLocationButton.setOnClickListener(new View.OnClickListener() {
+            myHolder.mLocationButtonTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -328,7 +329,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             final Uri app_url = Uri.parse(WEBSITE_URL);
             final Uri imageUrl = Uri.parse(item.getGeeftImage());
 
-            myHolder.mShareButton.setOnClickListener(new View.OnClickListener() {
+            myHolder.mShareButtonTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -632,6 +633,10 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         @Bind(R.id.geeft_like_reservation_button) ImageButton mPrenoteButton;
         @Bind(R.id.geeft_info_button) ImageButton mLocationButton;
         @Bind(R.id.geeft_share_button) ImageButton mShareButton;
+
+        @Bind(R.id.geeft_reservation_button_tab) LinearLayout mPrenoteButtonTab;
+        @Bind(R.id.geeft_location_button_tab) LinearLayout mLocationButtonTab;
+        @Bind(R.id.geeft_share_button_tab) LinearLayout mShareButtonTab;
         //@Bind(R.id.geeft_signalisation) ImageButton mSignalisationButton;
 
         //-------------------Macros

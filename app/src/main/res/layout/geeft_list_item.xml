@@ -158,62 +158,84 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
             <LinearLayout
+                android:id="@+id/geeft_reservation_button_tab"
+                android:background="@drawable/ripple_effect"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:gravity="center"
                 >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prenota"/>
                 <ImageButton
                     android:id="@+id/geeft_like_reservation_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ripple_effect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_reserve_off_24dp"
-                    android:padding="@dimen/activity_vertical_margin"
+                    android:background="#00ffffff"
                     android:clickable="true"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
                     android:visibility="visible"
                 />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/geeft_share_button_tab"
+                android:background="@drawable/ripple_effect"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
                 >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Condividi"/>
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/geeft_share_button"
-                    android:background="@drawable/ripple_effect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00ffffff"
                     android:src="@drawable/ic_menu_share_white_24dp"
-                    android:padding="@dimen/activity_vertical_margin"
                     android:clickable="true"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
                     android:visibility="visible"
                     />
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/geeft_location_button_tab"
+                android:background="@drawable/ripple_effect"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
                 >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Posizione"/>
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/geeft_info_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_location_on"
-                    android:background="@drawable/ripple_effect"
-                    android:padding="@dimen/activity_vertical_margin"
                     android:clickable="true"
+                    android:background="#00ffffff"
+                    android:paddingStart="3dp"
+                    android:paddingLeft="3dp"
                     android:visibility="visible"
                     />
             </LinearLayout>
-            <LinearLayout android:layout_width="0dp"
-                          android:layout_height="match_parent"
-                          android:layout_weight="1"
-                          android:gravity="end">
-            </LinearLayout>
+            <!--<LinearLayout android:layout_width="0dp"-->
+                          <!--android:layout_height="match_parent"-->
+                          <!--android:layout_weight="1"-->
+                          <!--android:gravity="end">-->
+            <!--</LinearLayout>-->
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
