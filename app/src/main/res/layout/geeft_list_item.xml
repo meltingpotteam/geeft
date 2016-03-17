@@ -177,8 +177,8 @@
                     android:src="@drawable/ic_reserve_off_24dp"
                     android:background="#00ffffff"
                     android:clickable="true"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="3dp"
+                    android:paddingLeft="3dp"
                     android:visibility="visible"
                 />
             </LinearLayout>
@@ -188,6 +188,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:gravity="center"
                 >
                 <TextView
@@ -201,8 +202,8 @@
                     android:background="#00ffffff"
                     android:src="@drawable/ic_menu_share_white_24dp"
                     android:clickable="true"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="3dp"
+                    android:paddingLeft="3dp"
                     android:visibility="visible"
                     />
 
@@ -213,6 +214,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:gravity="center"
                 >
                 <TextView

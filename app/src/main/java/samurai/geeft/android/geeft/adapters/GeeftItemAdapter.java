@@ -172,9 +172,9 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             if(BaasUser.current()!=null) {
                 if (item.getBaasboxUsername().equals(BaasUser.current().getName())) {
                     Log.d(TAG,"PRENOTE");
-                    myHolder.mPrenoteButton.setVisibility(View.GONE);
+                    myHolder.mPrenoteButtonTab.setVisibility(View.GONE);
                 }else{
-                    myHolder.mPrenoteButton.setVisibility(View.VISIBLE);
+                    myHolder.mPrenoteButtonTab.setVisibility(View.VISIBLE);
                 }
             }
 
