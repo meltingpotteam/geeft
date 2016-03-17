@@ -102,6 +102,8 @@
 
         <activity android:name=".activities.HowToDoActivity"/>
 
+        <activity android:name=".activities.CreditsActivity"/>
+
         <activity android:name=".activities.FullScreenImageActivity"/>
 
         <activity android:name=".activities.CategoryActivity"/>

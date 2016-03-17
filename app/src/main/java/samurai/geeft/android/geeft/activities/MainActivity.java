@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(id == R.id.action_feedback_geefted){
-            Intent intent = new Intent(MainActivity.this, FeedbackPageActivity.class);
+            Intent intent = new Intent(MainActivity.this, CreditsActivity.class);
             startActivity(intent);
 
 

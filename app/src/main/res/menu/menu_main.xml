@@ -16,6 +16,6 @@ tools:context=".activity.MainActivity">
     <item
         android:id="@+id/action_feedback_geefted"
         android:orderInCategory="100"
-        android:title="feedback"/>
+        android:title="Credits"/>
 
 </menu>
