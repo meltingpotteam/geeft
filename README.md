@@ -59,7 +59,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Push notifications
 - Eventually correction of bugs
 - Beta version release, testing and promoting
--[APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
+- [APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
 
 ==============
 ###Final Submission
