@@ -31,10 +31,13 @@ import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringArrayToken;
+import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by oldboy on 18/02/16.
@@ -75,6 +78,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
     //info dialog attributes---------------------
     private LayoutInflater inflater;
+    private Geeft mGeeft;
     //-------------------------------------------
 
     /**
@@ -114,11 +118,10 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
          mWinnerScreenLocationButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if(!isGoogleMapsInstalled()) {
+                 if (!isGoogleMapsInstalled()) {
                      Toast.makeText(mContext,
                              "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
-                 }
-                 else if (!mLocation.equals("")) {
+                 } else if (!mLocation.equals("")) {
                      parseLocation(mLocation);
                  } else
                      Toast.makeText(mContext,
@@ -149,6 +152,21 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerMessage = (TextView) findViewById(R.id.winner_screen_message_text);
         mIntent = getIntent();
         showProgressDialog();
+
+        mWinnerScreenGeeftBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Geeft> geeftList = new ArrayList<>();
+                geeftList.add(mGeeft);
+                startImageGallery(geeftList);
+            }
+        });
+    }
+
+    private void startImageGallery(List<Geeft> geeftList) {
+        Intent intent =
+                FullScreenImageActivity.newIntent(getApplicationContext(), geeftList,0);
+        startActivity(intent);
     }
 
     private void initActionBar() {
@@ -188,6 +206,8 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
     private void fillWinnerActivityGeeftedCase(BaasResult<BaasDocument> resGeeft) {
         BaasDocument docGeeft = resGeeft.value();
+        mGeeft = new Geeft();
+        mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
         mWinnerScreenGeefterName.setText(docGeeft.getString("name"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
@@ -257,6 +277,8 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     private void fillWinnerActivityGeefterCase(BaasUser geefted,BaasDocument docGeeft){
         //In this case, mWinnerScreenGeeftedName is Geefter,and mWinnerScreenGeefterName is Geefted
         // this is only for bound of the layout,not a problem.
+        mGeeft = new Geeft();
+        mGeeft.setGeeftImage(docGeeft.getString("image")+ BaasUser.current().getToken());
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         //mWinnerScreenGeeftedName.setText("prova");
@@ -397,5 +419,13 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage("Attendere");*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
     }
 }

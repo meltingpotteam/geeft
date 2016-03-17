@@ -54,6 +54,7 @@ public class BaaSUploadStory extends AsyncTask<Void,Void,Boolean> {
             doc.put("profilePic", getProfilePicFacebook());
             Log.d("SELECTED",mGeeft.getCategory()+"");
             doc.put("category", mGeeft.getCategory().toLowerCase());
+            String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
             // send the field fo allow communication and automatic selection; remember to manage them
             // in the BassReserveTask
             BaasFile image = new BaasFile();
@@ -77,9 +78,11 @@ public class BaaSUploadStory extends AsyncTask<Void,Void,Boolean> {
                                 Log.d(TAG,"OLD GEEFT ID: "+mOldGeeftId);
                                 BaasResult<BaasLink> resLink = BaasLink.createSync("geeft_story",mGeeft.getId()
                                         , mOldGeeftId);
-                                return resLink.isSuccess();
+                                if(resLink.isFailed()){
+                                    return false;
+                                }
                             }
-                            return true;
+                            return createStoryLink(doc,docUserId,false);
                         } else {
                             Log.e(TAG, "Error with grant of doc");
                             return false;
@@ -120,6 +123,35 @@ public class BaaSUploadStory extends AsyncTask<Void,Void,Boolean> {
         StringBuilder stbuild = new StringBuilder("");
         stbuild.append(temp[0]).append(temp[1]).append("=");
         return stbuild.toString();
+    }
+
+    private boolean createStoryLink(BaasDocument doc,String docUserId,boolean modify){
+        if(!modify) { // If is a new Geeft,create link in donate
+            BaasResult<BaasLink> resLink = BaasLink.createSync("story", mGeeft.getId(), docUserId);
+            //TODO : swap and Manage resLink
+            if (resLink.isSuccess()) { //Link created
+                BaasLink value = resLink.value();
+                Log.d(TAG, "Link id is :" + value.getId() + " and docUser id is: " + docUserId);
+                Log.d(TAG, "Link IN is: " + value.in().getId().equals(mGeeft.getId()) +
+                        " OUT is: " + value.out().getId().equals(docUserId));
+                mGeeft.setDonatedLinkId(value.getId()); //is for BaaSDeleteGeeftTask
+                Log.d(TAG,"link is:" + value.getId());
+                Log.d(TAG, "are same:" + value.getId().equals(mGeeft.getDonatedLinkId()));
+                doc.put("storyLinkId", mGeeft.getDonatedLinkId());
+                BaasResult<BaasDocument> resDoc = doc.saveSync();
+                if(resDoc.isSuccess()){
+                    return true;
+                }
+                else{
+                    Log.e(TAG,"error when put link in doc");
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        else // existing Geeft --> Existing link
+            return true;
     }
 
     @Override

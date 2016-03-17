@@ -18,12 +18,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baasbox.android.BaasUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
-import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 15/02/16.
@@ -99,14 +99,18 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
     public void onImageSelected(Geeft geeft) { // give id of image
         Intent intent;
         // launch full screen activity
-        if(geeft.isAssigned()){ // if geeft.isAssigned()
-            intent = CompactDialogActivity.newIntent(DonatedActivity.this,geeft);
+        if(BaasUser.current()!=null) {
+            boolean isFeedbackLeft = geeft.getBaasboxUsername()
+                    .equals(BaasUser.current().getName())?
+                    geeft.isFeedbackLeftByGeefter():geeft.isFeedbackLeftByGeefted();
+            if (geeft.isAssigned() && !isFeedbackLeft) { // if geeft.isAssigned()
+                intent = CompactDialogActivity.newIntent(DonatedActivity.this, geeft);
+            } else {
+                intent = FullGeeftDetailsActivity.newIntent(DonatedActivity.this,
+                        geeft);
+            }
+            DonatedActivity.this.startActivity(intent);
         }
-        else {
-            intent = FullGeeftDetailsActivity.newIntent(DonatedActivity.this,
-                    geeft);
-        }
-        DonatedActivity.this.startActivity(intent);
     }
 
     @Override
@@ -123,5 +127,7 @@ public class DonatedActivity extends AppCompatActivity implements GeeftReceivedL
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
 

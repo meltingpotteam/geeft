@@ -35,6 +35,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.container_for_fragment);
         mGeeft = new Geeft();
 
         if (savedInstanceState!=null){
@@ -147,4 +148,11 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgress!=null){
+            mProgress.dismiss();
+        }
+    }
 }

@@ -53,4 +53,6 @@ public class HowToDoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
 }

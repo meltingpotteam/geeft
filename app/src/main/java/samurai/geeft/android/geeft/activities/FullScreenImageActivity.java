@@ -25,18 +25,21 @@ import samurai.geeft.android.geeft.models.Geeft;
  * Created by ugookeadu on 24/02/16.
  */
 public class FullScreenImageActivity extends AppCompatActivity {
-        private final String TAG =""+this.getClass().getName();
+    private final String TAG =""+this.getClass().getName();
         private static final String EXTRA_GEEFT_LIST = "extra_geeft_list";
 
-        private ViewPager mViewPager;
-        private List<Geeft> mGeeftList = new ArrayList<>();
-        private View mBallView;
+    private static final String EXTRA_POSITION = "extra_position";
+
+    private ViewPager mViewPager;
+    private List<Geeft> mGeeftList = new ArrayList<>();
+    private View mBallView;
+    private int mPosition;
 
 
-
-    public static Intent newIntent(Context context,List geeftList) {
+    public static Intent newIntent(Context context,List geeftList,int position) {
         Intent intent = new Intent(context, FullScreenImageActivity.class);
         intent.putExtra(EXTRA_GEEFT_LIST, (ArrayList)geeftList);
+        intent.putExtra(EXTRA_POSITION,position);
         return intent;
     }
 
@@ -50,6 +53,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
         mGeeftList = (ArrayList)getIntent().getSerializableExtra(EXTRA_GEEFT_LIST);
+        mPosition = getIntent().getIntExtra(EXTRA_POSITION,0);
 
         initViewPager();
     }
@@ -73,6 +77,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
                 return mGeeftList.size();
             }
         });
+        mViewPager.setCurrentItem(mPosition);
     }
 
     @Override
@@ -89,4 +94,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

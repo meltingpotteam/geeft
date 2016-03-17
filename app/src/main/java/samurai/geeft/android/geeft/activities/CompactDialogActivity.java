@@ -1,12 +1,11 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 
 import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
@@ -34,11 +34,11 @@ import com.baasbox.android.json.JsonObject;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSExchangeCompletedTask;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackExchange;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -129,7 +129,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         }
     }
 
-    public void showDialogTakenGiven(Geeft geeft,boolean geefter) { // give id of image
+    public void showDialogTakenGiven(final Geeft geeft,boolean geefter) { // give id of image
         initUI();
 
         //--------------------------------------------
@@ -198,9 +198,34 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
             @Override
             public void onClick(View v) {
                 if(mIamGeefter){
-                    Intent intent = FullGeeftDetailsActivity.newIntent(CompactDialogActivity.this,
-                            mGeeft);
-                    startActivity(intent);
+                    final ProgressDialog progressDialog = ProgressDialog.show(CompactDialogActivity.this,
+                            "Attendere","Ricerca dell'utente vincitore del regalo in corso");
+                    BaasQuery.Criteria criteria = BaasQuery.builder()
+                            .where("out.id = '"+geeft.getId()+"'").criteria();
+                    BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, criteria, RequestOptions.DEFAULT
+                            , new BaasHandler<List<BaasLink>>() {
+                        @Override
+                        public void handle(BaasResult<List<BaasLink>> baasResult) {
+                            progressDialog.dismiss();
+                            if (baasResult.isSuccess()) {
+                                try {
+                                    Log.d(TAG,baasResult.get().get(0).out().getId());
+                                    Intent intent = WinnerScreenActivity
+                                        .newIntent(CompactDialogActivity.this
+                                                , 2, mGeeft.getId(), baasResult.get().get(0).out().getAuthor());
+                                    startActivity(intent);
+                                } catch (BaasException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                new AlertDialog.Builder(CompactDialogActivity.this)
+                                        .setTitle("Errore")
+                                        .setMessage
+                                                ("Riprovare più tardi.")
+                                        .show();
+                            }
+                        }
+                    });
                 }
                 else {
                     Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, mGeeft.getId(), "");
@@ -216,6 +241,9 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
             @Override
             public void onClick(View v) {
                 //showPicture();
+                List<Geeft> geeftList = new ArrayList<>();
+                geeftList.add(mGeeft);
+                startImageGallery(geeftList);
             }
         });
 
@@ -258,12 +286,16 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mReceivedDialogFullImage = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
         mReceivedDialogFullImage.setImageDrawable(mReceivedDialogBackground.getDrawable());
 
-
-
         dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
         //dialog.setMessage("Some information that we can take from the facebook shared one");
         dialog.show();  //<-- See This!
         //Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
+    }
+
+    private void startImageGallery(List<Geeft> geeftList) {
+        Intent intent =
+                FullScreenImageActivity.newIntent(getApplicationContext(), geeftList,0);
+        startActivity(intent);
     }
 
     private void setTakenToGeeft() {
@@ -506,18 +538,16 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
 
-                            finish();
                         }
                     })
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            dialog.dismiss();
+                            //dialog.dismiss();
                             finish();
-                            startMainActivity();
+                            //startMainActivity();
                         }
                     })
                     .show();
@@ -574,6 +604,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                         mHisBaasboxName = linksBis.get(0).out().getAuthor();//Get doc_id of user from get(0)
                                         //so, get baasboxName from getAuthor
                                         startFeedbackActivity(); // Feedback enabled;
+                                        finish();
                                     }
                                     else {
                                         Log.d(TAG,"Error while fetching link");
@@ -643,7 +674,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startMainActivity();
+
                     }
                 })
                 .show();
@@ -669,4 +700,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

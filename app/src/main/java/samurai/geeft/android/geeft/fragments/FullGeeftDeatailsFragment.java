@@ -390,7 +390,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private void startImageGallery(List<Geeft> geeftList) {
         Intent intent =
-                FullScreenImageActivity.newIntent(getContext(), geeftList);
+                FullScreenImageActivity.newIntent(getContext(), geeftList,0);
         startActivity(intent);
     }
 

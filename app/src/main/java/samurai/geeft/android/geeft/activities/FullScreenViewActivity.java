@@ -95,6 +95,8 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
                     Geeft geeft = mGeeftList.get(position);
                     GeeftStoryFragment geeftStoryFragment = new GeeftStoryFragment();
                     geeftStoryFragment.setGeeft(geeft);
+                    geeftStoryFragment.setPosition(position);
+                    geeftStoryFragment.setList(mGeeftList);
                     return geeftStoryFragment;
                 }
 
@@ -119,4 +121,6 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
             }
         }
     }
+
+
 }

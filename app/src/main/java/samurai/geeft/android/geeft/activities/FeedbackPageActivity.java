@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -49,13 +51,14 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
+    private ProgressDialog mProgressDialog;
     //-------------------
 
     public static Intent newIntent(@NonNull Context context, @NonNull Geeft geeft,String username,boolean isGeefter) {
         Intent intent = new Intent(context, FeedbackPageActivity.class);
         intent.putExtra(EXTRA_GEEFT, geeft);
-        intent.putExtra(EXTRA_CONTEXT,context.getClass().getSimpleName());
-        intent.putExtra(EXTRA_BAASBOX_NAME,username);
+        intent.putExtra(EXTRA_CONTEXT, context.getClass().getSimpleName());
+        intent.putExtra(EXTRA_BAASBOX_NAME, username);
         intent.putExtra(EXTRA_IS_GEEFTER, isGeefter);
         return intent;
     }
@@ -64,8 +67,10 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.feedback_geefted_page);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -96,6 +101,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         }
 
         initUI();
+        initActionBar();
 
         mFeedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +111,17 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
             }
         });
 
+    }
+
+    private void initActionBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar!=null){
+            setSupportActionBar(mToolbar);
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            mToolbar.setTitle("Lascia un feedback");
+        }
     }
 
     private void initUI(){
@@ -154,7 +171,10 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         };
 
         //TODO: ASyncTask
-        new BaaSUpdateUserFeedback(getApplicationContext(),mGeeft.getId(),mUsername,feedbackArray,userRatingComment,mIamGeefter,this).execute();
+        new BaaSUpdateUserFeedback(getApplicationContext(),mGeeft.getId()
+                ,mUsername,feedbackArray,userRatingComment,mIamGeefter,this).execute();
+        mProgressDialog = ProgressDialog.show(FeedbackPageActivity.this,"Attendere"
+                ,"Salvataggio del feedback in corso");
     }
 
     @Override
@@ -173,6 +193,9 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     }
 
     public void done(boolean result,int resultToken){
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
         if(result){
             new AlertDialog.Builder(FeedbackPageActivity.this)
                     .setTitle("Successo")
@@ -212,8 +235,8 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
     private void showDialogLeftFeedback(){
         new AlertDialog.Builder(FeedbackPageActivity.this)
-                .setTitle("Errore")
-                .setMessage("Hai già lasciato il tuo feedback per questo Geeft. Grazie.")
+                .setTitle("Grazie")
+                .setMessage("Hai già lasciato il tuo feedback per questo Geeft.")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -237,4 +260,11 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
     }
 */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+    }
 }

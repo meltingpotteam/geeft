@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_margin="10dp"
-    android:focusableInTouchMode="false"
-    android:focusable="false">
+    >
     <!-- TODO add the "signal to the moderator" -->
 
     <LinearLayout
@@ -18,7 +17,8 @@
             android:id="@+id/dialog_geefter_background"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:src="@android:color/darker_gray">
+            android:src="@android:color/darker_gray"
+            >
 
         </com.nvanbenschoten.motion.ParallaxImageView>
         <FrameLayout

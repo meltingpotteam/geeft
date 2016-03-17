@@ -77,4 +77,6 @@ public class CategoryActivity extends AppCompatActivity implements ListCategoryF
         super.onBackPressed();
         Log.d(TAG, "back pressed entries: " + getSupportFragmentManager().getBackStackEntryCount());
     }
+
+
 }

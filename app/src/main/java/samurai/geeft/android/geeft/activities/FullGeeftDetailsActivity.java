@@ -4,15 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-
-import java.io.Serializable;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.FullGeeftDeatailsFragment;
@@ -79,5 +76,11 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgress!=null){
+            mProgress.dismiss();
+        }
+    }
 }

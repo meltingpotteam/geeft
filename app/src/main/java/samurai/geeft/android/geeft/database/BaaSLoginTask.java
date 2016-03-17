@@ -91,8 +91,10 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
             //Bypassed google
             BaasResult<BaasUser> baasResult = BaasUser
                     .signupWithProviderSync(mBaasProvider, mToken, mSecret);
-            Log.d(TAG, BaasUser.current().toString());
-            Log.d(TAG, baasResult.value().toString());
+            if(BaasUser.current()!=null){
+                Log.d(TAG, BaasUser.current().toString());
+                Log.d(TAG, baasResult.value().toString());
+            }
 
 
             /**

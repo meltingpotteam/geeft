@@ -24,6 +24,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
     private final String TAG = getClass().getName();
+    private boolean mIsStory=false;
     Context mContext;
     List<Geeft> mGeeftList;
     String mlinkNameQuery;
@@ -44,6 +45,17 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
         mCallback = callback;
         mlinkNameQuery = linkNameQuery;
         mGeeftStoryListAdapter = Adapter;
+    }
+
+    public BaaSFetchLinks(Context context, String linkNameQuery,boolean isStory, List<Geeft> feedItems,
+                          GeeftStoryListAdapter Adapter,
+                          TaskCallbackBooleanToken callback) {
+        mContext = context;
+        mGeeftList = feedItems;
+        mCallback = callback;
+        mlinkNameQuery = linkNameQuery;
+        mGeeftStoryListAdapter = Adapter;
+        mIsStory = isStory;
     }
 
     @Override
@@ -119,6 +131,61 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                     }
                 }
             }
+            if (!mIsStory){
+                return true;
+            }
+        }
+        else{
+            Log.e(TAG, "Error when retrieve links");
+            return false;
+        }
+
+        if(mIsStory){
+            BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("story", query);
+            List<BaasLink> links;
+            if (resLinks.isSuccess()) {
+                links = resLinks.value();
+                //Log.d(mlinkNameQuery, getClass().getName());
+                Log.d(TAG, "Your links are here: " + links.size());
+                for (BaasLink link : links) {
+                    BaasResult<BaasDocument> result = BaasDocument.fetchSync("story", link.in().getId());
+                    Log.d(TAG,"geeftID: " + link.in().getId());
+                    if (result.isSuccess()) {
+                        try {
+                            BaasDocument document = result.get().asDocument();
+                            Geeft geeft = new Geeft();
+                            geeft.setGeeftImage(document.getString("image") + BaasUser.current().getToken());
+                            geeft.setId(document.getId());
+                            geeft.setUsername(document.getString("name"));
+                            geeft.setCategory(document.getString("category"));
+                            geeft.setGeeftDescription(document.getString("description"));
+                            geeft.setUserProfilePic(document.getString("profilePic"));
+                            geeft.setGeeftTitle(document.getString("title"));
+
+                            mGeeftList.add(0,geeft);
+                        }catch (BaasInvalidSessionException ise){
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+
+                        } catch (com.baasbox.android.BaasException ex) {
+                            Toast.makeText(mContext, "Exception during loading!",
+                                    Toast.LENGTH_LONG).show();
+                            mResultToken = RESULT_FAILED;
+                            return false;
+                        }
+                    } else if (result.isFailed()) {
+                        if(result.error() instanceof BaasInvalidSessionException){
+                            mResultToken = RESULT_SESSION_EXPIRED;
+                            return false;
+                        }
+                        else {
+                            Log.e(TAG, "Error when retrieve links: " + result.error());
+                            mResultToken=RESULT_FAILED;
+                            return false;
+                        }
+                    }
+                }
+            }
             return true;
         }
         else{
@@ -126,6 +193,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
             return false;
         }
     }
+
 
     @Override
     protected void onPostExecute(Boolean result) {

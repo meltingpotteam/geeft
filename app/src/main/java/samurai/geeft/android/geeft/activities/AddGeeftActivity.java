@@ -175,7 +175,9 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
 
     public void done(boolean result){
         //enables all social buttons
-        mProgress.dismiss();
+        if(mProgress!=null){
+            mProgress.dismiss();
+        }
         if(result){
             Toast.makeText(getApplicationContext(),
                     "Annuncio inserito con successo", Toast.LENGTH_LONG).show();
@@ -201,4 +203,11 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgress!=null){
+            mProgress.dismiss();
+        }
+    }
 }

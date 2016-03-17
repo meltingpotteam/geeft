@@ -328,4 +328,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 });
     }
     // [END revokeAccess]
+
+
 }

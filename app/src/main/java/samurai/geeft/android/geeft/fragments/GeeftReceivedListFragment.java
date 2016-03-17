@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.AddStoryActivity;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
@@ -248,8 +249,13 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
 
     public void getData() {
         showProgressDialog();
-        new BaaSFetchLinks(getContext(),
-                linkName, mGeeftList, mAdapter, this).execute();
+        if(getActivity().getClass().equals(AddStoryActivity.class)){
+            new BaaSFetchLinks(getContext(),
+                    linkName,true, mGeeftList, mAdapter, this).execute();
+        }else {
+            new BaaSFetchLinks(getContext(),
+                    linkName, mGeeftList, mAdapter, this).execute();
+        }
     }
 
     private void showWinnerDialog() {
@@ -313,13 +319,12 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
                 //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
-                if(getActivity().getClass().equals(DonatedActivity.class)){
-                    if(!mGeeft.isAutomaticSelection() && !mGeeft.isAssigned()){
-                        FragmentManager fm = getActivity().getSupportFragmentManager();
-                        Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
-                        fm.beginTransaction().replace(R.id.fragment_container, fragment)
-                                .commit();
-                    }
+                if(getActivity().getClass().equals(DonatedActivity.class) &&
+                        !mGeeft.isAutomaticSelection() && !mGeeft.isAssigned()){
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
+                    fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                            .commit();
                 }
                 else {
                     mCallback.onImageSelected(mGeeft.getId());

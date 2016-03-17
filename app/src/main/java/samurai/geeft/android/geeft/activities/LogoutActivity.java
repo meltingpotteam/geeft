@@ -54,4 +54,6 @@ public class LogoutActivity extends Activity {
     public static Intent newIntent(Context packageContext) {
         return new Intent(packageContext, LogoutActivity.class);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,8 +14,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -34,6 +38,8 @@ public class GeeftStoryFragment extends StatedFragment {
     private static final String GEEFT_KEY = "samurai.geeft.android.geeft.fragments."+
             "GeeftStoryFragment_geeft";
     private Toolbar mToolbar;
+    private int mPosition;
+    private List<Geeft> mList;
 
     public static GeeftStoryFragment newInstance(Bundle b) {
         GeeftStoryFragment fragment = new GeeftStoryFragment();
@@ -128,8 +134,21 @@ public class GeeftStoryFragment extends StatedFragment {
 
                 }
             });
+
+            mGeeftImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startImageGallery(mList);
+                }
+            });
             //////////////////////////////
         }
+    }
+
+    private void startImageGallery(List<Geeft> geeftList) {
+        Intent intent =
+                FullScreenImageActivity.newIntent(getContext(), geeftList,mPosition);
+        startActivity(intent);
     }
 
     public void setGeeft(Geeft geeft){
@@ -141,4 +160,11 @@ public class GeeftStoryFragment extends StatedFragment {
     }
 
 
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
+    public void setList(List<Geeft> list) {
+        mList = list;
+    }
 }
