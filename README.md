@@ -54,13 +54,12 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 ###Milestone 3 - Final
 ######Work in progress
 
-- Implementing Geeft around me
 - Finish the Geeftory
 - Implementing filtered search feature
 - Push notifications
 - Eventually correction of bugs
 - Beta version release, testing and promoting
-
+-[APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
 
 ==============
 ###Final Submission
