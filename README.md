@@ -39,7 +39,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
 
- ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facc&k=zRy3PtCvviVvJ8kexLvBdVPmcV-1gHCZ2fRGOpv1nLI=)
+ ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
  ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facd&k=a4G3G4oZ8rmZiUBWBFFwmaEws4OnitbIqbyEZspT_zY=)
  ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facb&k=fd2uVRmTYYkidhBwz-qhJ7Z3kKQ6ble4XflL1_VF4UY=)
 
