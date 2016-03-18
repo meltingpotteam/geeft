@@ -69,6 +69,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Instructions for APK installation] (https://app.edo.io/preview?id=56eb4bdf6fc9f12414711869&k=BbNjrtsrNm8ywmIhctWGFvoReGt8TUHK9qKLxg5vDPw=)
 - [Videotutorial ITA] (https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
 
+ ![](ftp://geeftapp.com@89.163.217.64/onlyshare/Milestone3_login.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Geeftory.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Aggiungi_storia.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Geeft.jpg)
