@@ -58,6 +58,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Eventually correction of bugs
 - Beta version release, testing and promoting
 - [APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
+- [VIDEO DEMO] (https://app.edo.io/preview?id=56eb498a4eeaefdbe0d86357&k=yHf8b_ERDdbmeoWZ-BcUhHulYuL8I7dXvIoV8mxWZxg=)
 - [Videotutorial ITA] (https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
 
  ![](http://geeftapp.com/site/img/eco/screens/Geeftory.jpg)
