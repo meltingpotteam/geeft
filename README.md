@@ -38,7 +38,6 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 ==============
 ###Milestone 2 - Release Candidate
-######Work in progress
 
 - Implementing the front-end for proximity search of gifts candidates or donors
 - Implementing the back-end for proximity  search and the algorithm or method for the gift assignmen(for UI and UX testing)
@@ -52,7 +51,6 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 ==============
 ###Milestone 3 - Final
-######Work in progress
 
 - Finish the Geeftory
 - Implementing filtered search feature
@@ -61,7 +59,11 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Beta version release, testing and promoting
 - [APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
 - [Videotutorial ITA] (https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
+ ![](http://geeftapp.com/site/img/eco/screens/Geeftory.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Aggiungi_storia.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Geeft.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Pannello_navigazione.jpg)
+
 ==============
 ###Final Submission
 ######Work in progress
