@@ -66,6 +66,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Beta version release, testing and promoting
 - [APK] (https://app.edo.io/preview?id=56eb4445dd9264bb0ae3fac1&k=8ejIG9ekSDeH7WdK0INuQ6yPLTP7fP7hX4d3DYifezI=)
 - [Demo video] (https://app.edo.io/preview?id=56eb498a4eeaefdbe0d86357&k=yHf8b_ERDdbmeoWZ-BcUhHulYuL8I7dXvIoV8mxWZxg=)
+- [Video interviews] (https://app.edo.io/preview?id=56e97d22d47caefc79a5d442&k=ItcNgJ4o3ixveL4n2jioIr4tZkx9kd8XYIgNeOztKkA=)
+- [Presentation Video HQ] (https://app.edo.io/preview?id=56ec262bdbe3e807c7a38dcf&k=xHkp1Ev34BTHMxqjzJ4eNNrub5Yls9xv_WG9m2E7C1w=)
+- [Presentation Video LQ] (https://app.edo.io/preview?id=56ec24ff162be19e9c8c5410&k=MMcQuEG7cWxZHZeaTCa4VYGosP28tmvrBWIs55ciCyc=)
 - [Instructions for APK installation] (https://app.edo.io/preview?id=56eb4bdf6fc9f12414711869&k=BbNjrtsrNm8ywmIhctWGFvoReGt8TUHK9qKLxg5vDPw=)
 - [Videotutorial ITA] (https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
 
