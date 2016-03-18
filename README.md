@@ -24,8 +24,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Presentation video](https://www.dropbox.com/s/njy7fougxzawya0/GeeftVideoV2.mp4?dl=0)
 - [New PDF presentation](http://meltingpotteam.altervista.org/presentation.pdf)
 - [Survey Results](https://docs.google.com/forms/d/1NTfVy07bu4if-nvRwikIn6_qdl_77DkiBgdGwzPPn-E/viewanalytics#start=publishanalytics)
-![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facf&k=AmRipMo3GJ1a9aFPKAoR-umozo96nHy3VSxREkBYTsQ=)
-![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3fad0&k=0-ksqbs4X6lUudoZoP4wF3YrWBl2dR3bzYz5hdhptfE=)
+ ![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facf&k=AmRipMo3GJ1a9aFPKAoR-umozo96nHy3VSxREkBYTsQ=)
+ ![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3fad0&k=0-ksqbs4X6lUudoZoP4wF3YrWBl2dR3bzYz5hdhptfE=)
 
 ==============
 ###Milestone 1 - Proof of Concept
@@ -37,9 +37,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
-![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facc&k=zRy3PtCvviVvJ8kexLvBdVPmcV-1gHCZ2fRGOpv1nLI=)
-![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facd&k=a4G3G4oZ8rmZiUBWBFFwmaEws4OnitbIqbyEZspT_zY=)
-![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facb&k=fd2uVRmTYYkidhBwz-qhJ7Z3kKQ6ble4XflL1_VF4UY=)
+ ![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facc&k=zRy3PtCvviVvJ8kexLvBdVPmcV-1gHCZ2fRGOpv1nLI=)
+ ![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facd&k=a4G3G4oZ8rmZiUBWBFFwmaEws4OnitbIqbyEZspT_zY=)
+ ![] (https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facb&k=fd2uVRmTYYkidhBwz-qhJ7Z3kKQ6ble4XflL1_VF4UY=)
 
 ==============
 ###Milestone 2 - Release Candidate
