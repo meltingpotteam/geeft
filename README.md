@@ -25,8 +25,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [New PDF presentation](http://meltingpotteam.altervista.org/presentation.pdf)
 - [Survey Results](https://docs.google.com/forms/d/1NTfVy07bu4if-nvRwikIn6_qdl_77DkiBgdGwzPPn-E/viewanalytics#start=publishanalytics)
 
- ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facf&k=AmRipMo3GJ1a9aFPKAoR-umozo96nHy3VSxREkBYTsQ=)
- ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3fad0&k=0-ksqbs4X6lUudoZoP4wF3YrWBl2dR3bzYz5hdhptfE=)
+ ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
+ ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
 
 ==============
 ###Milestone 1 - Proof of Concept
@@ -40,8 +40,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
 
  ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
- ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facd&k=a4G3G4oZ8rmZiUBWBFFwmaEws4OnitbIqbyEZspT_zY=)
- ![](https://app.edo.io/preview?id=56eb5761dd9264bb0ae3facb&k=fd2uVRmTYYkidhBwz-qhJ7Z3kKQ6ble4XflL1_VF4UY=)
+ ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
+ ![](http://geeftapp.com/onlyshare/Milestone1_mainbis.jpg)
 
 ==============
 ###Milestone 2 - Release Candidate
