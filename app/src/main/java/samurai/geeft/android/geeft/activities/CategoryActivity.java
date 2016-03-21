@@ -1,6 +1,8 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.ListCategoryFragment;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 import samurai.geeft.android.geeft.models.Category;
 
 /**
@@ -46,13 +49,51 @@ public class CategoryActivity extends AppCompatActivity implements ListCategoryF
     }
 
     @Override
-    public void onCategorySelected(Category category) {
-        TabGeeftFragment fragment =
-                TabGeeftFragment.newInstance(true, category);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
+    public void onCategorySelected(final Category category) {
+        AlertDialog.Builder searchDialogBuilder = new AlertDialog.Builder(CategoryActivity.this,
+                R.style.AppCompatAlertDialogStyle); //Read Update
+
+        searchDialogBuilder.setTitle("Cerca");
+        searchDialogBuilder.setMessage("Di quale sezione desideri filtrare i risultati?");
+        searchDialogBuilder.setPositiveButton("Geeft", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                /**
+                 * Start a fragment
+                 */
+                Log.d(TAG, "FRAGMENT_CALLED");
+                TabGeeftFragment fragment =
+                        TabGeeftFragment.newInstance(true, category);
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.commit();
+            }
+        });
+        searchDialogBuilder.setNegativeButton("Geeftory", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                /**
+                 * Start a fragment
+                 */
+                //MAGHEGGIO PER EVITARE QUERY DOPPIE
+                //searchView.clearFocus();
+                Log.d(TAG, "FRAGMENT_CALLED");
+                TabGeeftoryFragment fragment = TabGeeftoryFragment.newInstance(true,category);
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.commit();
+            }
+        });
+//                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
+        AlertDialog searchDialog = searchDialogBuilder.create();
+        //the context i had to use is the context of the dialog! not the context of the
+        searchDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        searchDialog.show();
+
         Log.d(TAG, getFragmentManager().getBackStackEntryCount() + "");
     }
 

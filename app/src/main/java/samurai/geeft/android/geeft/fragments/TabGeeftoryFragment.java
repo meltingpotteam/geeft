@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +101,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
 
     private void initVariables() {
+        mIsCategoryCall = getArguments().getBoolean(KEY_IS_CATEGORY_CALL,false);
         mIsSearchCall = getArguments().getBoolean(KEY_IS_SEARCH_CALL,false);
         if (mIsCategoryCall){
             mCategory = (Category)getArguments().getSerializable(KEY_CATEGORY);
