@@ -22,19 +22,22 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class BaaSTabGeeftoryTask extends BaaSCheckTask {
 
     private static final String TAG ="BaaSGeeftItemTask";
-            Context mContext;
+    private final BaasQuery.Criteria mCriteria;
+    Context mContext;
             List<Geeft> mGeeftList;
             TaskCallbackBooleanToken mCallback;
             StoryItemAdapter mGeeftStroryAdapter;
             boolean result;
     
     public BaaSTabGeeftoryTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
+                               BaasQuery.Criteria criteria,
                                TaskCallbackBooleanToken callback) {
-            mContext = context;
-            mGeeftList = feedItems;
-            mCallback = callback;
-            mGeeftStroryAdapter = Adapter;
-            mGeeftList = feedItems;
+        mContext = context;
+        mGeeftList = feedItems;
+        mCallback = callback;
+        mGeeftStroryAdapter = Adapter;
+        mGeeftList = feedItems;
+        mCriteria = criteria;
     }
     
     @Override
@@ -45,7 +48,7 @@ public class BaaSTabGeeftoryTask extends BaaSCheckTask {
             //TODO: change when baasbox fix issue with BaasLink.create
             BaasQuery.Criteria paginate = BaasQuery.builder()
                     .orderBy("_creation_date asc").criteria();
-            BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("story", paginate);
+            BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("story", mCriteria);
             if (checkError(baasResult)) {
                 try {
                     if (baasResult.get().size() == 0) {

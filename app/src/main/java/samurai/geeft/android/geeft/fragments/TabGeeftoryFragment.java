@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,15 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSSearchTask;
+import samurai.geeft.android.geeft.database.BaaSTabGeeftoryTask;
 import samurai.geeft.android.geeft.database.BaaSTopListTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
+import samurai.geeft.android.geeft.models.Category;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
@@ -40,6 +46,8 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     private static final String GEFFTORY_LIST_KEY = "geeftory_list_key";
     private static final String KEY_IS_SEARCH_CALL = "key_is_a_search_call";
     private static final String KEY_SEARCH = "key_search" ;
+    private static final String KEY_CATEGORY = "key_category" ;
+    private static final String KEY_IS_CATEGORY_CALL = "key_is_category_call";
 
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
@@ -54,6 +62,9 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     private int mListOldSize;
     private boolean mIsSearchCall;
     private String mSearchQuery;
+    private boolean mIsCategoryCall;
+    private Toolbar mToolbar;
+    private Category mCategory;
 
     public static TabGeeftoryFragment newInstance(Bundle b) {
         TabGeeftoryFragment fragment = new TabGeeftoryFragment();
@@ -71,6 +82,16 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         return fragment;
     }
 
+    public static TabGeeftoryFragment newInstance(boolean isCategoryCall,Category category) {
+        TabGeeftoryFragment fragment = new TabGeeftoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_IS_CATEGORY_CALL, isCategoryCall);
+        bundle.putSerializable(KEY_CATEGORY, category);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,13 +99,18 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         initVariables();
     }
 
+
+
     private void initVariables() {
         mIsSearchCall = getArguments().getBoolean(KEY_IS_SEARCH_CALL,false);
-        if (mIsSearchCall){
+        if (mIsCategoryCall){
+            mCategory = (Category)getArguments().getSerializable(KEY_CATEGORY);
+        } else if (mIsSearchCall){
             mSearchQuery = (String)getArguments().getSerializable(KEY_SEARCH);
             Log.d(TAG, "QUERY_SETTED"+mSearchQuery);
         }
         else {
+            mCategory = new Category("","");
             mSearchQuery = "";
         }
     }
@@ -96,10 +122,21 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         Log.d(TAG, " onCreateView()-> savedInstanceState is null? " + (savedInstanceState == null));
 
         //inflates the view
-        View rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_no_toolbar, container, false);
+        View rootView;
+
+
+        if(mIsCategoryCall){
+            rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_with_toolbar
+                    , container, false);
+        }else {
+            rootView = inflater.inflate(R.layout.fragment_recycler_and_swipe_no_toolbar
+                    , container, false);
+        }
 
         //initialize UI
         initUI(rootView);
+        if (savedInstanceState==null && mIsCategoryCall)
+            initSupportActionBar(rootView);
 
         return rootView;
     }
@@ -138,6 +175,13 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
         Log.d(TAG, "onRestoreState()-> savedInstanceState is null? " + (savedInstanceState == null));
         restoreState(savedInstanceState);
+        View rootView = getView();
+        if (rootView!=null){
+            initUI(rootView);
+            if(mIsCategoryCall){
+                initSupportActionBar(rootView);
+            }
+        }
     }
 
     /**
@@ -157,7 +201,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         Log.d(TAG, "done()");
 
         if (mRefreshLayout.isRefreshing()) {
-            mRefreshLayout.setRefreshing(false);
             stopRefreshOperations(result, token);
         }
         mAdapter.notifyDataSetChanged();
@@ -169,18 +212,20 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new StoryItemAdapter(getActivity(), mGeeftoryList,mRecyclerView);
-        mAdapter.setOnLoadMoreListener(new StoryItemAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //add progress item
-                if (mGeeftoryList.get(mGeeftoryList.size() - 1) == null)
-                    return;
-                mGeeftoryList.add(null);
-                mAdapter.notifyItemInserted(mGeeftoryList.size() - 1);
-                getData(true);
-                System.out.println("load");
-            }
-        });
+        if(!mIsCategoryCall&&!mIsSearchCall) {
+            mAdapter.setOnLoadMoreListener(new StoryItemAdapter.OnLoadMoreListener() {
+                @Override
+                public void onLoadMore() {
+                    //add progress item
+                    if (mGeeftoryList.get(mGeeftoryList.size() - 1) == null)
+                        return;
+                    mGeeftoryList.add(null);
+                    mAdapter.notifyItemInserted(mGeeftoryList.size() - 1);
+                    getData(true);
+                    System.out.println("load");
+                }
+            });
+        }
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
@@ -190,6 +235,15 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 getData();
             }
         });
+    }
+
+    private void initSupportActionBar(View rootView) {
+        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+                .getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void saveState(Bundle outState) {
@@ -231,12 +285,21 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
     private void getData(boolean isButtomRefresh) {
         mListOldSize = mGeeftoryList.size();
+        BaasQuery.Criteria paginate;
         if(mIsSearchCall){
             //for the search activity
             Log.d(TAG, "SEARCH CALLED RIGHT ");
             new BaaSSearchTask(getActivity(),mGeeftoryList,mAdapter,mSearchQuery, "story",this).execute();
 
-        } else {
+        }else if(mIsCategoryCall){
+            paginate = BaasQuery.builder()
+                    .where("category = '"
+                            +mCategory.getCategoryName().toLowerCase()+"'")
+                    .orderBy("_creation_date asc").criteria();
+
+            new BaaSTabGeeftoryTask(getActivity(),mGeeftoryList,mAdapter
+                    , paginate,this).execute();
+        }else {
             new BaaSTopListTask(getActivity(), mGeeftoryList, mAdapter
                     , mFirstRId, mLastRId, isButtomRefresh,"story", this).execute();
         }

@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
+    private ProgressDialog mProgressDialog;
     //-------------------
 
     public static Intent newIntent(Context context, String geeftId, String collection) {
@@ -60,6 +62,8 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
+        mProgressDialog = ProgressDialog.show(FullScreenViewActivity.this,"Attendere",
+                "Caricamento in corso...");
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),mCollection,this).execute();
     }
@@ -87,6 +91,9 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
     @Override
     public void done(boolean result, int resultToken) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
         if(result) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
@@ -122,5 +129,11 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+    }
 }
