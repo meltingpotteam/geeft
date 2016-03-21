@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 
 /**
@@ -22,6 +23,7 @@ import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
  */
 public class SearchGeeftActivity extends AppCompatActivity {
 
+    private static final String EXTRA_VIEW_PAGER = "extra_view_pager";
     private final String TAG = getClass().getSimpleName() ;
 
     private Toolbar mToolbar;
@@ -31,7 +33,7 @@ public class SearchGeeftActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchMenuItem;
 
-    public static Intent newIntent(@NonNull Context context) {
+    public static Intent newIntent(@NonNull Context context, ViewPagerAdapter viewPagerAdapter) {
         Intent intent = new Intent(context, SearchGeeftActivity.class);
         return intent;
     }

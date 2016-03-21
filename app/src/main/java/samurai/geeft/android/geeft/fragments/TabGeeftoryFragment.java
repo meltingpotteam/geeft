@@ -21,7 +21,9 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
-import samurai.geeft.android.geeft.database.BaaSTabGeeftoryTask;
+import samurai.geeft.android.geeft.database.BaaSSearchTask;
+import samurai.geeft.android.geeft.database.BaaSTopListTask;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
@@ -29,19 +31,29 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBooleanToken {
+public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBooleanToken
+        ,TaskCallbackBooleanStringStringToken {
 
     private final String TAG = getClass().getSimpleName();
     private final String PREF_FILE_NAME = "2pref_file";
     private static final String GEEFT_LIST_STATE_KEY = "geeft_list_state";
     private static final String GEFFTORY_LIST_KEY = "geeftory_list_key";
-    private static final String GEFFTORY_LIST_PREF = "geeftory_list_pref";
+    private static final String KEY_IS_SEARCH_CALL = "key_is_a_search_call";
+    private static final String KEY_SEARCH = "key_search" ;
 
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
     private List<Geeft> mGeeftoryList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private StoryItemAdapter mAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private Parcelable mGeeftListState;
+    private String mFirstRId;
+    private String mLastRId;
+    private int mListOldSize;
+    private boolean mIsSearchCall;
+    private String mSearchQuery;
 
     public static TabGeeftoryFragment newInstance(Bundle b) {
         TabGeeftoryFragment fragment = new TabGeeftoryFragment();
@@ -49,12 +61,33 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         return fragment;
     }
 
+    // instance for the search
+    public static TabGeeftoryFragment newInstance(boolean isSearchCall,String query) {
+        TabGeeftoryFragment fragment = new TabGeeftoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_IS_SEARCH_CALL, isSearchCall);
+        bundle.putSerializable(KEY_SEARCH, query.toLowerCase());
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
+        initVariables();
     }
 
+    private void initVariables() {
+        mIsSearchCall = getArguments().getBoolean(KEY_IS_SEARCH_CALL,false);
+        if (mIsSearchCall){
+            mSearchQuery = (String)getArguments().getSerializable(KEY_SEARCH);
+            Log.d(TAG, "QUERY_SETTED"+mSearchQuery);
+        }
+        else {
+            mSearchQuery = "";
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,7 +158,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
 
         if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
-            stopRefreshOperations(result,token);
+            stopRefreshOperations(result, token);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -134,8 +167,20 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recyclerview);
         mRecyclerView.setNestedScrollingEnabled(true);
 
-        mAdapter = new StoryItemAdapter(getActivity(), mGeeftoryList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new StoryItemAdapter(getActivity(), mGeeftoryList,mRecyclerView);
+        mAdapter.setOnLoadMoreListener(new StoryItemAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add progress item
+                if (mGeeftoryList.get(mGeeftoryList.size() - 1) == null)
+                    return;
+                mGeeftoryList.add(null);
+                mAdapter.notifyItemInserted(mGeeftoryList.size() - 1);
+                getData(true);
+                System.out.println("load");
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.my_swiperefreshlayout);
@@ -175,14 +220,25 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         }
     }
 
-
-    private void getData() {
-
-        if (!isNetworkConnected()) {
+    public void getData(){
+        if(!isNetworkConnected()) {
             mRefreshLayout.setRefreshing(false);
             showSnackbar();
+        }else {
+            getData(false);
+        }
+    }
+
+    private void getData(boolean isButtomRefresh) {
+        mListOldSize = mGeeftoryList.size();
+        if(mIsSearchCall){
+            //for the search activity
+            Log.d(TAG, "SEARCH CALLED RIGHT ");
+            new BaaSSearchTask(getActivity(),mGeeftoryList,mAdapter,mSearchQuery, "story",this).execute();
+
         } else {
-            new BaaSTabGeeftoryTask(getActivity(), mGeeftoryList, mAdapter, this).execute();
+            new BaaSTopListTask(getActivity(), mGeeftoryList, mAdapter
+                    , mFirstRId, mLastRId, isButtomRefresh,"story", this).execute();
         }
     }
 
@@ -209,16 +265,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         snackbar.show();
     }
 
-    private void stopRefreshOperations(boolean result, int resultToken) {
-        String message = new String();
-        mRefreshLayout.setRefreshing(false);
-        if (result) {
-            message = "Nuove storie, scorri";
-        } else {
-            message = "Nessuna nuova storia";
-        }
-        showToast(message);
-    }
 
     private void showToast(String message) {
         Toast toast;
@@ -227,5 +273,56 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
             toast.setGravity(Gravity.TOP, 0, 0);
             toast.show();
         }
+    }
+
+    @Override
+    public void done(boolean result, String firstId, String lastId, int resultToken) {
+        Log.d(TAG, "done()");
+        mFirstRId = firstId;
+        mLastRId = lastId;
+        if(mRefreshLayout.isRefreshing()) {
+            stopRefreshOperations(result, resultToken);
+        }else{
+            boolean trovato = false;
+            for (int i = 0; i < mGeeftoryList.size() && !trovato; i++) {
+                if (mGeeftoryList.get(i) == null) {
+                    Log.d(TAG, "elemento " + mGeeftoryList.get(i));
+                    mGeeftoryList.remove(i);
+                    trovato = true;
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+            mAdapter.setLoaded();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void stopRefreshOperations(boolean result, int resultToken) {
+        String message = new String();
+        mRefreshLayout.setRefreshing(false);
+        Toast toast;
+        if (result) {
+            int newSize = mGeeftoryList.size();
+            if(newSize==0 || newSize==mListOldSize) {
+                if(getContext()!=null) {
+                    message = "Nessun nuovo annuncio";
+                }
+            }
+            else {
+                message = "Nuovi annunci scorri";
+            }
+        } else {
+            if(resultToken == RESULT_OK) {
+                message= "Nessun nuovo annuncio";
+            }else if (resultToken == RESULT_SESSION_EXPIRED) {
+                message= "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login";
+            }else if(mGeeftoryList.size()==0){
+                message="Nessun risultato";
+            }else {
+                message="Operazione non possibile. Riprovare.";
+            }
+        }
+        showToast(message);
     }
 }

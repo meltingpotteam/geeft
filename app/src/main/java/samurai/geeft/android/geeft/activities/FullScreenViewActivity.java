@@ -115,7 +115,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 toast.show();
             } else {
-                new AlertDialog.Builder(getApplicationContext())
+                new AlertDialog.Builder(FullScreenViewActivity.this)
                         .setTitle("Errore")
                         .setMessage("Operazione non possibile. Riprovare più tardi.").show();
             }

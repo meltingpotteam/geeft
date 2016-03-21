@@ -11,12 +11,14 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
+import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -31,21 +33,35 @@ public class BaaSSearchTask extends BaaSCheckTask{
     private final int RESULT_SESSION_EXPIRED = -1;
 
     private static final String TAG ="BaaSGeeftItemTask";
+    private final String mCollection;
     Context mContext;
     List<Geeft> mGeeftList;
     TaskCallbackBooleanToken mCallback;
     GeeftItemAdapter mGeeftItemAdapter;
+    StoryItemAdapter mStoryItemAdapter;
     boolean result;
     String mSearchQuery;
 
     public BaaSSearchTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter
-            , String query, TaskCallbackBooleanToken callback) {
+            , String query, String collection, TaskCallbackBooleanToken callback) {
         mContext = context;
         mGeeftList = feedItems;
         mCallback = callback;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
         mSearchQuery = query;
+        mCollection = collection;
+    }
+
+    public BaaSSearchTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter
+            , String query, String collection, TaskCallbackBooleanToken callback) {
+        mContext = context;
+        mGeeftList = feedItems;
+        mCallback = callback;
+        mStoryItemAdapter = Adapter;
+        mGeeftList = feedItems;
+        mSearchQuery = query;
+        mCollection = collection;
     }
 
     @Override
@@ -70,10 +86,19 @@ public class BaaSSearchTask extends BaaSCheckTask{
             BaasResult<BaasUser> resUser = currentUser.saveSync();
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate;
-                paginate = BaasQuery.builder()
-                        .where("closed = false and deleted = false")
-                        .orderBy("_creation_date asc").criteria();
-                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync("geeft", paginate);
+                if(mGeeftList.isEmpty()) {
+                    paginate = BaasQuery.builder()
+                            .where("closed = false and deleted = false")
+                            .orderBy("_creation_date asc").criteria();
+                }else {
+                    Timestamp stamp = new Timestamp(mGeeftList.get(0).getCreationTime());
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                    paginate = BaasQuery.builder()
+                            .where("closed = false and deleted = false and  timestamp > "
+                                    + dateFormat.format(stamp))
+                            .orderBy("_creation_date asc").criteria();
+                }
+                BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync(mCollection, paginate);
                 if (baasResult.isSuccess()) {
                     try {
                         for (BaasDocument e : baasResult.get()) {
@@ -87,23 +112,25 @@ public class BaaSSearchTask extends BaaSCheckTask{
                             mGeeft.setGeeftDescription(e.getString("description"));
                             mGeeft.setUserProfilePic(e.getString("profilePic"));
                             mGeeft.setCreationTime(getCreationTimestamp(e));
-                            mGeeft.setDeadLine(e.getLong("deadline"));
-                            mGeeft.setUserFbId(e.getString("userFbId"));
-//
-                            mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
-                            mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
-
                             mGeeft.setUserLocation(e.getString("location"));
                             mGeeft.setUserCap(e.getString("cap"));
                             mGeeft.setGeeftTitle(e.getString("title"));
-                            mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
-                            mGeeft.setGeeftHeight(e.getInt("height"));
-                            mGeeft.setGeeftWidth(e.getInt("width"));
-                            mGeeft.setGeeftDepth(e.getInt("depth"));
                             mGeeft.setDonatedLinkId(e.getString("donatedLinkId"));
-                            mGeeft.setAssigned(e.getBoolean("assigned"));
-                            mGeeft.setTaken(e.getBoolean("taken"));
-                            mGeeft.setGiven(e.getBoolean("given"));
+                            mGeeft.setUserFbId(e.getString("userFbId"));
+
+                            if(e.getBoolean("allowCommunication")!=null){
+                                mGeeft.setAutomaticSelection(e.getBoolean("automaticSelection"));
+                                mGeeft.setAllowCommunication(e.getBoolean("allowCommunication"));
+                                mGeeft.setDimensionRead(e.getBoolean("allowDimension"));
+                                mGeeft.setGeeftHeight(e.getInt("height"));
+                                mGeeft.setGeeftWidth(e.getInt("width"));
+                                mGeeft.setGeeftDepth(e.getInt("depth"));
+                                mGeeft.setAssigned(e.getBoolean("assigned"));
+                                mGeeft.setTaken(e.getBoolean("taken"));
+                                mGeeft.setGiven(e.getBoolean("given"));
+                                mGeeft.setDeadLine(e.getLong("deadline"));
+                            }
+
 
                             // i build the string to compare with the query
                             StringBuilder strToCompareBuilder = new StringBuilder();

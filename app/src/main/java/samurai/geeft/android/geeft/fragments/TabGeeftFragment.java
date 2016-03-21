@@ -47,7 +47,7 @@ public class TabGeeftFragment extends StatedFragment
     private static final String KEY_CATEGORY = "key_category" ;
     private static final String FIRST_ID_KEY = "key_firstID";
     private static final String FIRST_TIME_STAMP = "key_firstTimeStamp";
-    private static final String KEY_IS_SEARCH_CALL = "ke_is_a_search_call";
+    private static final String KEY_IS_SEARCH_CALL = "key_is_a_search_call";
     private static final String KEY_SEARCH = "key_search" ;
     private static final String KEY_FIRST_RID = "key_first_rid";
     private static final String KEY_LAST_RID = "key_last_rid";
@@ -336,7 +336,8 @@ public class TabGeeftFragment extends StatedFragment
         if(mIsSearchCall){
             //for the search activity
             Log.d(TAG, "SEARCH CALLED RIGHT ");
-            new BaaSSearchTask(getActivity(),mGeeftList,mAdapter,mSearchQuery,this).execute();
+            new BaaSSearchTask(getActivity(),mGeeftList,mAdapter,mSearchQuery,"geeft",this).execute();
+
         } else if(mIsCategoryCall){
             paginate = BaasQuery.builder()
                     .where("closed = false and deleted = false and category = '"
@@ -347,7 +348,7 @@ public class TabGeeftFragment extends StatedFragment
                     , paginate,this).execute();
         } else {
             new BaaSTopListTask(getActivity(), mGeeftList, mAdapter
-                    , mFirstRId, mLastRId, isButtomRefresh, this).execute();
+                    , mFirstRId, mLastRId, isButtomRefresh,"geeft", this).execute();
         }
     }
 
@@ -419,11 +420,12 @@ public class TabGeeftFragment extends StatedFragment
         } else {
             if(resultToken == RESULT_OK) {
                 message= "Nessun nuovo annuncio";
-            }
-            else if (resultToken == RESULT_SESSION_EXPIRED) {
+            }else if (resultToken == RESULT_SESSION_EXPIRED) {
                 message= "Sessione scaduta,è necessario effettuare di nuovo" +
                         " il login";
-            } else {
+            }else if(mGeeftList.size()==0){
+                message="Nessun risultato";
+            }else {
                 message="Operazione non possibile. Riprovare.";
             }
         }

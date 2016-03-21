@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
@@ -13,6 +14,7 @@ import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
+    private final String TAG = getClass().getSimpleName();
     CharSequence mTitles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int mNumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
 
@@ -28,6 +30,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     //This method return the fragment for the every position in the View Pager
     @Override
     public Fragment getItem(int position) {
+        Log.d(TAG, "getItem = "+position);
         if(position == 0) // if the position is 0 we are returning the First tab
         {
             return TabGeeftoryFragment.newInstance(new Bundle());
@@ -36,8 +39,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         {
             return TabGeeftFragment.newInstance(false);
         }
-
-
     }
 
     // This method return the titles for the Tabs in the Tab Strip

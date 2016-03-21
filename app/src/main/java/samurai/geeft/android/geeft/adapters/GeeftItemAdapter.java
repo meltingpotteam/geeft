@@ -373,13 +373,14 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public void setLoaded() {
-        loading = false;
-    }
 
     @Override
     public int getItemCount() {
         return mGeeftList.size();
+    }
+
+    public void setLoaded() {
+        loading = false;
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {

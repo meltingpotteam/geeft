@@ -17,6 +17,8 @@ import com.baasbox.android.json.JsonObject;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
+import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
+import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -30,6 +32,8 @@ public class BaaSTopListTask extends BaaSCheckTask{
     private final int RESULT_SESSION_EXPIRED = -1;
 
     private final String TAG = getClass().getSimpleName();
+    private final String mCollection;
+    private StoryItemAdapter mStoryItemAdapter;
     private TaskCallbackBooleanToken mCallback2;
     Context mContext;
     List<Geeft> mGeeftList;
@@ -43,7 +47,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
     int mListSize;
 
     public BaaSTopListTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
-                     String topRid,String buttomRid, boolean isButtomRefresh,
+                     String topRid,String buttomRid, boolean isButtomRefresh,String collection,
                      TaskCallbackBooleanStringStringToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -53,7 +57,23 @@ public class BaaSTopListTask extends BaaSCheckTask{
         mIsButtomRefresh = isButtomRefresh;
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
+        mCollection = collection;
     }
+
+    public BaaSTopListTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
+                           String topRid,String buttomRid, boolean isButtomRefresh, String collection,
+                           TaskCallbackBooleanStringStringToken callback) {
+        mContext = context;
+        mGeeftList = feedItems;
+        mTopRid = topRid;
+        mButtomRid = buttomRid;
+        mCallback = callback;
+        mIsButtomRefresh = isButtomRefresh;
+        mStoryItemAdapter = Adapter;
+        mGeeftList = feedItems;
+        mCollection = collection;
+    }
+
 
     @Override
     protected Boolean doInBackground(Void... arg0) {
@@ -87,6 +107,13 @@ public class BaaSTopListTask extends BaaSCheckTask{
             BaasUser currentUser = BaasUser.current();
             BaasUser.current().getScope(BaasUser.Scope.REGISTERED).put("submits_active", links.size());
             BaasResult<BaasUser> resUser = currentUser.saveSync();
+            String collection;
+            if(mContext.getClass().equals(TabGeeftFragment.class)){
+                collection = "geeft";
+            }else{
+                collection = "story";
+            }
+            Log.d(TAG,"collection = "+collection+" getContext ="+ mContext);
             if (resUser.isSuccess()) {
                 isEmpty = mGeeftList.size()==0? true:false;
                 BaasResult<JsonObject> baasResult;
@@ -94,7 +121,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
                     baasResult = BaasBox.rest().sync(Rest.Method.GET,
                             "plugin/query.tabs?" +
                                     "firstTimeCalled=true" +
-                                    "&collection=geeft" +
+                                    "&collection=" +mCollection+
                                     "&is_minor_than="+mIsButtomRefresh+
                                     "&orderBy=rid%20desc");
                 }else{
@@ -111,7 +138,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
                             "plugin/query.tabs?" +
                                     "firstTimeCalled=false" +
                                     "&rid="+ rid+
-                                    "&collection=geeft" +
+                                    "&collection=" +mCollection+
                                     "&is_minor_than=" +mIsButtomRefresh+
                                     "&orderBy=rid%20desc");
                 }
@@ -154,7 +181,9 @@ public class BaaSTopListTask extends BaaSCheckTask{
                                             .getString("@rid"));
                                 }
                             }
-                            quickSort(docArray, 0, size - 1);
+                            if(!mCollection.equals("story")){
+                                quickSort(docArray, 0, size - 1);
+                            }
                         }
 
                         for (int i =0;i<docArray.size();i++) {

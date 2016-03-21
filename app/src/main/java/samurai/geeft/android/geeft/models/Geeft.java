@@ -336,26 +336,36 @@ public class Geeft implements Serializable {
         this.setGeeftDescription(doc.getString("description"));
         this.setUserProfilePic(doc.getString("profilePic"));
         this.setCreationTime(getCreationTimestamp(doc));
-        this.setDeadLine(doc.getLong("deadline"));
         this.setUserFbId(doc.getString("userFbId"));
-//
-        this.setAutomaticSelection(doc.getBoolean("automaticSelection"));
-        this.setAllowCommunication(doc.getBoolean("allowCommunication"));
 
         this.setUserLocation(doc.getString("location"));
         this.setUserCap(doc.getString("cap"));
         this.setGeeftTitle(doc.getString("title"));
-        this.setDimensionRead(doc.getBoolean("allowDimension"));
-        this.setGeeftHeight(doc.getInt("height"));
-        this.setGeeftWidth(doc.getInt("width"));
-        this.setGeeftDepth(doc.getInt("depth"));
         this.setDonatedLinkId(doc.getString("donatedLinkId"));
-        this.setAssigned(doc.getBoolean("assigned"));
-        this.setTaken(doc.getBoolean("taken"));
-        this.setGiven(doc.getBoolean("given"));
-        this.setIsFeedbackLeftByGeefted(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
-        this.setIsFeedbackLeftByGeefter(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
 
+        if(doc.getBoolean("automaticSelection")!=null) {
+            this.setDimensionRead(doc.getBoolean("allowDimension"));
+            this.setAssigned(doc.getBoolean("assigned"));
+            this.setTaken(doc.getBoolean("taken"));
+            this.setGiven(doc.getBoolean("given"));
+            this.setIsFeedbackLeftByGeefted(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
+            this.setIsFeedbackLeftByGeefter(doc.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
+
+            this.setAutomaticSelection(doc.getBoolean("automaticSelection"));
+            this.setAllowCommunication(doc.getBoolean("allowCommunication"));
+            if (doc.getLong("deadline") != null) {
+                this.setDeadLine(doc.getLong("deadline"));
+            }
+            if (doc.getInt("height") != null) {
+                this.setGeeftHeight(doc.getInt("height"));
+            }
+            if (doc.getInt("width") != null) {
+                this.setGeeftWidth(doc.getInt("width"));
+            }
+            if (doc.getInt("depth") != null) {
+                this.setGeeftDepth(doc.getInt("depth"));
+            }
+        }
         for (BaasLink l : links) {
             //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
             Log.d(TAG, "e id: " + doc.getString("id") + " inId: " + l.in().getId());

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +36,11 @@ import samurai.geeft.android.geeft.models.Geeft;
 /**
  * Created by ugookeadu on 17/02/16.
  */
-public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.ViewHolder> implements
+public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         TaskCallbackStoryItem,TaskCallbackBooleanArrayToken {
     private final LayoutInflater inflater;
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
     private final String WEBSITE_URL = "http://geeft.tk/";
     private final static String TAG ="GeeftAdapter";
 
@@ -58,20 +62,54 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
     private TextView mProfileDialogUserReceived;
     private ParallaxImageView mProfileDialogBackground;
 
+    // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 2;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
+    private long mLastClickTime;
+    private int mLastSize;
+
     //costructor
-    public StoryItemAdapter(Context context, List<Geeft> geeftList) {
+    public StoryItemAdapter(Context context, List<Geeft> myDataSet, RecyclerView recyclerView) {
         inflater = LayoutInflater.from(context);
-        this.mGeeftList = geeftList;
+        this.mGeeftList = myDataSet;
         this.mContext = context;
+        mLastSize = 0;
+        mLastClickTime=0;
+        mGeeftList = myDataSet;
+
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+
+            final LinearLayoutManager linearLayoutManager = 
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        // End has been reached
+                        // Do something
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
+        }
     }
 
     @Override
-    public void done(boolean result, ViewHolder holder, double[] userInformation) {
+    public void done(boolean result, StoryItemAdapter.ViewHolder myHolder, double[] userInformation) {
 
     }
 
     @Override
-    public void done(boolean result, ViewHolder holder, Geeft item) {
+    public void done(boolean result, StoryItemAdapter.ViewHolder myHolder, Geeft item) {
 
     }
 
@@ -114,150 +152,74 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mGeeftList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+    }
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public StoryItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // inflate the custom layout
-        View mGeeftView = inflater.inflate(R.layout.story_list_item, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder vh;
+        if (viewType == VIEW_ITEM) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.story_list_item, parent, false);
 
-        /** set the view's size, margins, paddings and layout parameters
-         *
-         */
+            vh = new StoryItemAdapter.ViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.progressbar_item, parent, false);
 
-        //Inflate a new view hierarchy from the specified xml resource.
-        return new ViewHolder(mGeeftView);
+            vh = new ProgressViewHolder(v);
+        }
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // - get element of the data model from list at this position
-        final Geeft item = mGeeftList.get(position);
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof ProgressViewHolder){
+            ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+        }else {
+            final StoryItemAdapter.ViewHolder myHolder = ((StoryItemAdapter.ViewHolder) holder);
+            // - get element of the data model from list at this position
+            final Geeft item = mGeeftList.get(position);
+
+            if (item != null) {
+                myHolder.mGeeftTitleTextView.setText(item.getGeeftTitle());
+                //myHolder.mExpireTime.setText(item.getCreationTime()); //TODO: GESTIRE
+
+                //TODO add the control of the cap matching in the city selected; sand in the maps tracking
+                Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
+                        .centerCrop().placeholder(R.drawable.ic_image_multiple).into(myHolder.mGeeftImage);
 
 
-        // - replace the contents of the view with that element
-        //holder.mUsernameTextView.setText(item.getUsername());
+                // Converting timestamp into x ago format
+                CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getCreationTime(),
+                        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
-        //holder.mGeeftDescriptionTextView.setText(item.getGeeftDescription());
-        //holder.mGeeftDescriptionTextView.setSingleLine(true);
-        //holder.mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);
-
-        holder.mGeeftTitleTextView.setText(item.getGeeftTitle());
-        //holder.mExpireTime.setText(item.getCreationTime()); //TODO: GESTIRE
-
-        //TODO add the control of the cap matching in the city selected; sand in the maps tracking
-        Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
-                .centerCrop().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
-        //Log.d("IMAGE", item.getUserProfilePic());
-        /*Picasso.with(mContext).load(item.getUserProfilePic()).fit()
-                .centerInside().placeholder(R.drawable.ic_account_circle)
-                .into(holder.mUserProfilePic);*/
+                //myHolder.mTimeStampTextView.setText(timeAgo);
 
 
-        // Converting timestamp into x ago format
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getCreationTime(),
-                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
-
-        //holder.mTimeStampTextView.setText(timeAgo);
-
-        /**
-         * when a User click on the NameText of the Geefter that Upload a geeft, this listener shows
-         * a little card with some useful information about the Geefter.
-         * It shows the name, the profile picture, his ranking, the number of the "Geeven" Geeft and
-         * of the "Receeved" Geeft.
-         * it also display the possibiliy to contact him with facebook.
-         * **/
-        /*
-        holder.mProfileClickableArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(v.getContext()); //Read Update
-                View dialogLayout = inflater.inflate(R.layout.profile_dialog, null);
-                alertDialog.setView(dialogLayout);
-                //On click, the user visualize can visualize some infos about the geefter
-                android.app.AlertDialog dialog = alertDialog.create();
-
-                //profile dialog fields-----------------------
-                mProfileDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
-                mProfileDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
-                mProfileDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
-
-                mProfileDialogUserRank = (TextView) dialogLayout.findViewById(R.id.dialog_ranking_score);
-                mProfileDialogUserGiven = (TextView) dialogLayout.findViewById(R.id.dialog_given_geeft);
-                mProfileDialogUserReceived = (TextView) dialogLayout.findViewById(R.id.dialog_received_geeft);
-
-
-                //--------------------------------------------
-                mProfileDialogUsername
-                        .setText(item
-                                .getUsername());
-                mProfileDialogBackground = (ParallaxImageView) dialogLayout.findViewById
-                        (R.id.dialog_geefter_background);
-                //--------------------------------------------
-                mProfileDialogUsername
-                        .setText(item
-                                .getUsername());
-                mProfileDialogUserLocation.setText(item.getUserLocation());
-                Picasso.with(mContext).load(item.getUserProfilePic()).fit()
-                        .centerInside()
-                        .into(mProfileDialogUserImage);
-                //Parallax background -------------------------------------
-                mProfileDialogBackground.setTiltSensitivity(5);
-                mProfileDialogBackground.registerSensorManager();
-                mProfileDialogBackground.setOnClickListener(new View.OnClickListener() {
+                //Signalization button Implementation--------------
+                myHolder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Uri uriUrl = Uri.parse(WEBSITE_URL);
-                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-                        mContext.startActivity(launchBrowser);
+                        //TODO implement the behaviour of the signalization button
+                        Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
                     }
                 });
-                //TODO tenere la parallasse?!
-                //---------------------------------------------------------
-
-                //TODO: fill the fields "rank" , "geeven", "receeved"-------
-                //----------------------------------------------------------
-                //Relaunch AsyncTask anytime is needed for give information updated
-                new BaaSGetGeefterInformation(mContext,StoryItemAdapter.this).execute();
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
-                //                dialog.setMessage("Some information that we can take from the facebook shared one");
-                dialog.show();  //<-- See This!
-                //
-
+                //-------------------------------------------------
+                myHolder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // launch full screen activity
+                        Intent intent = FullScreenViewActivity.newIntent(mContext,
+                                item.getId(), "story");
+                        mContext.startActivity(intent);
+                    }
+                });
             }
-        });
-        */
-        ////
-
-        //Signalization button Implementation--------------
-        holder.mSignalisationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO implement the behaviour of the signalization button
-                Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
-            }
-        });
-        //-------------------------------------------------
-        holder.mGeeftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // launch full screen activity
-                Intent intent = FullScreenViewActivity.newIntent(mContext,
-                        item.getId(),"story");
-                mContext.startActivity(intent);
-            }
-        });
-
-       /* holder.mMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = HowToDoActivity.newIntent(mContext,
-                        item.getId());
-                mContext.startActivity(intent);
-            }
-        });*/
-
+        }
+            
     }
 
     @Override
@@ -314,6 +276,27 @@ public class StoryItemAdapter extends RecyclerView.Adapter<StoryItemAdapter.View
             }
         }
 
+    }
+
+    public void setLoaded() {
+        loading = false;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        }
     }
 
 }
