@@ -333,7 +333,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         Toast toast;
         if(getActivity()!=null){
             toast = Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP, 0, 0);
+//            toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();
         }
     }

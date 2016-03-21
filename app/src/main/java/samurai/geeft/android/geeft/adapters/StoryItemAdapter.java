@@ -262,7 +262,7 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             Toast toast;
             if (resultToken == RESULT_OK) {
                 toast = Toast.makeText(mContext, "Nessuna nuova storia", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
+//                toast.setGravity(Gravity.BOTTOM, 0, 0);
                 toast.show();
             } else if (resultToken == RESULT_SESSION_EXPIRED) {
                 toast = Toast.makeText(mContext, "Sessione scaduta,è necessario effettuare di nuovo" +

@@ -134,7 +134,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private Intent assignedCase() {//Case where you are geefted and Geeft is assigned to you
         /*Intent intent = AssignedActivity
                 .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_BOTTOM);*/
         if(!(geeftId == null && docUserId == null)) {
             Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, geeftId, docUserId);
             return intent;

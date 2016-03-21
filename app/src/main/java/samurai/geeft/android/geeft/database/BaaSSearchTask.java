@@ -87,16 +87,26 @@ public class BaaSSearchTask extends BaaSCheckTask{
             if (resUser.isSuccess()) {
                 BaasQuery.Criteria paginate;
                 if(mGeeftList.isEmpty()) {
-                    paginate = BaasQuery.builder()
-                            .where("closed = false and deleted = false")
-                            .orderBy("_creation_date asc").criteria();
+                    if(mCollection.equals("story")){
+                        paginate = BaasQuery.builder()
+                                .orderBy("_creation_date asc").criteria();
+                    } else {
+                        paginate = BaasQuery.builder()
+                                .where("closed = false and deleted = false")
+                                .orderBy("_creation_date asc").criteria();
+                    }
                 }else {
                     Timestamp stamp = new Timestamp(mGeeftList.get(0).getCreationTime());
                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-                    paginate = BaasQuery.builder()
-                            .where("closed = false and deleted = false and  timestamp > "
-                                    + dateFormat.format(stamp))
-                            .orderBy("_creation_date asc").criteria();
+                    if (mCollection.equals("story")){
+                        paginate = BaasQuery.builder()
+                                .orderBy("_creation_date asc").criteria();
+                    } else {
+                        paginate = BaasQuery.builder()
+                                .where("closed = false and deleted = false and  timestamp > "
+                                        + dateFormat.format(stamp))
+                                .orderBy("_creation_date asc").criteria();
+                    }
                 }
                 BaasResult<List<BaasDocument>> baasResult = BaasDocument.fetchAllSync(mCollection, paginate);
                 if (baasResult.isSuccess()) {

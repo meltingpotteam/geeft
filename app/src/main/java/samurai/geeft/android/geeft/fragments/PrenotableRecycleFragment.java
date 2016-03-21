@@ -94,18 +94,18 @@ public class PrenotableRecycleFragment extends StatedFragment
             if (result) {
                 if(mGeeftList.size() == 0) {
                     toast = Toast.makeText(getContext(), "Nuovi annunci, scorri", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+//                    toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
                 else{
                     toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+//                    toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
             } else {
                 if(resultToken == RESULT_OK) {
                     toast = Toast.makeText(getContext(), "Nessun nuovo annuncio", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP, 0, 0);
+//                    toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
                 else if(resultToken == RESULT_SESSION_EXPIRED){

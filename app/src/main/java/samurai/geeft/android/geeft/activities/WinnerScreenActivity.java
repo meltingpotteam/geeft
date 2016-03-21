@@ -362,7 +362,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
             Toast toast;
             if (resultToken == RESULT_OK) {
                 toast = Toast.makeText(getApplicationContext(), "Nessuna nuova storia", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
+//                toast.setGravity(Gravity.BOTTOM, 0, 0);
                 toast.show();
             } else if (resultToken == RESULT_SESSION_EXPIRED) {
                 toast = Toast.makeText(getApplicationContext(), "Sessione scaduta,è necessario effettuare di nuovo" +

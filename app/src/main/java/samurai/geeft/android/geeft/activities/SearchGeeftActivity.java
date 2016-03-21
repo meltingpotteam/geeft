@@ -1,7 +1,9 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 
 /**
  * Created by gabriel-dev on 06/03/16.
@@ -122,21 +125,50 @@ public class SearchGeeftActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 Log.d(TAG, "ON_QUERY_TEXT_SUBMIT_CALLED");
+                AlertDialog.Builder searchDialogBuilder = new AlertDialog.Builder(SearchGeeftActivity.this,
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+
+                searchDialogBuilder.setTitle("Cerca");
+                searchDialogBuilder.setMessage("In quale sezione desideri effettuare la ricerca?");
+                searchDialogBuilder.setPositiveButton("Geeft", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        /**
+                         * Start a fragment
+                         */
+                        //MAGHEGGIO PER EVITARE QUERY DOPPIE
+                        //searchView.clearFocus();
+                        Log.d(TAG, "FRAGMENT_CALLED");
+                        mFragment = TabGeeftFragment.newInstance(true, query);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+                                .commit();
+                    }
+                });
+                searchDialogBuilder.setNegativeButton("Geeftory", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        /**
+                         * Start a fragment
+                         */
+                        //MAGHEGGIO PER EVITARE QUERY DOPPIE
+                        //searchView.clearFocus();
+                        Log.d(TAG, "FRAGMENT_CALLED");
+                        mFragment = TabGeeftoryFragment.newInstance(true, query);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+                                .commit();
+                    }
+                });
 //                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
-                /**
-                 * Start a fragment
-                 */
-                //MAGHEGGIO PER EVITARE QUERY DOPPIE
-//                searchView.clearFocus();
-                searchView.clearFocus();
-                Log.d(TAG, "FRAGMENT_CALLED");
-                mFragment = TabGeeftFragment.newInstance(true, query );
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
-                        .commit();
+                AlertDialog searchDialog = searchDialogBuilder.create();
+                //the context i had to use is the context of the dialog! not the context of the
+                searchDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+                searchDialog.show();
+                searchView.clearFocus();    //clear the focus on the search tool
                 return true;
             }
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
