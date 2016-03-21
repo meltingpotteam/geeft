@@ -138,8 +138,6 @@ public class SearchGeeftActivity extends AppCompatActivity {
                         /**
                          * Start a fragment
                          */
-                        //MAGHEGGIO PER EVITARE QUERY DOPPIE
-                        //searchView.clearFocus();
                         Log.d(TAG, "FRAGMENT_CALLED");
                         mFragment = TabGeeftFragment.newInstance(true, query);
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
