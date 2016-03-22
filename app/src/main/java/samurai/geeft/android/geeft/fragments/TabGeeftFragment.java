@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSSearchTask;
-import samurai.geeft.android.geeft.database.BaaSTabGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSTopListTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -339,16 +337,12 @@ public class TabGeeftFragment extends StatedFragment
             new BaaSSearchTask(getActivity(),mGeeftList,mAdapter,mSearchQuery,"geeft",this).execute();
 
         } else if(mIsCategoryCall){
-            paginate = BaasQuery.builder()
-                    .where("closed = false and deleted = false and category = '"
-                            +mCategory.getCategoryName().toLowerCase()+"'")
-                    .orderBy("_creation_date asc").criteria();
-
-            new BaaSTabGeeftTask(getActivity(),mGeeftList,mAdapter
-                    , paginate,this).execute();
+            new BaaSTopListTask(getActivity(), mGeeftList, mAdapter
+                    , mFirstRId, mLastRId, isButtomRefresh,"geeft"
+                    ,mCategory.getCategoryName().toLowerCase(), this).execute();
         } else {
             new BaaSTopListTask(getActivity(), mGeeftList, mAdapter
-                    , mFirstRId, mLastRId, isButtomRefresh,"geeft", this).execute();
+                    , mFirstRId, mLastRId, isButtomRefresh,"geeft",null, this).execute();
         }
     }
 

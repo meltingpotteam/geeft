@@ -25,7 +25,6 @@ import java.util.List;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.StoryItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSSearchTask;
-import samurai.geeft.android.geeft.database.BaaSTabGeeftoryTask;
 import samurai.geeft.android.geeft.database.BaaSTopListTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanStringStringToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -292,16 +291,12 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
             new BaaSSearchTask(getActivity(),mGeeftoryList,mAdapter,mSearchQuery, "story",this).execute();
 
         }else if(mIsCategoryCall){
-            paginate = BaasQuery.builder()
-                    .where("category = '"
-                            +mCategory.getCategoryName().toLowerCase()+"'")
-                    .orderBy("_creation_date asc").criteria();
-
-            new BaaSTabGeeftoryTask(getActivity(),mGeeftoryList,mAdapter
-                    , paginate,this).execute();
+            new BaaSTopListTask(getActivity(), mGeeftoryList, mAdapter
+                    , mFirstRId, mLastRId, isButtomRefresh,"story",
+                    mCategory.getCategoryName().toLowerCase() ,this).execute();
         }else {
             new BaaSTopListTask(getActivity(), mGeeftoryList, mAdapter
-                    , mFirstRId, mLastRId, isButtomRefresh,"story", this).execute();
+                    , mFirstRId, mLastRId, isButtomRefresh,"story",null, this).execute();
         }
     }
 

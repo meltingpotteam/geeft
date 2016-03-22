@@ -33,6 +33,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
 
     private final String TAG = getClass().getSimpleName();
     private final String mCollection;
+    private final String mCategory;
     private StoryItemAdapter mStoryItemAdapter;
     private TaskCallbackBooleanToken mCallback2;
     Context mContext;
@@ -48,6 +49,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
 
     public BaaSTopListTask(Context context, List<Geeft> feedItems, GeeftItemAdapter Adapter,
                      String topRid,String buttomRid, boolean isButtomRefresh,String collection,
+                           String category,
                      TaskCallbackBooleanStringStringToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -58,10 +60,16 @@ public class BaaSTopListTask extends BaaSCheckTask{
         mGeeftItemAdapter = Adapter;
         mGeeftList = feedItems;
         mCollection = collection;
+        if(category!=null){
+            mCategory = category.replace(" ","%20");
+        }else {
+            mCategory = null;
+        }
     }
 
     public BaaSTopListTask(Context context, List<Geeft> feedItems, StoryItemAdapter Adapter,
                            String topRid,String buttomRid, boolean isButtomRefresh, String collection,
+                           String category,
                            TaskCallbackBooleanStringStringToken callback) {
         mContext = context;
         mGeeftList = feedItems;
@@ -72,6 +80,11 @@ public class BaaSTopListTask extends BaaSCheckTask{
         mStoryItemAdapter = Adapter;
         mGeeftList = feedItems;
         mCollection = collection;
+        if(category!=null){
+            mCategory = category.replace(" ","%20");
+        }else {
+            mCategory = null;
+        }
     }
 
 
@@ -123,7 +136,8 @@ public class BaaSTopListTask extends BaaSCheckTask{
                                     "firstTimeCalled=true" +
                                     "&collection=" +mCollection+
                                     "&is_minor_than="+mIsButtomRefresh+
-                                    "&orderBy=rid%20desc");
+                                    "&orderBy=rid%20desc"+
+                                    "&category="+mCategory);
                 }else{
                     String rid;
                     if(mIsButtomRefresh) {
@@ -140,7 +154,8 @@ public class BaaSTopListTask extends BaaSCheckTask{
                                     "&rid="+ rid+
                                     "&collection=" +mCollection+
                                     "&is_minor_than=" +mIsButtomRefresh+
-                                    "&orderBy=rid%20desc");
+                                    "&orderBy=rid%20desc"+
+                                    "&category="+mCategory);
                 }
 
                 if (baasResult.isSuccess()) {
