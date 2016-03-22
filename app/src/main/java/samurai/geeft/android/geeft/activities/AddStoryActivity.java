@@ -15,7 +15,7 @@ import android.widget.Toast;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUploadStory;
 import samurai.geeft.android.geeft.fragments.AddStoryFragment;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -25,7 +25,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  */
 public class AddStoryActivity extends AppCompatActivity implements TaskCallbackBoolean,
             AddStoryFragment.OnCheckOkSelectedListener,
-            GeeftReceivedListFragment.OnGeeftImageSelectedListener{
+            GeeftListFragment.OnGeeftImageSelectedListener{
     private final String TAG = getClass().getSimpleName().toUpperCase();
 
     private Geeft mGeeft;
@@ -69,7 +69,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     }
 
     private void startFragmentGeeftList() {
-        Fragment fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
+        Fragment fragment = GeeftListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
                 false);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, fragment)

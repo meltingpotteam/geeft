@@ -41,7 +41,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 09/02/16.
  */
-public class GeeftReceivedListFragment extends StatedFragment implements TaskCallbackBooleanToken{
+public class GeeftListFragment extends StatedFragment implements TaskCallbackBooleanToken{
     public static final String KEY_LINK_NAME = "key_link_name";
     public static final String KEY_SHOW_WINNER_DIALOG = "key_show_winner_dialog";
     private static final String KEY_LIST_STATE = "key_list_state";
@@ -63,11 +63,11 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
     private ProgressDialog mProgressDialog;
     private String linkName;
 
-    public static GeeftReceivedListFragment newInstance(String linkName,boolean showWinnerDialog) {
+    public static GeeftListFragment newInstance(String linkName,boolean showWinnerDialog) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_LINK_NAME, linkName);
         bundle.putBoolean(KEY_SHOW_WINNER_DIALOG, showWinnerDialog);
-        GeeftReceivedListFragment fragment = new GeeftReceivedListFragment();
+        GeeftListFragment fragment = new GeeftListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -169,7 +169,7 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
         }
     }
 
-    public GeeftReceivedListFragment getInstance(){
+    public GeeftListFragment getInstance(){
         return this;
     }
 
@@ -300,6 +300,20 @@ public class GeeftReceivedListFragment extends StatedFragment implements TaskCal
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        switch (getActivity().getClass().getSimpleName()){
+            case "DonatedActivity":
+                    actionBar.setTitle("Lista geeft regalati");
+                break;
+            case "ReceivedActivity":
+                    actionBar.setTitle("Lista geeft ricevuti");
+                break;
+            case "ReservedActivity":
+                    actionBar.setTitle("Lista geet prenotati");
+                break;
+            case "AssignedActivity":
+                    actionBar.setTitle("Lista geeft da ritirare");
+                break;
+        }
     }
 
     private void initUI(View rootView) {

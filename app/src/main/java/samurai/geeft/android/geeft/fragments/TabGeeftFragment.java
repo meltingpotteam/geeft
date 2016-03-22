@@ -364,6 +364,7 @@ public class TabGeeftFragment extends StatedFragment
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(mCategory.getCategoryName());
     }
 
     public void done(boolean result, int resultToken){

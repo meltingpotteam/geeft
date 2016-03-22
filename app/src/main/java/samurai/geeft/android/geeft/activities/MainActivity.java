@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setTitle(R.string.logout_dialog_title);
             builder.setMessage(R.string.logout_dialog_message);
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 //the positive button should call the "logout method"
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(i, REQUEST_CODE_LOGOUT);
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 //cancel the intent
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

@@ -243,6 +243,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(mCategory.getCategoryName());
     }
 
     private void saveState(Bundle outState) {

@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -265,7 +264,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                     mProgress.setCancelable(false);
                     mProgress.setIndeterminate(true);
-                    mProgress.setMessage("Prenotazione in corso");
+                    mProgress.setMessage("Operazione in corso...");
 
 //              mProgress = ProgressDialog.show(mContext, "Attendere...",
 //                    "Prenotazione in corso", true);
@@ -448,7 +447,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         else {
             new AlertDialog.Builder(mContext)
                     .setTitle("Successo")
-                    .setMessage("Prenotazione effettuata con successo.").show();
+                    .setMessage("Operazione effettuata con successo.").show();
             Log.d("NOTATO", "" + item.isSelected());
             if(item.isSelected())
                 holder.mPrenoteButton.setImageResource(R.drawable.ic_reserve_on_24dp);

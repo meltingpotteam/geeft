@@ -16,14 +16,14 @@ import android.widget.TextView;
 import com.nvanbenschoten.motion.ParallaxImageView;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 15/02/16.
  **/
-public class ReceivedActivity extends AppCompatActivity implements GeeftReceivedListFragment.OnGeeftImageSelectedListener{
+public class ReceivedActivity extends AppCompatActivity implements GeeftListFragment.OnGeeftImageSelectedListener{
 
     private final String TAG = getClass().getName();
     //info dialog attributes---------------------
@@ -49,7 +49,7 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftReceived
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            fragment = GeeftReceivedListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,false);
+            fragment = GeeftListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED, false);
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

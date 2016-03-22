@@ -151,6 +151,7 @@ public class ListCategoryFragment extends StatedFragment {
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Categorie");
     }
 }
 

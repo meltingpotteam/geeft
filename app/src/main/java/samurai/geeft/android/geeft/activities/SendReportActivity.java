@@ -123,6 +123,4 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
         }
         finish();
     }
-
-
 }

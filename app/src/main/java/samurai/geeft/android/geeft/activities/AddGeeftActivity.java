@@ -20,7 +20,7 @@ import samurai.geeft.android.geeft.ApplicationInit;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
 import samurai.geeft.android.geeft.fragments.AddGeeftFragment;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 
@@ -32,7 +32,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 
 public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackBoolean,
         AddGeeftFragment.OnCheckOkSelectedListener,
-        GeeftReceivedListFragment.OnGeeftImageSelectedListener{
+        GeeftListFragment.OnGeeftImageSelectedListener{
 
     private static final String EXTRA_GEEFT = "extra_geeft" ;
     private static final String KEY_GEEFT_ID = "key_geeft_id";
@@ -103,8 +103,8 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
             public void onClick(DialogInterface dialog, int which) {
                 //here you can add functions
                 Log.d("DONE", "in startChooseStory");
-                GeeftReceivedListFragment fragment =
-                        GeeftReceivedListFragment.newInstance("received", false);
+                GeeftListFragment fragment =
+                        GeeftListFragment.newInstance("received", false);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.commit();

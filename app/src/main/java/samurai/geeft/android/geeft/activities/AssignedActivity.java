@@ -11,13 +11,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.fragments.GeeftReceivedListFragment;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 18/02/16.
  */
-public class AssignedActivity extends AppCompatActivity implements GeeftReceivedListFragment.OnGeeftImageSelectedListener{
+public class AssignedActivity extends AppCompatActivity implements GeeftListFragment.OnGeeftImageSelectedListener{
     private final String TAG = getClass().getName();
 
     private final static String EXTRA_COLLECTION = "extra_collection";
@@ -45,9 +45,9 @@ public class AssignedActivity extends AppCompatActivity implements GeeftReceived
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         Log.d(TAG, "" + getIntent().getStringExtra(EXTRA_COLLECTION));
         if (fragment == null) {
-            fragment = GeeftReceivedListFragment
+            fragment = GeeftListFragment
                     .newInstance(getIntent().getStringExtra(EXTRA_COLLECTION),
-                            getIntent().getBooleanExtra(EXTRA_SHOW_WINNER_DIALOG,false));
+                            getIntent().getBooleanExtra(EXTRA_SHOW_WINNER_DIALOG, false));
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }

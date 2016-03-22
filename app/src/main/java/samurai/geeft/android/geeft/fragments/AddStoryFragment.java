@@ -260,6 +260,7 @@ public class AddStoryFragment extends StatedFragment {
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Geeftory");
     }
 
     private void initUI(View rootView) {
