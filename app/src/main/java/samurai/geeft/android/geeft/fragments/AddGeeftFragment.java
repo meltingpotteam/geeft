@@ -504,6 +504,7 @@ public class AddGeeftFragment extends StatedFragment {
         }else{
             outState.putInt(KEY_EXPIRATION_TIME_SPINNER, 0);
         }
+        outState.putSerializable(KEY_GEEFT_IMAGE,mGeeftImage);
     }
 
     private void fillGeeft(Geeft geeft) {
@@ -559,13 +560,14 @@ public class AddGeeftFragment extends StatedFragment {
 
             String path = getArguments().getString(KEY_GEEFT_IMAGE);
             //TODO: crash on restore/ rotation. Obviously needs a control before calling FIle(path) if path exist
-            mGeeftImage = new File(path);
-            if (path!=null)
+            mGeeftImage = (File)savedInstanceState.getSerializable(KEY_GEEFT_IMAGE);
+            if (mGeeftImage!=null) {
                 Picasso.with(getActivity())
-                        .load(mGeeftImage)
+                        .load("file://"+mGeeftImage.getAbsolutePath())
                         .fit()
                         .centerInside()
                         .into(mGeeftImageView);
+            }
         }
     }
 

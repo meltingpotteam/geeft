@@ -335,6 +335,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    getHisBaasboxNameAndSendPush(false);
                                     finish();
                                     startMainActivity();
                                 }
@@ -401,6 +402,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    getHisBaasboxNameAndSendPush(true);
                                     finish();
                                     startMainActivity();
                                 }
@@ -432,8 +434,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
     private void showDialogFeedbackDisabled(){
         if(!mIamGeefter){
-            sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
-                    "di confermare il ritiro");
+            getHisBaasboxNameAndSendPush(false);
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Attenzione")
                     .setMessage("Appena il Geefter confermerà la consegna,verranno " +
@@ -457,8 +458,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     .show();
         }
         else{
-            sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
-                    "di confermare la consegna");
+            getHisBaasboxNameAndSendPush(true);
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Successo")
                     .setMessage("Appena il Geefted confermerà il ritiro,verranno " +
@@ -496,12 +496,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
             if (mGeeft.isTaken() && !mGeeft.isGiven()) {
                 //Send push notification to Geefter. One per day!
-                sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
-                        "di confermare la consegna");
+                /*sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
+                        "di confermare la consegna");*/
             } else if (mGeeft.isGiven() && !mGeeft.isTaken()) {
                 //Send push notification to Geefted. One per day!
-                sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
-                        "di confermare il ritiro");
+                /*sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
+                        "di confermare il ritiro");*/
             }
             else if (mGeeft.isTaken() && mGeeft.isGiven()) {
                 new BaaSExchangeCompletedTask(getApplicationContext(),mGeeft,mIamGeefter,this).execute();
@@ -587,6 +587,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         startActivity(intent);
     }
 
+
     private void getHisBaasboxNameAndStartFeedbackActivity(boolean iamGeefter) {
         final BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '"+ mGeeft.getId() + "'").criteria();
         if(iamGeefter) { // I'm Geefter,so I need BaasboxUsername of Geefted
@@ -659,6 +660,79 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
             });
         }
 
+    }
+
+
+    private void getHisBaasboxNameAndSendPush(boolean iamGeefter) {
+        final BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '"+ mGeeft.getId() + "'").criteria();
+        if(iamGeefter) { // I'm Geefter,so I need BaasboxUsername of Geefted
+            BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                @Override
+                public void handle(final BaasResult<List<BaasLink>> resLink) {
+                    if (resLink.isSuccess()) {
+                        List<BaasLink> links = resLink.value();
+                        if(links.size() <= 0){
+                            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                                @Override
+                                public void handle(BaasResult<List<BaasLink>> resLinkBis) {
+                                    if(resLinkBis.isSuccess()){
+                                        List<BaasLink> linksBis = resLinkBis.value();
+                                        mHisBaasboxName = linksBis.get(0).out().getAuthor();//Get doc_id of user from get(0)
+                                        //so, get baasboxName from getAuthor
+                                        String message = "Il geefter ha confermato la consegna dell'oggetto '" +
+                                                mGeeft.getGeeftTitle() +"'." +
+                                                " Ricordati di confermare il ritiro";
+                                        sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
+                                    }
+                                    else {
+                                        Log.d(TAG,"Error while fetching link");
+                                        showDialogError();
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            try {
+                                Log.d(TAG, "link out: " + links.get(0).in().toString());
+                                Log.d(TAG, "link out: " + links.get(0).out().toString());
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            mHisBaasboxName = links.get(0).out().getAuthor();//Get doc_id of user from get(0)
+                            //so, get baasboxName from getAuthor
+                            String message = "Il geefter ha confermato la consegna dell'oggetto '" +
+                                    mGeeft.getGeeftTitle() +"'." +
+                                    " Ricordati di confermare il ritiro";
+                            sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
+                        }
+                    }else {
+                        Log.d(TAG,"Error while fetching link");
+                        showDialogError();
+                    }
+                }
+            });
+        }
+        else{// I'm Geefted,so I need BaasboxUsername of Geefter
+            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                @Override
+                public void handle(BaasResult<List<BaasLink>> resLink) {
+                    if (resLink.isSuccess()) {
+                        List<BaasLink> links = resLink.value();
+                        Log.d(TAG,"link: " + links.get(0).toString());
+                        mHisBaasboxName = links.get(0).out().getAuthor(); //Get doc_id of user from get(0)
+                        //so, get baasboxName from getAuthor
+                        String message = "il geefted ha confermato il ritiro dell'oggetto '" +
+                                mGeeft.getGeeftTitle() +"'." +
+                                " Ricordati di confermare la consegna";
+                        sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
+
+                    } else {
+                        Log.d(TAG,"Error while fetching link");
+                        showDialogError();
+                    }
+                }
+            });
+        }
     }
 
     private void showDialogError(){
