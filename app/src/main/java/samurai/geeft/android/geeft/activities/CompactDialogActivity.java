@@ -432,8 +432,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
     private void showDialogFeedbackDisabled(){
         if(!mIamGeefter){
-            /*sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
-                    "di confermare il ritiro");*/
+            sendPush(mHisBaasboxName,"Il geefter ha confermato la consegna. Ricordati " +
+                    "di confermare il ritiro");
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Attenzione")
                     .setMessage("Appena il Geefter confermerà la consegna,verranno " +
@@ -457,8 +457,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     .show();
         }
         else{
-            /*sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
-                    "di confermare la consegna");*/
+            sendPush(mHisBaasboxName,"Il Geefted ha comfermato il ritiro. Ricordati " +
+                    "di confermare la consegna");
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Successo")
                     .setMessage("Appena il Geefted confermerà il ritiro,verranno " +
@@ -517,7 +517,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
     private void sendPush(String receiverUsername,String message){
 
-        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + mHisBaasboxName + "&message=" + message, new BaasHandler<JsonObject>() {
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + mHisBaasboxName + "&message=" + message.replace(" ","%20"), new BaasHandler<JsonObject>() {
             @Override
             public void handle(BaasResult<JsonObject> baasResult) {
                 if(baasResult.isSuccess()){

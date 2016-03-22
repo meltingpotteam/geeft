@@ -4,7 +4,7 @@ package samurai.geeft.android.geeft.utilities;
  * Created by ugookeadu on 19/02/16.
  */
 public class TagsValue {
-    public static final String WEBSITE_URL = "http://geeft.tk";
+    public static final String WEBSITE_URL = "http://geeftapp.com";
 
     public static final String GCM_SENDER_ID = "248994882321"; // replace with your own sender id
 

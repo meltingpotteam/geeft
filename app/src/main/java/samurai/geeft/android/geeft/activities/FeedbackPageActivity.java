@@ -18,6 +18,13 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.baasbox.android.BaasBox;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
+import com.baasbox.android.BaasUser;
+import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonObject;
+
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
@@ -197,12 +204,15 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
             mProgressDialog.dismiss();
         }
         if(result){
+            final String myName = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
             new AlertDialog.Builder(FeedbackPageActivity.this)
                     .setTitle("Successo")
                     .setMessage("Grazie per il tuo Feedback.")
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            sendPush(mUsername,myName +" ti ha lasciato un feedback riguardo a " +
+                                    mGeeft.getGeeftTitle() +",ricorda di farlo anche tu!");
                             startMainActivity();
                         }
                     })
@@ -244,6 +254,20 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
                     }
                 })
                 .show();
+    }
+
+    private void sendPush(final String receiverUsername,String message){
+
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + receiverUsername + "&message=" + message.replace(" ", "%20"), new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if (baasResult.isSuccess()) {
+                    Log.d(TAG, "Push notification sended to: " + receiverUsername);
+                } else {
+                    Log.e(TAG, "Error while sending push notification:" + baasResult.error());
+                }
+            }
+        });
     }
 /*
     public void done(boolean result){
