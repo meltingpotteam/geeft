@@ -24,9 +24,6 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Presentation video](https://www.dropbox.com/s/njy7fougxzawya0/GeeftVideoV2.mp4?dl=0)
 - [New PDF presentation](http://meltingpotteam.altervista.org/presentation.pdf)
 - [Survey Results](https://docs.google.com/forms/d/1NTfVy07bu4if-nvRwikIn6_qdl_77DkiBgdGwzPPn-E/viewanalytics#start=publishanalytics)
-- 
- ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
- ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
 
 ==============
 ###Milestone 1 - Proof of Concept
@@ -38,10 +35,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
-- 
- ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
- ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
- ![](http://geeftapp.com/onlyshare/Milestone1_mainbis.jpg)
+
+ ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
+ ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
 
 ==============
 ###Milestone 2 - Release Candidate
@@ -55,6 +51,10 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [APK] (https://app.edo.io/preview?id=56cb0f3cb80991bc29d7798d&k=WKBdR3tHrj_bBSD3h-wtacj2MSA70vhr1cP5euTB7os=)
 - [Presentation] (https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
 - [Demo Video] (https://app.edo.io/preview?id=56c684cedd9264cfcb17dd02&k=Dl6yFPkxvR2B4o-qwM4DPdoUgpputn0S2qA7en5tWa4=)
+
+ ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
+ ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
+ ![](http://geeftapp.com/onlyshare/Milestone1_mainbis.jpg)
 
 ==============
 ###Milestone 3 - Final
