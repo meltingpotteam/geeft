@@ -3,10 +3,10 @@
 
 **Geeft** is a social platform project started in December 2015 for the Google technologies for cloud and web development 2015 workshop.<br />
 It began as an idea of five Sapienza University students and is planned to be a place where people can give away their old objects or, on the other hand, receive. All this for free! Geefters can follow the route of their object all the time as it passes from one hand to another.<br />
-The idea behind this is that every donor can see how people are using their gifted object. This will push users to be creative and share their creativity with the  world.
+The idea behind this is that every donor can see how people are using their old object. This will encourage users to be creative and share it with the  world.
 
 **How will it work?**
-Imagine a person who has something that just occupate space with no purpose in his house. The first step is to decide to give it away.</br>
+Imagine a person with something that just occupate space in his house. The first step is to decide to give it away.</br>
 Now, the question is: where?
 Obviously in this amazing new app that he heard from his friend, so he downloaded the app easily from the Google Playstore. Is so intuitive that in a few minutes he figured out how it works and made a post. In less than a day he recived a notification that someone out there have always dreamed with something like that, crazy!<br />
 Now he just have to wait for that person to come for taking it away, with the promise and the posibility of seeing what will happen to his old stuff in the hands of someone else. He feels really good for giving to someone something that he just don't need and, by the way, he now have a lot of free space to continue collecting more and more stuff.
@@ -15,7 +15,7 @@ Now he just have to wait for that person to come for taking it away, with the pr
 In the social media Facebook as started a new tendence, a few groups has been created to allows members the possibility to give for free some object if a person goes an take it. So we decide that this is great opportunity to create an useful application that englobe all this all ready existing communities. Doing this we provide not only an easy way to connect all this users but also some improvements.
 
 **How are we different?**
-Beside the existing features we will provide the possibility, is not mandatory, to follow the route that the geeft do. This can be useful for young artist or for some handymans that want to show the world what an unused object can become. In the same time with Geeft will to create alerts on especific categories of objects. This will make this activity way more easy and efficient.
+Beside the existing features we will provide the possibility, is not mandatory, to follow the route that the geeft do. This can be useful for young artist or for some handymans that want to show the world what an unused object can become. At the same time, through Geeft, he will receive specific alerts on the categories he prefer. This will make this activity way more easy and efficient.
 
 
 ==============
@@ -35,7 +35,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
-- 
+
+
 
  ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
  ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
@@ -52,6 +53,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [APK] (https://app.edo.io/preview?id=56cb0f3cb80991bc29d7798d&k=WKBdR3tHrj_bBSD3h-wtacj2MSA70vhr1cP5euTB7os=)
 - [Presentation] (https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
 - [Demo Video] (https://app.edo.io/preview?id=56c684cedd9264cfcb17dd02&k=Dl6yFPkxvR2B4o-qwM4DPdoUgpputn0S2qA7en5tWa4=)
+ 
+
+
 
  ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
  ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
@@ -79,6 +83,11 @@ Beside the existing features we will provide the possibility, is not mandatory, 
  ![](http://geeftapp.com/site/img/eco/screens/Aggiungi_storia.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Geeft.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Pannello_navigazione.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Screenshot1.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Screenshot2.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Screenshot3.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Screenshot4.jpg)
+ ![](http://geeftapp.com/site/img/eco/screens/Screenshot5.jpg)
 
 ==============
 ###Final Submission
