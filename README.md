@@ -24,7 +24,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Presentation video](https://www.dropbox.com/s/njy7fougxzawya0/GeeftVideoV2.mp4?dl=0)
 - [New PDF presentation](http://meltingpotteam.altervista.org/presentation.pdf)
 - [Survey Results](https://docs.google.com/forms/d/1NTfVy07bu4if-nvRwikIn6_qdl_77DkiBgdGwzPPn-E/viewanalytics#start=publishanalytics)
-
+- 
  ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
  ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
 
@@ -38,7 +38,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
-
+- 
  ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
  ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
  ![](http://geeftapp.com/onlyshare/Milestone1_mainbis.jpg)
