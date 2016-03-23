@@ -35,6 +35,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Getting real users feedbacks by creating and maintaining pages on social networks
 - [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
 - [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
+- 
 
  ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
  ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
