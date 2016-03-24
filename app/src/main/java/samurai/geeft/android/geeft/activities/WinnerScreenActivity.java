@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -283,7 +282,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         //mWinnerScreenGeeftedName.setText("prova");
         Log.d(TAG,"informations: " + geefted.getName() + " ," + geefted.getStatus() + " ," + docGeeft.getId());
-        mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString());
+        mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
         mWinnerScreenLocationButton.setVisibility(View.GONE);

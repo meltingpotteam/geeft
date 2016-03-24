@@ -2,6 +2,7 @@ package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
      */
     private static final String FACEBOOK_SECRET = "52001af9217446b6408ef593f56e3f1a";
     private static final String GOOGLE_SECRET = "-ZaokFIw9scM3ZSVwp0kJHU6";
+    private final Bundle mUserData;
 
     /**
      * mContext is the context calling the task,
@@ -56,11 +58,12 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
      * @param callback is the callback handler
      */
     public BaaSLoginTask(Context context, String provider,
-                         String token, TaskCallbackBoolean callback) {
+                         String token, Bundle userData,TaskCallbackBoolean callback) {
         mContext = context;
         mProvider = provider;
         mToken = token;
         mCallback = callback;
+        mUserData = userData;
 
         /**
          * Assigning server default value based with the provider
@@ -113,9 +116,16 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         Log.d(TAG,"Fallito");
                         return false;
                     }
-                    String UserDocId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-                    String name = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
+                    String UserDocId =
+                            BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                    String name =
+                            BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
+                    if(name.contains(" ")){
+                        name= name.substring(0, name.indexOf(" "));
+                    }
+                    boolean isNull;
                     if (UserDocId == null) {
+                        isNull = true;
                         BaasDocument doc = new BaasDocument("linkable_users");
                         JsonArray JSONUserLinks = new JsonArray();
                         doc.put("prenoteLinks", JSONUserLinks);
@@ -146,6 +156,20 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                                 user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
                                 //Insert username
                                 user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
+                                if(mUserData!=null){
+                                    //Insert location
+                                    user.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("location", mUserData.getString("location"));
+                                    //Insert email
+                                    user.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("email", mUserData.getString("email"));
+                                    //Insert gender
+                                    user.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("gender", mUserData.getString("gender"));
+                                    //Insert birthday
+                                    user.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("birthday", mUserData.getString("birthday"));
+                                }
 
                                 BaasResult<BaasUser> resUser = user.saveSync();
                                 if (resUser.isSuccess()) {
@@ -167,7 +191,30 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         }
                     } else {
                         Log.d(TAG, "User already registered");
-                        return true;
+                        user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
+                        if(mUserData!=null){
+                            //Insert location
+                            user.getScope(BaasUser.Scope.REGISTERED)
+                                    .put("location", mUserData.getString("location"));
+                            //Insert email
+                            user.getScope(BaasUser.Scope.REGISTERED)
+                                    .put("email", mUserData.getString("email"));
+                            //Insert gender
+                            user.getScope(BaasUser.Scope.REGISTERED)
+                                    .put("gender", mUserData.getString("gender"));
+                            //Insert birthday
+                            user.getScope(BaasUser.Scope.REGISTERED)
+                                    .put("birthday", mUserData.getString("birthday"));
+                        }
+
+                        BaasResult<BaasUser> resUser = user.saveSync();
+                        if (resUser.isSuccess()) {
+                            Log.d(TAG, "New user, document created");
+                            return true;
+                        } else {
+                            Log.e(TAG, "FATAL ERROR userScope not update");
+                            return false;
+                        }
                     }
                 }else{ // if user is null
                     Log.e(TAG,"Error,user is NULL!");

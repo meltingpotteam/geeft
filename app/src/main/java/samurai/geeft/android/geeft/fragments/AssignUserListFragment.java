@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,11 +108,13 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
     }
 
     private void startUserProfileFragmet(User user, boolean isCurrentUser) {
+        FragmentTransaction transaction = getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
         Fragment fragment = UserProfileFragment.newInstance(user, mGeeft,isCurrentUser);
-        fm.beginTransaction().replace(R.id.fragment_container, fragment)
-                .commit();
-
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
 
