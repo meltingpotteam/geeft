@@ -52,6 +52,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     private TextView mWinnerScreenGeeftedName;
     private ImageView mWinnerScreenGeeftBackground;
     private ImageButton mWinnerScreenFbButton;
+    private ImageButton mWinnerScreenEmailButton;
     private ImageButton mWinnerScreenLocationButton;
     private TextView mWinnerMessage;
     //-------------------------------------------
@@ -135,6 +136,13 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
             }
         });
 
+        mWinnerScreenEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmailToGeefter();
+            }
+        });
+
     }
 
     private void initUI(){
@@ -147,6 +155,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenGeeftedName = (TextView) findViewById(R.id.winner_screen_geefted_name);
         mWinnerScreenGeeftBackground = (ImageView) findViewById(R.id.winner_screen_geeft_background);
         mWinnerScreenFbButton = (ImageButton) findViewById(R.id.winner_screen_facebook_button);
+        mWinnerScreenEmailButton = (ImageButton) findViewById(R.id.winner_screen_email_button);
         mWinnerScreenLocationButton = (ImageButton) findViewById(R.id.winner_screen_location_button);
         mWinnerMessage = (TextView) findViewById(R.id.winner_screen_message_text);
         mIntent = getIntent();
@@ -182,6 +191,40 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         }
     }
 
+    private void sendEmailToGeefter(){
+        BaasUser.fetch(mGeeft.getBaasboxUsername(), new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> geefterResult) {
+                //if(progressDialog != null){
+                //}
+                if (geefterResult.isSuccess()) {
+                    BaasUser geefter = geefterResult.value();
+                    String geefterEmail = geefter.getScope(BaasUser.Scope.REGISTERED).getString("email");
+                    if (geefterEmail == null) {
+                        Toast.makeText(WinnerScreenActivity.this, "Spiacenti,l'e-mail fornito non è valido", Toast.LENGTH_LONG).show();
+                    } else {
+                        sendEmail(geefterEmail);
+                    }
+                } else {
+                    showAlertDialog();
+                }
+            }
+        });
+    }
+
+    private void sendEmail(String email){
+
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto per "
+                + mGeeft.getGeeftTitle());
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gentile " + mGeeft.getUsername() +
+                " \n\n" + "Mi è stato assegnato l'oggetto: " + mGeeft.getGeeftTitle() + " tramite l'applicazione "
+                + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE");
+        WinnerScreenActivity.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+    }
+
     private void geeftedCase() {
         String GeeftDocId = mGeeftId;
         BaasDocument.fetch("geeft", GeeftDocId, new BaasHandler<BaasDocument>() {
@@ -207,6 +250,10 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         BaasDocument docGeeft = resGeeft.value();
         mGeeft = new Geeft();
         mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
+        mGeeft.setBaasboxUsername(docGeeft.getString("baasboxUsername"));
+        mGeeft.setGeeftTitle(docGeeft.getString("title"));
+        mGeeft.setUsername(docGeeft.getString("username"));
+
         mWinnerScreenGeefterName.setText(docGeeft.getString("name"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
@@ -214,7 +261,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
         mLocation = docGeeft.getString("location").concat(","+ docGeeft.getString("cap"));
         mUserFbId = docGeeft.getString("userFbId");
-        mWinnerMessage.setText("ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa");
+        mWinnerMessage.setText("ti ha assegnato questo Geeft!\nContattalo tramite facebook o e-mail per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa");
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
     }
@@ -277,15 +324,16 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         //In this case, mWinnerScreenGeeftedName is Geefter,and mWinnerScreenGeefterName is Geefted
         // this is only for bound of the layout,not a problem.
         mGeeft = new Geeft();
-        mGeeft.setGeeftImage(docGeeft.getString("image")+ BaasUser.current().getToken());
+        mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         //mWinnerScreenGeeftedName.setText("prova");
-        Log.d(TAG,"informations: " + geefted.getName() + " ," + geefted.getStatus() + " ," + docGeeft.getId());
-        mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.PRIVATE).get("name").toString());
+        Log.d(TAG, "informations: " + geefted.getName() + " ," + geefted.getStatus() + " ," + docGeeft.getId());
+        mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
         mWinnerScreenLocationButton.setVisibility(View.GONE);
+        mWinnerScreenEmailButton.setVisibility(View.GONE);
         JsonObject field = geefted.getScope(BaasUser.Scope.REGISTERED);
         mUserFbId = field.getObject("_social").getObject("facebook").getString("id");
         mWinnerMessage.setText("è stato selezionato per ricevere il Geeft. Prendi i contatti " +

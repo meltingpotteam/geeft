@@ -38,6 +38,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
+import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
 import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
@@ -382,10 +383,18 @@ public class UserProfileFragment extends StatedFragment implements
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                getActivity().finish();
+                //getActivity().finish(); this return to fullGeeftDetailsFragment,but not update
+                //so,user can modify or delete object. OnDismiss,startMainActivity or refresh list
+                //TODO:Not launch mainactivity,but refresh list (launch fragment with new BaasAsynctask call
+                startMainActivity();
             }
         });
         builder.show();
+    }
+
+    private void startMainActivity(){
+        Intent intent = new Intent(getContext(),MainActivity.class);
+        startActivity(intent);
     }
 
 
