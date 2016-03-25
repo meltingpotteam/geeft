@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
@@ -21,6 +22,11 @@ public class LogoutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO: Just for testing REMOVE
+        Log.i("USERNAMEMAIL", "Inside logout activity.");
+        startActivity(new Intent(this, UsernameMailActivity.class));
+
         setContentView(R.layout.splash_screen);
 
         BaasUser.current().logout(new BaasHandler<Void>() {

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasUser;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -254,8 +255,14 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     public void done(boolean result){
         //enables all social buttons
         enableButtons();
-        if(result)
+        if(result) {
+//            if (BaasUser.current().){//Parameter used only the first time Ex: Facebook id
+               // startActivity(new Intent(this, UsernameMailActivity.class));
+            //TODO: Just for testing REMOVE
+            Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
+//            }
             startMainActivity();
+        }
     }
 
     //Starts the MainActivity

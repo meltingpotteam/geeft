@@ -302,16 +302,16 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
         actionBar.setDisplayHomeAsUpEnabled(true);
         switch (getActivity().getClass().getSimpleName()){
             case "DonatedActivity":
-                    actionBar.setTitle("Lista geeft regalati");
+                    actionBar.setTitle(R.string.DonatedActivity_title);
                 break;
             case "ReceivedActivity":
-                    actionBar.setTitle("Lista geeft ricevuti");
+                    actionBar.setTitle(R.string.ReceivedActivity_title);
                 break;
             case "ReservedActivity":
-                    actionBar.setTitle("Lista geet prenotati");
+                    actionBar.setTitle(R.string.ReservedActivity_title);
                 break;
             case "AssignedActivity":
-                    actionBar.setTitle("Lista geeft da ritirare");
+                    actionBar.setTitle(R.string.AssignedActivity_title);
                 break;
         }
     }

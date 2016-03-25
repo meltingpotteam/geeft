@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.models;
 
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ public class User implements Serializable{
     private String mUserID;
     private String mFbID;
     private String mUsername;
+    private String mEmail;
     private String mDocId;
     private double mRank;
     private String mDescription;
@@ -24,10 +26,11 @@ public class User implements Serializable{
     }
 
 
-    public User(@Nullable String userID, String username, String fbID, String description,
+    public User(@Nullable String userID, String username, String email, String fbID, String description,
                 double rank){
         mUserID = userID;
         mUsername = username;
+        mEmail = email;
         mFbID = fbID;
         mDescription = description;
         mRank = rank;
@@ -66,6 +69,10 @@ public class User implements Serializable{
     public void setUsername(String username) {
         mUsername = username;
     }
+
+    public String getEmail() { return mEmail; }
+
+    public void setEmail(String email) { mEmail = email; }
 
     public String getDocId() {
         return mDocId;

@@ -291,6 +291,23 @@
 
     <string name="pref_title_system_sync_settings">Impostazioni di sincronizzazione di sistema</string>
 
+    <!-- Username / Mail -->
+    <string name="username_mail_instructions">Per favore aggiungere i seguenti campi:</string>
+    <string name="username_textview">Username:</string>
+    <string name="mail_textview">Email:</string>
+    <string name="username_button">Avanti</string>
+    <string name="no_valid_mail_toast">L\'email non è valida.</string>
+    <string name="no_valid_username_toast">Il username non può essere vuoto.</string>
+
+
+    <!--Geeft List Fragment-->
+<string name="DonatedActivity_title">Lista geeft regalati</string>
+<string name="ReceivedActivity_title">Lista geeft ricevuti</string>
+<string name="ReservedActivity_title">Lista geeft prenotati</string>
+<string name="AssignedActivity_title">Lista geeft da ritirare</string>
+
+
+
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifiche</string>
 

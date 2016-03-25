@@ -261,6 +261,10 @@ public class MainActivity extends AppCompatActivity {
             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,
                     R.style.AppCompatAlertDialogStyle); //Read Update
 
+            //TODO: Just for testing REMOVE
+            Log.i("USERNAMEMAIL", "Inside main activity calling UsernameMailActivity.");
+            startActivity(new Intent(this, UsernameMailActivity.class));
+
             builder.setTitle(R.string.logout_dialog_title);
             builder.setMessage(R.string.logout_dialog_message);
             builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
