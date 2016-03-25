@@ -47,6 +47,7 @@ import java.util.Locale;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by ugookeadu on 08/02/16.
@@ -58,6 +59,8 @@ public class AddGeeftFragment extends StatedFragment {
     private static final String ARG_MODIFY = "arg_modify";
     private static final String KEY_GEEFT_IMAGE = "key_geeft_image";
     private final String TAG = getClass().getName();
+
+    private static final String SHOWCASE_ID = "Showcase_single_use";
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
@@ -248,6 +251,8 @@ public class AddGeeftFragment extends StatedFragment {
         mAllowCommunication = (CheckBox) rootView
                 .findViewById(R.id.allow_communication_checkbox);
 
+
+
         cameraButton = (ImageButton) rootView.findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
 
@@ -269,11 +274,14 @@ public class AddGeeftFragment extends StatedFragment {
 //                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
 //                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
 
-                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg"+".jpg");
+                mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
+
+        presentShowcaseView(350);
+
         //Listener for the dimension checkbox--------------------------------------------------------------
         mGeeftHeight = (EditText) rootView.findViewById(R.id.geeft_height);
         mGeeftWidth = (EditText) rootView.findViewById(R.id.geeft_width);
@@ -616,6 +624,17 @@ public class AddGeeftFragment extends StatedFragment {
             sendGetRequest();
             //Do somethings
         }
+    }
+
+    private void presentShowcaseView(int withDelay){
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(cameraButton)
+                .setTitleText("Hello")
+                .setDismissText("Ho Capito")
+                .setContentText("Premi su questo tasto per avviare la fotocamera e scattare la foto dell'oggetto ")
+                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
+                .show();
     }
 
 

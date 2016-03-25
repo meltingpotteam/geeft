@@ -187,6 +187,7 @@ public class NavigationDrawerFragment extends Fragment {
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(),
                             KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
+
                     mWelcomeLayout.setVisibility(View.GONE);
                     mProfileLayout.setVisibility(View.VISIBLE);
                 }

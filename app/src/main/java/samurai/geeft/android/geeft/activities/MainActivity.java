@@ -15,12 +15,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +51,7 @@ import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG ="MainActivity";
     private static final int REQUEST_CODE_LOGOUT = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private static final String SHOWCASE_ID_MAIN = "Showcase_single_use_main";
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
      */
     CallbackManager mCallbackManager;
     static ShareDialog mShareDialog;
+    private DrawerLayout mDrawerLayout;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
          *
          */
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar)findViewById(R.id.main_app_bar);
         mViewPager = (ViewPager)findViewById(R.id.pager);
         setSupportActionBar(mToolbar);
@@ -148,13 +155,22 @@ public class MainActivity extends AppCompatActivity {
         final FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
         NavigationDrawerFragment drawerFragment =  (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_fragment);
-        Log.d("LOG",""+drawerFragment);
-                drawerFragment.setUp(R.id.navigation_drawer_fragment,
-                (DrawerLayout)findViewById(R.id.drawer_layout),mToolbar);
+        Log.d("LOG", "" + drawerFragment);
+        drawerFragment.setUp(R.id.navigation_drawer_fragment, mDrawerLayout, mToolbar);
 
+
+//        ViewTarget target = new ViewTarget(R.id.floating_menu, this);
+//
+//        new ShowcaseView.Builder(this)
+//                .withMaterialShowcase()
+//                .setTarget(target)
+//                .setContentTitle("TestShowcase")
+//                .setContentText("Questo è un test per l'implementazione dello ShowcaseView")
+//                .hideOnTouchOutside()
+//                .build();
 
         /**This is the floating menu button section; the button , when clicked, open a submenu
-         that give the possibility to select the action that the user wat to do (the action button)
+         that give the possibility to select the action that the user what to do (the action button)
          clicked will start the associated activity.
         **/
         floatingActionMenu.setClosedOnTouchOutside(true);
@@ -224,6 +240,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         mSlidingTabLayoutTabs.setViewPager(mViewPager);
+
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            Toast.makeText(MainActivity.this, "CLOOOOSE", Toast.LENGTH_SHORT).show();
+            presentShowcaseView(500);
+        }
     }
 
     @Override
@@ -396,5 +417,16 @@ public class MainActivity extends AppCompatActivity {
 //        super.onDestroy();
 //
 //    }
+
+    private void presentShowcaseView(int withDelay){
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(mSlidingTabLayoutTabs)
+                .setTitleText("Hello")
+                .setDismissText("Ho Capito")
+                .setContentText("Queste solo ne zezioni thell'applicazione! \n Geeftory è la sezione in cui puoi trovare le sotrie degli oggetti \n Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
+                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(SHOWCASE_ID_MAIN) // provide a unique ID used to ensure it is only shown once
+                .show();
+    }
 
 }
