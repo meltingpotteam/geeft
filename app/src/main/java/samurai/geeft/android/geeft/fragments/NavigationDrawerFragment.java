@@ -63,6 +63,10 @@ public class NavigationDrawerFragment extends Fragment {
     private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
     private RecyclerView mRecyclerView;
 
+    public FrameLayout getProfileLayout() {
+        return mProfileLayout;
+    }
+
     private LinearLayout mWelcomeLayout;
     private FrameLayout mProfileLayout;
 //    private ImageView mProfileImage;
@@ -197,7 +201,7 @@ public class NavigationDrawerFragment extends Fragment {
         // if the user have never seen the drawer and if the very first time this fragment is starting
         // in that case display the drawer
         if (!mUserLearnedDrawer) {
-            mDrawerLayout.openDrawer(mContainerView);
+//            mDrawerLayout.openDrawer(mContainerView);
             mWelcomeLayout.setVisibility(View.VISIBLE);
             mProfileLayout.setVisibility(View.GONE);
         }
@@ -319,5 +323,9 @@ public class NavigationDrawerFragment extends Fragment {
         Log.d(TAG, "FB_id" + id);
         return "https://graph.facebook.com/" + id + "/picture?type=large";
     }
+
+    /**
+     * Tutorial implementation
+     */
 
 }

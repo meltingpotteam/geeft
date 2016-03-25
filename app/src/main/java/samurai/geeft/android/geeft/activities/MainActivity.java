@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +52,9 @@ import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 20/01/16.
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private static final String SHOWCASE_ID_MAIN = "Showcase_single_use_main";
+    private static final String SHOWCASE_ID_FAB = "Showcase_single_use_fab_menu";
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mTitles[]={"Geeftory","Geeft"};
     //private CharSequence mTitles[]={"","Geeftory"};
     private FloatingActionButton mActionNewGeeft;
+    private FloatingActionButton mActionGeeftStory;
     private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
@@ -153,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
          * End implementation
          */
         final FloatingActionMenu floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
+
         NavigationDrawerFragment drawerFragment =  (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_fragment);
         Log.d("LOG", "" + drawerFragment);
@@ -185,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton mActionGeeftStory = (FloatingActionButton) findViewById(R.id.geeft_around_me_button);
+        mActionGeeftStory = (FloatingActionButton) findViewById(R.id.geeft_around_me_button);
         mActionGeeftStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,9 +235,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int getIndicatorColor(int position) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    return getResources().getColor(R.color.white,null);
-                }
-                else {
+                    return getResources().getColor(R.color.white, null);
+                } else {
                     return getResources().getColor(R.color.white);
                 }
             }
@@ -241,10 +246,39 @@ public class MainActivity extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         mSlidingTabLayoutTabs.setViewPager(mViewPager);
 
-        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            Toast.makeText(MainActivity.this, "CLOOOOSE", Toast.LENGTH_SHORT).show();
+        /**
+         * implementation of tutorial behaviour
+         */
+
+
+//
+//        floatingActionMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this, "METODO IS OPENED", Toast.LENGTH_SHORT).show();
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        presentShowcaseFabView(350);
+//
+//                    }
+//                }, 1000);
+//            }
+//        });
+
+
+//        if (!mActionGeeftStory.isHidden()){
+//            Toast.makeText(MainActivity.this, "METODO IS HIDDEN", Toast.LENGTH_SHORT).show();
+//            presentShowcaseFabView(350);
+//        }
+
+        if (!drawerFragment.isMenuVisible() || drawerFragment.getProfileLayout().getVisibility() == View.GONE) {
+//            Toast.makeText(MainActivity.this, "FUNGEEEE", Toast.LENGTH_SHORT).show();
             presentShowcaseView(500);
         }
+
     }
 
     @Override
@@ -419,14 +453,82 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void presentShowcaseView(int withDelay){
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(mSlidingTabLayoutTabs)
-                .setTitleText("Hello")
-                .setDismissText("Ho Capito")
-                .setContentText("Queste solo ne zezioni thell'applicazione! \n Geeftory è la sezione in cui puoi trovare le sotrie degli oggetti \n Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
-                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse(SHOWCASE_ID_MAIN) // provide a unique ID used to ensure it is only shown once
-                .show();
+//        new MaterialShowcaseView.Builder(this)
+//                .setTarget(mSlidingTabLayoutTabs)
+//                .setTitleText("Hello")
+//                .setDismissText("Ho Capito")
+//                .setContentText("Queste solo ne zezioni thell'applicazione! \n Geeftory è la sezione in cui puoi trovare le sotrie degli oggetti \n Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
+//                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+//                .singleUse(SHOWCASE_ID_MAIN) // provide a unique ID used to ensure it is only shown once
+//                .show();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID_MAIN);
+
+//        sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
+//            @Override
+//            public void onShow(MaterialShowcaseView itemView, int position) {
+//                Toast.makeText(itemView.getContext(), "Item #" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(mSlidingTabLayoutTabs,
+                "Benvenuti in Geeft!\nQueste sono le sezioni dell'applicazione!",
+                "HO CAPITO");
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
+                        .setDismissText("HO CAPITO")
+                        .setContentText("Geeftory è la sezione in cui puoi trovare le storie degli oggetti ")
+                        .withRectangleShape(true)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
+                        .setDismissText("HO CAPITO")
+                        .setContentText("Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
+                        .withRectangleShape()
+                        .build()
+        );
+
+        sequence.start();
+
+    }
+
+    private void presentShowcaseFabView(int withDelay){
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID_FAB);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(mActionNewGeeft)
+                        .setDismissText("HO CAPITO")
+                        .setContentText("Premendo qui, potrai aggiungere un nuovo geeft compilando un semplice form")
+                        .build()
+                );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(mActionGeeftStory)
+                        .setDismissText("HO CAPITO")
+                        .setContentText("Con questo potrai aggirnare la storia di un oggetto che hai ricevuto inviando un immagine e una descrizione di come lo hai utilizzato")
+                        .build()
+        );
+
+        sequence.start();
+
     }
 
 }
