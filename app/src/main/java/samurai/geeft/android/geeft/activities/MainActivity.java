@@ -476,14 +476,21 @@ public class MainActivity extends AppCompatActivity {
 
         sequence.setConfig(config);
 
-        sequence.addSequenceItem(mSlidingTabLayoutTabs,
-                "Benvenuti in Geeft!\nQueste sono le sezioni dell'applicazione!",
-                "HO CAPITO");
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(mSlidingTabLayoutTabs)
+                        .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
+                        .setContentText("Benvenuti in Geeft!\n" +
+                                "Queste sono le sezioni dell'applicazione!")
+                        .build()
+        );
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
                         .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
                         .setContentText("Geeftory è la sezione in cui puoi trovare le storie degli oggetti ")
                         .withRectangleShape(true)
                         .build()
@@ -493,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
                         .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
                         .setContentText("Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
                         .withRectangleShape()
                         .build()
@@ -515,6 +523,7 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mActionNewGeeft)
                         .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
                         .setContentText("Premendo qui, potrai aggiungere un nuovo geeft compilando un semplice form")
                         .build()
                 );
@@ -523,6 +532,7 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mActionGeeftStory)
                         .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
                         .setContentText("Con questo potrai aggirnare la storia di un oggetto che hai ricevuto inviando un immagine e una descrizione di come lo hai utilizzato")
                         .build()
         );

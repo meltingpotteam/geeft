@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +48,9 @@ import java.util.Locale;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 08/02/16.
@@ -125,6 +128,8 @@ public class AddGeeftFragment extends StatedFragment {
     private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
     private boolean mModify;
+    private LinearLayout mDeadlineFieldLayout;
+    private LinearLayout mAutomaticSelectionFieldLayout;
 
     public static AddGeeftFragment newInstance(@Nullable Geeft geeft, boolean modify) {
         AddGeeftFragment fragment = new AddGeeftFragment();
@@ -236,6 +241,8 @@ public class AddGeeftFragment extends StatedFragment {
     }
 
     private void initUI(View rootView) {
+        mDeadlineFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_geeft_deadline_field);
+        mAutomaticSelectionFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_geeft_automatic_selectin_field);
         mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
         mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
         mGeeftDescription = (TextView) rootView.findViewById
@@ -280,7 +287,6 @@ public class AddGeeftFragment extends StatedFragment {
             }
         });
 
-        presentShowcaseView(350);
 
         //Listener for the dimension checkbox--------------------------------------------------------------
         mGeeftHeight = (EditText) rootView.findViewById(R.id.geeft_height);
@@ -387,6 +393,9 @@ public class AddGeeftFragment extends StatedFragment {
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
+
+        presentShowcaseView(350);
+
     }
 
     //
@@ -626,15 +635,53 @@ public class AddGeeftFragment extends StatedFragment {
         }
     }
 
+    /**
+     * Tutorial Implementation
+     * @param withDelay
+     */
     private void presentShowcaseView(int withDelay){
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(cameraButton)
-                .setTitleText("Hello")
-                .setDismissText("Ho Capito")
-                .setContentText("Premi su questo tasto per avviare la fotocamera e scattare la foto dell'oggetto ")
-                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
-                .show();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(cameraButton)
+                        .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.colorAccent)
+                        .setContentText("Premi su questo tasto per avviare la fotocamera e scattare la foto dell'oggetto")
+                        .build()
+        );
+
+        mDeadlineFieldLayout.requestFocus();
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(mDeadlineFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setDismissTextColor(R.color.clickAccent)
+                        .setContentText("Seleziona quanti giorni vuoi che il geeft sia visibile prima dell'assegnazione")
+                        .withRectangleShape()
+                        .build()
+        );
+
+//        mAutomaticSelectionFieldLayout.requestFocus();
+//
+//        sequence.addSequenceItem(
+//                new MaterialShowcaseView.Builder(getActivity())
+//                        .setTarget(mAutomaticSelectionFieldLayout)
+//                        .setDismissText("HO CAPITO")
+//                        .setContentText("Seleziona quanti giorni vuoi che il geeft sia visibile prima dell'assegnazione")
+//                        .withRectangleShape()
+//                        .build()
+//        );
+
+        sequence.start();
+
     }
 
 
