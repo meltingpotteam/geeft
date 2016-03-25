@@ -313,6 +313,7 @@
     <string name="geeft_show_story">Visualizza storia del Geeft</string>
     <string name="geeft_modify">Modifica</string>
     <string name="geeft_delete">Elimina</string>
+    <string name="geeft_assign">Assegna</string>
     <string name="geeft_add_story">Storia</string>
     <string name="geeft_donate">Regala</string>
     <string name="geeft_add_story_description">Aggiungi una storia a questo Geeft</string>
