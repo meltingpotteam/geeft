@@ -331,8 +331,9 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
             @Override
             public void onClick(View view, int position) {
                 //Toast.makeText(getActivity(), "Click element" + position+" "+mGeeftList.get(position).getId(), Toast.LENGTH_LONG).show();
-                //TODO complete the fragment to start
                 mGeeft = mGeeftList.get(position);
+
+                /* DO NOT INCLUDE THIS,NEVER!! IS OLD
                 if(getActivity().getClass().equals(DonatedActivity.class) &&
                         !mGeeft.isAutomaticSelection() && !mGeeft.isAssigned()){
                     FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -343,9 +344,11 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
                 else {
                     mCallback.onImageSelected(mGeeft.getId());
                     mCallback.onImageSelected(mGeeft);
-                }
-               // mCallback.onImageSelected(mGeeft.getId());
-                //mCallback.onImageSelected(mGeeft);
+                }DO NOT INCLUDE THIS,NEVER!! IS OLD */
+
+
+                mCallback.onImageSelected(mGeeft.getId());
+                mCallback.onImageSelected(mGeeft);
             }
 
             @Override

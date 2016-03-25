@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -73,11 +75,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private LinearLayout mDonatedButtonField;
     private View mStoryView;
-    private View mModifyView;
+    private View mAddStoryView;
 
     private LinearLayout mReceivedButtonField;
     private View mDeleteView;
-    private View mAddStoryView;
+    private View mModifyView;
+    private View mAssignView;
+
     private View mDonateReceivedGeeftView;
     private List<Geeft> mGeeftList = new ArrayList<>();
 
@@ -200,6 +204,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mStoryView = rootView.findViewById(R.id.item_geeft_story);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
+        mAssignView = rootView.findViewById(R.id.item_assign_geeft);
         mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
         mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
 
@@ -251,6 +256,10 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
 
+            if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
+                mAssignView.setVisibility(View.GONE);
+            }
+
             if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
                 mDonatedButtonField.setVisibility(View.GONE);
 //                mModifyView.setVisibility(View.GONE);
@@ -283,6 +292,16 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 @Override
                 public void onClick(View v) {
                     deleteGeeft();
+                }
+            });
+
+            mAssignView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
+                    fm.beginTransaction().replace(R.id.fragment_container, fragment)
+                            .commit();
                 }
             });
 
