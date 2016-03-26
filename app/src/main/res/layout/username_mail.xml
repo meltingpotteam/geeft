@@ -32,6 +32,8 @@
         android:hint="Geeft User"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+
+        android:textColor="@color/colorPrimaryText"
         />
 
     <TextView
@@ -49,6 +51,7 @@
         android:inputType="textEmailAddress"
         android:gravity="center"
         android:hint="user@geeftapp.com"
+        android:textColor="@color/colorPrimaryText"
         />
     <Button
         android:id="@+id/username_request_button"

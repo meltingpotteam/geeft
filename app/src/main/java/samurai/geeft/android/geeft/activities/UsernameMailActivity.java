@@ -39,17 +39,15 @@ public class UsernameMailActivity extends AppCompatActivity {
 
         mButtonDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mUsername != null) {
+                if (mUsername.getText().toString() != "Geeft User") {
                     String email = mEmail.getText().toString();
                     if (isValidEmail(email)) {
 //                        Set mail and username
-
-                        //TODO: Just for testing REMOVE
                         Log.i("USERNAMEMAIL", "Valid mail.");
-
                         //BaasUser.current().;
                         finish();
                     } else {
+                        Log.i("USERNAMEMAIL", "Username. "+mUsername);
                         Toast.makeText(UsernameMailActivity.this, R.string.no_valid_mail_toast, Toast.LENGTH_SHORT).show();
                     }
                 } else {
