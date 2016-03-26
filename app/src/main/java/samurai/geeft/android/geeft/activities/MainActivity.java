@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -480,9 +481,9 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs)
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
-                        .setContentText("Benvenuti in Geeft!\n" +
-                                "Queste sono le sezioni dell'applicazione!")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_tabsections_text))
                         .build()
         );
 
@@ -490,9 +491,10 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
-                        .setContentText("Geeftory è la sezione in cui puoi trovare le storie degli oggetti ")
-                        .withRectangleShape(true)
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_geeftoryinfo_text))
+                        .withRectangleShape()
                         .build()
         );
 
@@ -500,8 +502,9 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
-                        .setContentText("Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_geeftinfo_text))
                         .withRectangleShape()
                         .build()
         );
@@ -523,7 +526,8 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mActionNewGeeft)
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText("Premendo qui, potrai aggiungere un nuovo geeft compilando un semplice form")
                         .build()
                 );
@@ -532,7 +536,8 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mActionGeeftStory)
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText("Con questo potrai aggirnare la storia di un oggetto che hai ricevuto inviando un immagine e una descrizione di come lo hai utilizzato")
                         .build()
         );

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -652,33 +653,39 @@ public class AddGeeftFragment extends StatedFragment {
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(cameraButton)
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.colorAccent)
-                        .setContentText("Premi su questo tasto per avviare la fotocamera e scattare la foto dell'oggetto")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_camerabutton_text))
                         .build()
+
         );
 
-        mDeadlineFieldLayout.requestFocus();
+//        mDeadlineFieldLayout.requestFocus();
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(mDeadlineFieldLayout)
                         .setDismissText("HO CAPITO")
-                        .setDismissTextColor(R.color.clickAccent)
-                        .setContentText("Seleziona quanti giorni vuoi che il geeft sia visibile prima dell'assegnazione")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_deadline_text))
                         .withRectangleShape()
                         .build()
         );
-
-//        mAutomaticSelectionFieldLayout.requestFocus();
 //
-//        sequence.addSequenceItem(
-//                new MaterialShowcaseView.Builder(getActivity())
+//        mAutomaticSelectionFieldLayout.requestFocus();
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
 //                        .setTarget(mAutomaticSelectionFieldLayout)
-//                        .setDismissText("HO CAPITO")
-//                        .setContentText("Seleziona quanti giorni vuoi che il geeft sia visibile prima dell'assegnazione")
-//                        .withRectangleShape()
-//                        .build()
-//        );
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_additionalinfo_text))
+                        .withoutShape()
+                        .build()
+        );
+
 
         sequence.start();
 

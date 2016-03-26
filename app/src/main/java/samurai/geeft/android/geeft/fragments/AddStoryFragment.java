@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +40,13 @@ import java.io.File;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 17/02/16.
+ * Updated by gabriele-dev on 25/03/16
  */
 public class AddStoryFragment extends StatedFragment {
     private final String TAG = getClass().getName();
@@ -55,6 +61,7 @@ public class AddStoryFragment extends StatedFragment {
     private final static String ARG_FILE = "samurai.geeft.android.geeft.fragments." +
             "AddStoryFragment_file";
 
+    private static final String SHOWCASE_ID_STORY = "Showcase_single_story";
 
     private Geeft mGeeft;
     private FloatingActionButton cameraButton;
@@ -79,6 +86,8 @@ public class AddStoryFragment extends StatedFragment {
     private boolean automaticSelection;
     private byte[] streamImage;
     private OnCheckOkSelectedListener mCallback;
+    private LinearLayout mCategoryFieldLayout;
+    private LinearLayout mDescriptionFieldLayout;
 
     public static AddStoryFragment newInstance(Bundle b) {
         AddStoryFragment fragment = new AddStoryFragment();
@@ -264,6 +273,8 @@ public class AddStoryFragment extends StatedFragment {
     }
 
     private void initUI(View rootView) {
+        mCategoryFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_story_category_field);
+        mDescriptionFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_story_description_field);
         mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
         mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
         mGeeftDescription = (TextView) rootView.findViewById
@@ -336,5 +347,60 @@ public class AddStoryFragment extends StatedFragment {
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
+    }
+
+    private void presentShowcaseFabView(int withDelay){
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID_STORY);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Qui potrai aggiornare la storia di un oggetto che hai ricevuto inviando un'immagine e una descrizione di come lo hai utilizzato")
+                        .withoutShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(cameraButton)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Premendo qui, potrai aggiungere una foto del nuovo stato dell'oggetto...")
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(mCategoryFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Seleziona la categoria attuale dell'oggetto (es. una vecchia moka che è stata pulita e deocorata. Se era nella categoria 'altro' ora diventa 'casa e giardino')")
+                        .withRectangleShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(mDescriptionFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Premendo qui, potrai aggiungere una foto del nuovo stato dell'oggetto...")
+                        .withRectangleShape()
+                        .build()
+        );
+
+        sequence.start();
+
     }
 }
