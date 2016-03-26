@@ -49,6 +49,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
         final android.support.v7.app.AlertDialog.Builder builder =
                 new android.support.v7.app.AlertDialog.Builder(AddStoryActivity.this,
                         R.style.AppCompatAlertDialogStyle);
+        builder.setCancelable(false);
         builder.setTitle("Hey!");
         builder.setMessage("Stai per pubblicare la storia di un oggetto ricevuto tramite Geeft?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {

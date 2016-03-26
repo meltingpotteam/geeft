@@ -2,7 +2,9 @@ package samurai.geeft.android.geeft.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -45,13 +48,15 @@ import java.util.Date;
 import java.util.Locale;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
  * Created by ugookeadu on 08/02/16.
  */
-public class AddGeeftFragment extends StatedFragment {
+public class AddGeeftFragment extends StatedFragment implements TaskCallbackBoolean{
     private static final String KEY_LOCATION_SPINNER = "key_location_spinner" ;
     private static final String KEY_CATEGORY_SPINNER = "key_category_spinner";
     private static final String KEY_EXPIRATION_TIME_SPINNER = "key_expiration_time_spinner";
@@ -64,17 +69,6 @@ public class AddGeeftFragment extends StatedFragment {
 
     private static final String ARG_GEEFT = "samurai.geeft.android.geeft.fragments." +
             "AddGeeftFragment_geeft";
-    private final static String ARG_ARRAY_STRINGS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_arrayStrings";
-    private final static String ARG_SELECTED_ITEMS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_selectedItems";
-    private final static String ARG_CHECKED_ITEMS = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_checkedItems";
-    private final static String ARG_FILE = "samurai.geeft.android.geeft.fragments." +
-            "AddGeeftFragment_file";
-    private final static String ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY= "samurai.geeft.android.geeft.activities."+
-            "add_geeft_fragment_seved_state";
-
 
     private Geeft mGeeft;
     private ImageButton cameraButton;
@@ -122,6 +116,8 @@ public class AddGeeftFragment extends StatedFragment {
     private int deltaExptime; // is the number of "expTime" String. Is delta in integer from now to deadline
     private OnCheckOkSelectedListener mCallback;
     private boolean mModify;
+    private ProgressDialog mProgress;
+    private long mLastClickTime;
 
     public static AddGeeftFragment newInstance(@Nullable Geeft geeft, boolean modify) {
         AddGeeftFragment fragment = new AddGeeftFragment();
@@ -230,6 +226,7 @@ public class AddGeeftFragment extends StatedFragment {
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Aggiungi un geeft");
     }
 
     private void initUI(View rootView) {
@@ -400,8 +397,11 @@ public class AddGeeftFragment extends StatedFragment {
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()){
             case R.id.fragment_add_geeft_ok_button:
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
+                    return true;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 //Toast.makeText(this, "TEST OK BUTTON IN TOOLBAR ", Toast.LENGTH_SHORT).show();
-
                 //Things TODO: Send to baasbox also the "Expire time" and "Category"
                 name = mGeeftTitle.getText().toString();
                 description = mGeeftDescription.getText().toString();
@@ -419,10 +419,10 @@ public class AddGeeftFragment extends StatedFragment {
                 automaticSelection = mAutomaticSelection.isChecked();
                 allowCommunication = mAllowCommunication.isChecked();
 
-                Log.d(TAG, "name: " + name + " description: " + description + " location: " + location
+                /*Log.d(TAG, "name: " + name + " description: " + description + " location: " + location
                         + " cap: " + cap + " expire time: " + expTime + " category: " + category
                         + " labels: " + labels + " automatic selection: "
-                        + automaticSelection + " allow communication: " + allowCommunication);
+                        + automaticSelection + " allow communication: " + allowCommunication);*/
 
                 if(name.length() <= 1 || description.length() <= 1
                         || mGeeftImageView.getDrawable() == null
@@ -430,6 +430,7 @@ public class AddGeeftFragment extends StatedFragment {
                         mGeeftExpirationTime.getSelectedItemPosition() == 0 ||
                         mGeeftCategory.getSelectedItemPosition() == 0){
                     //TODO controlare se il cap corrisponde alla location selezionata
+
                     Toast.makeText(getContext(),
                             "Bisogna compilare tutti i campi prima di procedere",
                             Toast.LENGTH_SHORT).show();
@@ -437,9 +438,9 @@ public class AddGeeftFragment extends StatedFragment {
                 else {
                     //geeftImage could be useful i the case we'll want to use the stored image and not the drawn one
                     fillGeeft(mGeeft);
-                    mCallback.onCheckSelected(true,mGeeft,mModify);
-                    return true;
+                    showDialogForStory();
                 }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -618,5 +619,56 @@ public class AddGeeftFragment extends StatedFragment {
         }
     }
 
+    private void showDialogForStory() {
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Hey");
+        builder.setMessage("Hai ricevuto in precedenza tale oggetto in regalo " +
+                "tramite Geeft?");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            //the positive button should call the "logout method"
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                Log.d("DONE", "in startChooseStory");
+                mCallback.onCheckSelected(true, mGeeft, mModify);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            //cancel the intent
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //here you can add functions
+                Log.d("AAAA", mGeeft.getUserCap() + " " + mGeeft.getGeeftTitle());
+                mProgress = new ProgressDialog(getContext());
+                mProgress.show();
+                mProgress.setCancelable(false);
+                mProgress.setIndeterminate(true);
+                mProgress.setTitle("Attendere");
+                mProgress.setMessage("Caricamento in corso");
+                new BaaSUploadGeeft(getContext(), mGeeft, mModify, AddGeeftFragment.this).execute();
+            }
+        });
+        //On click, the user visualize can visualize some infos about the geefter
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        //the context i had to use is the context of the dialog! not the context of the
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        dialog.show();
+    }
 
+    @Override
+    public void done(boolean result) {
+        if(mProgress!=null){
+            mProgress.dismiss();
+        }
+        if(result){
+            Toast.makeText(getContext(),
+                    "Annuncio inserito con successo", Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        } else {
+            Toast.makeText(getContext(),
+                    "E' accaduto un errore riprovare",Toast.LENGTH_LONG).show();
+        }
+    }
 }

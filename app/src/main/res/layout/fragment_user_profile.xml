@@ -71,6 +71,16 @@
                                 android:textColor="#ffffff"
                                 android:textSize="24sp" />
 
+                            <EditText
+                                android:id="@+id/username_edit_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/user_add_description"
+                                android:textColorHint="@color/colorHintAccent"
+                                android:textColor="#ffffff"
+                                android:visibility="gone"
+                                />
+
                             <Button
                                 android:id="@+id/user_profile_button"
                                 android:layout_width="match_parent"

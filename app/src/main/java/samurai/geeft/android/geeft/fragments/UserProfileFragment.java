@@ -52,17 +52,17 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 31/01/16.
  */
 public class UserProfileFragment extends StatedFragment implements
-        TaskCallbackBoolean, LinkCountListener{
+        TaskCallbackBoolean, LinkCountListener {
 
     private static final String KEY_USER = "key_user";
     private static final String ARG_USER = "arg_user";
-    private static final String KEY_IS_CURRENT_USER = "key_is_current_user" ;
-    private static final java.lang.String ARG_IS_CURRENT_USER = "arg_is_current_user" ;
+    private static final String KEY_IS_CURRENT_USER = "key_is_current_user";
+    private static final java.lang.String ARG_IS_CURRENT_USER = "arg_is_current_user";
     private static final String KEY_IS_EDITING_DESCRIPTION = "key_is_editing_description";
-    private static final String ARG_GEEFT = "arg_geeft" ;
-    private static final String KEY_GEEFT = "key_geeft" ;
+    private static final String ARG_GEEFT = "arg_geeft";
+    private static final String KEY_GEEFT = "key_geeft";
 
-    private  final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     private TextView mUsernameTextView;
     private TextView mUserDescriptionTextView;
@@ -84,6 +84,7 @@ public class UserProfileFragment extends StatedFragment implements
     private RequestToken mLinkCreateRequest;
     private Geeft mGeeft;
     private ProgressDialog progressDialog;
+    private EditText mUsernameEditText;
 
 
     public static UserProfileFragment newInstance(@Nullable User user,
@@ -112,14 +113,14 @@ public class UserProfileFragment extends StatedFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "PROVA USER");
-        if (savedInstanceState!=null){
-            mUser = (User)savedInstanceState.getSerializable(KEY_USER);
+        if (savedInstanceState != null) {
+            mUser = (User) savedInstanceState.getSerializable(KEY_USER);
             mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
-            mGeeft = (Geeft)savedInstanceState.getSerializable(KEY_GEEFT);
-        }else {
-            mUser = (User)getArguments().getSerializable(ARG_USER);
+            mGeeft = (Geeft) savedInstanceState.getSerializable(KEY_GEEFT);
+        } else {
+            mUser = (User) getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
-            mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
+            mGeeft = (Geeft) getArguments().getSerializable(ARG_GEEFT);
         }
     }
 
@@ -135,10 +136,10 @@ public class UserProfileFragment extends StatedFragment implements
     @Override
     protected void onFirstTimeLaunched() {
         super.onFirstTimeLaunched();
-        if(mIsCurrentUser){
+        if (mIsCurrentUser) {
             mUser.setLinkGivenCount(TagsValue.USER_LINK_COUNT_NOT_FINESHED);
             mUser.setLinkReceivedCount(TagsValue.USER_LINK_COUNT_NOT_FINESHED);
-            if(BaasUser.current()!=null) {
+            if (BaasUser.current() != null) {
                 mUser = fillUser(BaasUser.current());
             }
         }
@@ -166,7 +167,7 @@ public class UserProfileFragment extends StatedFragment implements
 
     @Override
     public void done(boolean result) {
-        if(result){
+        if (result) {
             fillUI();
         }
     }
@@ -191,57 +192,56 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void countLinks(BaasQuery.Criteria query, final String linkName) {
-         BaasLink.fetchAll(linkName, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
-             @Override
-             public void handle(BaasResult<List<BaasLink>> baasResult) {
-                 if (baasResult.isSuccess()) {
-                     mCallback = UserProfileFragment.this;
-                     try {
-                         int count = baasResult.get().size();
-                         Log.d(TAG, linkName + " size = " + count);
-                         if (linkName.equals(TagsValue.LINK_NAME_RECEIVED)) {
-                             mCallback.onCountedLinks(TagsValue.LINK_NAME_RECEIVED, count);
+        BaasLink.fetchAll(linkName, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+            @Override
+            public void handle(BaasResult<List<BaasLink>> baasResult) {
+                if (baasResult.isSuccess()) {
+                    mCallback = UserProfileFragment.this;
+                    try {
+                        int count = baasResult.get().size();
+                        Log.d(TAG, linkName + " size = " + count);
+                        if (linkName.equals(TagsValue.LINK_NAME_RECEIVED)) {
+                            mCallback.onCountedLinks(TagsValue.LINK_NAME_RECEIVED, count);
 
-                         } else if (linkName.equals(TagsValue.LINK_NAME_DONATED)) {
-                             mCallback.onCountedLinks(TagsValue.LINK_NAME_DONATED, count);
-                         }
-                     } catch (BaasException e) {
-                         e.printStackTrace();
-                         Log.d(TAG, e.getMessage().toString());
-                         if (linkName.equals(TagsValue.LINK_NAME_RECEIVED)) {
-                             mCallback.onCountedLinks(TagsValue.LINK_NAME_RECEIVED,
-                                     TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR);
+                        } else if (linkName.equals(TagsValue.LINK_NAME_DONATED)) {
+                            mCallback.onCountedLinks(TagsValue.LINK_NAME_DONATED, count);
+                        }
+                    } catch (BaasException e) {
+                        e.printStackTrace();
+                        Log.d(TAG, e.getMessage().toString());
+                        if (linkName.equals(TagsValue.LINK_NAME_RECEIVED)) {
+                            mCallback.onCountedLinks(TagsValue.LINK_NAME_RECEIVED,
+                                    TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR);
 
-                         } else if (linkName.equals(TagsValue.LINK_NAME_DONATED)) {
-                             mCallback.onCountedLinks(TagsValue.LINK_NAME_DONATED,
-                                     TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR);
-                         }
-                     }
-                 }
-             }
-         });
+                        } else if (linkName.equals(TagsValue.LINK_NAME_DONATED)) {
+                            mCallback.onCountedLinks(TagsValue.LINK_NAME_DONATED,
+                                    TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onCountedLinks(String linkName, int count) {
-        if (linkName.equals(TagsValue.LINK_NAME_DONATED)){
+        if (linkName.equals(TagsValue.LINK_NAME_DONATED)) {
             setLinkCountTextView(mUserGivenTextView, count);
             mUser.setLinkGivenCount(count);
-        }else if(linkName.equals(TagsValue.LINK_NAME_RECEIVED)){
+        } else if (linkName.equals(TagsValue.LINK_NAME_RECEIVED)) {
             setLinkCountTextView(mUserReceivedTextView, count);
             mUser.setLinkReceivedCount(count);
         }
     }
 
     private void setLinkCountTextView(TextView linkTextView, int count) {
-        if(count == TagsValue.USER_LINK_COUNT_NOT_FINESHED){
+        if (count == TagsValue.USER_LINK_COUNT_NOT_FINESHED) {
             return;
         }
-        if(count==TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR){
+        if (count == TagsValue.USER_LINK_COUNT_FINESHED_WITH_ERROR) {
             linkTextView.setText("ND");
-        }
-        else {
-            linkTextView.setText(count+"");
+        } else {
+            linkTextView.setText(count + "");
         }
     }
 
@@ -259,8 +259,9 @@ public class UserProfileFragment extends StatedFragment implements
         mUserFeedbackTextView.setText(new DecimalFormat("#.##").format(mUser.getRank()));
         mUserDescriptionTextView.setText(mUser.getDescription());
         mUserDescriptionEditText.setText(mUser.getDescription());
+
         setLinkCountTextView(mUserReceivedTextView, mUser.getLinkReceivedCount());
-        setLinkCountTextView(mUserGivenTextView,mUser.getLinkGivenCount());
+        setLinkCountTextView(mUserGivenTextView, mUser.getLinkGivenCount());
 
         Log.d(TAG, "on init is editing = " + mIsEditingDescription);
         changeButtonAdDescriptionState();
@@ -291,10 +292,10 @@ public class UserProfileFragment extends StatedFragment implements
         progressDialog.show();
         progressDialog.setMessage("Salvataggio in corso...");
         BaasUser user;
-        if(mIsCurrentUser){
+        if (mIsCurrentUser) {
             final String newDescrition = mUserDescriptionEditText.getText().toString();
 
-            user =BaasUser.current();
+            user = BaasUser.current();
             user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
             user.save(new BaasHandler<BaasUser>() {
                 @Override
@@ -337,7 +338,7 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void assignCurrentGeeft() throws MalformedURLException {
-        if(BaasUser.current()!=null) {
+        if (BaasUser.current() != null) {
             mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
                     "Operazione in corso");
 
@@ -347,7 +348,7 @@ public class UserProfileFragment extends StatedFragment implements
                     "&d_id=" + mUser.getDocId() +
                     "&label=" + TagsValue.LINK_NAME_ASSIGNED +
                     "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
-                    "&geeftedName=" + mUser.getID()+
+                    "&geeftedName=" + mUser.getID() +
                     "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
                     .replace(" ", "%20")
                     , new BaasHandler<JsonObject>() {
@@ -361,23 +362,23 @@ public class UserProfileFragment extends StatedFragment implements
                         Log.d(TAG, "IN HANDLER SUCCES");
                     }
                 }
-        });
+            });
         }
     }
 
     private void showSuccessAlert() {
-        if(mProgressDialog!=null){
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
         final android.support.v7.app.AlertDialog.Builder builder =
                 new android.support.v7.app.AlertDialog.Builder(getContext(),
                         R.style.AppCompatAlertDialogStyle).
                         setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        getActivity().getSupportFragmentManager().popBackStack();
-                    }
-                }); //Read Update
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
+                        }); //Read Update
         builder.setTitle("Successo");
         builder.setMessage("Oggetto Assegnato. Verrai contattato dall'utente su Facebook.");
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -392,14 +393,14 @@ public class UserProfileFragment extends StatedFragment implements
         builder.show();
     }
 
-    private void startMainActivity(){
-        Intent intent = new Intent(getContext(),MainActivity.class);
+    private void startMainActivity() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
     }
 
 
     private void showFailureAlert() {
-        if(mProgressDialog!=null){
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
         final android.support.v7.app.AlertDialog.Builder builder =
@@ -427,26 +428,26 @@ public class UserProfileFragment extends StatedFragment implements
 
     private void changeButtonAdDescriptionState() {
         Log.d(TAG, "is editing = " + mIsEditingDescription);
-        if(mIsCurrentUser && !mIsEditingDescription){
-            mButton.setText("Modifica descrizione");
+        if (mIsCurrentUser && !mIsEditingDescription) {
+            mButton.setText("Modifica profilo");
             mUserDescriptionEditText.setVisibility(View.GONE);
             mUserDescriptionTextView.setVisibility(View.VISIBLE);
             mButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        }else if(mIsCurrentUser && mIsEditingDescription) {
-            mButton.setText("Salva descrizione");
+        } else if (mIsCurrentUser && mIsEditingDescription) {
+            mButton.setText("Salva modifiche");
             mUserDescriptionEditText.setVisibility(View.VISIBLE);
             mUserDescriptionTextView.setVisibility(View.GONE);
             mButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        }else{
+        } else {
             mButton.setText("Assegna il Geeft");
         }
     }
 
     private void initUi(View rootView) {
-        mUsernameTextView = (TextView)rootView.findViewById(R.id.username_text_view);
-        mUserGivenTextView = (TextView)rootView
+        mUsernameTextView = (TextView) rootView.findViewById(R.id.username_text_view);
+        mUserGivenTextView = (TextView) rootView
                 .findViewById(R.id.user_given_text_view);
-        mUserReceivedTextView = (TextView)rootView
+        mUserReceivedTextView = (TextView) rootView
                 .findViewById(R.id.user_received_text_view);
         mUserProfileImage = (ImageView) rootView.findViewById(R.id.user_profile_photo);
         mUserFeedbackTextView = (TextView) rootView.findViewById(R.id.user_feedback_text_view);
@@ -454,9 +455,11 @@ public class UserProfileFragment extends StatedFragment implements
         mUserGivenTextView = (TextView) rootView.findViewById(R.id.user_given_text_view);
         mUserDescriptionEditText =
                 (EditText) rootView.findViewById(R.id.user_description_edit_text);
-        mUserDescriptionTextView = (TextView)rootView.findViewById(R.id.user_description_text_view);
+        mUserDescriptionTextView = (TextView) rootView.findViewById(R.id.user_description_text_view);
         mLayoutDonatedView = rootView.findViewById(R.id.layout_donated);
         mLayoutReceivedView = rootView.findViewById(R.id.layout_received);
+        mUsernameEditText = (EditText)rootView.findViewById(R.id.username_edit_text);
+
 
 
         mUsernameTextView.setText("...");
@@ -464,9 +467,9 @@ public class UserProfileFragment extends StatedFragment implements
         mUserReceivedTextView.setText("...");
         mUserFeedbackTextView.setText("...");
 
-        mButton = (Button)rootView.findViewById(R.id.user_profile_button);
+        mButton = (Button) rootView.findViewById(R.id.user_profile_button);
 
-        if(mIsCurrentUser) {
+        if (mIsCurrentUser) {
             mLayoutDonatedView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -487,9 +490,9 @@ public class UserProfileFragment extends StatedFragment implements
 
 
     private void initSupportActionBar(View rootView) {
-        mToolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity())
+        mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity())
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -499,8 +502,8 @@ public class UserProfileFragment extends StatedFragment implements
 
     public void getData() {
 
-        BaasQuery.Criteria query =BaasQuery.builder()
-                .where("in.id like '" + mUser.getDocId() + "'" ).criteria();
+        BaasQuery.Criteria query = BaasQuery.builder()
+                .where("in.id like '" + mUser.getDocId() + "'").criteria();
         countLinks(query, TagsValue.LINK_NAME_RECEIVED);
         countLinks(query, TagsValue.LINK_NAME_DONATED);
     }

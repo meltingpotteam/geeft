@@ -49,7 +49,7 @@ public class BaaSGetUserData  extends AsyncTask<Void,Void,Boolean> {
         JsonObject privateFields = baasUser.getScope(BaasUser.Scope.PRIVATE);
 
         String fbID = registeredFields.getObject("_social").getObject("facebook").getString("id");
-        String username = privateFields.get("name").toString();
+        String username = registeredFields.get("username").toString();
         String docId = privateFields.getString("doc_id");
         double userRank = registeredFields.get("feedback");
 

@@ -329,7 +329,7 @@ public class Geeft implements Serializable {
 
     public void fillGeeft(JsonObject doc, List<BaasLink> links) {
         this.setId(doc.getString("id"));
-        this.setUsername(doc.getString("name"));
+        this.setUsername(doc.getString("username"));
         this.setBaasboxUsername(doc.getString("baasboxUsername"));
         this.setGeeftImage(doc.getString("image") + BaasUser.current().getToken());
         //Append ad image url your session token!

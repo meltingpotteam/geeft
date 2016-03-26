@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -298,10 +298,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mAssignView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
                     Fragment fragment = AssignUserListFragment.newInstance(mGeeft);
-                    fm.beginTransaction().replace(R.id.fragment_container, fragment)
-                            .commit();
+                    FragmentTransaction transaction = getActivity()
+                            .getSupportFragmentManager().beginTransaction();
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.commit();
                 }
             });
 
@@ -517,7 +519,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mProgressDialog.dismiss();
         }
         if(result) {
-            new AlertDialog.Builder(getContext())
+            new AlertDialog.Builder(getContext(), R.style.AppCompatAlertDialogStyle)
                     .setTitle("Successo")
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -528,7 +530,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     })
                     .setMessage("Il Geeft è stato eliminato con successo.").show();
         }else {
-            new AlertDialog.Builder(getContext())
+            new AlertDialog.Builder(getContext(), R.style.AppCompatAlertDialogStyle)
                     .setTitle("Errore")
                     .setMessage("Operazione non possibile. Riprovare più tardi.").show();
         }

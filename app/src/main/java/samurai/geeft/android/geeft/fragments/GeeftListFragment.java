@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +25,6 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AddStoryActivity;
-import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
@@ -131,19 +128,25 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
             if(mGeeftList!=null)
             Log.d(TAG,"GeeftReceivedList size:" + mGeeftList.size()+"");
             if (mGeeftList==null || mGeeftList.size()==0) {
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getContext(), R.style.AppCompatAlertDialogStyle)
                         .setTitle("Oops")
-                        .setMessage("Nessun oggetto ricevuto da mostrare!")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setMessage("Nessun Geeft da mostrare!")
+                        .setPositiveButton("Riprova", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            if(getActivity()
-                                    .getSupportFragmentManager().getBackStackEntryCount()>0){
-                                getActivity().getSupportFragmentManager().popBackStack();
-                            }else {
-                                getActivity().onBackPressed();
+                            getData();
                             }
+                        })
+                        .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                if(getActivity()
+                                        .getSupportFragmentManager().getBackStackEntryCount()>0){
+                                    getActivity().getSupportFragmentManager().popBackStack();
+                                }else {
+                                    getActivity().onBackPressed();
+                                }
                             }
                         })
                         .show();
@@ -162,9 +165,25 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 toast.show();
             } else {
-                new AlertDialog.Builder(getContext())
+                AlertDialog alertDialog = new AlertDialog.Builder(getContext()
+                        , R.style.AppCompatAlertDialogStyle)
                         .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                        .setMessage("Operazione non possibile.")
+                        .setPositiveButton("Riprovare", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getData();
+                            }
+                        })
+                        .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
+                        })
+                        .setCancelable(false)
+                        .create();
+                alertDialog.show();
             }
         }
     }
@@ -225,7 +244,8 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
      */
     private boolean mGeeftListShowDialog() {
         if (mGeeftList.size() == 0) {
-            new AlertDialog.Builder(getContext())
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext()
+                    , R.style.AppCompatAlertDialogStyle)
                     .setTitle("Errore")
                     .setMessage("Nessun oggetto ricevuto disponibile")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -234,7 +254,9 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
                             getActivity().getSupportFragmentManager().popBackStack();
                         }
                     })
-                    .show();
+                    .setCancelable(false)
+                    .create();
+            alertDialog.show();
             Log.d(TAG, "in done ==0");
             return true;
         }
@@ -260,7 +282,8 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
 
     private void showWinnerDialog() {
         if(showWinnerDialog){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+                    R.style.AppCompatAlertDialogStyle);
             builder.setMessage(R.string.winner_screen_message);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -308,7 +331,7 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
                     actionBar.setTitle("Lista geeft ricevuti");
                 break;
             case "ReservedActivity":
-                    actionBar.setTitle("Lista geet prenotati");
+                    actionBar.setTitle("Lista geeft prenotati");
                 break;
             case "AssignedActivity":
                     actionBar.setTitle("Lista geeft da ritirare");

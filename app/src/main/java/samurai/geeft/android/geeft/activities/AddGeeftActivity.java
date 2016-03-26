@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,15 +39,6 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     private final String TAG = getClass().getName();
     private Geeft mGeeft;
     private ProgressDialog mProgress;
-    private final static String TAG_ADD_GEEFT_FIELDS = "samurai.geeft.android.geeft.activities." +
-            "stack_add_geeft";
-    private final static String TAG_ADD_GEEFT_RECIEVED_LIST = "samurai.geeft.android.geeft.activities." +
-            "stack_add_geeft_recieved_list";
-    private final static String ADD_GEEFT_FRAGMENT_SAVED_STATE_KEY= "samurai.geeft.android.geeft.activities."+
-            "add_geeft_fragment_seved_state";
-    private final static String ADD_GEEFT_RECIEVED_LIST_FRAGMENT_SAVED_STATE_KEY = "samurai.geeft.android.geeft.activities."+
-            "add_geeft_recieved_list_fragment_saved_state";
-
 
     private Map<String, Fragment.SavedState> savedStateMap;
     private ApplicationInit init;
@@ -91,56 +81,14 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
     @Override
     public void onCheckSelected(boolean startChooseStory,final Geeft geeft,final boolean modify) {
         mGeeft = geeft;
-        final android.support.v7.app.AlertDialog.Builder builder =
-                new android.support.v7.app.AlertDialog.Builder(this,
-                        R.style.AppCompatAlertDialogStyle); //Read Update
-        builder.setTitle("Hey");
-        builder.setMessage("Hai ricevuto in precedenza tale oggetto in regalo " +
-                "tramite Geeft?");
-        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            //the positive button should call the "logout method"
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //here you can add functions
-                Log.d("DONE", "in startChooseStory");
-                GeeftListFragment fragment =
-                        GeeftListFragment.newInstance("received", false);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-                Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
 
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            //cancel the intent
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //here you can add functions
-                Log.d("AAAA", geeft.getUserCap() + " " + geeft.getGeeftTitle());
-                mProgress = new ProgressDialog(AddGeeftActivity.this);
-                mProgress.show();
-                mProgress.setCancelable(false);
-                mProgress.setIndeterminate(true);
-                mProgress.setMessage("Attendere");
-                new BaaSUploadGeeft(getApplicationContext(), geeft, modify, AddGeeftActivity.this).execute();
-            }
-        });
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportFragmentManager().popBackStack();
-                } else{
-                    onBackPressed();
-                }
-            }
-        });
-        //On click, the user visualize can visualize some infos about the geefter
-        android.support.v7.app.AlertDialog dialog = builder.create();
-        //the context i had to use is the context of the dialog! not the context of the
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-        dialog.show();
+        Log.d("DONE", "in startChooseStory");
+        GeeftListFragment fragment =
+                GeeftListFragment.newInstance("received", false);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+        Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
     }
 
     @Override
@@ -150,7 +98,8 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         mProgress.show();
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
-        mProgress.setMessage("Attendere");
+        mProgress.setTitle("Attendere");
+        mProgress.setMessage("Caricamento in corso...");
         new BaaSUploadGeeft(getApplicationContext(),mGeeft,mId,this).execute();
     }
 

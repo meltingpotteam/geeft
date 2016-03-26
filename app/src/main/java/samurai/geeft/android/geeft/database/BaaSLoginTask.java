@@ -120,9 +120,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                     String name =
                             BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
-                    if(name.contains(" ")){
-                        name= name.substring(0, name.indexOf(" "));
-                    }
                     boolean isNull;
                     if (UserDocId == null) {
                         isNull = true;
@@ -191,14 +188,13 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         }
                     } else {
                         Log.d(TAG, "User already registered");
-                        user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
                         if(mUserData!=null){
                             //Insert location
                             user.getScope(BaasUser.Scope.REGISTERED)
                                     .put("location", mUserData.getString("location"));
                             //Insert email
-                            user.getScope(BaasUser.Scope.REGISTERED)
-                                    .put("email", mUserData.getString("email"));
+                            /*user.getScope(BaasUser.Scope.REGISTERED)
+                                    .put("email", mUserData.getString("email"));*/
                             //Insert gender
                             user.getScope(BaasUser.Scope.REGISTERED)
                                     .put("gender", mUserData.getString("gender"));
