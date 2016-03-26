@@ -347,9 +347,12 @@ public class AddStoryFragment extends StatedFragment {
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
+
+        presentShowcaseView(350);
+
     }
 
-    private void presentShowcaseFabView(int withDelay){
+    private void presentShowcaseView(int withDelay){
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(withDelay); // half second between each showcase view
@@ -363,7 +366,7 @@ public class AddStoryFragment extends StatedFragment {
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Qui potrai aggiornare la storia di un oggetto che hai ricevuto inviando un'immagine e una descrizione di come lo hai utilizzato")
+                        .setContentText(getString(R.string.tutorial_storyinfo_text))
                         .withoutShape()
                         .build()
         );
@@ -374,7 +377,7 @@ public class AddStoryFragment extends StatedFragment {
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Premendo qui, potrai aggiungere una foto del nuovo stato dell'oggetto...")
+                        .setContentText(getString(R.string.tutorial_storycamerabutton_text))
                         .build()
         );
 
@@ -384,7 +387,7 @@ public class AddStoryFragment extends StatedFragment {
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Seleziona la categoria attuale dell'oggetto (es. una vecchia moka che è stata pulita e deocorata. Se era nella categoria 'altro' ora diventa 'casa e giardino')")
+                        .setContentText(getString(R.string.tutorial_storycategory_text))
                         .withRectangleShape()
                         .build()
         );
@@ -395,7 +398,7 @@ public class AddStoryFragment extends StatedFragment {
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Premendo qui, potrai aggiungere una foto del nuovo stato dell'oggetto...")
+                        .setContentText(getString(R.string.tutorial_storydescription_text))
                         .withRectangleShape()
                         .build()
         );

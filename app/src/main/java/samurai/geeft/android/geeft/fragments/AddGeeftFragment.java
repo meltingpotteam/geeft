@@ -651,6 +651,16 @@ public class AddGeeftFragment extends StatedFragment {
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
+                        .setDismissText("OK")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Qui potrai aggiungere nuovi oggetti nuovi oggetti in geeft!\nPotrai aggiungere oggetti che non utilizzi più e che vuoi donare , semplicemente compilando questi campi")
+                        .withoutShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(cameraButton)
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))

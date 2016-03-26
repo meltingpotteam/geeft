@@ -330,11 +330,17 @@
     <string name="fragment_add_geeft_label_title">Aggiungi dei TAG, separati da una virgola, che possano identificare meglio il tuo geeft</string>
     <string name="add_geeft_label_hint">(es. cucina, pentola, acciaio, ... )</string>
     <string name="user_add_description">Aggiungi una breve presentazione</string>
+
+    <!-- Tutorial strings-->
     <string name="tutorial_camerabutton_text">Premi su questo tasto per avviare la fotocamera e scattare la foto dell\'oggetto</string>
     <string name="tutorial_deadline_text">Seleziona quanti giorni vuoi che il geeft sia visibile prima dell\'assegnazione</string>
-    <string name="tutorial_additionalinfo_text">Spuntando \'Selezione automatica del Geefted\' l\'applicazione selezionerà automaticamente un vincitore in maniera intelligente\n\n Nel caso di oggetti grandi , potrai inserite le sue dimensioni spuntando la relativa casella</string>
+    <string name="tutorial_additionalinfo_text">Spuntando \'Selezione automatica del Geefted\' l\'applicazione selezionerà automaticamente un vincitore in maniera intelligente\n\nNel caso di oggetti grandi , potrai inserite le sue dimensioni spuntando la relativa casella</string>
     <string name="tutorial_geeftinfo_text">Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!</string>
     <string name="tutorial_geeftoryinfo_text">"Geeftory è la sezione in cui puoi trovare le storie degli oggetti "</string>
     <string name="tutorial_tabsections_text">Benvenuti in Geeft!\nQueste sono le sezioni dell\'applicazione!</string>
+    <string name="tutorial_storyinfo_text">Qui potrai aggiornare la storia di un oggetto che hai ricevuto inviando un\'immagine e una descrizione di come lo hai utilizzato</string>
+    <string name="tutorial_storycamerabutton_text">Premendo qui, potrai aggiungere una foto del nuovo stato dell\'oggetto...</string>
+    <string name="tutorial_storydescription_text">Premendo qui, potrai aggiungere una foto del nuovo stato dell\'oggetto...</string>
+    <string name="tutorial_storycategory_text">Seleziona la categoria attuale dell\'oggetto (es. una vecchia moka che è stata pulita e deocorata. Se era nella categoria \'altro\' ora diventa \'casa e giardino\')</string>
 
 </resources>
