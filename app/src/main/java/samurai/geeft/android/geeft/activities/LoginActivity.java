@@ -259,17 +259,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
 //          //Call to Nickname and Email request
             Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
             startActivity(new Intent(this, UsernameMailActivity.class));
-//            }
-            startMainActivity();
         }
-    }
-
-    //Starts the MainActivity
-    private void startMainActivity(){
-        final Intent mMainIntent = new Intent(LoginActivity.this,
-                MainActivity.class);
-        startActivity(mMainIntent);
-        finish();
     }
 
     //Disable social sign in buttons

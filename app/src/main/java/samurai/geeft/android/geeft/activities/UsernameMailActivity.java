@@ -51,7 +51,9 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             public void onClick(View v) {
                 Log.i("USERNAMEMAIL", "Nickname"+mNickname.getText().toString()+"!");
                 Log.i("USERNAMEMAIL", "Email"+mEmail.getText().toString()+"!");
-                if (mNickname.getText().toString() != null) {
+                if ((mNickname.getText().toString().isEmpty())||(mNickname.getText().toString() == null)) {
+                    Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
+                } else {
                     String email = mEmail.getText().toString();
                     if (isValidEmail(email)) {
 //                        Set mail and username
@@ -60,13 +62,11 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                         new BaaSUpdateUsernameMail(getApplicationContext(),myName,
                                 mNickname.getText().toString(),mEmail.getText().toString(),UsernameMailActivity.this).execute();
                         mProgressDialog = ProgressDialog.show(UsernameMailActivity.this,"Attendere"
-                                ,"Salvataggio del feedback in corso");
-                        finish();
+                                ,"Salvataggio in corso");
+                        startMainActivity();
                     } else {
                         Toast.makeText(UsernameMailActivity.this, R.string.no_valid_mail_toast, Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -104,6 +104,14 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             return false;
 
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    //Starts the MainActivity
+    private void startMainActivity(){
+        final Intent mMainIntent = new Intent(UsernameMailActivity.this,
+                MainActivity.class);
+        startActivity(mMainIntent);
+        finish();
     }
 
     @Override
