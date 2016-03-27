@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
         mActionGeeftStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
                 floatingActionMenu.close(true); //TODO: Enable this after is stable,in beta version
@@ -260,10 +262,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_logout) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,
                     R.style.AppCompatAlertDialogStyle); //Read Update
-
-            //TODO: Just for testing REMOVE
-            Log.i("USERNAMEMAIL", "Inside main activity calling UsernameMailActivity.");
-            startActivity(new Intent(this, UsernameMailActivity.class));
 
             builder.setTitle(R.string.logout_dialog_title);
             builder.setMessage(R.string.logout_dialog_message);

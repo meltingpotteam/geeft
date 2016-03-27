@@ -23,10 +23,6 @@ public class LogoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO: Just for testing REMOVE
-        Log.i("USERNAMEMAIL", "Inside logout activity.");
-        startActivity(new Intent(this, UsernameMailActivity.class));
-
         setContentView(R.layout.splash_screen);
 
         BaasUser.current().logout(new BaasHandler<Void>() {

@@ -298,6 +298,7 @@
     <string name="username_button">Avanti</string>
     <string name="no_valid_mail_toast">L\'email non è valida.</string>
     <string name="no_valid_username_toast">Il username non può essere vuoto.</string>
+    <string name="nickname_default">Geeft User</string>
 
 
     <!--Geeft List Fragment-->

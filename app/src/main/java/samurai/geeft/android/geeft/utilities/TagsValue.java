@@ -10,8 +10,7 @@ public class TagsValue {
 
     public static final String APPCODE = "1234567890";
 
-//    public static final String API_DOMAIN = "geeft1.cloudapp.net";
-    public static final String API_DOMAIN = "geeft-test1.cloudapp.net";
+    public static final String API_DOMAIN = "geeft1.cloudapp.net";
 
     public static final int APP_PORT = 9000;
 

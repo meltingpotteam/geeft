@@ -256,10 +256,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         //enables all social buttons
         enableButtons();
         if(result) {
-//            if (BaasUser.current().){//Parameter used only the first time Ex: Facebook id
-               // startActivity(new Intent(this, UsernameMailActivity.class));
-            //TODO: Just for testing REMOVE
+//          //Call to Nickname and Email request
             Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
+            startActivity(new Intent(this, UsernameMailActivity.class));
 //            }
             startMainActivity();
         }

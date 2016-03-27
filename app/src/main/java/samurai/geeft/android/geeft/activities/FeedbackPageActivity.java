@@ -144,7 +144,7 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         mRatingComment = (EditText) findViewById(R.id.fragment_feedback_help_page_description);
         mTextViewFeedbackDescription = (TextView) findViewById(R.id.text_view_feedback_description);
 
-        Log.d(TAG, "getSimpleName su questa classe:" + TAG);
+        Log.d(TAG, "getSimpleName in this class:" + TAG);
        // if(mCallingActivity.equals("AssignedActivity")){
         if(mIamGeefter){
             mRatingDescription.setVisibility(View.GONE);
