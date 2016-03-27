@@ -212,6 +212,50 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textStyle="bold"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorAccent"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="La tua mail sarà visibile solo alle persone a cui assegni un oggetto, dopo l'assegnazione. E' necessaria per essere contattati"
+                            android:textStyle="italic"
+                            android:textSize="10dp"
+                            android:textColor="@color/colorAccent"/>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/user_email_text_view"
+                                android:paddingTop="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                            <EditText
+                                android:id="@+id/user_email_edit_text"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/user_add_description"
+                                android:textColorHint="@color/colorHintAccent"
+                                android:visibility="gone"
+                                android:inputType="textEmailAddress"
+                                />
+                        </FrameLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/card_margin"
+                    >
+                    <LinearLayout
+                        style="@style/Widget.CardContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="Breve presentazione"
                             android:textStyle="bold"
                             android:textSize="15dp"

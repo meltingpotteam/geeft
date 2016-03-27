@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +38,13 @@ import com.squareup.picasso.Picasso;
 import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Random;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.database.BaaSMail;
 import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -85,6 +90,10 @@ public class UserProfileFragment extends StatedFragment implements
     private Geeft mGeeft;
     private ProgressDialog progressDialog;
     private EditText mUsernameEditText;
+    private TextView mUserEmailTextView;
+    private EditText mUserEmailEditText;
+    private Random mRandom;
+    private int mCode;
 
 
     public static UserProfileFragment newInstance(@Nullable User user,
@@ -180,6 +189,7 @@ public class UserProfileFragment extends StatedFragment implements
         String username = registeredFields.getString("username");
         String description = registeredFields.getString("user_description");
         String docId = registeredFields.getString("doc_id");
+        String email = registeredFields.getString("email");
         double userRank = registeredFields.get("feedback");
 
         user.setFbID(fbID);
@@ -187,6 +197,7 @@ public class UserProfileFragment extends StatedFragment implements
         user.setDescription(description);
         user.setDocId(docId);
         user.setRank(userRank);
+        user.setEmail(email==null?"":email);
 
         return user;
     }
@@ -259,6 +270,8 @@ public class UserProfileFragment extends StatedFragment implements
         mUserFeedbackTextView.setText(new DecimalFormat("#.##").format(mUser.getRank()));
         mUserDescriptionTextView.setText(mUser.getDescription());
         mUserDescriptionEditText.setText(mUser.getDescription());
+        mUserEmailTextView.setText(mUser.getEmail());
+        mUserEmailEditText.setText(mUser.getEmail());
 
         setLinkCountTextView(mUserReceivedTextView, mUser.getLinkReceivedCount());
         setLinkCountTextView(mUserGivenTextView, mUser.getLinkGivenCount());
@@ -287,36 +300,113 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void updateDescription() {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.show();
-        progressDialog.setMessage("Salvataggio in corso...");
-        BaasUser user;
+        final BaasUser user;
         if (mIsCurrentUser) {
             final String newDescrition = mUserDescriptionEditText.getText().toString();
-
+            final String newEmail = mUserEmailEditText.getText().toString().toLowerCase();
             user = BaasUser.current();
-            user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
-            user.save(new BaasHandler<BaasUser>() {
+            if(mRandom ==null){
+                mRandom = new Random();
+                int min = 1000;
+                int max = 9999;
+                final int code = mRandom.nextInt(max - min + 1) + min;
+                mCode = code;
+                sendMail(newEmail);
+            }
+            final android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(getContext(),
+                            R.style.AppCompatAlertDialogStyle);
+            final EditText input = new EditText(getContext());
+            input.setGravity(Gravity.CENTER_HORIZONTAL);
+            input.setHint("Inserisci il codice di conferma");
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
+            input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            builder.setView(input);
+            builder.setMessage("Controlla il codice nella tua mail");
+            //builder.setTitle("Inserire pasword");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
-                public void handle(BaasResult<BaasUser> baasResult) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    if (baasResult.isSuccess()) {
-                        mUserDescriptionTextView.setText(newDescrition);
-                        mUser.setDescription(newDescrition);
-                        mIsEditingDescription = !mIsEditingDescription;
-                        changeButtonAdDescriptionState();
-                        Log.d(TAG, BaasUser.current()
-                                .getScope(BaasUser.Scope.REGISTERED)
-                                .put("user_description", newDescrition).toString());
-                    } else if (baasResult.isFailed()) {
-                        showDescriptionFailDailog();
+                public void onClick(DialogInterface dialog, int which) {
+                    if (!checkCode(mCode, input.getText().toString())) {
+                        //dialog.dismiss();
+                    } else {
+                        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        progressDialog.show();
+                        progressDialog.setMessage("Salvataggio in corso...");
+                        user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
+                        user.getScope(BaasUser.Scope.REGISTERED).put("email", newEmail);
+                        user.save(new BaasHandler<BaasUser>() {
+                            @Override
+                            public void handle(BaasResult<BaasUser> baasResult) {
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                }
+                                if (baasResult.isSuccess()) {
+                                    mRandom = null;
+                                    mUserDescriptionTextView.setText(newDescrition);
+                                    mUser.setDescription(newDescrition);
+                                    mUserEmailTextView.setText(newEmail);
+                                    mUser.setEmail(newEmail);
+                                    mIsEditingDescription = !mIsEditingDescription;
+                                    changeButtonAdDescriptionState();
+                                    Log.d(TAG, BaasUser.current()
+                                            .getScope(BaasUser.Scope.REGISTERED)
+                                            .put("user_description", newDescrition).toString());
+                                } else if (baasResult.isFailed()) {
+                                    showDescriptionFailDailog();
+                                }
+                            }
+                        });
                     }
                 }
             });
+            builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sendMail(newDescrition);
+                }
+            });
+            builder.show();
         }
+    }
+
+    private void sendMail(String newMail){
+        new BaaSMail(getView(),"geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
+    }
+    private boolean checkCode(int code, String userCode){
+        int userInput=0;
+        if(userCode!=null && !userCode.isEmpty()){
+            userInput = Integer.parseInt(userCode);
+        }
+        if (userCode.isEmpty()||code!=userInput) {
+            final android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(getContext(),
+                            R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Errore");
+            builder.setMessage("Codice non valido");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    updateDescription();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return false;
+        }
+        return true;
     }
 
     private void showDescriptionFailDailog() {
@@ -432,11 +522,15 @@ public class UserProfileFragment extends StatedFragment implements
             mButton.setText("Modifica profilo");
             mUserDescriptionEditText.setVisibility(View.GONE);
             mUserDescriptionTextView.setVisibility(View.VISIBLE);
+            mUserEmailTextView.setVisibility(View.VISIBLE);
+            mUserEmailEditText.setVisibility(View.GONE);
             mButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         } else if (mIsCurrentUser && mIsEditingDescription) {
             mButton.setText("Salva modifiche");
             mUserDescriptionEditText.setVisibility(View.VISIBLE);
             mUserDescriptionTextView.setVisibility(View.GONE);
+            mUserEmailTextView.setVisibility(View.GONE);
+            mUserEmailEditText.setVisibility(View.VISIBLE);
             mButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         } else {
             mButton.setText("Assegna il Geeft");
@@ -459,6 +553,8 @@ public class UserProfileFragment extends StatedFragment implements
         mLayoutDonatedView = rootView.findViewById(R.id.layout_donated);
         mLayoutReceivedView = rootView.findViewById(R.id.layout_received);
         mUsernameEditText = (EditText)rootView.findViewById(R.id.username_edit_text);
+        mUserEmailTextView = (TextView)rootView.findViewById(R.id.user_email_text_view);
+        mUserEmailEditText = (EditText)rootView.findViewById(R.id.user_email_edit_text);
 
 
 

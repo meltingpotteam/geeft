@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class User implements Serializable{
     private final String TAG = getClass().getSimpleName();
+    private String mEmail;
     private String mUserID;
     private String mFbID;
     private String mUsername;
@@ -24,15 +25,23 @@ public class User implements Serializable{
     }
 
 
-    public User(@Nullable String userID, String username, String fbID, String description,
-                double rank){
+    public User(@Nullable String userID, String username, String fbID, String description
+            ,String email, double rank){
         mUserID = userID;
         mUsername = username;
         mFbID = fbID;
         mDescription = description;
         mRank = rank;
+        mEmail = email;
     }
 
+    public String getEmail(){
+        return mEmail;
+    }
+
+    public void setEmail(String email){
+        mEmail = email;
+    }
 
     public String getProfilePic() {
         Log.d(TAG, mFbID);
