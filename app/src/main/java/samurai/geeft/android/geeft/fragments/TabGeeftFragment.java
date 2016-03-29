@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSSearchTask;
@@ -418,6 +420,7 @@ public class TabGeeftFragment extends StatedFragment
             }else if (resultToken == RESULT_SESSION_EXPIRED) {
                 message= "Sessione scaduta,è necessario effettuare di nuovo" +
                         " il login";
+                startLoginActivity();
             }else if(mGeeftList.size()==0){
                 message="Nessun risultato";
             }else {
@@ -439,6 +442,11 @@ public class TabGeeftFragment extends StatedFragment
                     });
             snackbar.show();
         }
+    }
+
+    private void startLoginActivity(){
+        Intent intent = new Intent(getContext(),LoginActivity.class);
+        startActivity(intent);
     }
 
     /*private void showProgressDialog() {
