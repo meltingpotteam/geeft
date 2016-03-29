@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by ugookeadu on 18/02/16.
@@ -35,7 +36,7 @@ public class HowToDoFragment extends StatedFragment{
         View rootView = inflater.inflate(R.layout.fragment_how_to_do, container, false);
         mImageView = (ImageView)rootView.findViewById(R.id.how_to_do_photo_frame);
         mTextView = (TextView)rootView.findViewById(R.id.how_to_do_step1);
-        Picasso.with(getContext()).load("http://geeft1.cloudapp.net:9000/file/" +
+        Picasso.with(getContext()).load("http://"+TagsValue.API_DOMAIN+":"+TagsValue.APP_PORT+"/file/" +
                 "b31b7dcb-10f2-486e-9f79-b2c5f44cd5ab?X-BAASBOX-APPCODE1234567890&X-BB-SESSION=" +
                         "X-BAASBOX-APPCODE1234567890&X-BB-SESSION="+ BaasUser.current().getToken())
                 .fit().centerInside()

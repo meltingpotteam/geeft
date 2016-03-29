@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,9 @@ import samurai.geeft.android.geeft.database.BaaSUploadGeeft;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 08/02/16.
@@ -63,6 +68,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     private static final String ARG_MODIFY = "arg_modify";
     private static final String KEY_GEEFT_IMAGE = "key_geeft_image";
     private final String TAG = getClass().getName();
+
+    private static final String SHOWCASE_ID = "Showcase_single_use";
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
@@ -118,6 +125,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     private boolean mModify;
     private ProgressDialog mProgress;
     private long mLastClickTime;
+    private LinearLayout mDeadlineFieldLayout;
+    private LinearLayout mAutomaticSelectionFieldLayout;
 
     public static AddGeeftFragment newInstance(@Nullable Geeft geeft, boolean modify) {
         AddGeeftFragment fragment = new AddGeeftFragment();
@@ -230,6 +239,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     }
 
     private void initUI(View rootView) {
+        mDeadlineFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_geeft_deadline_field);
+        mAutomaticSelectionFieldLayout = (LinearLayout) rootView.findViewById(R.id.add_geeft_automatic_selectin_field);
         mGeeftImageView = (ImageView) rootView.findViewById(R.id.geeft_add_photo_frame);
         mGeeftTitle = (TextView) rootView.findViewById(R.id.fragment_add_geeft_form_name);
         mGeeftDescription = (TextView) rootView.findViewById
@@ -244,6 +255,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                 .findViewById(R.id.automatic_selection_checkbox);
         mAllowCommunication = (CheckBox) rootView
                 .findViewById(R.id.allow_communication_checkbox);
+
+
 
         cameraButton = (ImageButton) rootView.findViewById(R.id.geeft_photo_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -266,11 +279,13 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
 //                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
 //                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
 
-                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg"+".jpg");
+                mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
                 startActivityForResult(intent, CAPTURE_NEW_PICTURE);
             }
         });
+
+
         //Listener for the dimension checkbox--------------------------------------------------------------
         mGeeftHeight = (EditText) rootView.findViewById(R.id.geeft_height);
         mGeeftWidth = (EditText) rootView.findViewById(R.id.geeft_width);
@@ -376,6 +391,9 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
+
+        presentShowcaseView(350);
+
     }
 
     //
@@ -656,6 +674,72 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         dialog.show();
     }
+    
+    /**
+     * Tutorial Implementation
+     * @param withDelay
+     */
+    private void presentShowcaseView(int withDelay){
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setDismissText("OK")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Qui potrai aggiungere nuovi oggetti nuovi oggetti in geeft!\nPotrai aggiungere oggetti che non utilizzi più e che vuoi donare , semplicemente compilando questi campi")
+                        .withoutShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(cameraButton)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_camerabutton_text))
+                        .build()
+
+        );
+
+//        mDeadlineFieldLayout.requestFocus();
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(mDeadlineFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_deadline_text))
+                        .withRectangleShape()
+                        .build()
+        );
+//
+//        mAutomaticSelectionFieldLayout.requestFocus();
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+//                        .setTarget(mAutomaticSelectionFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_additionalinfo_text))
+                        .withoutShape()
+                        .build()
+        );
+
+
+        sequence.start();
+
+    }
+
 
     @Override
     public void done(boolean result) {

@@ -33,6 +33,7 @@ android {
     }
 }
 
+
 repositories {
     maven {
         url "http://dl.bintray.com/glomadrian/maven"
@@ -77,6 +78,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.ms-square:expandableTextView:0.1.4'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.1.0@aar'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
@@ -87,6 +89,7 @@ dependencies {
     compile files('libs/additionnal.jar')
     compile files('libs/mail.jar')
     compile files('libs/commons-email-1.4/commons-email-1.4.jar')
+    compile 'com.github.amlcurran.showcaseview:library:5.4.1'
 }
 apply plugin: 'com.google.gms.google-services'//Login with G+
 
