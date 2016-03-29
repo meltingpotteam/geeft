@@ -693,7 +693,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                         .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Qui potrai aggiungere nuovi oggetti nuovi oggetti in geeft!\nPotrai aggiungere oggetti che non utilizzi più e che vuoi donare , semplicemente compilando questi campi")
+                        .setContentText(getString(R.string.tutorial_geeftinfo_welcomedescription))
                         .withoutShape()
                         .build()
         );
