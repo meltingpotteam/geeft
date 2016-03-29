@@ -142,6 +142,9 @@
 
         <activity android:name=".activities.ActivityRecylerAnimators"/>
 
+        <activity android:name=".activities.UsernameMailActivity"/>
+
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

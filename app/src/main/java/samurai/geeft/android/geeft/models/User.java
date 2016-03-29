@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.models;
 
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -29,19 +30,12 @@ public class User implements Serializable{
             ,String email, double rank){
         mUserID = userID;
         mUsername = username;
+        mEmail = email;
         mFbID = fbID;
         mDescription = description;
         mRank = rank;
-        mEmail = email;
     }
 
-    public String getEmail(){
-        return mEmail;
-    }
-
-    public void setEmail(String email){
-        mEmail = email;
-    }
 
     public String getProfilePic() {
         Log.d(TAG, mFbID);
@@ -75,6 +69,10 @@ public class User implements Serializable{
     public void setUsername(String username) {
         mUsername = username;
     }
+
+    public String getEmail() { return mEmail; }
+
+    public void setEmail(String email) { mEmail = email; }
 
     public String getDocId() {
         return mDocId;

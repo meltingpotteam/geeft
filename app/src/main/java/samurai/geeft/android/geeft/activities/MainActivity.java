@@ -196,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
         mActionGeeftStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(MainActivity.this, AddStoryActivity.class);
                 startActivity(intent);
                 floatingActionMenu.close(true); //TODO: Enable this after is stable,in beta version
