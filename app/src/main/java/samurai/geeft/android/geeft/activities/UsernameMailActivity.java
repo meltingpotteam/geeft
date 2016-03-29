@@ -61,7 +61,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                         final String myName = BaasUser.current().getName().toString();
                         new BaaSUpdateUsernameMail(getApplicationContext(),myName,
                                 mNickname.getText().toString(),mEmail.getText().toString(),UsernameMailActivity.this).execute();
-                        mProgressDialog = ProgressDialog.show(UsernameMailActivity.this,"Attendere"
+                                mProgressDialog = ProgressDialog.show(UsernameMailActivity.this,"Attendere"
                                 ,"Salvataggio in corso");
                         startMainActivity();
                     } else {
