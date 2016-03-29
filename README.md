@@ -1,4 +1,4 @@
-![logo motto shadow](http://meltingpotteam.altervista.org/logo_motto_shadow.png)
+![logo motto shadow](http://meltingpotteam.altervista.org/LogoGithubSizeGeeftVerticalPhraseBackground.jpg)
 ==============
 
 **Geeft** is a social platform project started in December 2015 for the Google technologies for cloud and web development 2015 workshop.<br />
