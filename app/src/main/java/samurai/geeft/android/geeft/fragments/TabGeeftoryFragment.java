@@ -37,6 +37,7 @@ import samurai.geeft.android.geeft.utilities.StatedFragment;
 /**
  * Created by ugookeadu on 17/02/16.
  */
+
 public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackBooleanToken
         ,TaskCallbackBooleanStringStringToken {
 
@@ -98,7 +99,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
         Log.d(TAG, "onCreate()-> savedInstanceState is null? " + (savedInstanceState == null));
         initVariables();
     }
-
 
 
     private void initVariables() {
