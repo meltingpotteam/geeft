@@ -63,7 +63,6 @@ public class BaaSMail extends AsyncTask<Void,Void,Boolean> {
 
     private String getTimeFields() {
         String url = "/plugin/get.timeFields";
-        Log.d(TAG, "Url is: " + url);
         BaasResult<JsonObject> result = BaasBox.rest().sync(Rest.Method.GET, url);
         String timeField;
         try {
