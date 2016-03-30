@@ -262,10 +262,10 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
             if (user!=null) {
                 String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
                 String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
-                if ((mail!=null)&&(!mail.isEmpty())&&(username!=null)&&(username.isEmpty())){
-                    startMainActivity();
-                } else {
+                if ((mail==null)||(mail.isEmpty())||(username==null)||(username.isEmpty())){
                     startActivity(new Intent(this, UsernameMailActivity.class));
+                } else {
+                    startMainActivity();
                 }
             }
 
