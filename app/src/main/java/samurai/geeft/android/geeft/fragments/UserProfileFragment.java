@@ -305,76 +305,100 @@ public class UserProfileFragment extends StatedFragment implements
             final String newDescrition = mUserDescriptionEditText.getText().toString();
             final String newEmail = mUserEmailEditText.getText().toString().toLowerCase();
             user = BaasUser.current();
-            if(mRandom ==null){
-                mRandom = new Random();
-                int min = 1000;
-                int max = 9999;
-                final int code = mRandom.nextInt(max - min + 1) + min;
-                mCode = code;
-                sendMail(newEmail);
-            }
-            final android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(getContext(),
-                            R.style.AppCompatAlertDialogStyle);
-            final EditText input = new EditText(getContext());
-            input.setGravity(Gravity.CENTER_HORIZONTAL);
-            input.setHint("Inserisci il codice di conferma");
-            input.setInputType(InputType.TYPE_CLASS_NUMBER);
-            input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
-            input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            input.setLayoutParams(lp);
-            builder.setView(input);
-            builder.setMessage("Controlla il codice nella tua mail");
-            //builder.setTitle("Inserire pasword");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (!checkCode(mCode, input.getText().toString())) {
-                        //dialog.dismiss();
-                    } else {
-                        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-                        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        progressDialog.show();
-                        progressDialog.setMessage("Salvataggio in corso...");
-                        user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
-                        user.getScope(BaasUser.Scope.REGISTERED).put("email", newEmail);
-                        user.save(new BaasHandler<BaasUser>() {
-                            @Override
-                            public void handle(BaasResult<BaasUser> baasResult) {
-                                if (progressDialog != null) {
-                                    progressDialog.dismiss();
-                                }
-                                if (baasResult.isSuccess()) {
-                                    mRandom = null;
-                                    mUserDescriptionTextView.setText(newDescrition);
-                                    mUser.setDescription(newDescrition);
-                                    mUserEmailTextView.setText(newEmail);
-                                    mUser.setEmail(newEmail);
-                                    mIsEditingDescription = !mIsEditingDescription;
-                                    changeButtonAdDescriptionState();
-                                    Log.d(TAG, BaasUser.current()
-                                            .getScope(BaasUser.Scope.REGISTERED)
-                                            .put("user_description", newDescrition).toString());
-                                } else if (baasResult.isFailed()) {
-                                    showDescriptionFailDailog();
-                                }
+
+            if(newDescrition.equals( user.getScope(BaasUser.Scope.REGISTERED)
+                    .get("user_description"))&&
+                    newEmail.equals( user.getScope(BaasUser.Scope.REGISTERED).get("email"))){
+                mRandom = null;
+                mUserDescriptionTextView.setText(newDescrition);
+                mUser.setDescription(newDescrition);
+                mUserEmailTextView.setText(newEmail);
+                mUser.setEmail(newEmail);
+                mIsEditingDescription = !mIsEditingDescription;
+                changeButtonAdDescriptionState();
+            }else {
+
+                if (mRandom == null) {
+                    mRandom = new Random();
+                    int min = 1000;
+                    int max = 9999;
+                    final int code = mRandom.nextInt(max - min + 1) + min;
+                    mCode = code;
+                    sendMail(newEmail);
+                }
+                if(!newEmail.equals( user.getScope(BaasUser.Scope.REGISTERED).get("email"))) {
+                    final android.support.v7.app.AlertDialog.Builder builder =
+                            new android.support.v7.app.AlertDialog.Builder(getContext(),
+                                    R.style.AppCompatAlertDialogStyle);
+                    final EditText input = new EditText(getContext());
+                    input.setGravity(Gravity.CENTER_HORIZONTAL);
+                    input.setHint("Inserisci il codice di conferma");
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
+                    input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    builder.setView(input);
+                    builder.setMessage("Controlla il codice nella tua mail");
+                    //builder.setTitle("Inserire pasword");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (!checkCode(mCode, input.getText().toString())) {
+                                //dialog.dismiss();
+                            } else {
+                                saveUser(user, newDescrition, newEmail);
                             }
-                        });
-                    }
+                        }
+                    });
+                    builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendMail(newDescrition);
+                        }
+                    });
+                    builder.show();
+                }else {
+                    saveUser(user,newDescrition,newEmail);
                 }
-            });
-            builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sendMail(newDescrition);
-                }
-            });
-            builder.show();
+            }
         }
     }
+
+    private void saveUser(BaasUser user,final String newDescrition,final String newEmail){
+        user.getScope(BaasUser.Scope.REGISTERED).put("user_description", newDescrition);
+        user.getScope(BaasUser.Scope.REGISTERED).put("email", newEmail);
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.show();
+        progressDialog.setMessage("Salvataggio in corso...");
+
+        user.save(new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> baasResult) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if (baasResult.isSuccess()) {
+                    mRandom = null;
+                    mUserDescriptionTextView.setText(newDescrition);
+                    mUser.setDescription(newDescrition);
+                    mUserEmailTextView.setText(newEmail);
+                    mUser.setEmail(newEmail);
+                    mIsEditingDescription = !mIsEditingDescription;
+                    changeButtonAdDescriptionState();
+                    Log.d(TAG, BaasUser.current()
+                            .getScope(BaasUser.Scope.REGISTERED)
+                            .put("user_description", newDescrition).toString());
+                } else if (baasResult.isFailed()) {
+                    showDescriptionFailDailog();
+                }
+            }
+        });
+    }
+
 
     private void sendMail(String newMail){
         new BaaSMail(getView(),"geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
