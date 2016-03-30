@@ -32,7 +32,6 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.RequestToken;
 import com.baasbox.android.Rest;
-import com.baasbox.android.json.JsonArray;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
@@ -199,7 +198,7 @@ public class UserProfileFragment extends StatedFragment implements
         user.setDescription(description);
         user.setDocId(docId);
         user.setRank(userRank);
-        user.setEmail(email==null?"":email);
+        user.setEmail(email == null ? "" : email);
 
         return user;
     }
@@ -326,9 +325,9 @@ public class UserProfileFragment extends StatedFragment implements
                     int max = 9999;
                     final int code = mRandom.nextInt(max - min + 1) + min;
                     mCode = code;
-                    sendMail(newEmail);
                 }
                 if(!newEmail.equals( user.getScope(BaasUser.Scope.REGISTERED).get("email"))) {
+                    sendMail(newEmail);
                     final android.support.v7.app.AlertDialog.Builder builder =
                             new android.support.v7.app.AlertDialog.Builder(getContext(),
                                     R.style.AppCompatAlertDialogStyle);
@@ -456,28 +455,29 @@ public class UserProfileFragment extends StatedFragment implements
 
     private void assignCurrentGeeft() throws MalformedURLException {
         if (BaasUser.current() != null) {
+
             mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
                     "Operazione in corso");
 
             mLinkCreateRequest = BaasBox.rest().async(Rest.Method.GET, "plugin/manual" +
-                    ".geeftedChoose?" +
-                    "s_id=" + mGeeft.getId() +
-                    "&d_id=" + mUser.getDocId() +
-                    "&label=" + TagsValue.LINK_NAME_ASSIGNED +
-                    "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
-                    "&geeftedName=" + mUser.getID() +
-                    "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
-                    .replace(" ", "%20")
-                    , new BaasHandler<JsonObject>() {
-                @Override
-                public void handle(BaasResult<JsonObject> result) {
-                    mLinkCreateRequest = null;
-                    if (result.isFailed()) {
-                        showFailureAlert();
-                    } else if (result.isSuccess()) {
-                        showSuccessAlert();
-                        Log.d(TAG, "IN HANDLER SUCCES");
-                    }
+                ".geeftedChoose?" +
+                "s_id=" + mGeeft.getId() +
+                "&d_id=" + mUser.getDocId() +
+                "&label=" + TagsValue.LINK_NAME_ASSIGNED +
+                "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
+                "&geeftedName=" + mUser.getID() +
+                "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
+                .replace(" ", "%20")
+                , new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> result) {
+                mLinkCreateRequest = null;
+                if (result.isFailed()) {
+                    showFailureAlert();
+                } else if (result.isSuccess()) {
+                    showSuccessAlert();
+                    Log.d(TAG, "IN HANDLER SUCCES");
+                }
                 }
             });
         }

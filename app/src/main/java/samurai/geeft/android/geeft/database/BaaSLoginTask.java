@@ -152,14 +152,14 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                                 //Insert in doc_id the id of docUser,linked with geefts
                                 user.getScope(BaasUser.Scope.REGISTERED).put("doc_id", doc.getId());
                                 //Insert username
-                                user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
+                                //user.getScope(BaasUser.Scope.REGISTERED).put("username", name);
                                 if(mUserData!=null){
                                     //Insert location
                                     user.getScope(BaasUser.Scope.REGISTERED)
                                             .put("location", mUserData.getString("location"));
                                     //Insert email
-                                    user.getScope(BaasUser.Scope.REGISTERED)
-                                            .put("email", mUserData.getString("email"));
+                                    /*user.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("email", mUserData.getString("email"));*/
                                     //Insert gender
                                     user.getScope(BaasUser.Scope.REGISTERED)
                                             .put("gender", mUserData.getString("gender"));

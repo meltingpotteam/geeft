@@ -259,10 +259,13 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
 //          //Call to Nickname and Email request
             Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
             BaasUser user = BaasUser.current();
+            Log.d(TAG,"user "+user);
             if (user!=null) {
                 String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
+                Log.d(TAG,"mail "+mail);
                 String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
                 if ((mail==null)||(mail.isEmpty())||(username==null)||(username.isEmpty())){
+                    Log.d(TAG,"user "+user);
                     startActivity(new Intent(this, UsernameMailActivity.class));
                 } else {
                     startMainActivity();
