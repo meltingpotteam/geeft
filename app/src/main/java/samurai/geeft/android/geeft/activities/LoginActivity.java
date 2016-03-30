@@ -258,7 +258,17 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         if(result) {
 //          //Call to Nickname and Email request
             Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
-            startActivity(new Intent(this, UsernameMailActivity.class));
+            BaasUser user = BaasUser.current();
+            if (user!=null) {
+                String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
+                String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
+                if ((mail!=null)&&(!mail.isEmpty())&&(username!=null)&&(username.isEmpty())){
+                    startMainActivity();
+                } else {
+                    startActivity(new Intent(this, UsernameMailActivity.class));
+                }
+            }
+
         }
     }
 
@@ -379,5 +389,13 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 });
     }
     // [END revokeAccess]
+
+    //Starts the MainActivity
+    private void startMainActivity() {
+        final Intent mMainIntent = new Intent(LoginActivity.this,
+                MainActivity.class);
+        startActivity(mMainIntent);
+        finish();
+    }
 
 }

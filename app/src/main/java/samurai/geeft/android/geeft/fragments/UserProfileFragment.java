@@ -333,7 +333,9 @@ public class UserProfileFragment extends StatedFragment implements
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (!checkCode(mCode, input.getText().toString())) {
-                        //dialog.dismiss();
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                     } else {
                         final ProgressDialog progressDialog = new ProgressDialog(getContext());
                         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -377,7 +379,7 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void sendMail(String newMail){
-        new BaaSMail(getView(),"geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
+        new BaaSMail("geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
     }
     private boolean checkCode(int code, String userCode){
         int userInput=0;

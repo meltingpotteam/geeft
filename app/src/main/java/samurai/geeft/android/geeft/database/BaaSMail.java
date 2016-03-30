@@ -18,8 +18,7 @@ public class BaaSMail extends AsyncTask<Void,Void,Boolean> {
     private final String mReceiver;
     private final int mCode;
     View mView;
-    public BaaSMail(View view, String sender,String p,String receiver, int code){
-        mView = view;
+    public BaaSMail(String sender,String p,String receiver, int code){
         mSender = sender;
         mP = p;
         mReceiver = receiver;
@@ -28,9 +27,9 @@ public class BaaSMail extends AsyncTask<Void,Void,Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        return sendEmail(mView);
+        return sendEmail();
     }
-    public boolean sendEmail(View view){
+    public boolean sendEmail(){
         try {
             Email email = new SimpleEmail();
             email.setHostName("smtp.gmail.com");
