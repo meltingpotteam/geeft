@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
 
+import samurai.geeft.android.geeft.activities.LoginActivity;
+import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
@@ -126,6 +129,8 @@ public class BaaSUpdateUsernameMail extends AsyncTask<Void,Void,Boolean> {
             Log.d(TAG,resFeedback.toString());
             return false;
         }
+
+
 
     }
 
