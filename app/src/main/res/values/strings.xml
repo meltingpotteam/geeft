@@ -353,7 +353,9 @@
     <!-- Tutorial strings-->
     <string name="tutorial_camerabutton_text">Premi su questo tasto per avviare la fotocamera e scattare la foto dell\'oggetto</string>
     <string name="tutorial_deadline_text">Seleziona quanti giorni vuoi che il geeft sia visibile prima dell\'assegnazione</string>
-    <string name="tutorial_additionalinfo_text">Spuntando \'Selezione automatica del Geefted\' l\'applicazione selezionerà automaticamente un vincitore in maniera intelligente. In caso contrario potrai vedere la lista delle persone che si sono prenotate all\'oggetto, selezionandolo dal menu degli oggetti donati, e potrai sceglierne il qualsiasi momento il vincitore.\n\nSpuntando \'Posso essere contattato\' darai la possibilità agli utenti di poterti contattare tramite facebook.\n\nNel caso di oggetti grandi, potrai inserite le loro dimensioni spuntando la relativa casella</string>
+    <string name="tutorial_additionalinfo_automaticselection_text">Spuntando \'Selezione automatica del Geefted\' l\'applicazione selezionerà automaticamente un vincitore in maniera intelligente.\n\nIn caso contrario potrai vedere la lista delle persone che si sono prenotate all\'oggetto, selezionandolo dal menu degli oggetti donati, e potrai sceglierne il qualsiasi momento il vincitore.</string>
+    <string name="tutorial_additionalinfo_allowContact_text">Spuntando \'Posso essere contattato\' darai la possibilità agli utenti di poterti contattare tramite facebook</string>
+    <string name="tutorial_additionalinfo_bigobject_text">Nel caso di oggetti grandi, potrai inserite le loro dimensioni spuntando la relativa casella</string>
     <string name="tutorial_geeftinfo_text">Geeft è dove puoi vedere gli oggetti presenti su geeft e prenotare quello a cui sei interessato!</string>
     <string name="tutorial_geeftoryinfo_text">"Geeftory è la sezione in cui puoi trovare le storie degli oggetti "</string>
     <string name="tutorial_tabsections_text">Benvenuti in Geeft!\nQueste sono le sezioni dell\'applicazione!</string>

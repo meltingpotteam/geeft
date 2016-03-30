@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -49,7 +50,9 @@ import java.io.File;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
+import samurai.geeft.android.geeft.fragments.GeeftListFragment;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -62,13 +65,12 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  * Updated by gabriel-dev on 29/01/16.
  * Update by danybr-dev on 2/02/16
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.OnDrawerClosedListener{
     private final String TAG ="MainActivity";
     private static final int REQUEST_CODE_LOGOUT = 0;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private static final String SHOWCASE_ID_MAIN = "Showcase_single_use_main";
-    private static final String SHOWCASE_ID_FAB = "Showcase_single_use_fab_menu";
 
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
@@ -277,12 +279,24 @@ public class MainActivity extends AppCompatActivity {
 //            presentShowcaseFabView(350);
 //        }
 
-        if (!drawerFragment.isMenuVisible() || drawerFragment.getProfileLayout().getVisibility() == View.GONE) {
-//            Toast.makeText(MainActivity.this, "FUNGEEEE", Toast.LENGTH_SHORT).show();
-            presentShowcaseView(500);
-        }
+//        if (!drawerFragment.isMenuVisible() || drawerFragment.getProfileLayout().getVisibility() == View.GONE) {
+////            Toast.makeText(MainActivity.this, "FUNGEEEE", Toast.LENGTH_SHORT).show();
+//            presentShowcaseView(500);
+//        }
+//
+//        mDrawerLayout.openDrawer(drawerFragment.getView());
 
     }
+
+    /**
+     * callback from drawer implementation
+     */
+
+    @Override
+    public void onDrawerClosed() {
+        presentShowcaseView(500);
+    }
+
 
     @Override
     protected void onResume() {
@@ -508,39 +522,6 @@ public class MainActivity extends AppCompatActivity {
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_geeftinfo_text))
                         .withRectangleShape()
-                        .build()
-        );
-
-        sequence.start();
-
-    }
-
-    private void presentShowcaseFabView(int withDelay){
-
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(withDelay); // half second between each showcase view
-
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID_FAB);
-
-        sequence.setConfig(config);
-
-        sequence.addSequenceItem(
-                new MaterialShowcaseView.Builder(this)
-                        .setTarget(mActionNewGeeft)
-                        .setDismissText("HO CAPITO")
-                        .setMaskColour(Color.parseColor("#f11d5e88"))
-                        .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Premendo qui, potrai aggiungere un nuovo geeft compilando un semplice form")
-                        .build()
-                );
-
-        sequence.addSequenceItem(
-                new MaterialShowcaseView.Builder(this)
-                        .setTarget(mActionGeeftStory)
-                        .setDismissText("HO CAPITO")
-                        .setMaskColour(Color.parseColor("#f11d5e88"))
-                        .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Con questo potrai aggirnare la storia di un oggetto che hai ricevuto inviando un immagine e una descrizione di come lo hai utilizzato")
                         .build()
         );
 

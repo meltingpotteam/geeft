@@ -4,6 +4,7 @@ package samurai.geeft.android.geeft.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.CategoryActivity;
@@ -39,9 +42,13 @@ import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.activities.UserProfileActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
+import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +62,8 @@ public class NavigationDrawerFragment extends Fragment {
     private static final String KEY_USER_LEARNED_DRAWER = "samurai.geeft.android.geeft.fragment." +
             "uesr_learned_drawer";
 
+    private static final String SHOWCASE_ID_NAVDRAW = "Showcase_single_use_navigation_drawer";
+
 
     //variables
     private ActionBarDrawerToggle mDrawerToggle;
@@ -62,6 +71,8 @@ public class NavigationDrawerFragment extends Fragment {
     private View mContainerView;
     private NavigationDrawerItemAdapter mNavigationDrawerItemAdapter;
     private RecyclerView mRecyclerView;
+    private OnDrawerClosedListener mCallback; //callback to listen if the navigation drawer is open or closed
+    private List<NavigationDrawerItem> mListOfValuesInDrawer;
 
     public FrameLayout getProfileLayout() {
         return mProfileLayout;
@@ -79,6 +90,23 @@ public class NavigationDrawerFragment extends Fragment {
     // indicate if we runnig the fragment lifecycle from begining
     // for example when back from rotation
     private boolean mFromSavedIstanceState;
+
+    public interface OnDrawerClosedListener {
+        void onDrawerClosed();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnDrawerClosedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,8 +144,9 @@ public class NavigationDrawerFragment extends Fragment {
          * application starts;
          **/
 
+        mListOfValuesInDrawer = getData();
         // Set adapter data
-        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), getData());
+        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), mListOfValuesInDrawer);
 
         //set manager and adapter dor recycleview
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -157,6 +186,8 @@ public class NavigationDrawerFragment extends Fragment {
                 //TODO what happens on long press
             }
         }));
+
+//        presentShowcaseNavigationView(350);
     }
 
     //set up the Recyclerview on creation
@@ -194,6 +225,7 @@ public class NavigationDrawerFragment extends Fragment {
 
                     mWelcomeLayout.setVisibility(View.GONE);
                     mProfileLayout.setVisibility(View.VISIBLE);
+                    mCallback.onDrawerClosed();     //send a "callback" to signal that the navigation drawer is closed
                 }
             }
         };
@@ -201,7 +233,7 @@ public class NavigationDrawerFragment extends Fragment {
         // if the user have never seen the drawer and if the very first time this fragment is starting
         // in that case display the drawer
         if (!mUserLearnedDrawer) {
-//            mDrawerLayout.openDrawer(mContainerView);
+            mDrawerLayout.openDrawer(mContainerView);
             mWelcomeLayout.setVisibility(View.VISIBLE);
             mProfileLayout.setVisibility(View.GONE);
         }
@@ -327,5 +359,32 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Tutorial implementation
      */
+//
+//    private void presentShowcaseNavigationView(int withDelay){
+//
+//        ShowcaseConfig config = new ShowcaseConfig();
+//        config.setDelay(withDelay); // half second between each showcase view
+//
+//        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID_NAVDRAW);
+//
+//        sequence.setConfig(config);
+//
+//        sequence.addSequenceItem(
+//                new MaterialShowcaseView.Builder(getActivity())
+//                        .setDismissText("HO CAPITO")
+//                        .withRectangleShape()
+//                        .setMaskColour(Color.parseColor("#f11d5e88"))
+//                        .setDismissTextColor(Color.parseColor("#F57C00"))
+//                        .setContentText("test navigation drawer showcase")
+//                        .build()
+//        );
+//
+//        sequence.start();
+//
+//    }
 
+
+    /**
+     *
+     */
 }

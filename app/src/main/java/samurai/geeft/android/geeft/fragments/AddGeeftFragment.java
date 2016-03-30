@@ -730,11 +730,32 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                         .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText(getString(R.string.tutorial_additionalinfo_text))
+                        .setContentText(getString(R.string.tutorial_additionalinfo_automaticselection_text))
                         .withoutShape()
                         .build()
         );
 
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+//                        .setTarget(mAutomaticSelectionFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_additionalinfo_allowContact_text))
+                        .withoutShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+//                        .setTarget(mAutomaticSelectionFieldLayout)
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_additionalinfo_bigobject_text))
+                        .withoutShape()
+                        .build()
+        );
 
         sequence.start();
 
