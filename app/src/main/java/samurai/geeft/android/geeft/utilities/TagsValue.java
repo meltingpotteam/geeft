@@ -18,6 +18,8 @@ public class TagsValue {
 
     public static final String DEFAULT_TAG = "TEAM2015";
 
+    public static final String DEFAULT_URL = "http://geeft-test1.cloudapp.net:9000";
+
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

@@ -32,6 +32,7 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.RequestToken;
 import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonArray;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
@@ -402,8 +403,9 @@ public class UserProfileFragment extends StatedFragment implements
 
 
     private void sendMail(String newMail){
-        new BaaSMail(getView(),TagsValue.DEFAULT_EMAIL,TagsValue.DEFAULT_TAG,newMail,mCode).execute();
+        new BaaSMail(TagsValue.DEFAULT_EMAIL,newMail,mCode).execute();
     }
+
     private boolean checkCode(int code, String userCode){
         int userInput=0;
         if(userCode!=null && !userCode.isEmpty()){
@@ -513,6 +515,23 @@ public class UserProfileFragment extends StatedFragment implements
         startActivity(intent);
     }
 
+
+    private void showErrorAlert() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(),
+                        R.style.AppCompatAlertDialogStyle); //Read Update
+        builder.setTitle("Errore");
+        builder.setMessage("Errore imprevisto,riprovare più tardi");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
 
     private void showFailureAlert() {
         if (mProgressDialog != null) {

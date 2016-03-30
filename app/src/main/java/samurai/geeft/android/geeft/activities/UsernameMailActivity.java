@@ -28,6 +28,7 @@ import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
 import samurai.geeft.android.geeft.database.BaaSUpdateUsernameMail;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.User;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by joseph on 25/03/16.
@@ -199,7 +200,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     }
 
     private void sendMail(String newMail){
-        new BaaSMail("geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
+        new BaaSMail(TagsValue.DEFAULT_EMAIL,newMail,mCode).execute();
     }
     private boolean checkCode(int code, String userCode){
         int userInput=0;
