@@ -582,7 +582,7 @@ public class UserProfileFragment extends StatedFragment implements
         mUserEmailEditText = (EditText)rootView.findViewById(R.id.user_email_edit_text);
         if(mIsCurrentUser==false){
             mUserEmailCard = rootView.findViewById(R.id.user_email_card);
-            mUserEmailTextView.setVisibility(View.GONE);
+            mUserEmailCard.setVisibility(View.GONE);
         }
 
         mUsernameTextView.setText("...");
