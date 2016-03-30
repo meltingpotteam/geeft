@@ -208,6 +208,7 @@
                     >
                     <LinearLayout
                         style="@style/Widget.CardContent"
+                        android:id="@+id/user_email_card"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView

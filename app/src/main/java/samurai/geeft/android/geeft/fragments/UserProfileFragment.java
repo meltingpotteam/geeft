@@ -94,6 +94,7 @@ public class UserProfileFragment extends StatedFragment implements
     private EditText mUserEmailEditText;
     private Random mRandom;
     private int mCode;
+    private View mUserEmailCard;
 
 
     public static UserProfileFragment newInstance(@Nullable User user,
@@ -579,8 +580,10 @@ public class UserProfileFragment extends StatedFragment implements
         mUsernameEditText = (EditText)rootView.findViewById(R.id.username_edit_text);
         mUserEmailTextView = (TextView)rootView.findViewById(R.id.user_email_text_view);
         mUserEmailEditText = (EditText)rootView.findViewById(R.id.user_email_edit_text);
-
-
+        if(mIsCurrentUser==false){
+            mUserEmailCard = rootView.findViewById(R.id.user_email_card);
+            mUserEmailTextView.setVisibility(View.GONE);
+        }
 
         mUsernameTextView.setText("...");
         mUserGivenTextView.setText("...");
