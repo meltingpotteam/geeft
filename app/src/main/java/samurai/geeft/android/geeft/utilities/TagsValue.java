@@ -14,6 +14,10 @@ public class TagsValue {
 
     public static final int APP_PORT = 9000;
 
+    public static final String DEFAULT_EMAIL = "geeft.app@gmail.com";
+
+    public static final String DEFAULT_TAG = "TEAM2015";
+
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

@@ -402,7 +402,7 @@ public class UserProfileFragment extends StatedFragment implements
 
 
     private void sendMail(String newMail){
-        new BaaSMail(getView(),"geeft.app@gmail.com","TEAM2015",newMail,mCode).execute();
+        new BaaSMail(getView(),TagsValue.DEFAULT_EMAIL,TagsValue.DEFAULT_TAG,newMail,mCode).execute();
     }
     private boolean checkCode(int code, String userCode){
         int userInput=0;
