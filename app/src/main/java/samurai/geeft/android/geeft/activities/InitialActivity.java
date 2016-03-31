@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
-import java.io.Serializable;
-
 import samurai.geeft.android.geeft.R;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanGeeft;
-import samurai.geeft.android.geeft.models.Geeft;
 
 /**
  * Created by ugookeadu on 14/01/16.
@@ -23,6 +20,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 public class InitialActivity extends Activity  {
 
 
+    private final String TAG = getClass().getSimpleName();
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
@@ -50,7 +48,19 @@ public class InitialActivity extends Activity  {
                         @Override
                         public void handle(BaasResult<BaasUser> baasResult) {
                             if (baasResult.isSuccess()){
-                                startMainActivity();
+                                BaasUser user = BaasUser.current();
+                                Log.d(TAG, "user " + user);
+                                if (user!=null) {
+                                    String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
+                                    Log.d(TAG,"mail "+mail);
+                                    String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
+                                    if ((mail==null)||(mail.isEmpty())||(username==null)||(username.isEmpty())){
+                                        Log.d(TAG,"user "+user);
+                                        startActivity(new Intent(InitialActivity.this, UsernameMailActivity.class));
+                                    } else {
+                                        startMainActivity();
+                                    }
+                                }
                                 finish();
                             }else if(baasResult.isFailed()){
                                 startLoginActivity();
