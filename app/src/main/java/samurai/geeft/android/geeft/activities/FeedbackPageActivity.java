@@ -235,12 +235,14 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
     private void startLoginActivity(){
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
+        finish();
 
     }
 
     private void startMainActivity(){
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void showDialogLeftFeedback(){

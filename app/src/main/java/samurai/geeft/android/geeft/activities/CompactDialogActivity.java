@@ -597,7 +597,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     if (resLink.isSuccess()) {
                         List<BaasLink> links = resLink.value();
                         if(links.size() <= 0){
-                            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                            BaasLink.fetchAll(TagsValue.LINK_NAME_RECEIVED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
                                 @Override
                                 public void handle(BaasResult<List<BaasLink>> resLinkBis) {
                                     if(resLinkBis.isSuccess()){
@@ -672,7 +672,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     if (resLink.isSuccess()) {
                         List<BaasLink> links = resLink.value();
                         if(links.size() <= 0){
-                            BaasLink.fetchAll(TagsValue.LINK_NAME_DONATED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+                            BaasLink.fetchAll(TagsValue.LINK_NAME_RECEIVED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
                                 @Override
                                 public void handle(BaasResult<List<BaasLink>> resLinkBis) {
                                     if(resLinkBis.isSuccess()){
