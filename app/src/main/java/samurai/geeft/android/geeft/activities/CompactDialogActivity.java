@@ -336,7 +336,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     getHisBaasboxNameAndSendPush(false);
-                                    finish();
                                     startMainActivity();
                                 }
                             })
@@ -344,7 +343,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
                                     dialog.dismiss();
-                                    finish();
                                     startMainActivity();
                                 }
                             })
@@ -403,7 +401,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     getHisBaasboxNameAndSendPush(true);
-                                    finish();
                                     startMainActivity();
                                 }
                             })
@@ -411,7 +408,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
                                     dialog.dismiss();
-                                    finish();
                                     startMainActivity();
                                 }
                             })
@@ -443,7 +439,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            finish();
                             startMainActivity();
                         }
                     })
@@ -451,7 +446,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         @Override
                         public void onDismiss(DialogInterface dialog) {
                             dialog.dismiss();
-                            finish();
                             startMainActivity();
                         }
                     })
@@ -467,7 +461,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            finish();
                             startMainActivity();
                         }
                     })
@@ -475,7 +468,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         @Override
                         public void onDismiss(DialogInterface dialog) {
                             dialog.dismiss();
-                            finish();
                             startMainActivity();
                         }
                     })
@@ -567,7 +559,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             @Override
                             public void onDismiss(DialogInterface dialog) {
                                 dialog.dismiss();
-                                finish();
                                 startMainActivity();
                             }
                         })
@@ -579,12 +570,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private void startLoginActivity(){
         Intent intent = new Intent(CompactDialogActivity.this,LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void startFeedbackActivity(){
 
         Intent intent = FeedbackPageActivity.newIntent(getApplicationContext(), mGeeft, mHisBaasboxName, mIamGeefter);
         startActivity(intent);
+        finish();
     }
 
 
@@ -605,7 +598,6 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                         mHisBaasboxName = linksBis.get(0).out().getAuthor();//Get doc_id of user from get(0)
                                         //so, get baasboxName from getAuthor
                                         startFeedbackActivity(); // Feedback enabled;
-                                        finish();
                                     }
                                     else {
                                         Log.d(TAG,"Error while fetching link");
@@ -757,6 +749,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private void startMainActivity(){
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+        finish();
+
     }
 
 

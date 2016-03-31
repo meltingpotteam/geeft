@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baasbox.android.BaasUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 
 import samurai.geeft.android.geeft.R;
@@ -56,9 +57,19 @@ public class ReceivedActivity extends AppCompatActivity implements GeeftListFrag
     }
     @Override
     public void onImageSelected(Geeft geeft) { // give id of image
-        // launch full screen activity
-        Intent intent = FullGeeftDetailsActivity.newIntent(ReceivedActivity.this,
-                geeft);
+
+        Intent intent;
+        boolean isFeedbackLeft = geeft.getBaasboxUsername()
+                .equals(BaasUser.current().getName())?
+                geeft.isFeedbackLeftByGeefter():geeft.isFeedbackLeftByGeefted();
+
+        if (geeft.isAssigned() && !isFeedbackLeft) { // if geeft.isAssigned()
+            intent = CompactDialogActivity.newIntent(ReceivedActivity.this, geeft);
+        } else {
+            // launch full screen activity
+            intent = FullGeeftDetailsActivity.newIntent(ReceivedActivity.this,
+                    geeft);
+        }
         ReceivedActivity.this.startActivity(intent);
     }
     @Override
