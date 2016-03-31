@@ -11,7 +11,8 @@
         "client_id": "android:samurai.geeft.android.geeft",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "samurai.geeft.android.geeft"
+          "package_name": "samurai.geeft.android.geeft",
+          "certificate_hash": []
         }
       },
       "oauth_client": [],
