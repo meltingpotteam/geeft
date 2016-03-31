@@ -24,8 +24,6 @@ import java.util.Random;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSMail;
-import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
-import samurai.geeft.android.geeft.database.BaaSUpdateUsernameMail;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -80,82 +78,87 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             if (isValidEmail(email)) {
 //              Set mail and username
                 Log.i("USERNAMEMAIL", "Valid mail.");
-                final String myName = BaasUser.current().getName().toString();
-                user = BaasUser.current();
-                if(mRandom ==null){
-                    mRandom = new Random();
-                    int min = 1000;
-                    int max = 9999;
-                    final int code = mRandom.nextInt(max - min + 1) + min;
-                    mCode = code;
-                    Log.i("USERNAMEMAIL", "Verification code: " + code);
-                    sendMail(email);
-                }
-                final android.support.v7.app.AlertDialog.Builder builder =
-                        new android.support.v7.app.AlertDialog.Builder(UsernameMailActivity.this,
-                                R.style.AppCompatAlertDialogStyle);
-                final EditText input = new EditText(this.getApplicationContext());
-                input.setGravity(Gravity.CENTER_HORIZONTAL);
-                input.setHint("Inserisci il codice di conferma");
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
-                input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                input.setLayoutParams(lp);
-                builder.setView(input);
-                builder.setMessage("Controlla il codice nella tua mail");
-                //builder.setTitle("Inserire pasword");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!checkCode(mCode, input.getText().toString())) {
-                            if (dialog != null) {
-                                dialog.dismiss();
-                            }
-                        } else {
-                            Log.i("USERNAMEMAIL", "Dentro onClick. ");
-                            final ProgressDialog progressDialog = new ProgressDialog(UsernameMailActivity.this);
-                            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            progressDialog.show();
-                            progressDialog.setMessage("Salvataggio in corso...");
-                            user.getScope(BaasUser.Scope.REGISTERED).put("username", mNewUsername);
-                            user.getScope(BaasUser.Scope.REGISTERED).put("email", mNewEmail);
-                            user.save(new BaasHandler<BaasUser>() {
-                                @Override
-                                public void handle(BaasResult<BaasUser> baasResult) {
-                                    if (progressDialog != null) {
-                                        progressDialog.dismiss();
-                                    }
-                                    if (baasResult.isSuccess()) {
-                                        mRandom = null;
-                                        mUser.setUsername(mNewUsername);
-                                        mUser.setEmail(mNewEmail);
-                                        Log.d(TAG, BaasUser.current()
-                                                .getScope(BaasUser.Scope.REGISTERED)
-                                                .put("username", mNewUsername).toString());
-                                    } else if (baasResult.isFailed()) {
-                                        showDescriptionFailDailog();
-                                    }
-                                    startMainActivity();
-                                }
-                            });
-                        }
-                    }
-                    });
-                builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendMail(mNewEmail);
-                    }
-                });
-                builder.show();
+                emailVerification(email);
 
             } else {
                 Toast.makeText(UsernameMailActivity.this, R.string.no_valid_mail_toast, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void emailVerification(String email) {
+        final String myName = BaasUser.current().getName().toString();
+        final BaasUser user = BaasUser.current();
+        if(mRandom ==null){
+            mRandom = new Random();
+            int min = 1000;
+            int max = 9999;
+            final int code = mRandom.nextInt(max - min + 1) + min;
+            mCode = code;
+            Log.i("USERNAMEMAIL", "Verification code: " + code);
+        }
+        sendMail(email);
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(UsernameMailActivity.this,
+                        R.style.AppCompatAlertDialogStyle);
+        final EditText input = new EditText(this.getApplicationContext());
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
+        input.setHint("Inserisci il codice di conferma");
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
+        input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+        builder.setMessage("Controlla il codice nella tua mail");
+        //builder.setTitle("Inserire pasword");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!checkCode(mCode, input.getText().toString())) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                } else {
+                    Log.i("USERNAMEMAIL", "Dentro onClick. ");
+                    final ProgressDialog progressDialog = new ProgressDialog(UsernameMailActivity.this);
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    progressDialog.show();
+                    progressDialog.setMessage("Salvataggio in corso...");
+                    user.getScope(BaasUser.Scope.REGISTERED).put("username", mNewUsername);
+                    user.getScope(BaasUser.Scope.REGISTERED).put("email", mNewEmail);
+                    user.save(new BaasHandler<BaasUser>() {
+                        @Override
+                        public void handle(BaasResult<BaasUser> baasResult) {
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
+                            if (baasResult.isSuccess()) {
+                                mRandom = null;
+                                mUser.setUsername(mNewUsername);
+                                mUser.setEmail(mNewEmail);
+                                Log.d(TAG, BaasUser.current()
+                                        .getScope(BaasUser.Scope.REGISTERED)
+                                        .put("username", mNewUsername).toString());
+                                startMainActivity();
+                            } else if (baasResult.isFailed()) {
+                                showDescriptionFailDailog();
+                            }
+
+                        }
+                    });
+                }
+            }
+        });
+        builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                emailVerification(mNewEmail);
+            }
+        });
+        builder.show();
     }
 
     public void done(boolean result,int resultToken){

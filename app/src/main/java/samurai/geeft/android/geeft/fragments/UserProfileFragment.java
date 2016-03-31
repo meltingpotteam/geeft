@@ -357,7 +357,7 @@ public class UserProfileFragment extends StatedFragment implements
                     builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            sendMail(newDescrition);
+                            updateDescription();
                         }
                     });
                     builder.show();
@@ -460,24 +460,24 @@ public class UserProfileFragment extends StatedFragment implements
                     "Operazione in corso");
 
             mLinkCreateRequest = BaasBox.rest().async(Rest.Method.GET, "plugin/manual" +
-                ".geeftedChoose?" +
-                "s_id=" + mGeeft.getId() +
-                "&d_id=" + mUser.getDocId() +
-                "&label=" + TagsValue.LINK_NAME_ASSIGNED +
-                "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
-                "&geeftedName=" + mUser.getID() +
-                "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
-                .replace(" ", "%20")
-                , new BaasHandler<JsonObject>() {
-            @Override
-            public void handle(BaasResult<JsonObject> result) {
-                mLinkCreateRequest = null;
-                if (result.isFailed()) {
-                    showFailureAlert();
-                } else if (result.isSuccess()) {
-                    showSuccessAlert();
-                    Log.d(TAG, "IN HANDLER SUCCES");
-                }
+                    ".geeftedChoose?" +
+                    "s_id=" + mGeeft.getId() +
+                    "&d_id=" + mUser.getDocId() +
+                    "&label=" + TagsValue.LINK_NAME_ASSIGNED +
+                    "&deleteLabel=" + TagsValue.LINK_NAME_RESERVE +
+                    "&geeftedName=" + mUser.getID() +
+                    "&geefterFbName=" + fillUser(BaasUser.current()).getUsername()
+                    .replace(" ", "%20")
+                    , new BaasHandler<JsonObject>() {
+                @Override
+                public void handle(BaasResult<JsonObject> result) {
+                    mLinkCreateRequest = null;
+                    if (result.isFailed()) {
+                        showFailureAlert();
+                    } else if (result.isSuccess()) {
+                        showSuccessAlert();
+                        Log.d(TAG, "IN HANDLER SUCCES");
+                    }
                 }
             });
         }
