@@ -292,7 +292,7 @@
     <string name="pref_title_system_sync_settings">Impostazioni di sincronizzazione di sistema</string>
 
     <!-- Username / Mail -->
-    <string name="username_mail_instructions">Per favore aggiungere i seguenti campi:</string>
+    <string name="username_mail_instructions">Per favore compilare i seguenti campi:</string>
     <string name="username_textview">Nickname:</string>
     <string name="mail_textview">Email:</string>
     <string name="username_button">Avanti</string>

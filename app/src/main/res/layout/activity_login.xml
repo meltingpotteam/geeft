@@ -3,14 +3,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@drawable/background_login"
     >
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:src="@drawable/logo_motto_shadow"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="270dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo_motto_shadow_circle2"
         android:padding="@dimen/activity_horizontal_margin_x2"/>
 
     <LinearLayout
@@ -28,9 +32,9 @@
             android:textAllCaps="false"
             android:textColor="#ffffff"
             android:background="#3b5998"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|bottom"
             android:textSize="@dimen/abc_text_size_medium_material"
-            android:layout_margin="10dp"
+            android:layout_margin="120dp"
             />
 
         <Button

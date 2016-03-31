@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,6 +43,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private User mUser;
     private Random mRandom;
     private int mCode;
+    private Toolbar mToolbar;
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -55,6 +57,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.username_mail);
 
+        initActionBar();
         mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
@@ -155,6 +158,17 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             } else {
                 Toast.makeText(UsernameMailActivity.this, R.string.no_valid_mail_toast, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void initActionBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar!=null){
+            setSupportActionBar(mToolbar);
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            mToolbar.setTitle("Geeft");
         }
     }
 
