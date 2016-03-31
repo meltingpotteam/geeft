@@ -1,15 +1,18 @@
 package samurai.geeft.android.geeft.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,10 +47,13 @@ import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSDeleteGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
+import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackDeletion;
 import samurai.geeft.android.geeft.models.Geeft;
@@ -57,7 +64,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCallBackBooleanInt
-        , TaskCallbackBooleanToken,TaskCallbackDeletion {
+        , TaskCallbackBooleanToken,TaskCallbackDeletion, TaskCallbackBooleanHolderToken {
 
     private static final String KEY_CONTEXT = "key_context" ;
     private final String TAG = getClass().getSimpleName();
@@ -96,6 +103,17 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private ParallaxImageView mProfileDialogBackground;
     private LayoutInflater inflater;
 
+    private CardView mPrenoteButton;
+    private TextView mReservationCardText;
+    private long mLastClickTime;
+
+
+    //-------------------Macros
+    private final int RESULT_OK = 1;
+    private final int RESULT_FAILED = 0;
+    private final int RESULT_SESSION_EXPIRED = -1;
+    //-------------------
+
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
         FullGeeftDeatailsFragment fragment = new FullGeeftDeatailsFragment();
         Bundle bundle = new Bundle();
@@ -114,6 +132,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mGeeft = (Geeft) getArguments().getSerializable(GEEFT_KEY);
         }
         inflater = LayoutInflater.from(getContext()); //prova
+
     }
 
 
@@ -190,6 +209,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     private void initUI(View rootView) {
+        mPrenoteButton = (CardView) rootView.findViewById(R.id.item_reserve_geeft);
+        mReservationCardText = (TextView) rootView.findViewById(R.id.geeft_reservation_card_text);
+
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
@@ -238,6 +260,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
                 }
             });
+
+            if(mGeeft.isSelected())
+                mReservationCardText.setText("Rimuovi prenotazione");
+            else
+                mReservationCardText.setText("Prenota il Geeft");
             mStoryView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -323,6 +350,43 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
         }
+
+        //--------------------------- Prenote button implementation
+
+
+        mPrenoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                mProgressDialog = new ProgressDialog(getContext());
+                try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    mProgressDialog.show();
+                } catch (WindowManager.BadTokenException e) {
+                }
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setMessage("Operazione in corso...");
+
+//              mProgress = ProgressDialog.show(mContext, "Attendere...",
+//                    "Prenotazione in corso", true);
+
+                String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+                if(docUserId==null){
+                    startLoginActivity();
+                    ((Activity)getContext()).finish();
+                }
+                Log.d(TAG, "Doc id of user is: " + docUserId + " and item id is: " + mGeeft.getId());
+                mGeeft.setIsSelected(!mGeeft.isSelected());
+                new BaaSReserveTask(getContext(), docUserId, mGeeft,
+                        FullGeeftDeatailsFragment.this).execute();
+
+            }
+        });
     }
 
     private void setUserRaiting() {
@@ -347,22 +411,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     private void setUserInformationDialog(String username){
-        BaasUser.fetch(username,new BaasHandler<BaasUser>() {
+        BaasUser.fetch(username, new BaasHandler<BaasUser>() {
             @Override
             public void handle(BaasResult<BaasUser> res) {
-                if(res.isSuccess()){
+                if (res.isSuccess()) {
                     BaasUser user = res.value();
-                    Log.d("LOG","The user: "+user);
+                    Log.d("LOG", "The user: " + user);
                     double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                     long given = user.getScope(BaasUser.Scope.REGISTERED).get("n_given");
                     long received = user.getScope(BaasUser.Scope.REGISTERED).get("n_received");
 
-                    mProfileDialogUserRank.setText(""+rank+"/5.0");
-                    mProfileDialogUserGiven.setText(""+given);
-                    mProfileDialogUserReceived.setText(""+received);
+                    mProfileDialogUserRank.setText("" + rank + "/5.0");
+                    mProfileDialogUserGiven.setText("" + given);
+                    mProfileDialogUserReceived.setText("" + received);
 
                 } else {
-                    Log.e("LOG","Error",res.error());
+                    Log.e("LOG", "Error", res.error());
                 }
             }
         });
@@ -529,7 +593,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                         }
                     })
                     .setMessage("Il Geeft è stato eliminato con successo.").show();
-        }else {
+        } else {
             new AlertDialog.Builder(getContext(), R.style.AppCompatAlertDialogStyle)
                     .setTitle("Errore")
                     .setMessage("Operazione non possibile. Riprovare più tardi.").show();
@@ -591,4 +655,37 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
         }
     }
+
+
+    public void done(boolean result, GeeftItemAdapter.GeeftViewHolder holder,Geeft item,int resultToken){
+        //enables all social buttons
+        mProgressDialog.dismiss();
+        if(!result){
+            Toast toast;
+            if (resultToken == RESULT_OK) {
+                //DO SOMETHING
+            } else if (resultToken == RESULT_SESSION_EXPIRED) {
+                toast = Toast.makeText(getContext(), "Sessione scaduta,è necessario effettuare di nuovo" +
+                        " il login", Toast.LENGTH_LONG);
+                getContext().startActivity(new Intent(getContext(), LoginActivity.class));
+                toast.show();
+            }
+            else {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Errore")
+                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+            }
+        } else {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Successo")
+                    .setMessage("Operazione effettuata con successo.").show();
+            Log.d("NOTATO", "" + item.isSelected());
+
+            if(item.isSelected())
+                mReservationCardText.setText("Rimuovi prenotazione");
+            else
+                mReservationCardText.setText("Prenota il Geeft");
+        }
+    }
+
 }

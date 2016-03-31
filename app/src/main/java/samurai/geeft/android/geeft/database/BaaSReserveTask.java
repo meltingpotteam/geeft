@@ -44,6 +44,13 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
         mCallback = callback;
         mHolder = holder;
     }
+    public BaaSReserveTask(Context context, String docUserId, Geeft item,
+                           TaskCallbackBooleanHolderToken callback) {
+        mContext = context;
+        mDocUserId = docUserId;
+        mItem = item;
+        mCallback = callback;
+    }
 
     @Override
     protected Boolean doInBackground(Void... arg0) {

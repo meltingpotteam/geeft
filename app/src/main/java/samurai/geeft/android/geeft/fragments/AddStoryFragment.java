@@ -363,7 +363,7 @@ public class AddStoryFragment extends StatedFragment {
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_storyinfo_text))
@@ -374,7 +374,7 @@ public class AddStoryFragment extends StatedFragment {
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(cameraButton)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_storycamerabutton_text))
@@ -384,7 +384,7 @@ public class AddStoryFragment extends StatedFragment {
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(mCategoryFieldLayout)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_storycategory_text))

@@ -152,12 +152,13 @@
                 layout="@layout/item_geeft_title_and_description_card"
                 />
 
-
-
             <include
                 android:id="@+id/item_geeft_story"
                 layout="@layout/item_show_geeft_story"/>
 
+            <include
+                android:id="@+id/item_reserve_geeft"
+                layout="@layout/item_reservation_card"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
