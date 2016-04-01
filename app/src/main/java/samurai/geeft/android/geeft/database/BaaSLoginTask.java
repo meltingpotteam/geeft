@@ -86,7 +86,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
      */
     @Override
     protected Boolean doInBackground(Void... arg0) {
-
         /**
          * Variable storing the result of the sync BaaS social login
          */
@@ -108,7 +107,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("id"));
                 BaasUser user = BaasUser.current();
                 if (user != null) {
-                    Log.d(TAG, user.toString());
                     BaasResult<BaasUser> userBaasResult = BaasUser.current().refreshSync();
                     if (userBaasResult.isSuccess()){
                         Log.d(TAG,"Successo");
@@ -116,6 +114,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         Log.d(TAG,"Fallito");
                         return false;
                     }
+                    Log.d(TAG, user.toString());
                     String UserDocId =
                             BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                     String name =

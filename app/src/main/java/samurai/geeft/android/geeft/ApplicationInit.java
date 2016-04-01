@@ -6,16 +6,14 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.Fragment;
 
 import com.baasbox.android.BaasBox;
-
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.facebook.FacebookSdk;
 
-
-import io.fabric.sdk.android.Fabric;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.fabric.sdk.android.Fabric;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**

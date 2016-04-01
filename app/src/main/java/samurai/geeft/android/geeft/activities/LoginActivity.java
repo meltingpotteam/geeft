@@ -142,7 +142,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         /**
          *  Callback registration: succes s-> execute Task else show relative Toast
          */
-
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override

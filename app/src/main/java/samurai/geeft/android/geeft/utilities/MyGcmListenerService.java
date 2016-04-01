@@ -134,7 +134,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private Intent assignedCase() {//Case where you are geefted and Geeft is assigned to you
         /*Intent intent = AssignedActivity
                 .newIntent(getApplicationContext(), TagsValue.LINK_NAME_ASSIGNED, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_BOTTOM);*/
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
         if(!(geeftId == null && docUserId == null)) {
             Intent intent = WinnerScreenActivity.newIntent(getApplicationContext(), 1, geeftId, docUserId);
             return intent;
@@ -199,7 +199,7 @@ public class MyGcmListenerService extends GcmListenerService {
             Log.d(TAG, "doc_id: "+docUserId);
             if(docUserId.equals(""))
                 docUserId = null;
-        //} catch (org.json.JSONException t) {
+            //} catch (org.json.JSONException t) {
         } catch (Exception t) {
             Log.e(TAG, "Could not parse malformed JSON: \"" + custom + "\"");
             //startMainActivity();
