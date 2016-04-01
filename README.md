@@ -69,7 +69,7 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Push notifications
 - Eventually correction of bugs
 - Beta version release, testing and promoting
-- [APK] (https://app.edo.io/preview?id=56fe91d208b5edf20344e171&k=0h3sCFhNCh39L_UHbw1P0DDatk1TBeczkL3DmcM2NZU=)
+- [APK] (https://app.edo.io/preview?id=56fe93e808b5edbbdef1f78e&k=BrMboHEWw6Z0BrBwFAScIO0A27U4vq2zVu0fvzJsmNQ=)
 - [Presentation (PDF)] (https://app.edo.io/preview?id=56ec71a1d47cae352af8cbe1&k=AcHVPTRAFoWNV7RlZTqIKlBTN9zi6thnwdc5ku4lhhE=)
 - [Demo video] (https://app.edo.io/preview?id=56eb6c524eeaef2e4222e861&k=KLQ32TTQuavJtxHUnLdtmgA9_AqMnFnvkv-N7AUxwxY=)
 - [Video interviews] (https://app.edo.io/preview?id=56e97d22d47caefc79a5d442&k=ItcNgJ4o3ixveL4n2jioIr4tZkx9kd8XYIgNeOztKkA=)
