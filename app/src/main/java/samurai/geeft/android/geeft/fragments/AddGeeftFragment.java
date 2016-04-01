@@ -701,7 +701,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(cameraButton)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_camerabutton_text))
@@ -714,7 +714,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
                         .setTarget(mDeadlineFieldLayout)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_deadline_text))
@@ -727,7 +727,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
 //                        .setTarget(mAutomaticSelectionFieldLayout)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_additionalinfo_automaticselection_text))
@@ -738,7 +738,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(getActivity())
 //                        .setTarget(mAutomaticSelectionFieldLayout)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_additionalinfo_allowContact_text))

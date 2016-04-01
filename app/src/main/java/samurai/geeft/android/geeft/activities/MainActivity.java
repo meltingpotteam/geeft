@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs)
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_tabsections_text))
@@ -499,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_geeftoryinfo_text))
