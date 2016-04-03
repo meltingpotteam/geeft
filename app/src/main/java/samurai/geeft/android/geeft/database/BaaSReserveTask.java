@@ -5,15 +5,20 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasLink;
+import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonArray;
 
+import java.util.List;
+
 import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanHolderToken;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
  * Created by danybr-dev on 20/01/16.
@@ -83,6 +88,19 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
         if(currentUser != null) {
             if (mItem.isSelected()) { // Selected button, I reserve (create the link FROM doc of user TO geeft)
                 //This id document associated to Current User
+                BaasQuery.Criteria query = BaasQuery.builder().where("out.id like '" + mItem.getId()+ "'").
+                        criteria();
+                BaasResult<List<BaasLink>> assignedLink = BaasLink.fetchAllSync(
+                        TagsValue.LINK_NAME_ASSIGNED,query);
+                try {
+                    if (assignedLink.get().size()!=0){
+                        Log.d(TAG,"oggetto gia assegnato");
+                        return true;
+                    }
+                } catch (BaasException e) {
+                    e.printStackTrace();
+                }
+
                 BaasResult<BaasLink> resLink = BaasLink.createSync("reserve", mItem.getId(), mDocUser.getId());
                 //TODO : BUG: create(linkname,source-id,dest-id) but source-id is in and dest-id is out.
                 if (resLink.isSuccess()) { //Link created
