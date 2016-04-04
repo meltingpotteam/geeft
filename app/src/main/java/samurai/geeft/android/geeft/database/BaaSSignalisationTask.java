@@ -36,6 +36,8 @@ public class BaaSSignalisationTask extends AsyncTask<Void,Void,Boolean> {
                 BaasUser currentUser = BaasUser.current();
                 mAction = 0;
                 BaasResult<BaasDocument> resDocToBeDelete = BaasDocument.fetchSync("geeft",mDocId);
+
+                Log.d(TAG,"Role: " + currentUser.getRoles());
                 if(resDocToBeDelete.isSuccess()){
                     BaasDocument docToBeDelete = resDocToBeDelete.value();
                     if(currentUser.hasRole("registered")){ // if I am a mere mortal,

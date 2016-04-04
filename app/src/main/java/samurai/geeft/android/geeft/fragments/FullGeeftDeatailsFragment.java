@@ -410,10 +410,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private void startLoginActivity() {
         getContext().startActivity(new Intent(getContext(), LoginActivity.class));
+        getActivity().finish();
     }
 
     private void startMainActivity() {
         getContext().startActivity(new Intent(getContext(), MainActivity.class));
+        getActivity().finish();
     }
 
 
@@ -568,6 +570,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     break;
                 case 2: //document is already deleted by BaaSSignalisationTask, I'm a moderator
                     Toast.makeText(getContext(),"Documento eliminato con successo",Toast.LENGTH_LONG).show();
+                    startMainActivity();
                     break;
                 default:
                     Toast.makeText(getContext(),"C'è stato un errore nella segnalazione",Toast.LENGTH_LONG).show();
