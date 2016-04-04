@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,9 @@ import com.baasbox.android.BaasUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +69,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private Geeft mGeeft;
     private Toolbar mToolbar;
     private LinearLayout mGeefterProfileCard;
+    private TextView mGeeftTimeAgo;
+    private TextView mGeeftChooseType;
     private ImageView mGeeftImageView;
     private ImageView mGeefterProfilePicImageView;
     private TextView mGeefterNameTextView;
@@ -193,6 +199,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
+        mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
+        mGeeftChooseType = (TextView) rootView.findViewById(R.id.geeft_choose_type);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
         mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
@@ -218,7 +226,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mGeefterNameTextView.setText(mGeeft.getUsername());
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
-
+            setGeeftDetails();
             setUserRaiting();
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
@@ -347,22 +355,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     private void setUserInformationDialog(String username){
-        BaasUser.fetch(username,new BaasHandler<BaasUser>() {
+        BaasUser.fetch(username, new BaasHandler<BaasUser>() {
             @Override
             public void handle(BaasResult<BaasUser> res) {
-                if(res.isSuccess()){
+                if (res.isSuccess()) {
                     BaasUser user = res.value();
-                    Log.d("LOG","The user: "+user);
+                    Log.d("LOG", "The user: " + user);
                     double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                     long given = user.getScope(BaasUser.Scope.REGISTERED).get("n_given");
                     long received = user.getScope(BaasUser.Scope.REGISTERED).get("n_received");
 
-                    mProfileDialogUserRank.setText(""+rank+"/5.0");
-                    mProfileDialogUserGiven.setText(""+given);
-                    mProfileDialogUserReceived.setText(""+received);
+                    mProfileDialogUserRank.setText("" + new DecimalFormat("#.##").format(rank) + "/5.0");
+                    mProfileDialogUserGiven.setText("" + given);
+                    mProfileDialogUserReceived.setText("" + received);
 
                 } else {
-                    Log.e("LOG","Error",res.error());
+                    Log.e("LOG", "Error", res.error());
                 }
             }
         });
@@ -492,6 +500,21 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         dialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
         dialog.show();  //<-- See This!
 
+    }
+
+    private void setGeeftDetails() {
+        // Converting timestamp into x ago format
+        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+        mGeeftTimeAgo.setText(timeAgo);
+
+        if(mGeeft.isAutomaticSelection()){
+            mGeeftChooseType.setText("Automatica");
+        }
+        else{
+            mGeeftChooseType.setText("Manuale");
+        }
     }
 
     @Override
