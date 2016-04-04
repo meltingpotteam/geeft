@@ -354,6 +354,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             return true;
         }
 
+        if(id == R.id.action_reset_tutorial){
+
+            MaterialShowcaseView.resetAll(this);
+            Toast.makeText(this, "All Showcases reset", Toast.LENGTH_SHORT).show();
+            presentShowcaseView(350);
+
+        }
+
         if(id == R.id.action_search){
             Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
 

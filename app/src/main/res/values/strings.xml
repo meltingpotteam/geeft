@@ -364,5 +364,6 @@
     <string name="tutorial_storydescription_text">Qui potrai scrivere la descrizione del nuovo stato dell\'oggetto.\nPuoi scrivere anche una guida passo-passo di come hai realizzato l\'oggetto così da rendere la descrizione un vero e proprio tutorial!</string>
     <string name="tutorial_storycategory_text">Seleziona la categoria attuale dell\'oggetto (es. una vecchia moka che è stata pulita e decorata. Se era nella categoria \'altro\' ora diventa \'casa e giardino\')</string>
     <string name="tutorial_geeftinfo_welcomedescription">Qui potrai aggiungere nuovi oggetti in geeft!\nPotrai aggiungere oggetti che non utilizzi più e che vuoi donare , semplicemente compilando questi campi</string>
+    <string name="action_reset_tutorial_text">Tutorial</string>
 
 </resources>
