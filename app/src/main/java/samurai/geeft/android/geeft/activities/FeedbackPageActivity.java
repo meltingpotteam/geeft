@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RatingBar;
+import android.support.v7.widget.AppCompatRatingBar;
 import android.widget.TextView;
 
 import com.baasbox.android.BaasBox;
@@ -37,10 +37,10 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
     private final String TAG = getClass().getSimpleName();
     private Toolbar mToolbar;
-    private RatingBar mRatingCommunication;
-    private RatingBar mRatingCourtesy;
-    private RatingBar mRatingReliability;
-    private RatingBar mRatingDescription;
+    private AppCompatRatingBar mRatingCommunication;
+    private AppCompatRatingBar mRatingCourtesy;
+    private AppCompatRatingBar mRatingReliability;
+    private AppCompatRatingBar mRatingDescription;
     private TextView mTextViewFeedbackDescription;
     private EditText mRatingComment;
     private Button  mFeedbackButton;
@@ -137,10 +137,10 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
         //mToolbar.setTitle("Feedback");
 
         mFeedbackButton = (Button) findViewById(R.id.feedback_submit_button);
-        mRatingCommunication = (RatingBar) findViewById(R.id.ratingBarCommunication);
-        mRatingCourtesy = (RatingBar) findViewById(R.id.ratingBarCourtesy);
-        mRatingDescription = (RatingBar) findViewById(R.id.ratingBarDescription);
-        mRatingReliability = (RatingBar) findViewById(R.id.ratingBarReliability);
+        mRatingCommunication = (AppCompatRatingBar) findViewById(R.id.ratingBarCommunication);
+        mRatingCourtesy = (AppCompatRatingBar) findViewById(R.id.ratingBarCourtesy);
+        mRatingDescription = (AppCompatRatingBar) findViewById(R.id.ratingBarDescription);
+        mRatingReliability = (AppCompatRatingBar) findViewById(R.id.ratingBarReliability);
         mRatingComment = (EditText) findViewById(R.id.fragment_feedback_help_page_description);
         mTextViewFeedbackDescription = (TextView) findViewById(R.id.text_view_feedback_description);
 

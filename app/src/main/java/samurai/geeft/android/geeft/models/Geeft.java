@@ -23,6 +23,7 @@ public class Geeft implements Serializable {
     private long deadLine;
     private String userLocation;
     private String userCap;
+    private String fullname;
     private String username;
     private String baasboxUsername;
     private String userFbId;
@@ -58,7 +59,7 @@ public class Geeft implements Serializable {
 
     public Geeft(String id, String geeftDescription, String geeftImage,String[] geeftArrayImage, String geeftTitle,
                  boolean isSelected, long creationTime, String geeftLabels, boolean automaticSelection, boolean allowCommunication, boolean dimensionRead, long deadLine, String userLocation, String userCap,
-                 String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth, boolean assigned,boolean taken,boolean given,boolean isFeedbackLeftByGeefted, boolean isFeedbackLeftByGeefter) {
+                 String fullname,String baasboxUsername,String username,String userFbId, String userProfilePic, String reservedLinkId,String donatedLinkId,int geeftHeight, int geeftWidth,int geeftDepth, boolean assigned,boolean taken,boolean given,boolean isFeedbackLeftByGeefted, boolean isFeedbackLeftByGeefter) {
 
         this.geeftDescription = geeftDescription;
         this.geeftImage = geeftImage;
@@ -72,6 +73,7 @@ public class Geeft implements Serializable {
         this.dimensionRead = dimensionRead;
         this.userLocation = userLocation;
         this.userCap = userCap;
+        this.fullname = fullname;
         this.username = username;
         this.baasboxUsername = baasboxUsername;
         this.userFbId = userFbId;
@@ -90,6 +92,14 @@ public class Geeft implements Serializable {
         this.isFeedbackLeftByGeefted = isFeedbackLeftByGeefted;
         this.isFeedbackLeftByGeefter = isFeedbackLeftByGeefter;
 
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getBaasboxUsername() {

@@ -36,7 +36,7 @@
         android:textStyle="bold"
             android:text="@string/feedback_communication_question"
         />
-    <RatingBar
+    <android.support.v7.widget.AppCompatRatingBar
         android:id="@+id/ratingBarCommunication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
         android:textStyle="bold"
         android:text="@string/feedback_reliability_question"
         />
-    <RatingBar
+    <android.support.v7.widget.AppCompatRatingBar
         android:id="@+id/ratingBarReliability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
         android:textStyle="bold"
         android:text="@string/feedback_courtesy_question"
         />
-    <RatingBar
+    <android.support.v7.widget.AppCompatRatingBar
         android:id="@+id/ratingBarCourtesy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
         android:textStyle="bold"
         android:text="@string/feedback_description_question"
         />
-    <RatingBar
+    <android.support.v7.widget.AppCompatRatingBar
         android:id="@+id/ratingBarDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

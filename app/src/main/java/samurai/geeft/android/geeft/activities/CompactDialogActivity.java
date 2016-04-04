@@ -102,7 +102,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         }
 
         BaasUser currentUser = BaasUser.current();
-        mIamGeefter = currentUser.getScope(BaasUser.Scope.PRIVATE).get("name").equals(mGeeft.getUsername());
+        mIamGeefter = currentUser.getScope(BaasUser.Scope.PRIVATE).get("name").equals(mGeeft.getFullname());
+            //TODO: && get("username").equals(mGeeft.username)
         Log.d(TAG,"currentUser name: " + currentUser.getScope(BaasUser.Scope.PRIVATE).get("name") );
         Log.d(TAG, "Geefter name: " + mGeeft.getUsername());
 

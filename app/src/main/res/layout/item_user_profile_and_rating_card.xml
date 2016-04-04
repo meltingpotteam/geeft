@@ -38,7 +38,7 @@
                     android:textColor="#666"
                     android:textSize="14sp"/>
 
-                <RatingBar
+                <android.support.v7.widget.AppCompatRatingBar
                     style="@style/ratingBarSmall"
                     android:id="@+id/ratingBarSmall"
                     android:layout_width="wrap_content"

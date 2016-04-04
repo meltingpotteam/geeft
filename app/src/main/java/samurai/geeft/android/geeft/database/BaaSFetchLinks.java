@@ -90,6 +90,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             Geeft geeft = new Geeft();
                             geeft.setGeeftImage(document.getString("image") + BaasUser.current().getToken());
                             geeft.setId(document.getId());
+                            geeft.setFullname(document.getString("name"));
                             geeft.setUsername(document.getString("username"));
                             geeft.setBaasboxUsername(document.getString("baasboxUsername"));
                             //Append ad image url your session token!
