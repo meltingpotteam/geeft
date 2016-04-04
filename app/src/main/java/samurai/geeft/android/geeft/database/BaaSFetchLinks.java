@@ -12,6 +12,9 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.GeeftStoryListAdapter;
@@ -23,7 +26,9 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 09/02/16.
  */
 public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
+
     private final String TAG = getClass().getName();
+
     private boolean mIsStory=false;
     Context mContext;
     List<Geeft> mGeeftList;
@@ -85,7 +90,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             Geeft geeft = new Geeft();
                             geeft.setGeeftImage(document.getString("image") + BaasUser.current().getToken());
                             geeft.setId(document.getId());
-                            geeft.setUsername(document.getString("name"));
+                            geeft.setUsername(document.getString("username"));
                             geeft.setBaasboxUsername(document.getString("baasboxUsername"));
                             //Append ad image url your session token!
                             geeft.setCategory(document.getString("category"));
@@ -106,7 +111,7 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setGiven(document.getBoolean("given"));
                             geeft.setIsFeedbackLeftByGeefted(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
                             geeft.setIsFeedbackLeftByGeefter(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
-
+                            geeft.setCreationTime(getCreationTimestamp(document));
                             mGeeftList.add(0,geeft);
                         }catch (BaasInvalidSessionException ise){
                             mResultToken = RESULT_SESSION_EXPIRED;
@@ -195,9 +200,24 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
     }
 
 
+
     @Override
     protected void onPostExecute(Boolean result) {
-        mCallback.done(result,mResultToken);
+        mCallback.done(result, mResultToken);
         //If not working modify "" for firstID
+    }
+
+    private long getCreationTimestamp(BaasDocument d){ //return timestamp of _creation_date of document
+        String date = d.getCreationDate();
+        //Log.d(TAG,"_creation_date is:" + date);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        try {
+            Date creation_date = dateFormat.parse(date);
+            return creation_date.getTime(); //Convert timestamp in string
+        }catch (java.text.ParseException e){
+            Log.e(TAG,"ERRORE FATALE : " + e.toString());
+        }
+        return -1;
+
     }
 }

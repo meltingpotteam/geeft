@@ -60,7 +60,7 @@ public class BaaSGeeftHistoryArrayTask extends AsyncTask<Void,Void,Boolean> {
                 Log.d("HISTORY", e.getString("image"));
                 Geeft mGeeft = new Geeft();
                 mGeeft.setId(e.getId());
-                mGeeft.setUsername(e.getString("name"));
+                mGeeft.setUsername(e.getString("username"));
                 mGeeft.setGeeftImage(e.getString("image") + BaasUser.current().getToken());
                 mGeeft.setGeeftDescription(e.getString("description"));
                 mGeeft.setUserProfilePic(e.getString("profilePic"));

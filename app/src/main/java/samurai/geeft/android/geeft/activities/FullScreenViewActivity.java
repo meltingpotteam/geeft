@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -62,8 +63,11 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
-        mProgressDialog = ProgressDialog.show(FullScreenViewActivity.this,"Attendere",
-                "Caricamento in corso...");
+        mProgressDialog = new ProgressDialog(FullScreenViewActivity.this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Operazione in corso...");
+        mProgressDialog.show();
+
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),mCollection,this).execute();
     }
