@@ -70,6 +70,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private Toolbar mToolbar;
     private LinearLayout mGeefterProfileCard;
     private TextView mGeeftTimeAgo;
+    private TextView mGeeftLocation;
     private TextView mGeeftChooseType;
     private ImageView mGeeftImageView;
     private ImageView mGeefterProfilePicImageView;
@@ -101,6 +102,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private ImageButton mProfileDialogFbButton;
     private ParallaxImageView mProfileDialogBackground;
     private LayoutInflater inflater;
+
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
         FullGeeftDeatailsFragment fragment = new FullGeeftDeatailsFragment();
@@ -200,6 +202,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
+        mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
         mGeeftChooseType = (TextView) rootView.findViewById(R.id.geeft_choose_type);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
         mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
@@ -510,6 +513,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
         mGeeftTimeAgo.setText(timeAgo);
+
+        mGeeftLocation.setText(mGeeft.getUserLocation() +"," + mGeeft.getUserCap());
 
         if(mGeeft.isAutomaticSelection()){
             mGeeftChooseType.setText("Automatica");
