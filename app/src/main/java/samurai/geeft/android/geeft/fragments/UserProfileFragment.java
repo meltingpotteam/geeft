@@ -615,8 +615,11 @@ public class UserProfileFragment extends StatedFragment implements
             mLayoutDonatedView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(DonatedActivity.newIntent(getContext()
+                    /*startActivity(DonatedActivity.newIntent(getContext()
                             , TagsValue.COLLECTION_GEEFT, false));
+                    */
+                    startActivity(DonatedActivity.newIntent(getContext()
+                            , TagsValue.LINK_NAME_DONATED, false));
                 }
             });
 
