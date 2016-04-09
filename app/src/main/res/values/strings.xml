@@ -14,6 +14,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="login_publish_warning">Non verrà pubblicato nulla senza il tuo consenso.</string>
 
     <!-- string needed by facebook sdk for app identification. -->
     <string name="facebook_app_id">1537015443283612</string>
