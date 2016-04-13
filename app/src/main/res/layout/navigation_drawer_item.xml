@@ -26,19 +26,39 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/navigation_drawer_row_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Here goese the row title"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/standard_text_size"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:paddingRight="10dp"
+                        />
 
-            <TextView
-                android:id="@+id/navigation_drawer_row_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Here goese the row title"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/standard_text_size"
-                android:textAllCaps="true"
-                android:textStyle="bold"
+                    <TextView
+                        android:id="@+id/navigation_drawer_row_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/standard_text_size"
+                        android:background="@drawable/count_view_design"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
 
-                />
+                        />
+                </LinearLayout>
             <TextView
                 android:id="@+id/navigation_drawer_row_description"
                 android:paddingTop="4dp"
