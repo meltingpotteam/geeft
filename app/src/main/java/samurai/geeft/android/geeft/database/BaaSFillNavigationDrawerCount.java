@@ -12,14 +12,10 @@ import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanIntHolder;
-import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 
