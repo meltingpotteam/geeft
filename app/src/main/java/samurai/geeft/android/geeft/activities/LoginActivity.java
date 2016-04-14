@@ -13,7 +13,11 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasException;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.json.JsonObject;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -28,7 +32,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
@@ -39,6 +42,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.UUID;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSLoginTask;
@@ -74,29 +78,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
 
         //Vibration feedback
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-        //On click the rotation animation starts.
-        // mGoogleLoginButton.startAnimation(mRotation);
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        //requestScopes() and requestServerAuthCode() are added.
-        String serverClientId = getString(R.string.server_client_id);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
-                .requestServerAuthCode(serverClientId)
-                .requestEmail()
-                .build();
-        // [END configure_signin]
-
-        // [START build_client]
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(LoginActivity.this)
-                .enableAutoManage(LoginActivity.this /* FragmentActivity */, LoginActivity.this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        // [END build_client]
 
         //Method for sign-in buttons settings
         setUpViews();
@@ -154,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                 Bundle bFacebookData = getFacebookData(object);
                                 final String loginToken = loginResult.getAccessToken().getToken();
                                 new BaaSLoginTask(LoginActivity.this, "FACEBOOK",
-                                        loginToken, bFacebookData,LoginActivity.this).execute();
+                                        loginToken, bFacebookData, LoginActivity.this).execute();
                             }
                         });
                         Bundle parameters = new Bundle();
@@ -222,6 +203,28 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
      * TO BE COMPLETED
      */
     private void setUpGoogleButton(){
+        // [START configure_signin]
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        //requestScopes() and requestServerAuthCode() are added.
+        String serverClientId = getString(R.string.server_client_id);
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestIdToken(getResources().getString(R.string.server_client_id))
+                .requestServerAuthCode(getResources().getString(R.string.server_client_id))
+                .requestEmail()
+                .build();
+        // [END configure_signin]
+
+        // [START build_client]
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */,this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        // [END build_client]
         mGoogleLoginButton = (Button) findViewById(R.id.google_login_button);
         //mGoogleLoginButton.startAnimation(mRotation2);
 
@@ -239,9 +242,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 doneButtonClickTime = SystemClock.elapsedRealtime();
                 //disableButtons();
 
-                //signIn(); ENABLE THIS WHEN G+ LOGIN WITH TOKEN IS FIXED
-                Toast.makeText(LoginActivity.this, "Non è stato possibile effettuare il login con G+, prova con Facebook o riprova più tardi", Toast.LENGTH_LONG).show();
-
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent,RC_SIGN_IN);
             }
         });
 
@@ -286,16 +288,73 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         mGoogleLoginButton.setEnabled(true);
     }
 
-    //Facebook SDK call result
+
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from
+        //   GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            if (result.isSuccess()) {
+                final GoogleSignInAccount acct = result.getSignInAccount();
+
+                final BaasUser user = BaasUser
+                        .withUserName(
+                                UUID.nameUUIDFromBytes(acct.getIdToken().getBytes()).toString())
+                        .setPassword(
+                                UUID.nameUUIDFromBytes(acct.getIdToken().getBytes()).toString());
+                JsonObject extras = user.getScope(BaasUser.Scope.PRIVATE)
+                        .put("name", acct.getDisplayName());
+                if(user.getScope(BaasUser.Scope.REGISTERED)
+                        .get("profilePic")==null){
+                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                            acct.getPhotoUrl().toString());
+                }
+                user.login(new BaasHandler<BaasUser>() {
+                    @Override
+                    public void handle(BaasResult<BaasUser> result) {
+                        if (result.isSuccess()) {
+                            Log.d("LOG", "Current user is: " + result.value());
+                            try {
+                                new BaaSLoginTask(LoginActivity.this, "GOOGLE",
+                                        acct.getServerAuthCode(), result.get(),
+                                        LoginActivity.this).execute();
+                            } catch (BaasException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            user.signup(new BaasHandler<BaasUser>() {
+                                @Override
+                                public void handle(BaasResult<BaasUser> result) {
+                                    if (result.isSuccess()) {
+                                        Log.d("LOG", "Current user is: " + result.value());
+                                        try {
+                                            new BaaSLoginTask(LoginActivity.this, "GOOGLE",
+                                                    acct.getServerAuthCode(), result.get(),
+                                                    LoginActivity.this).execute();
+                                        } catch (BaasException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        Log.e("LOG", "Show error", result.error());
+                                    }
+                                }
+                            });
+                            Log.e("LOG", "Show error", result.error());
+                        }
+                    }
+                });
+            } else{
+                Log.e(TAG, "GOOGLE RESULT ="+result.getStatus().toString());
+            }
         }
-        else
+        else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override //Overrided method for implement GoogleApiClient.OnConnectionFailedListener interface
@@ -308,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     /**
      * Google+ implementation
      */
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
 
@@ -332,7 +391,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 }
             });
         }
-    }
+    }*/
 
     // [START handleSignInResult]
     private void handleSignInResult(GoogleSignInResult result) {
@@ -346,7 +405,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                         " with authCode: " + acct.getServerAuthCode());
             }
             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
-                    acct.getServerAuthCode(),new Bundle(),
+                    acct.getServerAuthCode(),BaasUser.current(),
                     LoginActivity.this).execute();
         } else {
             // Signed out, show unauthenticated UI.
