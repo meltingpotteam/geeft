@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         setSupportActionBar(mToolbar);
         if (getSupportActionBar()!=null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         // TODO: Move this to where you establish a user session
         logUser();
 

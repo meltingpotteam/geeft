@@ -502,8 +502,6 @@ public class UserProfileFragment extends StatedFragment implements
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                //getActivity().finish(); this return to fullGeeftDetailsFragment,but not update
-                //so,user can modify or delete object. OnDismiss,startMainActivity or refresh list
                 //TODO:Not launch mainactivity,but refresh list (launch fragment with new BaasAsynctask call
                 startMainActivity();
             }

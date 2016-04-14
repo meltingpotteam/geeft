@@ -180,8 +180,6 @@ public class NavigationDrawerFragment extends Fragment {
                 //TODO what happens on long press
             }
         }));
-
-//        presentShowcaseNavigationView(350);
     }
 
     //set up the Recyclerview on creation

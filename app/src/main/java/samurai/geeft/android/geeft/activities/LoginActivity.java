@@ -303,7 +303,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 final GoogleSignInAccount acct = result.getSignInAccount();
                 Log.d(TAG, "TOKEN " + acct.getId());
 
-
                 final BaasUser user = BaasUser
                         .withUserName(
                                 UUID.nameUUIDFromBytes(acct.getId().getBytes()).toString())

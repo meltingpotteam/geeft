@@ -205,7 +205,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                                 Log.e(TAG, "FATAL ERROR userScope not update");
                                 return false;
                             }
-
                         }
                         else{
                             Log.e(TAG, "FATAL ERROR document not GRANTED");

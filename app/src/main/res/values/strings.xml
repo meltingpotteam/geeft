@@ -2,6 +2,7 @@
     <string name="app_name">Geeft</string>
           android:textColor="@color/colorPrimaryText"
 
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
