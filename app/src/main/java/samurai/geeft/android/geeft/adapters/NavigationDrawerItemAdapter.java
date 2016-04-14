@@ -109,7 +109,10 @@ public class NavigationDrawerItemAdapter extends
     public void done(boolean result,NavigationDrawerItemAdapter.ViewHolder holder,
               int count,int resultToken){
         if(result){
-            holder.mCountIcon.setText(count+"");
+            if(count != 0)
+                holder.mCountIcon.setText(count+"");
+            else
+                holder.mCountIcon.setVisibility(View.GONE);
         }
         else{
             if (resultToken == RESULT_SESSION_EXPIRED) {
