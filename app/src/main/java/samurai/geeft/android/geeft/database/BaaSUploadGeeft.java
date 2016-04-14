@@ -75,9 +75,15 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... arg0) {
         if(BaasUser.current() !=null) {
-            String userFbId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getObject("_social")
-                    .getObject("facebook")
-                    .get("id").toString();
+            String userFbId="";
+            try {
+                userFbId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getObject("_social")
+                        .getObject("facebook")
+                        .get("id").toString();
+            }catch (NullPointerException ex){
+                userFbId="";
+                Log.d(TAG,"The user didn't sign with facebook");
+            }
             String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
             String username = BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
                     .getString("username");
