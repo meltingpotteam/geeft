@@ -4,7 +4,6 @@ package samurai.geeft.android.geeft.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +29,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.AssignedActivity;
 import samurai.geeft.android.geeft.activities.CategoryActivity;
@@ -42,13 +39,9 @@ import samurai.geeft.android.geeft.activities.SendReportActivity;
 import samurai.geeft.android.geeft.activities.UserProfileActivity;
 import samurai.geeft.android.geeft.adapters.NavigationDrawerItemAdapter;
 import samurai.geeft.android.geeft.interfaces.ClickListener;
-import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.NavigationDrawerItem;
 import samurai.geeft.android.geeft.utilities.RecyclerTouchListener;
 import samurai.geeft.android.geeft.utilities.TagsValue;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -162,7 +155,8 @@ public class NavigationDrawerFragment extends Fragment {
         mProfleName = (TextView) rootView.findViewById(R.id.navigation_drawer_geefter_username);
 
         // ask for the facebook image and username
-        String fbImage = getProfilePicFacebook();
+        String fbImage =BaasUser.current().getScope(BaasUser.Scope.REGISTERED).get("profilePic");
+        Log.d(TAG,"URI = "+fbImage);
         String fbName = getFacebookName();
 
         // set them in the layout

@@ -101,7 +101,8 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
             doc.put("name", getFacebookName());
             doc.put("baasboxUsername",BaasUser.current().getName());
             doc.put("userFbId",userFbId);
-            doc.put("profilePic", getProfilePicFacebook());
+            doc.put("profilePic", BaasUser.current()
+                    .getScope(BaasUser.Scope.REGISTERED).get("profilePic").toString());
             doc.put("deadline", mGeeft.getDeadLine()); // is timestamp in long
             doc.put("category", mGeeft.getCategory().toLowerCase());
             // send the field fo allow communication and automatic selection; remember to manage them

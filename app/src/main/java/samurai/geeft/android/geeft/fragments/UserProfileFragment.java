@@ -186,14 +186,15 @@ public class UserProfileFragment extends StatedFragment implements
         User user = new User(baasUser.getName());
         JsonObject registeredFields = baasUser.getScope(BaasUser.Scope.REGISTERED);
 
-        String fbID = registeredFields.getObject("_social").getObject("facebook").getString("id");
         String username = registeredFields.getString("username");
         String description = registeredFields.getString("user_description");
         String docId = registeredFields.getString("doc_id");
         String email = registeredFields.getString("email");
         double userRank = registeredFields.get("feedback");
 
-        user.setFbID(fbID);
+        if (mIsCurrentUser){
+            user.setProfilePic(baasUser.getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
+        }
         user.setUsername(username);
         user.setDescription(description);
         user.setDocId(docId);

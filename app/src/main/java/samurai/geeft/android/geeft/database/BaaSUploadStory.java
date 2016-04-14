@@ -53,7 +53,8 @@ public class BaaSUploadStory extends AsyncTask<Void,Void,Boolean> {
             String username = BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
                     .getString("username");
             doc.put("username", username);
-            doc.put("profilePic", getProfilePicFacebook());
+            doc.put("profilePic", BaasUser.current()
+                    .getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
             Log.d("SELECTED",mGeeft.getCategory()+"");
             doc.put("category", mGeeft.getCategory().toLowerCase());
             String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");

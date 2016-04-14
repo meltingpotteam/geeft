@@ -104,7 +104,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 .getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+
     }
 
     private void startUserProfileFragmet(User user, boolean isCurrentUser) {

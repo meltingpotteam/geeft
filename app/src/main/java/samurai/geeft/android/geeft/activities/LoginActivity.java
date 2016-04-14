@@ -301,27 +301,34 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 final GoogleSignInAccount acct = result.getSignInAccount();
+                Log.d(TAG, "TOKEN " + acct.getId());
+
 
                 final BaasUser user = BaasUser
                         .withUserName(
-                                UUID.nameUUIDFromBytes(acct.getIdToken().getBytes()).toString())
+                                UUID.nameUUIDFromBytes(acct.getId().getBytes()).toString())
                         .setPassword(
-                                UUID.nameUUIDFromBytes(acct.getIdToken().getBytes()).toString());
+                                UUID.nameUUIDFromBytes(acct.getId().getBytes()).toString());
                 JsonObject extras = user.getScope(BaasUser.Scope.PRIVATE)
                         .put("name", acct.getDisplayName());
-                if(user.getScope(BaasUser.Scope.REGISTERED)
-                        .get("profilePic")==null){
-                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
-                            acct.getPhotoUrl().toString());
-                }
+                user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                        acct.getPhotoUrl().toString());
                 user.login(new BaasHandler<BaasUser>() {
                     @Override
                     public void handle(BaasResult<BaasUser> result) {
                         if (result.isSuccess()) {
                             Log.d("LOG", "Current user is: " + result.value());
                             try {
+                                BaasUser baasUser = result.get();
+                                Log.d(TAG, "" + baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                        .get("email"));
+                                if (baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                        .get("email")==null){
+                                    baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                            .put("email", acct.getEmail());
+                                }
                                 new BaaSLoginTask(LoginActivity.this, "GOOGLE",
-                                        acct.getServerAuthCode(), result.get(),
+                                        acct.getServerAuthCode(), baasUser,
                                         LoginActivity.this).execute();
                             } catch (BaasException e) {
                                 e.printStackTrace();
@@ -333,6 +340,14 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                     if (result.isSuccess()) {
                                         Log.d("LOG", "Current user is: " + result.value());
                                         try {
+                                            BaasUser baasUser = result.get();
+                                            Log.d(TAG, "" + baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                                    .get("email"));
+                                            if (baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                                    .get("email")==null){
+                                                baasUser.getScope(BaasUser.Scope.REGISTERED)
+                                                        .put("email",acct.getEmail());
+                                            }
                                             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                                                     acct.getServerAuthCode(), result.get(),
                                                     LoginActivity.this).execute();
@@ -349,7 +364,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                     }
                 });
             } else{
-                Log.e(TAG, "GOOGLE RESULT ="+result.getStatus().toString());
+                Log.e(TAG, "GOOGLE RESULT =" + result.getStatus().toString());
             }
         }
         else {

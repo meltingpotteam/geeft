@@ -75,13 +75,12 @@ public class BaaSFetchUsersFromLink extends AsyncTask<Void,Void,Boolean> {
     private void fillUserData(BaasUser baasUser) {
         JsonObject registeredFields = baasUser.getScope(BaasUser.Scope.REGISTERED);
 
-        String fbID = registeredFields.getObject("_social").getObject("facebook").getString("id");
         String username = registeredFields.getString("username");
         String description = registeredFields.getString("user_description");
         String docId = registeredFields.getString("doc_id");
         double userRank = registeredFields.get("feedback");
 
-        mUser.setFbID(fbID);
+        mUser.setProfilePic(baasUser.getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
         mUser.setUsername(username);
         mUser.setDescription(description);
         mUser.setDocId(docId);

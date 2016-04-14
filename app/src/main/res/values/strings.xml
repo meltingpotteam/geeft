@@ -24,7 +24,7 @@
     <string name="toast_fb_login_err">Non è stato possibile effettuare il login con Facebook, riprova più tardi</string>
     <string name="toast_google_login_err">Non è stato possibile effettuare il login con Google+, riprova più tardi</string>
     <string name="skip">skip</string>
-    <string name="server_client_id">96076765659-n1f8ltnjf5p4nnmnj2r1qn7sj6n2mchm.apps.googleusercontent.com</string>
+    <string name="server_client_id">248994882321-p44e336af9tsmpk9p63p83ftbptum44o.apps.googleusercontent.com</string>
 
     <string name="user_name">Name and Surname</string>
 

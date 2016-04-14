@@ -1,8 +1,6 @@
 package samurai.geeft.android.geeft.models;
 
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.Serializable;
 
@@ -20,30 +18,30 @@ public class User implements Serializable{
     private String mDescription;
     private int mLinkGivenCount;
     private int mLinkReceivedCount;
+    private String mProfilePic;
 
     public User(@Nullable String userID){
         mUserID = userID;
     }
 
 
-    public User(@Nullable String userID, String username, String fbID, String description
+    public User(@Nullable String userID, String username, String profilePic, String description
             ,String email, double rank){
         mUserID = userID;
         mUsername = username;
         mEmail = email;
-        mFbID = fbID;
+        mProfilePic = profilePic;
         mDescription = description;
         mRank = rank;
     }
 
 
     public String getProfilePic() {
-        Log.d(TAG, mFbID);
-        return "https://graph.facebook.com/"+mFbID+"/picture?type=large";
+        return mProfilePic;
     }
 
-    public void setProfilePic(String fbID) {
-        mFbID = fbID;
+    public void setProfilePic(String profilePic) {
+        mProfilePic = profilePic;
     }
 
     public String getID(){

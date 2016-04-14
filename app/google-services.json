@@ -11,10 +11,24 @@
         "client_id": "android:samurai.geeft.android.geeft",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "samurai.geeft.android.geeft"
+          "package_name": "samurai.geeft.android.geeft",
+          "certificate_hash": []
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "248994882321-q2akhmb4s4725qcpjeme53qbos5nr8ds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "samurai.geeft.android.geeft",
+            "certificate_hash": "0945EB99C1621087B0B40997C09B89F1F5A89884"
+          }
+        },
+        {
+          "client_id": "248994882321-p44e336af9tsmpk9p63p83ftbptum44o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [],
       "services": {
         "analytics_service": {
@@ -29,7 +43,7 @@
           "other_platform_oauth_client": []
         },
         "google_signin_service": {
-          "status": 1
+          "status": 2
         },
         "ads_service": {
           "status": 1
