@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasHandler;
@@ -44,6 +45,8 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private Random mRandom;
     private int mCode;
     private Toolbar mToolbar;
+    private TextView mEmailTextView;
+
 
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -61,13 +64,24 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
-        mEmail=(EditText) findViewById(R.id.email_edittext);
+        String mail = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email");
+        if ((mail==null)||(mail.isEmpty())) {
+            mEmail = (EditText) findViewById(R.id.email_edittext);
+            mEmailTextView = (TextView) findViewById(R.id.email_text_message);
+            mEmail.setVisibility(View.VISIBLE);
+            mEmailTextView.setVisibility(View.VISIBLE);
+        }
         mButtonDone=(Button) findViewById(R.id.username_request_button);
         mButtonDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String mail = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email");
                 Log.i("USERNAMEMAIL", "Nickname" + mNickname.getText().toString() + "!");
                 Log.i("USERNAMEMAIL", "Email" + mEmail.getText().toString() + "!");
-                addNicknameEmail();
+                if ((mail==null)||(mail.isEmpty())) {
+                    addNicknameEmail();
+                } else {
+                    addNickname();
+                }
             }
         });
     }
@@ -75,6 +89,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private void addNicknameEmail() {
         final BaasUser user;
         mNewUsername = mNickname.getText().toString();
+
         mNewEmail = mEmail.getText().toString().toLowerCase();
         if ((mNewUsername.isEmpty()) || (mNewUsername == null)) {
             Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
@@ -160,6 +175,34 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             }
         }
     }
+
+    private void addNickname() {
+        final BaasUser user;
+        mNewUsername = mNickname.getText().toString();
+        if ((mNewUsername.isEmpty()) || (mNewUsername == null)) {
+            Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
+        } else {
+            user = BaasUser.current();
+            user.getScope(BaasUser.Scope.REGISTERED).put("username", mNewUsername);
+            user.save(new BaasHandler<BaasUser>() {
+                @Override
+                public void handle(BaasResult<BaasUser> baasResult) {
+                if (baasResult.isSuccess()) {
+                    mUser.setUsername(mNewUsername);
+                    Log.d(TAG, BaasUser.current()
+                            .getScope(BaasUser.Scope.REGISTERED)
+                            .put("username", mNewUsername).toString());
+                } else if (baasResult.isFailed()) {
+                    showDescriptionFailDailog();
+                }
+                startMainActivity();
+                }
+            });
+        }
+    }
+
+
+
 
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

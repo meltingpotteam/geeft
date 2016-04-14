@@ -56,11 +56,13 @@
             />
 
         <TextView
+            android:id="@+id/email_text_message"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/mail_textview"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryText"
+            android:visibility="gone"
             />
 
         <EditText
@@ -71,6 +73,7 @@
             android:gravity="center"
             android:hint="user@geeftapp.com"
             android:textColor="@color/colorPrimaryText"
+            android:visibility="gone"
             />
         <Button
             android:id="@+id/username_request_button"
