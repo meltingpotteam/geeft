@@ -5,7 +5,6 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               tools:context=".MainActivity">
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/fragment_appbar_layout"
         android:layout_width="match_parent"
@@ -14,11 +13,8 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         >
-
         <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
-
     </android.support.design.widget.AppBarLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,25 +40,23 @@
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryText"
             />
-
         <EditText
             android:id="@+id/username_edittext"
             android:gravity="center"
             android:hint="Geeft User"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
             android:textColor="@color/colorPrimaryText"
             />
-
         <TextView
+            android:id="@+id/email_text_message"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/mail_textview"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryText"
+            android:visibility="gone"
             />
-
         <EditText
             android:id="@+id/email_edittext"
             android:layout_width="fill_parent"
@@ -71,6 +65,7 @@
             android:gravity="center"
             android:hint="user@geeftapp.com"
             android:textColor="@color/colorPrimaryText"
+            android:visibility="gone"
             />
         <Button
             android:id="@+id/username_request_button"
@@ -82,8 +77,5 @@
             android:textColor="@color/white"
             android:layout_gravity="end"
             android:textSize="16sp" />
-
     </LinearLayout>
-
-
 </LinearLayout>

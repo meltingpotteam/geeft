@@ -1,5 +1,4 @@
 package samurai.geeft.android.geeft.activities;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,14 +14,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
-
 import java.util.Random;
-
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSMail;
 import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
@@ -30,12 +27,10 @@ import samurai.geeft.android.geeft.database.BaaSUpdateUsernameMail;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.TagsValue;
-
 /**
  * Created by joseph on 25/03/16.
  */
 public class UsernameMailActivity extends AppCompatActivity implements TaskCallbackBooleanToken {
-
     private final String TAG = getClass().getSimpleName();
     private EditText mNickname,mEmail;
     private String mNewUsername,mNewEmail;
@@ -44,34 +39,42 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private Random mRandom;
     private int mCode;
     private Toolbar mToolbar;
-
+    private TextView mEmailTextView;
     //-------------------Macros
     private final int RESULT_OK = 1;
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
     private ProgressDialog mProgressDialog;
     //-------------------
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.username_mail);
-
         initActionBar();
         mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
-        mEmail=(EditText) findViewById(R.id.email_edittext);
+        String mail = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email");
+        if ((mail==null)||(mail.isEmpty())) {
+            mEmail = (EditText) findViewById(R.id.email_edittext);
+            mEmailTextView = (TextView) findViewById(R.id.email_text_message);
+            mEmail.setVisibility(View.VISIBLE);
+            mEmailTextView.setVisibility(View.VISIBLE);
+        }
         mButtonDone=(Button) findViewById(R.id.username_request_button);
         mButtonDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String mail = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email");
                 Log.i("USERNAMEMAIL", "Nickname" + mNickname.getText().toString() + "!");
                 Log.i("USERNAMEMAIL", "Email" + mEmail.getText().toString() + "!");
-                addNicknameEmail();
+                if ((mail==null)||(mail.isEmpty())) {
+                    addNicknameEmail();
+                } else {
+                    addNickname();
+                }
             }
         });
     }
-
     private void addNicknameEmail() {
         final BaasUser user;
         mNewUsername = mNickname.getText().toString();
@@ -146,7 +149,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                             });
                         }
                     }
-                    });
+                });
                 builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -154,13 +157,35 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                     }
                 });
                 builder.show();
-
             } else {
                 Toast.makeText(UsernameMailActivity.this, R.string.no_valid_mail_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }
-
+    private void addNickname() {
+        final BaasUser user;
+        mNewUsername = mNickname.getText().toString();
+        if ((mNewUsername.isEmpty()) || (mNewUsername == null)) {
+            Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
+        } else {
+            user = BaasUser.current();
+            user.getScope(BaasUser.Scope.REGISTERED).put("username", mNewUsername);
+            user.save(new BaasHandler<BaasUser>() {
+                @Override
+                public void handle(BaasResult<BaasUser> baasResult) {
+                    if (baasResult.isSuccess()) {
+                        mUser.setUsername(mNewUsername);
+                        Log.d(TAG, BaasUser.current()
+                                .getScope(BaasUser.Scope.REGISTERED)
+                                .put("username", mNewUsername).toString());
+                    } else if (baasResult.isFailed()) {
+                        showDescriptionFailDailog();
+                    }
+                    startMainActivity();
+                }
+            });
+        }
+    }
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar!=null){
@@ -171,7 +196,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             mToolbar.setTitle("Geeft");
         }
     }
-
     public void done(boolean result,int resultToken){
         if(mProgressDialog!=null){
             mProgressDialog.dismiss();
@@ -192,19 +216,15 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             }
         }
     }
-
     private void startLoginActivity(){
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
     }
-
     public final static boolean isValidEmail(CharSequence target) {
         if (target == null)
             return false;
-
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
-
     //Starts the MainActivity
     private void startMainActivity() {
         final Intent mMainIntent = new Intent(UsernameMailActivity.this,
@@ -212,7 +232,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         startActivity(mMainIntent);
         finish();
     }
-
     private void sendMail(String newMail){
         new BaaSMail(TagsValue.DEFAULT_EMAIL,newMail,mCode).execute();
     }
@@ -245,7 +264,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         }
         return true;
     }
-
     private void showDescriptionFailDailog() {
         new AlertDialog.Builder(getApplicationContext())
                 .setTitle("Ooops...")
@@ -263,7 +281,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                     }
                 });
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -271,5 +288,4 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             mProgressDialog.dismiss();
         }
     }
-
 }
