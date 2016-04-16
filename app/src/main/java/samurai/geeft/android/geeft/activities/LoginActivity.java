@@ -54,7 +54,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
  */
 public class LoginActivity extends AppCompatActivity implements TaskCallbackBoolean,GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "LoginActivity";
+    private final String TAG = getClass().getSimpleName();
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_GET_AUTH_CODE = 9003;
 
@@ -210,7 +210,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestScopes(new Scope(Scopes.PLUS_ME))
                 .requestIdToken(getResources().getString(R.string.server_client_id))
                 .requestServerAuthCode(getResources().getString(R.string.server_client_id))
                 .requestEmail()
@@ -310,8 +311,15 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                 UUID.nameUUIDFromBytes(acct.getId().getBytes()).toString());
                 JsonObject extras = user.getScope(BaasUser.Scope.PRIVATE)
                         .put("name", acct.getDisplayName());
-                user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
-                        acct.getPhotoUrl().toString());
+                if( acct.getPhotoUrl()!=null){
+                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                            acct.getPhotoUrl().toString());
+                }else {
+                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                            "");
+                }
+
+
                 user.login(new BaasHandler<BaasUser>() {
                     @Override
                     public void handle(BaasResult<BaasUser> result) {

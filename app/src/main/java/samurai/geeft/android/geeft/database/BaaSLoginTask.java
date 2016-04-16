@@ -34,7 +34,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
      * Key secret used for obtaining user private information by Facebook or Google+.
      */
     private static final String FACEBOOK_SECRET = "52001af9217446b6408ef593f56e3f1a";
-    private static final String GOOGLE_SECRET = "RIlloFFnJRSMnKN48ASkc8Gu";
+    private static final String GOOGLE_SECRET = "iEJc8ZH7FZOsbDwsQTdGjhxk";
     private  Bundle mUserData;
 
     /**

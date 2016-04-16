@@ -17,11 +17,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "248994882321-q2akhmb4s4725qcpjeme53qbos5nr8ds.apps.googleusercontent.com",
+          "client_id": "248994882321-n3vl6vmfer63trkch3q1rp68hk8hl9al.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "samurai.geeft.android.geeft",
-            "certificate_hash": "0945EB99C1621087B0B40997C09B89F1F5A89884"
+            "certificate_hash": "74DC07DCF67B6767671D6DFFCC350145991DF923"
           }
         },
         {
