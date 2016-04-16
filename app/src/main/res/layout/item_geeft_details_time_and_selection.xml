@@ -22,15 +22,36 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
 
             android:layout_gravity="center">
-
             <TextView
-                android:id="@+id/geeft_time_ago"
-                android:layout_width="wrap_content"
+                android:id="@+id/geeft_information_textview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="..."
-                android:textColor="#666"
-                android:textSize="14sp"/>
+                android:text="@string/geeft_information_text"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                style="@style/TextAppearance.AppCompat.Title"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Creazione:"
+                    android:textColor="#666"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/geeft_time_ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
+                    android:maxLines="1"
+                    android:text="..."
+                    android:textColor="#666"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,6 +86,27 @@
                     android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/geeft_choose_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
+                    android:text="..."
+                    android:textColor="#666"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scadenza:"
+                    android:textColor="#666"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/geeft_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="5dp"

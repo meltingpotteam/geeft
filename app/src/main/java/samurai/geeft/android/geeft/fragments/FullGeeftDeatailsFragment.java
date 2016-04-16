@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,13 +29,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasLink;
+import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.RequestOptions;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
@@ -45,6 +54,7 @@ import samurai.geeft.android.geeft.activities.FullScreenImageActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.activities.ReservedActivity;
 import samurai.geeft.android.geeft.database.BaaSDeleteGeeftTask;
 import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.database.BaaSSignalisationTask;
@@ -68,6 +78,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private Toolbar mToolbar;
     private LinearLayout mGeefterProfileCard;
     private TextView mGeeftTimeAgo;
+    private TextView mGeeftDeadline;
     private TextView mGeeftLocation;
     private TextView mGeeftChooseType;
     private ImageView mGeeftImageView;
@@ -86,6 +97,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private View mDeleteView;
     private View mModifyView;
     private View mAssignView;
+    private View mPrenoteView;
 
     private View mDonateReceivedGeeftView;
     private List<Geeft> mGeeftList = new ArrayList<>();
@@ -200,6 +212,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
+        mGeeftDeadline = (TextView) rootView.findViewById(R.id.geeft_deadline);
         mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
         mGeeftChooseType = (TextView) rootView.findViewById(R.id.geeft_choose_type);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
@@ -211,6 +224,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mDonatedButtonField = (LinearLayout)rootView.findViewById(R.id.fragment_details_donated_buttons_layout);
         mReceivedButtonField = (LinearLayout)rootView.findViewById(R.id.fragment_details_received_buttons_layout);
         mStoryView = rootView.findViewById(R.id.item_geeft_story);
+        mPrenoteView = rootView.findViewById(R.id.prenote_geeft);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
         mAssignView = rootView.findViewById(R.id.item_assign_geeft);
@@ -289,6 +303,18 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 //                mDonateReceivedGeeftView.setVisibility(View.GONE);
             }
 
+            mPrenoteView.setVisibility(View.GONE);
+            if(getArguments().getSerializable(KEY_CONTEXT)
+                    .equals(ReservedActivity.class.getSimpleName())) {
+                //showPrenoteViewIfGeeftReserved(); it is useless in this context
+                mPrenoteView.setVisibility(View.VISIBLE);
+                mPrenoteView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteReservation();
+                    }
+                });
+            }
             mModifyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -303,6 +329,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     deleteGeeft();
                 }
             });
+
+
 
             mAssignView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -332,6 +360,106 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
         }
+    }
+
+    private void showPrenoteViewIfGeeftReserved() { //It is for GeeftItemAdapter,but not implemented yet
+        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+         //retrieve doc_is attached at user
+        //find all links with the doc_id (User id <--> doc id )
+        BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'" +
+        "and out.id = '" + mGeeft.getId() + "'").criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_RESERVE, query, RequestOptions.DEFAULT,
+                new BaasHandler<List<BaasLink>>() {
+                    @Override
+                    public void handle(BaasResult<List<BaasLink>> baasResult) {
+                        if (baasResult.isSuccess()) {
+                            List<BaasLink> links = baasResult.value();
+                            Log.d(TAG, "Size of links reserved (expected 1) are: " + links.size());
+                            if (links.size() > 0)
+                                mPrenoteView.setVisibility(View.VISIBLE);
+                        } else {
+                            Log.e("LOG", "Error", baasResult.error());
+                        }
+                    }
+                });
+    }
+
+    private void deleteReservation() {
+        //TODO: Create Was_Reserved link
+        mProgressDialog = new ProgressDialog(getContext());
+        try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.show();
+        } catch (WindowManager.BadTokenException e) {
+        }
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Operazione in corso...");
+
+        String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
+        //retrieve doc_is attached at user
+        //find all links with the doc_id (User id <--> doc id )
+        BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'" +
+                "and out.id = '" + mGeeft.getId() + "'").criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_RESERVE, query, RequestOptions.DEFAULT,
+                new BaasHandler<List<BaasLink>>() {
+                    @Override
+                    public void handle(BaasResult<List<BaasLink>> baasResult) {
+                        if (baasResult.isSuccess()) {
+                            List<BaasLink> links = baasResult.value();
+                            int links_size = links.size();
+                            Log.d(TAG, "Size of links reserved (expected 1) are: " + links_size);
+                            if (links_size > 0) {
+                                for (BaasLink link : links) {
+                                    BaasLink.withId(link.getId()).delete(RequestOptions.DEFAULT
+                                            , new BaasHandler<Void>() {
+                                        @Override
+                                        public void handle(BaasResult<Void> baasResult) {
+                                            if (baasResult.isSuccess()) {
+                                                if (mProgressDialog != null)
+                                                    mProgressDialog.dismiss();
+                                                showSuccessDialog();
+                                                mPrenoteView.setVisibility(View.GONE);
+                                            } else {
+                                                if (mProgressDialog != null)
+                                                    mProgressDialog.dismiss();
+                                                Toast.makeText(getContext(),
+                                                        "E' accaduto un errore,riprovare più tardi",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                Toast.makeText(getContext(),
+                                        "E' accaduto un errore,riprovare più tardi",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Log.e("LOG", "Error", baasResult.error());
+                        }
+                    }
+                });
+    }
+
+    private void showSuccessDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Successo")
+                .setMessage("Operazione effettuata con successo.")
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startMainActivity();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        startMainActivity();
+                    }
+                })
+                .show();
     }
 
     private void setUserRaiting() {
@@ -507,10 +635,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private void setGeeftDetails() {
         // Converting timestamp into x ago format
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
-                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+        //CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
+        //        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
-        mGeeftTimeAgo.setText(timeAgo);
+        mGeeftTimeAgo.setText(convertTimestamp(mGeeft.getCreationTime()/1000));
+        mGeeftDeadline.setText(convertTimestamp(mGeeft.getDeadLine()));
 
         mGeeftLocation.setText(mGeeft.getUserLocation() +"," + mGeeft.getUserCap());
 
@@ -520,6 +649,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         else{
             mGeeftChooseType.setText("Manuale");
         }
+    }
+
+    private String convertTimestamp(long timestamp) {
+        String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(timestamp*1000);
+        return date;
     }
 
     @Override

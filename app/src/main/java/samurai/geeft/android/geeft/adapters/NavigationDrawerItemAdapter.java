@@ -94,6 +94,10 @@ public class NavigationDrawerItemAdapter extends
             new BaaSFillNavigationDrawerCount(mContext,TagsValue.LINK_NAME_DONATED,
                     holder,position,NavigationDrawerItemAdapter.this).execute();
         }
+        else if (position == 2){
+            new BaaSFillNavigationDrawerCount(mContext,TagsValue.LINK_NAME_RESERVE,
+                    holder,position,NavigationDrawerItemAdapter.this).execute();
+        }
         else if (position == 3){
             new BaaSFillNavigationDrawerCount(mContext,TagsValue.LINK_NAME_ASSIGNED,
                     holder,position,NavigationDrawerItemAdapter.this).execute();

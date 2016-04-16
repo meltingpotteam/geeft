@@ -157,11 +157,16 @@
                 />
 
 
+            <include
+                android:id="@+id/prenote_geeft"
+                layout="@layout/item_prenote_geeft"/>
 
             <include
                 android:id="@+id/item_geeft_story"
                 layout="@layout/item_show_geeft_story"/>
 
+
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

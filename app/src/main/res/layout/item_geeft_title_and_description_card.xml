@@ -8,7 +8,8 @@
     <LinearLayout
         style="@style/Widget.CardContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/geeft_title_textview"
             android:layout_width="match_parent"
@@ -16,12 +17,16 @@
             android:text="@string/geeft_title_text"
             android:textStyle="bold"
             android:textColor="@color/colorAccent"
-            style="@style/TextAppearance.AppCompat.Title"/>
+            style="@style/TextAppearance.AppCompat.Title"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"/>
         <TextView
             android:id="@+id/geeft_description_textview"
             android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/geeft_description_text"/>
+            android:text="@string/geeft_description_text"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -328,9 +328,13 @@
 
     <string name="winner_screen_message">ti ha assegnato questo Geeft!\nContattalo tramite facebook per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa</string>
     <string name="show_story">Visualizza la storia dell\'oggetto</string>
+    <string name="geeft_information_text">Informazioni</string>
     <string name="geeft_title_text">Descrizione</string>
     <string name="geeft_description_text">Geeft description</string>
     <string name="geeft_show_story">Visualizza storia del Geeft</string>
+    <string name="prenote_geeft_text_on">Prenota</string>
+    <string name="prenote_geeft_text_off">Cancella prenotazione</string>
+
     <string name="geeft_modify">Modifica</string>
     <string name="geeft_delete">Elimina</string>
     <string name="geeft_assign">Assegna</string>
