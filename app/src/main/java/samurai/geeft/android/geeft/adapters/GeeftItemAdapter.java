@@ -551,7 +551,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                 .setText(item
                         .getUsername());
         mProfileDialogUserLocation.setText(item.getUserLocation());
-        Picasso.with(mContext).load(item.getUserProfilePic()).fit()
+        Picasso.with(mContext).load(Uri.parse(item.getUserProfilePic())).fit()
                 .centerInside()
                 .into(mProfileDialogUserImage);
 

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -134,7 +135,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         initUI();
 
         //--------------------------------------------
-        Log.d(TAG,"Geeft: " + geeft.getGeeftImage());
+        Log.d(TAG, "Geeft: " + geeft.getGeeftImage());
         mReceivedDialogUsername
                 .setText(geeft
                         .getUsername());
@@ -144,7 +145,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         .getUsername());
         mReceivedDialogUserLocation.setText(geeft.getUserLocation());
         Picasso.with(CompactDialogActivity.this)
-                .load(geeft.getUserProfilePic())
+                .load(Uri.parse(geeft.getUserProfilePic()))
                 .fit()
                 .centerInside()
                 .into(mReceivedDialogUserImage);

@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.fragments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -262,8 +263,9 @@ public class UserProfileFragment extends StatedFragment implements
         int avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         Log.d(TAG, mUser.getProfilePic());
         Picasso.with(getContext())
-                .load(mUser.getProfilePic())
+                .load(Uri.parse(mUser.getProfilePic()))
                 .placeholder(R.drawable.ic_account_circle)
+                .error(R.drawable.ic_account_circle)
                 .centerInside()
                 .resize(avatarSize, avatarSize)
                 .transform(new CircleTransformation())

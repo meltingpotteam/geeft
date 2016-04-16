@@ -1,6 +1,7 @@
 package samurai.geeft.android.geeft.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -113,7 +114,7 @@ public class GeeftStoryFragment extends StatedFragment {
 
             Picasso.with(getContext()).load(mGeeft.getGeeftImage()).fit()
                     .centerInside().placeholder(R.drawable.ic_image_multiple).into(mGeeftImage);
-            Picasso.with(getContext()).load(mGeeft.getUserProfilePic()).fit()
+            Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic())).fit()
                     .centerInside().placeholder(R.drawable.ic_account_circle).into(mUserProfilePic);
             mUserLocationTextView.setText(mGeeft.getUserLocation());
             mUsernameTextView.setText(mGeeft.getUsername());

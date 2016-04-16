@@ -30,10 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 
 import org.json.JSONException;
@@ -210,10 +208,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestScopes(new Scope(Scopes.PLUS_ME))
                 .requestIdToken(getResources().getString(R.string.server_client_id))
                 .requestServerAuthCode(getResources().getString(R.string.server_client_id))
+                .requestProfile()
                 .requestEmail()
                 .build();
         // [END configure_signin]
@@ -222,9 +219,12 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */,this /* OnConnectionFailedListener */)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addOnConnectionFailedListener(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+
         // [END build_client]
         mGoogleLoginButton = (Button) findViewById(R.id.google_login_button);
         //mGoogleLoginButton.startAnimation(mRotation2);
@@ -302,6 +302,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 final GoogleSignInAccount acct = result.getSignInAccount();
+                Log.d(TAG, "Mail " + acct.getEmail());
                 Log.d(TAG, "TOKEN " + acct.getId());
 
                 final BaasUser user = BaasUser
@@ -314,9 +315,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 if( acct.getPhotoUrl()!=null){
                     user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
                             acct.getPhotoUrl().toString());
-                }else {
-                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
-                            "");
                 }
 
 
@@ -333,6 +331,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                         .get("email")==null){
                                     baasUser.getScope(BaasUser.Scope.REGISTERED)
                                             .put("email", acct.getEmail());
+                                    Log.d(TAG, "emial=" + acct.getEmail());
+                                    Log.d(TAG, "user ="+ baasUser.toString());
                                 }
                                 new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                                         acct.getServerAuthCode(), baasUser,
@@ -354,6 +354,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                                     .get("email")==null){
                                                 baasUser.getScope(BaasUser.Scope.REGISTERED)
                                                         .put("email",acct.getEmail());
+                                                Log.d(TAG, "emial=" + acct.getEmail());
                                             }
                                             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                                                     acct.getServerAuthCode(), result.get(),

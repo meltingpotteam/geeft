@@ -10,23 +10,24 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.json.JsonObject;
 
 import java.util.Random;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSMail;
-import samurai.geeft.android.geeft.database.BaaSUpdateUserFeedback;
-import samurai.geeft.android.geeft.database.BaaSUpdateUsernameMail;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -50,18 +51,34 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private final int RESULT_FAILED = 0;
     private final int RESULT_SESSION_EXPIRED = -1;
     private ProgressDialog mProgressDialog;
+    private boolean hasEmail;
+    private TextView mEmailTextView;
+    private TextView mMessageTextView;
     //-------------------
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.username_mail);
-
+        setContentView(R.layout.activity_username_mail);
+        if(BaasUser.current()!=null){
+            JsonObject scopeRegistered = BaasUser.current().getScope(BaasUser.Scope.REGISTERED);
+            if(scopeRegistered.getString("email")!=null &&
+                    !scopeRegistered.getString("email").equals("")){
+                hasEmail = true;
+            }
+        }
         initActionBar();
         mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
         mEmail=(EditText) findViewById(R.id.email_edittext);
+        mEmailTextView = (TextView) findViewById(R.id.user_email_text_view);
+        mMessageTextView = (TextView) findViewById(R.id.username_mail_message);
+        if(hasEmail){
+            mEmail.setVisibility(View.GONE);
+            mEmailTextView.setVisibility(View.GONE);
+            mMessageTextView.setText("Compilare il seguente campo");
+        }
         mButtonDone=(Button) findViewById(R.id.username_request_button);
         mButtonDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -73,18 +90,42 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     }
 
     private void addNicknameEmail() {
-        final BaasUser user;
+        final BaasUser user = BaasUser.current();;
         mNewUsername = mNickname.getText().toString();
         mNewEmail = mEmail.getText().toString().toLowerCase();
         if ((mNewUsername.isEmpty()) || (mNewUsername == null)) {
             Toast.makeText(UsernameMailActivity.this, R.string.no_valid_username_toast, Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(hasEmail){
+            final ProgressDialog progressDialog = new ProgressDialog(UsernameMailActivity.this);
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            progressDialog.show();
+            progressDialog.setMessage("Salvataggio in corso...");
+            user.getScope(BaasUser.Scope.REGISTERED).put("username", mNewUsername);
+            user.save(new BaasHandler<BaasUser>() {
+                @Override
+                public void handle(BaasResult<BaasUser> baasResult) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                    if (baasResult.isSuccess()) {
+                        mRandom = null;
+                        mUser.setUsername(mNewUsername);
+                        Log.d(TAG, BaasUser.current()
+                                .getScope(BaasUser.Scope.REGISTERED)
+                                .put("username", mNewUsername).toString());
+                    } else if (baasResult.isFailed()) {
+                        showDescriptionFailDailog();
+                    }
+                    startMainActivity();
+                }
+            });
+        }
+        else {
             String email = mEmail.getText().toString().toLowerCase();
             if (isValidEmail(email)) {
 //              Set mail and username
                 Log.i("USERNAMEMAIL", "Valid mail.");
                 final String myName = BaasUser.current().getName().toString();
-                user = BaasUser.current();
                 if(mRandom ==null){
                     mRandom = new Random();
                     int min = 1000;
@@ -168,7 +209,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            mToolbar.setTitle("Geeft");
+            mToolbar.setTitle("Benvenuto");
         }
     }
 
@@ -263,6 +304,24 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                     }
                 });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                if(getSupportFragmentManager().getBackStackEntryCount()>0){
+                    getSupportFragmentManager().popBackStack();
+                    Log.d(TAG, "back stack entries: " + getSupportFragmentManager().getBackStackEntryCount());
+                }else {
+                    startLoginActivity();
+                    finish();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onDestroy() {

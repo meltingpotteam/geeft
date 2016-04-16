@@ -66,6 +66,9 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
         mToken = token;
         mCallback = callback;
         mUserData = userData;
+        if (BaasUser.current()!=null){
+            user = BaasUser.current();
+        }
 
         /**
          * Assigning server default value based with the provider
@@ -131,16 +134,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
          */
         if (mBaasProvider.equals(BaasUser.Social.GOOGLE)||baasResult.isSuccess()) {
             //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE)..getString("id"));
-            user = BaasUser.current();
             if (user != null) {
-                BaasResult<BaasUser> userBaasResult = BaasUser.current().refreshSync();
-                if (userBaasResult.isSuccess()){
-                    Log.d(TAG,"Successo");
-                }else{
-                    Log.d(TAG,"Fallito");
-                    return false;
-                }
-                Log.d(TAG, user.toString());
+                Log.d(TAG, "BASSUSER= "+BaasUser.current().toString());
                 String userDocId =
                         BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
                 String name =
@@ -200,6 +195,7 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             BaasResult<BaasUser> resUser = user.saveSync();
                             if (resUser.isSuccess()) {
                                 Log.d(TAG, "New user, document created");
+                                Log.d(TAG, "user refreshed = " + BaasUser.current().toString());
                                 return true;
                             } else {
                                 Log.e(TAG, "FATAL ERROR userScope not update");
@@ -242,14 +238,15 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
 
                     BaasResult<BaasUser> resUser = user.saveSync();
                     if (resUser.isSuccess()) {
-                        Log.d(TAG, "New user, document created");
+                        Log.d(TAG, "User already registered");
+                        Log.d(TAG, "user refreshed = " + BaasUser.current().toString());
                         return true;
                     } else {
                         Log.e(TAG, "FATAL ERROR userScope not update");
                         return false;
                     }
                 }
-            }else{ // if user is null
+            }else{ // if user is nullF
                 Log.e(TAG,"Error,user is NULL!");
                 return false;
             }

@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,7 +74,7 @@ public class AssignUserListAdapter extends RecyclerView.Adapter<AssignUserListAd
         User user = mUserList.get(position);
 
         Picasso.with(mContext)
-                .load(user.getProfilePic())
+                .load(Uri.parse(user.getProfilePic()))
                 .centerCrop()
                 .resize(avatarSize, avatarSize)
                 .transform(new RoundedTransformation())

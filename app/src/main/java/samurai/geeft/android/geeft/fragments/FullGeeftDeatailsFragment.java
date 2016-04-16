@@ -33,8 +33,6 @@ import com.baasbox.android.BaasUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,7 +220,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         if(mGeeft!=null) {
             Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                     .fit().centerInside().into(mGeeftImageView);
-            Picasso.with(getContext()).load(mGeeft.getUserProfilePic())
+            Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic()))
                     .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
                     .into(mGeefterProfilePicImageView);
 
@@ -467,7 +465,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 .setText(geeft
                         .getUsername());
         mProfileDialogUserLocation.setText(geeft.getUserLocation());
-        Picasso.with(getContext()).load(geeft.getUserProfilePic()).fit()
+        Picasso.with(getContext()).load(Uri.parse(geeft.getUserProfilePic())).fit()
                 .centerInside()
                 .into(mProfileDialogUserImage);
 

@@ -24,7 +24,7 @@
         <Button
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:text="Login con Facebook"
+            android:text="Accedi con Facebook"
             android:id="@+id/fb_login_button"
             android:padding="4dp"
             android:textAllCaps="false"
@@ -42,7 +42,7 @@
         <Button
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:text="Login con Google+"
+            android:text="Accedi con Google"
             android:id="@+id/google_login_button"
             android:padding="4dp"
             android:textAllCaps="false"

@@ -160,8 +160,12 @@ public class NavigationDrawerFragment extends Fragment {
         String fbName = getFacebookName();
 
         // set them in the layout
-        Picasso.with(getActivity()).load(Uri.parse(fbImage)).fit()
-                .centerCrop().into(mProfileImage);
+        Picasso.with(getActivity()).load(Uri.parse(fbImage))
+                .fit()
+                .centerCrop()
+                .placeholder(R.drawable.ic_account_circle)
+                .error(R.drawable.ic_account_circle)
+                .into(mProfileImage);
         Log.d(TAG, "profilePic loaded: " + fbImage);
         mProfleName.setText(fbName);
 
