@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.json.JsonObject;
@@ -76,6 +77,9 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
     private final static String EXTRA_GEEFT_ID  = "extra_geeft_id";
     private final static String EXTRA_ID = "extra_id";
 
+    private BaasUser mGeefted;  //Careful with this, I use it only to send the e-mail to Geefted in
+                                //in geefter case
+
     //info dialog attributes---------------------
     private LayoutInflater inflater;
     private Geeft mGeeft;
@@ -85,7 +89,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
      *
      * @param context
      * @param action : 1 is for Geefter mode,2 is for Geefted mode
-     * @param geeftId : is GeeftId,it can be null in second case
+     * @param geeftId : is GeeftId
      * @param docUserId : is docUserId,it can be null in first case
      * @return
      */
@@ -118,14 +122,20 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
          mWinnerScreenLocationButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if (!isGoogleMapsInstalled()) {
-                     Toast.makeText(mContext,
-                             "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
-                 } else if (!mLocation.equals("")) {
-                     parseLocation(mLocation);
-                 } else
+                 if (mAction == 1) {
+                     if (!isGoogleMapsInstalled()) {
+                         Toast.makeText(mContext,
+                                 "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
+                     } else if (!mLocation.equals("")) {
+                         parseLocation(mLocation);
+                     } else
+                         Toast.makeText(mContext,
+                                 "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
+                 } else { //This is a TEMPORARY patch for a bug: If visibility of LocationButton is
+                     //set on GONE, also EmailButton is invisible.
                      Toast.makeText(mContext,
                              "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
+                 }
              }
          });
         //-----------------------
@@ -139,11 +149,16 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEmailToGeefter();
+                if(mAction == 1)
+                    sendEmailToGeefter();
+                else
+                    sendEmailToGeefted();
             }
         });
 
     }
+
+
 
     private void initUI(){
         mContext = getApplicationContext();
@@ -203,7 +218,12 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                     if (geefterEmail == null) {
                         Toast.makeText(WinnerScreenActivity.this, "Spiacenti,l'e-mail fornito non è valido", Toast.LENGTH_LONG).show();
                     } else {
-                        sendEmail(geefterEmail);
+                        String message = "Gentile " + mGeeft.getUsername() +
+                                " \n\n" + "Mi è stato assegnato l'oggetto: '" + mGeeft.getGeeftTitle() + "' " +
+                                "tramite l'applicazione "
+                                + "Android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
+
+                        sendEmail(geefterEmail,message);
                     }
                 } else {
                     showAlertDialog();
@@ -212,23 +232,27 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         });
     }
 
-    private void sendEmail(String email){
+
+    private void sendEmailToGeefted() {
+        String geeftedEmail = mGeefted.getScope(BaasUser.Scope.REGISTERED).getString("email");
+        if (geeftedEmail == null) {
+            Toast.makeText(WinnerScreenActivity.this, "Spiacenti,l'e-mail fornito non è valido", Toast.LENGTH_LONG).show();
+        } else {
+            String geeftedUsername = mGeefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString();
+
+            String message = "Gentile "+ geeftedUsername + "\n\n ti ho assegnato l'oggetto: '"
+                    + mGeeft.getGeeftTitle() + "' tramite l'applicazione "
+                    + "Android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
+
+            sendEmail(geeftedEmail,message);
+        }
+    }
+
+    private void sendEmail(String email,String message){
 
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-        String message;
-        if(mAction == 1){
-            message = "Gentile " + mGeeft.getUsername() +
-                    " \n\n" + "Mi è stato assegnato l'oggetto: '" + mGeeft.getGeeftTitle() + "' " +
-                    "tramite l'applicazione "
-                    + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
-        }
-        else{
-            message = "Gentile utente\n\n" + "ti ho assegnato l'oggetto: '"
-                    + mGeeft.getGeeftTitle() + "' tramite l'applicazione "
-                    + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
-        }
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto per '"
                 + mGeeft.getGeeftTitle() + "'");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
@@ -272,16 +296,17 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mLocation = docGeeft.getString("location").concat("," + docGeeft.getString("cap"));
         mUserFbId = docGeeft.getString("userFbId");
         String message;
-        if(mUserFbId != null){
-            message = "ti ha assegnato questo Geeft!\nContattalo tramite facebook o e-mail per" +
-                    " concordare la posizione precisa per il ritiro e nel frattempo osserva la sua " +
-                    "posizione approssimativa";
-        }
-        else{
+        if(mUserFbId == null || mUserFbId.equals("")){
             message = "ti ha assegnato questo Geeft!\nContattalo tramite e-mail per" +
                     " concordare la posizione precisa per il ritiro e nel frattempo osserva la sua " +
                     "posizione approssimativa";
             mWinnerScreenFbButton.setVisibility(View.GONE);
+        }
+        else{
+            message = "ti ha assegnato questo Geeft!\nContattalo tramite facebook o e-mail per" +
+                    " concordare la posizione precisa per il ritiro e nel frattempo osserva la sua " +
+                    "posizione approssimativa";
+
         }
 
         mWinnerMessage.setText(message);
@@ -347,7 +372,9 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         //In this case, mWinnerScreenGeeftedName is Geefter,and mWinnerScreenGeefterName is Geefted
         // this is only for bound of the layout,not a problem.
         mGeeft = new Geeft();
+        mGeefted = geefted;
         mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
+        mGeeft.setGeeftTitle(docGeeft.getString("title"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
         //mWinnerScreenGeeftedName.setText("prova");
@@ -355,18 +382,20 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
-        mWinnerScreenLocationButton.setVisibility(View.GONE);
+        //mWinnerScreenLocationButton.setVisibility(View.GONE);
         JsonObject field = geefted.getScope(BaasUser.Scope.REGISTERED);
         String message;
+        mWinnerScreenEmailButton.setVisibility(View.VISIBLE);
         if(field.getObject("_social").getObject("facebook")!=null) {
             mUserFbId = field.getObject("_social").getObject("facebook").getString("id");
-            message = "è stato selezionato per ricevere il Geeft. Prendi i contatti " +
+            message = "è stato selezionato per ricevere il Geeft. \nPrendi i contatti " +
                     "tramite social, oppure inviagli un'e-mail utilizzando i pulsanti qui sotto.";
         }else{
             mUserFbId = "";
             mWinnerScreenFbButton.setVisibility(View.GONE);
-            message = "è stato selezionato per ricevere il Geeft. Prendi i contatti " +
-                    "inviandogli un' e-mail.";
+            message = "è stato selezionato per ricevere il Geeft. \nPrendi i contatti " +
+                    "inviandogli un' e-mail utilizzando il pulsante qui sotto.";
+            Log.d(TAG,"entrato in else");
         }
         mWinnerMessage.setText(message);
         if (mProgressDialog != null)
