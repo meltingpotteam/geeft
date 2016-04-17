@@ -217,11 +217,21 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto per "
-                + mGeeft.getGeeftTitle());
-        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gentile " + mGeeft.getUsername() +
-                " \n\n" + "Mi è stato assegnato l'oggetto: " + mGeeft.getGeeftTitle() + " tramite l'applicazione "
-                + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE");
+        String message;
+        if(mAction == 1){
+            message = "Gentile " + mGeeft.getUsername() +
+                    " \n\n" + "Mi è stato assegnato l'oggetto: '" + mGeeft.getGeeftTitle() + "' " +
+                    "tramite l'applicazione "
+                    + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
+        }
+        else{
+            message = "Gentile utente\n\n" + "ti ho assegnato l'oggetto: '"
+                    + mGeeft.getGeeftTitle() + "' tramite l'applicazione "
+                    + "android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
+        }
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto per '"
+                + mGeeft.getGeeftTitle() + "'");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
         WinnerScreenActivity.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
@@ -256,12 +266,25 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
         mWinnerScreenGeefterName.setText(docGeeft.getString("name"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
-                getScope(BaasUser.Scope.PRIVATE).get("name").toString());
+                getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
         Picasso.with(mContext).load(docGeeft.getString("image")+ BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
-        mLocation = docGeeft.getString("location").concat(","+ docGeeft.getString("cap"));
+        mLocation = docGeeft.getString("location").concat("," + docGeeft.getString("cap"));
         mUserFbId = docGeeft.getString("userFbId");
-        mWinnerMessage.setText("ti ha assegnato questo Geeft!\nContattalo tramite facebook o e-mail per concordare la posizione precisa per il ritiro e nel frattempo osserva la sua posizione approssimativa");
+        String message;
+        if(mUserFbId != null){
+            message = "ti ha assegnato questo Geeft!\nContattalo tramite facebook o e-mail per" +
+                    " concordare la posizione precisa per il ritiro e nel frattempo osserva la sua " +
+                    "posizione approssimativa";
+        }
+        else{
+            message = "ti ha assegnato questo Geeft!\nContattalo tramite e-mail per" +
+                    " concordare la posizione precisa per il ritiro e nel frattempo osserva la sua " +
+                    "posizione approssimativa";
+            mWinnerScreenFbButton.setVisibility(View.GONE);
+        }
+
+        mWinnerMessage.setText(message);
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
     }
@@ -326,22 +349,26 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mGeeft = new Geeft();
         mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
         mWinnerScreenGeeftedName.setText(BaasUser.current().
-                getScope(BaasUser.Scope.PRIVATE).get("name").toString());
+                getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
         //mWinnerScreenGeeftedName.setText("prova");
         Log.d(TAG, "informations: " + geefted.getName() + " ," + geefted.getStatus() + " ," + docGeeft.getId());
         mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
         mWinnerScreenLocationButton.setVisibility(View.GONE);
-        mWinnerScreenEmailButton.setVisibility(View.GONE);
         JsonObject field = geefted.getScope(BaasUser.Scope.REGISTERED);
+        String message;
         if(field.getObject("_social").getObject("facebook")!=null) {
             mUserFbId = field.getObject("_social").getObject("facebook").getString("id");
+            message = "è stato selezionato per ricevere il Geeft. Prendi i contatti " +
+                    "tramite social, oppure inviagli un'e-mail utilizzando i pulsanti qui sotto.";
         }else{
             mUserFbId = "";
+            mWinnerScreenFbButton.setVisibility(View.GONE);
+            message = "è stato selezionato per ricevere il Geeft. Prendi i contatti " +
+                    "inviandogli un' e-mail.";
         }
-        mWinnerMessage.setText("è stato selezionato per ricevere il Geeft. Prendi i contatti " +
-                "tramite Facebook,usa il pulsante qui sotto per visualizzare il suo profilo ed inviargli un messaggio");
+        mWinnerMessage.setText(message);
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
 

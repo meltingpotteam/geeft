@@ -42,10 +42,10 @@ public class NavigationDrawerItemAdapter extends
     private List<NavigationDrawerItem> mNavigationDrawerItems=
             Collections.emptyList();
 
-    public NavigationDrawerItemAdapter(Context context, List<NavigationDrawerItem> itmes){
+    public NavigationDrawerItemAdapter(Context context, List<NavigationDrawerItem> items){
         inflater = LayoutInflater.from(context);
         mContext = context;
-        this.mNavigationDrawerItems = itmes;
+        this.mNavigationDrawerItems = items;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,6 +90,8 @@ public class NavigationDrawerItemAdapter extends
         holder.mTitle.setText(navigationDrawerItem.getTitle());
         holder.mDescription.setText(navigationDrawerItem.getDetails());
 
+        holder.mCountIcon.setVisibility(View.GONE);
+
         if(position == 1) {
             new BaaSFillNavigationDrawerCount(mContext,TagsValue.LINK_NAME_DONATED,
                     holder,position,NavigationDrawerItemAdapter.this).execute();
@@ -112,8 +114,10 @@ public class NavigationDrawerItemAdapter extends
     public void done(boolean result,NavigationDrawerItemAdapter.ViewHolder holder,
               int count,int resultToken){
         if(result){
-            if(count != 0)
-                holder.mCountIcon.setText(count+"");
+            if(count != 0) {
+                holder.mCountIcon.setText(count + "");
+                holder.mCountIcon.setVisibility(View.VISIBLE);
+            }
             else
                 holder.mCountIcon.setVisibility(View.GONE);
         }

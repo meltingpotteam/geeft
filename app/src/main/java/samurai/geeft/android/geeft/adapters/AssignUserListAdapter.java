@@ -87,6 +87,7 @@ public class AssignUserListAdapter extends RecyclerView.Adapter<AssignUserListAd
         holder.mUsernameTextView.setText(user.getUsername());
         holder.mUserDescriptionTextView.setText(user.getDescription());
 
+
     }
 
 

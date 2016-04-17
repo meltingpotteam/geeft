@@ -47,7 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ciao, "
+                    android:text="Ciao "
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="italic"
                     android:textSize="18sp"
