@@ -72,13 +72,16 @@ public class AssignUserListAdapter extends RecyclerView.Adapter<AssignUserListAd
         Log.d(TAG, "ON BIND");
         runEnterAnimation(holder.itemView, position);
         User user = mUserList.get(position);
+        Log.d(TAG, "Profile pic= " + user.getProfilePic());
 
+        Uri profilePic = Uri.parse(user.getProfilePic());
         Picasso.with(mContext)
-                .load(Uri.parse(user.getProfilePic()))
+                .load(profilePic)
                 .centerCrop()
                 .resize(avatarSize, avatarSize)
                 .transform(new RoundedTransformation())
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .error(R.drawable.ic_account_circle_black_24dp)
                 .into(holder.mUserPicImageView);
 
         holder.mUsernameTextView.setText(user.getUsername());

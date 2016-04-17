@@ -37,6 +37,9 @@ public class User implements Serializable{
 
 
     public String getProfilePic() {
+        if(mProfilePic==null){
+            return "";
+        }
         return mProfilePic;
     }
 

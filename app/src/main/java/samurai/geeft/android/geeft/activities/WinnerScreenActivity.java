@@ -173,7 +173,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
     private void startImageGallery(List<Geeft> geeftList) {
         Intent intent =
-                FullScreenImageActivity.newIntent(getApplicationContext(), geeftList,0);
+                FullScreenImageActivity.newIntent(getApplicationContext(), geeftList, 0);
         startActivity(intent);
     }
 
@@ -335,7 +335,11 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mWinnerScreenLocationButton.setVisibility(View.GONE);
         mWinnerScreenEmailButton.setVisibility(View.GONE);
         JsonObject field = geefted.getScope(BaasUser.Scope.REGISTERED);
-        mUserFbId = field.getObject("_social").getObject("facebook").getString("id");
+        if(field.getObject("_social").getObject("facebook")!=null) {
+            mUserFbId = field.getObject("_social").getObject("facebook").getString("id");
+        }else{
+            mUserFbId = "";
+        }
         mWinnerMessage.setText("è stato selezionato per ricevere il Geeft. Prendi i contatti " +
                 "tramite Facebook,usa il pulsante qui sotto per visualizzare il suo profilo ed inviargli un messaggio");
         if (mProgressDialog != null)
