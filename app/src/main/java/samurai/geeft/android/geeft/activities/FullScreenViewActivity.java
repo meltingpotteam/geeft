@@ -194,7 +194,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
-                        .setDismissText("OK")
+                        .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_geeftory_behaviordescription))
