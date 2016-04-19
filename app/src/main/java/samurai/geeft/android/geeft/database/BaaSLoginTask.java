@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.Grant;
@@ -133,7 +134,15 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
          * and returns false
          */
         if (mBaasProvider.equals(BaasUser.Social.GOOGLE)||baasResult.isSuccess()) {
-            //Log.d(TAG,"ID IS: " + BaasUser.current().getScope(BaasUser.Scope.PRIVATE)..getString("id"));
+            if(!mBaasProvider.equals(BaasUser.Social.GOOGLE)){
+                try {
+                    user = baasResult.get();
+                } catch (BaasException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.d(TAG,"ID IS: " + BaasUser.current()
+                    .getScope(BaasUser.Scope.PRIVATE).getString("id"));
             if (user != null) {
                 Log.d(TAG, "BASSUSER= "+BaasUser.current().toString());
                 String userDocId =

@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -59,6 +59,8 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         super.onCreate(savedInstanceState);
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
+        mToolbar = (Toolbar) findViewById(R.id.appbar_layout);
+        mToolbar.setVisibility(View.VISIBLE);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);

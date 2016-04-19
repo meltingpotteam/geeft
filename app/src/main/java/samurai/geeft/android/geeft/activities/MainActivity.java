@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private SlidingTabLayout mSlidingTabLayoutTabs;
-    private CharSequence mTitles[]={"Geeftory","Geeft"};
+    private CharSequence mTitles[]={"Geeft","Geeftory"};
     private FloatingActionButton mActionNewGeeft;
     private FloatingActionButton mActionGeeftStory;
     private int mNumboftabs =2;
@@ -508,10 +508,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
-                        .setDismissText("OK")
+                        .setDismissText("HO CAPITO")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText(getString(R.string.tutorial_geeftoryinfo_text))
+                        .setContentText(getString(R.string.tutorial_geeftinfo_text))
                         .withRectangleShape()
                         .build()
         );
@@ -519,10 +519,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText(getString(R.string.tutorial_geeftinfo_text))
+                        .setContentText(getString(R.string.tutorial_geeftoryinfo_text))
                         .withRectangleShape()
                         .build()
         );

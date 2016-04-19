@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
@@ -24,21 +23,22 @@ public class LogoutActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splash_screen);
-
-        BaasUser.current().logout(new BaasHandler<Void>() {
-            @Override
-            public void handle(BaasResult<Void> baasResult) {
-                if (baasResult.isSuccess())
-                    setLogoutOk(true);
-                else if( baasResult.isFailed())
-                    setLogoutOk(false);
-                else if( baasResult.isCanceled()) {
-                    Intent intent = new Intent();
-                    setResult(Activity.RESULT_CANCELED, intent);
+        if(BaasUser.current()!=null){
+            BaasUser.current().logout(new BaasHandler<Void>() {
+                @Override
+                public void handle(BaasResult<Void> baasResult) {
+                    if (baasResult.isSuccess())
+                        setLogoutOk(true);
+                    else if( baasResult.isFailed())
+                        setLogoutOk(false);
+                    else if( baasResult.isCanceled()) {
+                        Intent intent = new Intent();
+                        setResult(Activity.RESULT_CANCELED, intent);
+                    }
+                    finish();
                 }
-                finish();
-            }
-        });
+            });
+        }
         setLogoutOk(false);
     }
 

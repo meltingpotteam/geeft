@@ -216,13 +216,18 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             long remainingDays = (deadlineMillis - actualMillis) / 86400;
             long remainingHours = (deadlineMillis - actualMillis) % 86400 / 3600;
 
-            if (remainingDays >0)
-                myHolder.mExpireTime.setText(remainingDays + "g "+ remainingHours+"ore");
-            else if(remainingHours>0) {
-                myHolder.mExpireTime.setText( remainingHours +"ore");
+            if (remainingDays >0) {
+                myHolder.mExpireTime.setText("Prenota entro: " + remainingDays + "g " + remainingHours + "ore");
+                myHolder.mPrenoteButtonTab.setVisibility(View.VISIBLE);
             }
-            else
-                myHolder.mExpireTime.setText("Scaduto");
+            else if(remainingHours>0) {
+                myHolder.mExpireTime.setText("Prenota entro: "+remainingHours +"ore");
+                myHolder.mPrenoteButtonTab.setVisibility(View.VISIBLE);
+            }
+            else {
+                myHolder.mExpireTime.setText("Non più preontabile");
+                myHolder.mPrenoteButtonTab.setVisibility(View.GONE);
+            }
 
             /**The User are obliged to set a title, a description, a position, a location and an image.
              * TODO verify this part if the design of the application will change
