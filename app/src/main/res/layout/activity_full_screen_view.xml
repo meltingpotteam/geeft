@@ -5,23 +5,22 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <android.support.v4.view.ViewPager
-        android:id="@+id/activity_full_screen_view_pager"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-    </android.support.v4.view.ViewPager>
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:visibility="gone"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        >
 
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_bar_height">
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/activity_full_screen_view_pager"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+        </android.support.v4.view.ViewPager>
 
-    </android.support.design.widget.AppBarLayout>
+    </LinearLayout>
+
+    <include android:id="@+id/toolbar"
+             layout="@layout/tool_bar"
+             android:visibility="gone"/>
+
 </FrameLayout>

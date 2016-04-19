@@ -44,7 +44,7 @@ public class FullScreenImageFragment extends StatedFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_full_screen_image, container, false);
         initUI(rootView);
-        initSupportActionBar(rootView);
+        //initSupportActionBar(rootView);
         return rootView;
     }
 
@@ -69,7 +69,7 @@ public class FullScreenImageFragment extends StatedFragment {
             View rootView = getView();
             if (rootView!=null){
                 initUI(rootView);
-                initSupportActionBar(rootView);
+                //initSupportActionBar(rootView);
             }
         }
     }

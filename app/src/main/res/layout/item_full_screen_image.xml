@@ -6,9 +6,6 @@
     android:background="@android:color/background_dark"
     >
 
-    <include layout="@layout/tool_bar"
-             android:id="@+id/toolbar"/>
-
     <samurai.geeft.android.geeft.utilities.TouchImageView
         android:id="@+id/touch_image_view"
         android:layout_width="match_parent"

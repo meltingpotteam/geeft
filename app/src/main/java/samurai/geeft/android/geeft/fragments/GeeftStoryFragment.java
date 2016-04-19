@@ -55,8 +55,8 @@ public class GeeftStoryFragment extends StatedFragment {
         View rootView = inflater.inflate(R.layout.fragment_geeft_story_scrollableview, container, false);
 
         initUI(rootView);
-        if (savedInstanceState==null)
-            initSupportActionBar(rootView);
+        //if (savedInstanceState==null)
+            //initSupportActionBar(rootView);
 
         return rootView;
     }

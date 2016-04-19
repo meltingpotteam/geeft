@@ -2,12 +2,14 @@ package samurai.geeft.android.geeft.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +36,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
     private List<Geeft> mGeeftList = new ArrayList<>();
     private View mBallView;
     private int mPosition;
+    private Toolbar mToolbar;
 
 
     public static Intent newIntent(Context context,List geeftList,int position) {
@@ -54,6 +57,14 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_screen_view);
         mGeeftList = (ArrayList)getIntent().getSerializableExtra(EXTRA_GEEFT_LIST);
         mPosition = getIntent().getIntExtra(EXTRA_POSITION,0);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setVisibility(View.VISIBLE);
+        mToolbar.setBackgroundColor(Color.BLACK);
+        mToolbar.setTitle("Storia del Geeft");
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         initViewPager();
     }

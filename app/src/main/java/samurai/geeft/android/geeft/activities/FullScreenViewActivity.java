@@ -59,12 +59,17 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         super.onCreate(savedInstanceState);
         Log.d(TAG, "QUI");
         setContentView(R.layout.activity_full_screen_view);
-        mToolbar = (Toolbar) findViewById(R.id.appbar_layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.VISIBLE);
         mViewPager = (ViewPager) findViewById(R.id.activity_full_screen_view_pager);
         if(savedInstanceState!=null)
                 mCollection = savedInstanceState.getString(ARG_COLLECTION);
 
+        mToolbar.setTitle("Storia del Geeft");
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mProgressDialog = new ProgressDialog(FullScreenViewActivity.this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Operazione in corso...");
