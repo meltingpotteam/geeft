@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,9 @@ import samurai.geeft.android.geeft.database.BaaSGeeftHistoryArrayTask;
 import samurai.geeft.android.geeft.fragments.GeeftStoryFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.models.Geeft;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 02/02/16.
@@ -34,6 +38,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
             "samurai.geeft.android.geeft.geeft_id";
     private final static String ARG_COLLECTION = "samurai.geeft.android.geeft.activities." +
             "FullScreenViewActivity_collection";
+    private static final String SHOWCASE_ID_STORY = "Showcase_id_story";
 
 
     private ViewPager mViewPager;
@@ -72,6 +77,9 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
 
         new BaaSGeeftHistoryArrayTask(getApplicationContext(),mGeeftList,
                 getIntent().getStringExtra(EXTRA_GEEFT_ID),mCollection,this).execute();
+
+        presentShowcaseView(450);
+
     }
 
     @Override
@@ -141,5 +149,56 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
         if (mProgressDialog!=null){
             mProgressDialog.dismiss();
         }
+    }
+
+    // Showcase for timeline
+    private void presentShowcaseView(int withDelay){
+//        new MaterialShowcaseView.Builder(this)
+//                .setTarget(mSlidingTabLayoutTabs)
+//                .setTitleText("Hello")
+//                .setDismissText("Ho Capito")
+//                .setContentText("Queste solo ne zezioni thell'applicazione! \n Geeftory è la sezione in cui puoi trovare le sotrie degli oggetti \n Geeft è dove puoi vedere gli oggeti presenti su geeft e prenotare quello a cui sei interessato!")
+//                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+//                .singleUse(SHOWCASE_ID_MAIN) // provide a unique ID used to ensure it is only shown once
+//                .show();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(withDelay); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID_STORY);
+
+//        sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
+//            @Override
+//            public void onShow(MaterialShowcaseView itemView, int position) {
+//                Toast.makeText(itemView.getContext(), "Item #" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setDismissText("OK")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_geeftory_details))
+                        .withoutShape()
+                        .build()
+
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setDismissText("OK")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText("Fai Swipe a destra ->\n" +
+                                getString(R.string.tutorial_geeftory_behaviordescription))
+                        .withoutShape()
+                        .build()
+        );
+
+        sequence.start();
+
     }
 }
