@@ -60,7 +60,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.VISIBLE);
         mToolbar.setBackgroundColor(Color.BLACK);
-        mToolbar.setTitle("Storia del Geeft");
+        mToolbar.setTitle("");
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
