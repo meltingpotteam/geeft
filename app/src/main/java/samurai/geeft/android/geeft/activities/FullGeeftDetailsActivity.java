@@ -3,6 +3,7 @@ package samurai.geeft.android.geeft.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,14 +15,17 @@ import android.view.MenuItem;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.FullGeeftDeatailsFragment;
 import samurai.geeft.android.geeft.models.Geeft;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDetailsActivity extends AppCompatActivity{
     private static final String EXTRA_CONTEXT = "extra_context";
-    private final String TAG = getClass().getSimpleName();
 
+    private final String TAG = getClass().getSimpleName();
     private Geeft mGeeft;
     private ProgressDialog mProgress;
     private final static String EXTRA_GEFFT = "geeft";
@@ -59,6 +63,7 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
             fm.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit();
         }
+
     }
 
     @Override
@@ -83,4 +88,7 @@ public class FullGeeftDetailsActivity extends AppCompatActivity{
             mProgress.dismiss();
         }
     }
+
+
+
 }
