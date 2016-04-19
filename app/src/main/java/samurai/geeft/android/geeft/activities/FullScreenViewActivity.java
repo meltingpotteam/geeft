@@ -197,8 +197,7 @@ public class FullScreenViewActivity extends AppCompatActivity implements TaskCal
                         .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
-                        .setContentText("Fai Swipe a destra ->\n" +
-                                getString(R.string.tutorial_geeftory_behaviordescription))
+                        .setContentText(getString(R.string.tutorial_geeftory_behaviordescription))
                         .withoutShape()
                         .build()
         );
