@@ -43,8 +43,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_title">Benvenuto</string>
     <string name="navigation_drawer_description">Benvenuto nel menù di Geeft.
-        Scegli un\'azione oppure premi la freccia in alto a sinistra per tornare alla home.
-        Altrimenti scorri la lista e seleziona un\'opzione.
+        Scegli un\'opzione nella lista oppure
+        clicca fuori dal menù per tornare alla home.
     </string>
     <string name="account_title">Il mio profilo</string>
     <string name="gift_title">Geeft che hai regalato</string>

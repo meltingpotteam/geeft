@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,6 +65,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private LayoutInflater inflater;
     private Toolbar mToolbar;
     private android.app.AlertDialog mDialog;
+    private ProgressDialog mProgressDialog;
+
     //-------------------------------------------
     private final static String EXTRA_GEFFT = "geeft";
     private static final String EXTRA_CONTEXT = "extra_context";
@@ -498,7 +501,9 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         "di confermare il ritiro");*/
             }
             else if (mGeeft.isTaken() && mGeeft.isGiven()) {
+                showProgressDialog();
                 new BaaSExchangeCompletedTask(getApplicationContext(),mGeeft,mIamGeefter,this).execute();
+
                              // create link in "ricevuti",delete link in "assegnati" and update
                             //n_given and n_received
 
@@ -525,6 +530,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     }
 
     public void exchangeCompleted(boolean result,int resultToken){ //CALLBACK METHOD
+        if (mProgressDialog != null)
+            mProgressDialog.dismiss();
         if(result){
             new AlertDialog.Builder(CompactDialogActivity.this)
                     .setTitle("Evviva!")
@@ -567,6 +574,22 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         .show();
             }
         }
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(CompactDialogActivity.this);
+        try {
+//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Attendere");
+            mProgressDialog.show();
+        } catch (WindowManager.BadTokenException e) {
+            Log.e(TAG,"error: " + e.toString());
+        }/*
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Attendere");*/
     }
 
     private void startLoginActivity(){
@@ -769,6 +792,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
     }
 
 
