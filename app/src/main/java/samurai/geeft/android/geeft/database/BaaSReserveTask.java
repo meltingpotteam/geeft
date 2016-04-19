@@ -61,6 +61,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                 }*/
         //-----------------------
         BaasUser currentUser = BaasUser.current();
+        Log.d(TAG,"CURRENT USER= "+currentUser.toString());
         if (mDocUserId==null){
             return false;
         }
@@ -79,7 +80,7 @@ public class BaaSReserveTask extends AsyncTask<Void,Void,Boolean> {
                 return false;
             }
             else {
-                Log.e(TAG, "Fatal error while retrieve DocUser");
+                Log.e(TAG, "Fatal error while retrieve DocUser ="+resDoc.error());
                 mResultToken = RESULT_FAILED;
                 return false;
             }

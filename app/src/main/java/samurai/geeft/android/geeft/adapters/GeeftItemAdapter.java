@@ -218,11 +218,9 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (remainingDays >0) {
                 myHolder.mExpireTime.setText("Prenota entro: " + remainingDays + "g " + remainingHours + "ore");
-                myHolder.mPrenoteButtonTab.setVisibility(View.VISIBLE);
             }
             else if(remainingHours>0) {
                 myHolder.mExpireTime.setText("Prenota entro: "+remainingHours +"ore");
-                myHolder.mPrenoteButtonTab.setVisibility(View.VISIBLE);
             }
             else {
                 myHolder.mExpireTime.setText("Non più preontabile");
