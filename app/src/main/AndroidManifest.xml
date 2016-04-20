@@ -140,9 +140,11 @@
         <activity android:name=".activities.UserProfileActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.ActivityRecylerAnimators"/>
+        <activity android:name=".activities.ActivityRecylerAnimators"
+                  android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.UsernameMailActivity"/>
+        <activity android:name=".activities.UsernameMailActivity"
+                  android:screenOrientation="portrait"/>
 
 
         <receiver

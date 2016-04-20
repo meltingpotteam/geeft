@@ -6,18 +6,9 @@
               android:orientation="vertical"
               tools:context=".MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/fragment_appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        >
-
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
-
-    </android.support.design.widget.AppBarLayout>
+    <include android:id="@+id/toolbar"
+             layout="@layout/tool_bar"
+             android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
