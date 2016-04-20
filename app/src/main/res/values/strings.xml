@@ -356,6 +356,8 @@
     <string name="add_geeft_label_hint">(es. cucina, pentola, acciaio, ... )</string>
     <string name="user_add_description">Aggiungi una breve presentazione</string>
 
+    <string name="share_geeft_description">In questo momento è presente in regalo questo oggetto in Geeft,visita ora!</string>
+
     <!-- Tutorial strings-->
     <string name="tutorial_camerabutton_text">Premi su questo tasto per avviare la fotocamera e scattare la foto dell\'oggetto</string>
     <string name="tutorial_deadline_text">Seleziona quanti giorni vuoi che il geeft sia visibile prima dell\'assegnazione</string>

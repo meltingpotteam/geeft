@@ -100,6 +100,8 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setUserProfilePic(document.getString("profilePic"));
                             geeft.setUserCap(document.getString("cap"));
                             geeft.setGeeftTitle(document.getString("title"));
+                            geeft.setDeadLine(document.getLong("deadline"));
+                            geeft.setUserFbId(document.getString("userFbId"));
                             geeft.setDimensionRead(document.getBoolean("allowDimension"));
                             geeft.setAutomaticSelection(document.getBoolean("automaticSelection"));
                             geeft.setAllowCommunication(document.getBoolean("allowCommunication"));

@@ -4,7 +4,7 @@ package samurai.geeft.android.geeft.utilities;
  * Created by ugookeadu on 19/02/16.
  */
 public class TagsValue {
-    public static final String WEBSITE_URL = "http://geeftapp.com";
+    public static final String WEBSITE_URL = "http://geeftapp.com/redirect.html";
 
     public static final String GCM_SENDER_ID = "248994882321"; // replace with your own sender id
 
@@ -16,9 +16,8 @@ public class TagsValue {
 
     public static final String DEFAULT_EMAIL = "geeft.app@gmail.com";
 
-    public static final String DEFAULT_TAG = "TEAM2015";
 
-    public static final String DEFAULT_URL = "http://geeft-test1.cloudapp.net:9000";
+    public static final String DEFAULT_URL = "http://geeft1.cloudapp.net:9000";
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 

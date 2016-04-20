@@ -341,7 +341,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         ShareLinkContent linkContent = new ShareLinkContent.Builder()
                                 .setContentTitle(title)
                                 .setContentDescription(
-                                        "In questo momento è presente in regalo questo oggetto tramite Geeft,visita ora!")
+                                        "In questo momento è presente in regalo questo oggetto,cercalo su Geeft!")
                                 .setContentUrl(app_url)
                                 .setImageUrl(imageUrl)
                                 .build();
