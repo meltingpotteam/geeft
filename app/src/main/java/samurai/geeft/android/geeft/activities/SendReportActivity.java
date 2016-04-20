@@ -104,18 +104,18 @@ public class SendReportActivity extends AppCompatActivity implements TaskCallbac
     public void done(boolean result){
         //enables all social buttons
         if(result){
-            Toast.makeText(getApplicationContext(),
-                    "Report inviato", Toast.LENGTH_LONG).show();
+
             // SEND Hidden E-mail with title ,description and User Display Name
             BaasUser user = BaasUser.current();
             final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
             emailIntent.setType("plain/text");
             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "geeft.app@gmail.com" });
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Suggestion/Feedback from "
-                    + mUserDisplayName);
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "User: " + user.getName() +
-                    " \n" + "Title: " + mTitle + "\n" + "Description: " + mDescription);
-            SendReportActivity.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Suggerimenti/Feedback");
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Titolo: " + mTitle + "\n" +
+                    "Descrizione: " + mDescription);
+            SendReportActivity.this.startActivity(Intent.createChooser(emailIntent, "Inviando l'e-mail..."));
+            /*Toast.makeText(getApplicationContext(),
+                    "Report inviato,grazie!", Toast.LENGTH_LONG).show();*/
         }
         else{
             Toast.makeText(getApplicationContext(),
