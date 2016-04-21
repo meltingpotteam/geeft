@@ -20,6 +20,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 13/01/16.
  * Class used for initializing all services
  */
+
 public class ApplicationInit extends Application {
     Map<String, Fragment.SavedState> savedStateMap;
 
