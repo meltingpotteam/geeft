@@ -423,18 +423,20 @@ public class TabGeeftFragment extends StatedFragment
                 startLoginActivity();
             }else if(mGeeftList.size()==0){
                 message="Nessun risultato";
-            }else {
-                message="Operazione non possibile. Riprovare.";
+            }else if(resultToken == RESULT_FAILED){
+                message="Operazione fallita, riprovare.";
             }
         }
-        showToast(message);
+        if(message!=null) {
+            showToast(message);
+        }
     }
     private void showSnackbar(){
         if(getActivity().getClass().equals(MainActivity.class)) {
             Snackbar snackbar = Snackbar
                     .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                            "No Internet Connection!", Snackbar.LENGTH_SHORT)
-                    .setAction("RETRY", new View.OnClickListener() {
+                            "Connessione assente!", Snackbar.LENGTH_SHORT)
+                    .setAction("RIPROVA", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             getData();

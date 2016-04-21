@@ -359,7 +359,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     }
 
     private void stopRefreshOperations(boolean result, int resultToken) {
-        String message = new String();
+        String message = null;
         mRefreshLayout.setRefreshing(false);
         Toast toast;
         if (result) {
@@ -381,11 +381,13 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 startLoginActivity();
             }else if(mGeeftoryList.size()==0){
                 message="Nessun risultato";
-            }else {
-                message="Operazione non possibile. Riprovare.";
+            }else if(resultToken == RESULT_FAILED){
+                message="Operazione fallita, riprovare.";
             }
         }
-        showToast(message);
+        if(message!=null) {
+            showToast(message);
+        }
     }
 
     private void startLoginActivity(){

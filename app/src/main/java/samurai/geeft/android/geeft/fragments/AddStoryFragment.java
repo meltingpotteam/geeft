@@ -3,8 +3,11 @@ package samurai.geeft.android.geeft.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -12,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -62,6 +66,11 @@ public class AddStoryFragment extends StatedFragment {
             "AddStoryFragment_file";
 
     private static final String SHOWCASE_ID_STORY = "Showcase_single_story";
+
+    private static final int SELECT_PICTURE = 1;
+    private static final int REQUEST_CAMERA =2000 ;
+    private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
+            +File.separator+"geeft";
 
     private Geeft mGeeft;
     private FloatingActionButton cameraButton;
@@ -183,22 +192,90 @@ public class AddStoryFragment extends StatedFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void selectImage() {
+        final CharSequence[] items = { "Scatta una foto", "Aggiungi dalla galleria", "Annulla" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Scatta una foto")) {
+                    File folder = new File(GEEFT_FOLDER);
+                    boolean success = true;
+                    if (!folder.exists()) {
+                        success = folder.mkdir();
+                    }
+                    mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
+                    Log.d(TAG, "mGeeftImage = "+mGeeftImage.getAbsolutePath());
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Aggiungi dalla galleria")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_PICTURE);
+                } else if (items[item].equals("Cancella")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
     /**
      * positioning uploaded; it works now: the image fit the central part of the imageView in the form
      **/
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
-            mGeeftImage = new File(Environment.getExternalStorageDirectory()
-                    +File.separator + "image.jpg");
-            Picasso.with(getActivity()).load(mGeeftImage)
-                    .fit()
-                    .centerInside()
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .into(mGeeftImageView);
+        Log.d(TAG,"ON ACTIVITY RESULT");
+        Log.d(TAG,"resultCode == Activity.RESULT_OK ? "+(resultCode == Activity.RESULT_OK));
+        Log.d(TAG,"requestCode == REQUEST_CAMERA ? "+(requestCode == REQUEST_CAMERA));
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mGeeftImageView);
+            } else if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                CursorLoader cursorLoader = new CursorLoader(getContext(), selectedImageUri,
+                        projection, null, null, null);
+                Cursor cursor = cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+                Bitmap bm;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(selectedImagePath, options);
+                final int REQUIRED_SIZE = 200;
+                int scale = 1;
+                while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                        && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
+                options.inSampleSize = scale;
+                options.inJustDecodeBounds = false;
+                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                mGeeftImage = new File(selectedImageUri.getPath());
+                Log.d(TAG, "getAbsolutePath() = " + mGeeftImage.getAbsolutePath());
+                Log.d(TAG,"selectedImagePath() = "+selectedImagePath);
+                Log.d(TAG, "selectedImagePath() = " + selectedImageUri);
+                Log.d(TAG, "mGeeftImage.getAbsolutePath() = "+mGeeftImage.getAbsolutePath());
+                Picasso.with(getActivity()).load("file://" + selectedImagePath)
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mGeeftImageView);
+            }
         }
     }
-
     public interface OnCheckOkSelectedListener {
         void onCheckSelected(boolean startChooseStory, Geeft mGeeft);
     }
@@ -288,11 +365,7 @@ public class AddStoryFragment extends StatedFragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                mGeeftImage = new File(Environment.getExternalStorageDirectory()
-                        +File.separator + "image.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
-                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
+                selectImage();
             }
         });
         //--------------------------------------------------------------

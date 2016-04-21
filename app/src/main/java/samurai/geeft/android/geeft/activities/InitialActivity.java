@@ -48,31 +48,28 @@ public class InitialActivity extends Activity  {
                     BaasUser.current().refresh(new BaasHandler<BaasUser>() {
                         @Override
                         public void handle(BaasResult<BaasUser> baasResult) {
-                            if (baasResult.isSuccess()) {
-                                try {
-                                    Log.d(TAG,"USER FROM BAASBOX ="+baasResult.get().toString());
-                                    Log.d(TAG, "CURRENT USER = "+BaasUser.current().toString());
-                                } catch (BaasException e) {
-                                    e.printStackTrace();
-                                }
-                                BaasUser user = BaasUser.current();
-                                Log.d(TAG, "user " + user);
-                                if (user != null) {
-                                    String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
-                                    Log.d(TAG, "mail " + mail);
-                                    String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
-                                    if ((mail == null) || (mail.isEmpty()) || (username == null) || (username.isEmpty())) {
-                                        Log.d(TAG, "user " + user);
-                                        startActivity(new Intent(InitialActivity.this, UsernameMailActivity.class));
-                                    } else {
-                                        startMainActivity();
-                                    }
-                                }
-                                finish();
-                            } else if (baasResult.isFailed()) {
-                                startLoginActivity();
-                                finish();
+                            try {
+                                Log.d(TAG,"USER FROM BAASBOX ="+baasResult.get().toString());
+                                Log.d(TAG, "CURRENT USER = "+BaasUser.current().toString());
+                            } catch (BaasException e) {
+                                e.printStackTrace();
                             }
+                            BaasUser user = BaasUser.current();
+                            Log.d(TAG, "user " + user);
+                            if (user != null) {
+                                String mail = user.getScope(BaasUser.Scope.REGISTERED).getString("email");
+                                Log.d(TAG, "mail " + mail);
+                                String username = user.getScope(BaasUser.Scope.REGISTERED).getString("username");
+                                if ((mail == null) || (mail.isEmpty()) || (username == null) || (username.isEmpty())) {
+                                    Log.d(TAG, "user " + user);
+                                    startActivity(new Intent(InitialActivity.this, UsernameMailActivity.class));
+                                } else {
+                                    startMainActivity();
+                                }
+                            }else{
+                                startLoginActivity();
+                            }
+                            finish();
                         }
                     });
                 }else{

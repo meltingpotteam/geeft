@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,6 +18,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -67,6 +70,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     private static final String KEY_EXPIRATION_TIME_SPINNER = "key_expiration_time_spinner";
     private static final String ARG_MODIFY = "arg_modify";
     private static final String KEY_GEEFT_IMAGE = "key_geeft_image";
+    private static final int REQUEST_CAMERA =2000 ;
     private final String TAG = getClass().getName();
 
     private static final String SHOWCASE_ID = "Showcase_single_use";
@@ -80,6 +84,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     private Geeft mGeeft;
     private ImageButton cameraButton;
     private static final int CAPTURE_NEW_PICTURE = 1888;
+    private static final int SELECT_PICTURE = 1;
 
     //field to fill with the edited parameters in the form  field
     private TextView mGeeftTitle;  //name of the object
@@ -263,25 +268,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                File folder = new File(GEEFT_FOLDER);
-                boolean success = true;
-                if (!folder.exists()) {
-                    success = folder.mkdir();
-                }
-                /**
-                 * delete entire contents in the geeft folder after the geeft upload
-                 * TODO: remove this if we will want to manage the photo storing
-                 */
-//                mGeeftImage = new File(GEEFT_FOLDER+File.separator+"geeftimg-"
-//                        +new SimpleDateFormat("yyyyMMddHHmmss",
-//                        Locale.getDefault()).format(new Date())+".jpg");
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
-//                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
-
-                mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
-                startActivityForResult(intent, CAPTURE_NEW_PICTURE);
+               selectImage();
             }
         });
 
@@ -396,6 +383,39 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
 
     }
 
+    private void selectImage() {
+        final CharSequence[] items = { "Scatta una foto", "Aggiungi dalla galleria", "Annulla" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Scatta una foto")) {
+                    File folder = new File(GEEFT_FOLDER);
+                    boolean success = true;
+                    if (!folder.exists()) {
+                        success = folder.mkdir();
+                    }
+                    mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
+                    Log.d(TAG, "mGeeftImage = "+mGeeftImage.getAbsolutePath());
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Aggiungi dalla galleria")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_PICTURE);
+                } else if (items[item].equals("Cancella")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
     //
 
 
@@ -466,7 +486,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     /**
      * positioning uploaded; it works now: the image fit the central part of the imageView in the form
      **/
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_NEW_PICTURE && resultCode == Activity.RESULT_OK) {
             getArguments().putString(KEY_GEEFT_IMAGE,mGeeftImage.getAbsolutePath());
             Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
@@ -475,6 +495,56 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_CACHE)
                     .into(mGeeftImageView);
+        }
+    }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"ON ACTIVITY RESULT");
+        Log.d(TAG,"resultCode == Activity.RESULT_OK ? "+(resultCode == Activity.RESULT_OK));
+        Log.d(TAG,"requestCode == REQUEST_CAMERA ? "+(requestCode == REQUEST_CAMERA));
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                getArguments().putString(KEY_GEEFT_IMAGE,mGeeftImage.getAbsolutePath());
+                Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mGeeftImageView);
+            } else if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                CursorLoader cursorLoader = new CursorLoader(getContext(), selectedImageUri,
+                        projection, null, null, null);
+                Cursor cursor = cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+                Bitmap bm;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(selectedImagePath, options);
+                final int REQUIRED_SIZE = 200;
+                int scale = 1;
+                while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                        && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
+                options.inSampleSize = scale;
+                options.inJustDecodeBounds = false;
+                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                mGeeftImage = new File(selectedImageUri.getPath());
+                Log.d(TAG, "getAbsolutePath() = " + mGeeftImage.getAbsolutePath());
+                Log.d(TAG,"selectedImagePath() = "+selectedImagePath);
+                Log.d(TAG, "selectedImagePath() = " + selectedImageUri);
+                Log.d(TAG, "mGeeftImage.getAbsolutePath() = "+mGeeftImage.getAbsolutePath());
+                Picasso.with(getActivity()).load("file://" + selectedImagePath)
+                        .fit()
+                        .centerInside()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(mGeeftImageView);
+            }
         }
     }
 

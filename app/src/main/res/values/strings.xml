@@ -21,15 +21,15 @@
     <string name="facebook_app_id">1537015443283612</string>
     <!--app personal strings. -->
     <string name="toast_fb_login_canc">Login con Facebook annullato</string>
-    <string name="toast_google_login_canc">Login con Google+ annullato</string>
+    <string name="toast_google_login_canc">Login con Google annullato</string>
     <string name="toast_fb_login_err">Non è stato possibile effettuare il login con Facebook, riprova più tardi</string>
-    <string name="toast_google_login_err">Non è stato possibile effettuare il login con Google+, riprova più tardi</string>
+    <string name="toast_google_login_err">Non è stato possibile effettuare il login con Google, riprova più tardi</string>
     <string name="skip">skip</string>
     <string name="server_client_id">248994882321-p44e336af9tsmpk9p63p83ftbptum44o.apps.googleusercontent.com</string>
 
     <string name="user_name">Name and Surname</string>
 
-    <string name="action_settings">Logout</string>
+    <string name="action_settings">Disconnetti</string>
 
     <string name="description">Prova</string>
     <string name="action_navigate">Next</string>

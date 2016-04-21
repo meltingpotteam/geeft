@@ -1,5 +1,6 @@
 package samurai.geeft.android.geeft.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Toast;
@@ -55,6 +57,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     private final String TAG = getClass().getSimpleName();
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_GET_AUTH_CODE = 9003;
+
+    private ProgressDialog mProgressDialog;
 
     private GoogleApiClient mGoogleApiClient;
     // UI references.
@@ -132,6 +136,10 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                 // Get facebook data from login
                                 Bundle bFacebookData = getFacebookData(object);
                                 final String loginToken = loginResult.getAccessToken().getToken();
+                                mProgressDialog = new ProgressDialog(LoginActivity.this);
+                                mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                mProgressDialog.setMessage("Attendere");
+                                mProgressDialog.show();
                                 new BaaSLoginTask(LoginActivity.this, "FACEBOOK",
                                         loginToken, bFacebookData, LoginActivity.this).execute();
                             }
@@ -257,6 +265,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
     public void done(boolean result){
         //enables all social buttons
         enableButtons();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
         if(result) {
 //          //Call to Nickname and Email request
             Log.i("USERNAMEMAIL", "Inside LoginActivity call.");
@@ -273,7 +284,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                     startMainActivity();
                 }
             }
-
         }
     }
 
@@ -298,9 +308,12 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         // Result returned from launching the Intent from
         //   GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                mProgressDialog = new ProgressDialog(LoginActivity.this);
+                mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                mProgressDialog.setMessage("Attendere");
+                mProgressDialog.show();
                 final GoogleSignInAccount acct = result.getSignInAccount();
                 Log.d(TAG, "Mail " + acct.getEmail());
                 Log.d(TAG, "TOKEN " + acct.getId());
@@ -342,6 +355,9 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                         LoginActivity.this).execute();
                             } catch (BaasException e) {
                                 e.printStackTrace();
+                                if (mProgressDialog!=null){
+                                    mProgressDialog.dismiss();
+                                }
                             }
                         } else {
                             user.signup(new BaasHandler<BaasUser>() {
@@ -364,9 +380,16 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                                     LoginActivity.this).execute();
                                         } catch (BaasException e) {
                                             e.printStackTrace();
+                                            if (mProgressDialog!=null){
+                                                mProgressDialog.dismiss();
+                                            }
                                         }
                                     } else {
-                                        Log.e("LOG", "Show error", result.error());
+                                        if (mProgressDialog!=null){
+                                            mProgressDialog.dismiss();
+                                        }
+                                        Toast.makeText(getApplicationContext(),R.string.toast_google_login_err
+                                                , Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
@@ -375,6 +398,8 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                     }
                 });
             } else{
+                Toast.makeText(getApplicationContext(),R.string.toast_google_login_err
+                        , Toast.LENGTH_LONG).show();
                 Log.e(TAG, "GOOGLE RESULT =" + result.getStatus().toString());
             }
         }
