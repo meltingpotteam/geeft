@@ -31,6 +31,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     private Geeft mGeeft;
     private String mId;
     private ProgressDialog mProgress;
+    private boolean isListStarted;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     }
 
     private void startFragmentGeeftList() {
+        isListStarted = true;
         Fragment fragment = GeeftListFragment.newInstance(TagsValue.LINK_NAME_RECEIVED,
                 false);
         FragmentManager fm = getSupportFragmentManager();
@@ -78,6 +80,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
     }
 
     private void startFragmentGeeftory() {
+        isListStarted = false;
         AddStoryFragment fragment = AddStoryFragment.newInstance(new Bundle());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
@@ -125,7 +128,7 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
                     "Annuncio inserito con successo", Toast.LENGTH_LONG).show();
             finish();
         } else {
-            new AlertDialog.Builder(getApplicationContext())
+            new AlertDialog.Builder(AddStoryActivity.this)
                     .setTitle("Errore")
                     .setMessage("Riprovare più tardi")
                     .show();
@@ -143,10 +146,41 @@ public class AddStoryActivity extends AppCompatActivity implements TaskCallbackB
                 if(getSupportFragmentManager().getBackStackEntryCount()>0){
                     getSupportFragmentManager().popBackStack();
                 }else {
-                    super.onBackPressed();
+                    onBackPressed();
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().getBackStackEntryCount()>0){
+            super.onBackPressed();
+        }else {
+            if(isListStarted){
+                AddStoryActivity.super.onBackPressed();
+            }else {
+                final android.support.v7.app.AlertDialog.Builder builder =
+                        new android.support.v7.app.AlertDialog.Builder(AddStoryActivity.this,
+                                R.style.AppCompatAlertDialogStyle);
+                builder.setTitle("Attenzione!");
+                builder.setMessage("Sei sicuro di voler uscire?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        AddStoryActivity.super.onBackPressed();
+                    }
+                });
+                builder.setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        }
     }
 
     @Override

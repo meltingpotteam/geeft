@@ -89,6 +89,7 @@
                     android:layout_height="match_parent"
                     android:hint="@string/add_gift_name_hint"
                     android:textColorHint="@color/colorHintAccent"
+                    android:inputType="textCapSentences"
                     />
             </LinearLayout>
 
@@ -122,6 +123,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/add_geeft_description_hint"
                     android:textColorHint="@color/colorHintAccent"
+                    android:inputType="textCapSentences"
                     />
             </LinearLayout>
             <LinearLayout

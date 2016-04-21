@@ -8,14 +8,13 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,7 +123,7 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         public ImageView mGeeftImage;
 
         //public LinearLayout mProfileClickableArea;
-        public ImageButton mSignalisationButton;
+        public LinearLayout mSignalisationButton;
 
         //-------------------------------------------
         public CardView mContainer;
@@ -142,7 +141,7 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             //mUserLocationTextView = (TextView) itemView.findViewById(R.id.location);
             //mUsernameTextView = (TextView) itemView.findViewById(R.id.geefter_name);
             //mTimeStampTextView = (TextView) itemView.findViewById(R.id.timestamp);
-            mSignalisationButton = (ImageButton) itemView.findViewById(R.id.geeft_signalisation);
+            mSignalisationButton = (LinearLayout) itemView.findViewById(R.id.geeft_signalisation);
             //mProfileClickableArea = (LinearLayout) itemView.findViewById(R.id.geefter_info_area);
 
             //mUserProfilePic = (ImageView) itemView.findViewById(R.id.geefter_profile_image);
@@ -189,7 +188,7 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 //TODO add the control of the cap matching in the city selected; sand in the maps tracking
                 Glide.with(mContext).load(item.getGeeftImage()).fitCenter()
-                        .centerCrop().placeholder(R.drawable.ic_image_multiple).into(myHolder.mGeeftImage);
+                        .centerCrop().into(myHolder.mGeeftImage);
 
 
                 // Converting timestamp into x ago format
@@ -204,7 +203,8 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View v) {
                         //TODO implement the behaviour of the signalization button
-                        Toast.makeText(v.getContext(), "You have Signalate a Geeft", Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), "Segnalazione completata con successo",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
                 //-------------------------------------------------

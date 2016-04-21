@@ -83,8 +83,9 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
 
         // - replace the contents of the view with that element
         holder.mCategoryName.setText(item.getCategoryName());
-        Glide.with(mContext).load(item.getImageUrl()).centerCrop().fitCenter()
+        Glide.with(mContext).load(item.getImageUrl()).centerCrop()
                 .placeholder(R.drawable.ic_image_multiple)
+                .fitCenter()
                 .into(holder.mCategoryImage);
 //        Log.d("IMAGE", item.getUserProfilePic());
 

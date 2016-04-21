@@ -400,6 +400,7 @@ public class TabGeeftFragment extends StatedFragment
         mAdapter.notifyDataSetChanged();
     }
 
+
     private void stopRefreshOperations(boolean result, int resultToken) {
         String message = new String();
         mRefreshLayout.setRefreshing(false);

@@ -132,6 +132,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
     private long mLastClickTime;
     private LinearLayout mDeadlineFieldLayout;
     private LinearLayout mAutomaticSelectionFieldLayout;
+    private String mGeeftImagePath;
 
     public static AddGeeftFragment newInstance(@Nullable Geeft geeft, boolean modify) {
         AddGeeftFragment fragment = new AddGeeftFragment();
@@ -328,7 +329,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
 //                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
 
-                Picasso.with(getActivity()).load(mGeeftImage)
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .config(Bitmap.Config.ARGB_8888)
                         .fit()
                         .centerInside()
@@ -506,7 +507,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
                 getArguments().putString(KEY_GEEFT_IMAGE,mGeeftImage.getAbsolutePath());
-                Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
+                mGeeftImagePath = "file://"+mGeeftImage.getAbsolutePath();
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -538,7 +540,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                 Log.d(TAG,"selectedImagePath() = "+selectedImagePath);
                 Log.d(TAG, "selectedImagePath() = " + selectedImageUri);
                 Log.d(TAG, "mGeeftImage.getAbsolutePath() = "+mGeeftImage.getAbsolutePath());
-                Picasso.with(getActivity()).load("file://" + selectedImagePath)
+                mGeeftImagePath =  "file://"+selectedImagePath;
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)

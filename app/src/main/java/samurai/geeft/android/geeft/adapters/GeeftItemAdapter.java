@@ -142,6 +142,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         return mGeeftList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
@@ -166,7 +167,6 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         }else{
             final GeeftViewHolder myHolder = ((GeeftViewHolder)holder);
             final Geeft item = mGeeftList.get(position);
-
 
             if(BaasUser.current()!=null) {
                 if (item.getBaasboxUsername().equals(BaasUser.current().getName())) {

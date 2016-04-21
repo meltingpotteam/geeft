@@ -27,10 +27,13 @@ public class LogoutActivity extends Activity {
             BaasUser.current().logout(new BaasHandler<Void>() {
                 @Override
                 public void handle(BaasResult<Void> baasResult) {
-                    if (baasResult.isSuccess())
+                    if (baasResult.isSuccess()) {
                         setLogoutOk(true);
-                    else if( baasResult.isFailed())
+
+                    }
+                    else if( baasResult.isFailed()) {
                         setLogoutOk(false);
+                    }
                     else if( baasResult.isCanceled()) {
                         Intent intent = new Intent();
                         setResult(Activity.RESULT_CANCELED, intent);

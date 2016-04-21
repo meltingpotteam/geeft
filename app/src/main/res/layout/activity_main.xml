@@ -66,7 +66,7 @@
                 fab:fab_colorPressed="@color/clickAccent"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
                 fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-                fab:fab_label="Regala un oggetto su Geeft"
+                fab:fab_label="Regala un oggetto in Geeft"
                 fab:fab_size="mini"
                 app:layout_scrollFlags="scroll|enterAlways"
                 />
@@ -80,7 +80,7 @@
                 fab:fab_colorPressed="@color/clickAccent"
                 fab:fab_showAnimation="@anim/fab_slide_in_from_right"
                 fab:fab_hideAnimation="@anim/fab_slide_out_to_right"
-                fab:fab_label="Metti in mostra un oggetto su Geeftory"
+                fab:fab_label="Pubblica una tua creazione in Geeftory"
                 fab:fab_size="mini"
                 />
             <!--<com.github.clans.fab.FloatingActionButton-->

@@ -256,6 +256,7 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
 
     private void sendMail(String newMail){
         new BaaSMail(TagsValue.DEFAULT_EMAIL,newMail,mCode).execute();
+        addNicknameEmail();
     }
     private boolean checkCode(int code, String userCode){
         int userInput=0;

@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,22 +27,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
+import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonObject;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import samurai.geeft.android.geeft.R;
@@ -707,6 +704,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     break;
                 case 2: //document is already deleted by BaaSSignalisationTask, I'm a moderator
                     Toast.makeText(getContext(),"Documento eliminato con successo",Toast.LENGTH_LONG).show();
+                    sendPushToSgravone();
                     startMainActivity();
                     break;
                 default:
@@ -717,6 +715,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         else{
             Toast.makeText(getContext(), "C'è stato un errore nella segnalazione", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sendPushToSgravone() {
+        String receiverUsername = mGeeft.getBaasboxUsername();
+        String message = "Il tuo annuncio " + mGeeft.getGeeftTitle() + " e' stato cancellato a " +
+                "seguito di varie segnalazioni";
+        sendPush(receiverUsername,message);
     }
 
     private void sendEmail(String docId){
@@ -754,4 +759,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
         }
     }
+
+    private void sendPush(final String receiverUsername,String message){
+
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + receiverUsername
+                + "&message=" + message.replace(" ","%20"),
+                new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if(baasResult.isSuccess()){
+                    Log.d(TAG,"Push notification sended to: " + receiverUsername);
+                }
+                else{
+                    Log.e(TAG,"Error while sending push notification:" + baasResult.error());
+                }
+            }
+        });
+    }
+
 }

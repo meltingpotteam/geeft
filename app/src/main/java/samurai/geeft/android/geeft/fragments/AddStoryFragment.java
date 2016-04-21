@@ -97,6 +97,7 @@ public class AddStoryFragment extends StatedFragment {
     private OnCheckOkSelectedListener mCallback;
     private LinearLayout mCategoryFieldLayout;
     private LinearLayout mDescriptionFieldLayout;
+    private String mGeeftImagePath;
 
     public static AddStoryFragment newInstance(Bundle b) {
         AddStoryFragment fragment = new AddStoryFragment();
@@ -235,7 +236,8 @@ public class AddStoryFragment extends StatedFragment {
         Log.d(TAG,"requestCode == REQUEST_CAMERA ? "+(requestCode == REQUEST_CAMERA));
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
-                Picasso.with(getActivity()).load("file://"+mGeeftImage.getAbsolutePath())
+                mGeeftImagePath = "file://"+mGeeftImage.getAbsolutePath();
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -267,7 +269,8 @@ public class AddStoryFragment extends StatedFragment {
                 Log.d(TAG,"selectedImagePath() = "+selectedImagePath);
                 Log.d(TAG, "selectedImagePath() = " + selectedImageUri);
                 Log.d(TAG, "mGeeftImage.getAbsolutePath() = "+mGeeftImage.getAbsolutePath());
-                Picasso.with(getActivity()).load("file://" + selectedImagePath)
+                mGeeftImagePath= "file://" + selectedImagePath;
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -312,7 +315,7 @@ public class AddStoryFragment extends StatedFragment {
             mGeeftImage = (File)savedInstanceState.getSerializable(ARG_FILE);
             if(mGeeftImage!=null) {
                 Picasso.with(getActivity()).invalidate(mGeeftImage);
-                Picasso.with(getContext()).load(mGeeftImage)
+                Picasso.with(getContext()).load(mGeeftImagePath)
                         .fit()
                         .centerInside()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -391,7 +394,7 @@ public class AddStoryFragment extends StatedFragment {
                 mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
 //                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
 
-                Picasso.with(getActivity()).load(mGeeftImage)
+                Picasso.with(getActivity()).load(mGeeftImagePath)
                         .config(Bitmap.Config.ARGB_8888)
                         .fit()
                         .centerInside()

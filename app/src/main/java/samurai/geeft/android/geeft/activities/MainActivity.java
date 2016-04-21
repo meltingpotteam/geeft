@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar)findViewById(R.id.main_app_bar);
         mViewPager = (ViewPager)findViewById(R.id.pager);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         if (getSupportActionBar()!=null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);

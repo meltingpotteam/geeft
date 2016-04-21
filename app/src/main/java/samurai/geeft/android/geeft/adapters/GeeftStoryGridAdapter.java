@@ -1,6 +1,5 @@
 package samurai.geeft.android.geeft.adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -62,7 +61,9 @@ public class GeeftStoryGridAdapter extends RecyclerView.Adapter<GeeftStoryGridAd
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Geeft item = mGeeftList.get(position);
         Picasso.with(mContext).load(item.getGeeftImage()).fit()
-                .centerInside().placeholder(R.drawable.ic_image_multiple).into(holder.mGeeftImage);
+                .centerInside()
+                .placeholder(R.drawable.ic_image_multiple)
+                .into(holder.mGeeftImage);
     }
 
     @Override

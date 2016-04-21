@@ -325,6 +325,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                 UUID.nameUUIDFromBytes(acct.getId().getBytes()).toString());
                 JsonObject extras = user.getScope(BaasUser.Scope.PRIVATE)
                         .put("name", acct.getDisplayName());
+
                 if( acct.getPhotoUrl()!=null){
                     user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
                             acct.getPhotoUrl().toString());
@@ -508,6 +509,14 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 MainActivity.class);
         startActivity(mMainIntent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
     }
 
 }
