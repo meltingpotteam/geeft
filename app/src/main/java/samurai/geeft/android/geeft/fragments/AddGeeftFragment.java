@@ -182,7 +182,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
 
         if (mGeeft != null) {
             initUI(rootView);
-            fillUI(rootView);
+            if(mModify)
+                fillUI(rootView);
         }else{
             mGeeft= new Geeft();
             initUI(rootView);
@@ -379,6 +380,8 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         spinner_categories.setAdapter(adapter_categories);
         //--------------------------------------------------------------
         Log.d("onCreateView", "onActivityCreated2");
+        mAutomaticSelection.setChecked(true);
+        mAllowCommunication.setChecked(true);
 
         presentShowcaseView(350);
 

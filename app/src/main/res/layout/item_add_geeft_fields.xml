@@ -328,7 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/automatic_geefter_selection"
                     android:layout_alignRight="@+id/automatic_geefter_selection"
-                    />
+                    android:checked="true"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -349,6 +349,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/allow_communication"
                     android:layout_alignRight="@+id/allow_communication"
+                    android:checked="true"
                     />
             </RelativeLayout>
             <RelativeLayout
