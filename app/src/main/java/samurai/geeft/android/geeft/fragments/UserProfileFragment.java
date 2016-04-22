@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.DonatedActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.ReceivedActivity;
+import samurai.geeft.android.geeft.adapters.GeeftItemAdapter;
 import samurai.geeft.android.geeft.database.BaaSMail;
 import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
@@ -65,8 +67,13 @@ public class UserProfileFragment extends StatedFragment implements
     private static final String KEY_IS_CURRENT_USER = "key_is_current_user";
     private static final java.lang.String ARG_IS_CURRENT_USER = "arg_is_current_user";
     private static final String KEY_IS_EDITING_DESCRIPTION = "key_is_editing_description";
+    private static final String ARG_SHOW_PROFILE = "arg_show_profile";
+    private static final String KEY_SHOW_PROFILE = "key_show_profile";
+    private static final String KEY_ALLOW_COMUNICATION = "key_allow_comunication";
+    private static final String ARG_ALLOW_COMUNICATION = "arg_allow_comunication";
     private static final String ARG_GEEFT = "arg_geeft";
     private static final String KEY_GEEFT = "key_geeft";
+
 
     private final String TAG = getClass().getSimpleName();
 
@@ -79,6 +86,8 @@ public class UserProfileFragment extends StatedFragment implements
     private ImageView mUserProfileImage;
     private User mUser;
     private boolean mIsCurrentUser;
+    private boolean mShowProfile;
+    private boolean mAllowComunication;
     private ProgressDialog mProgressDialog;
     private LinkCountListener mCallback;
     private Button mButton;
@@ -96,7 +105,10 @@ public class UserProfileFragment extends StatedFragment implements
     private Random mRandom;
     private int mCode;
     private View mUserEmailCard;
-
+    private LinearLayout mComunicationButtons;
+    private LinearLayout mFbButton;
+    private LinearLayout mGoogleButton;
+    private LinearLayout mEmailButton;
 
     public static UserProfileFragment newInstance(@Nullable User user,
                                                   boolean isCUrrentUser) {
@@ -104,6 +116,17 @@ public class UserProfileFragment extends StatedFragment implements
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
         bundle.putBoolean(ARG_IS_CURRENT_USER, isCUrrentUser);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static UserProfileFragment newInstance(@Nullable User user,
+                                                  boolean showProfile,boolean allowComunication) {
+        UserProfileFragment fragment = new UserProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_USER, user);
+        bundle.putBoolean(ARG_SHOW_PROFILE, showProfile); //if true, hide "Assegna il geeft" button
+        bundle.putBoolean(ARG_ALLOW_COMUNICATION, allowComunication); //if true,show contact buttons
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -127,10 +150,14 @@ public class UserProfileFragment extends StatedFragment implements
         if (savedInstanceState != null) {
             mUser = (User) savedInstanceState.getSerializable(KEY_USER);
             mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
+            mShowProfile = savedInstanceState.getBoolean(KEY_SHOW_PROFILE);
+            mAllowComunication = savedInstanceState.getBoolean(KEY_ALLOW_COMUNICATION);
             mGeeft = (Geeft) savedInstanceState.getSerializable(KEY_GEEFT);
         } else {
             mUser = (User) getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
+            mShowProfile = getArguments().getBoolean(ARG_SHOW_PROFILE);
+            mAllowComunication = getArguments().getBoolean(ARG_ALLOW_COMUNICATION);
             mGeeft = (Geeft) getArguments().getSerializable(ARG_GEEFT);
         }
     }
@@ -163,6 +190,8 @@ public class UserProfileFragment extends StatedFragment implements
         super.onSaveState(outState);
         outState.putSerializable(KEY_USER, mUser);
         outState.putBoolean(KEY_IS_CURRENT_USER, mIsCurrentUser);
+        outState.putBoolean(KEY_SHOW_PROFILE, mShowProfile);
+        outState.putBoolean(KEY_ALLOW_COMUNICATION,mAllowComunication);
         outState.putBoolean(KEY_IS_EDITING_DESCRIPTION, mIsEditingDescription);
     }
 
@@ -172,6 +201,8 @@ public class UserProfileFragment extends StatedFragment implements
         mUser = (User) savedInstanceState.getSerializable(KEY_USER);
         Log.d(TAG, "onRestore " + mUser.getFbID());
         mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
+        mShowProfile = savedInstanceState.getBoolean(KEY_SHOW_PROFILE);
+        mAllowComunication = savedInstanceState.getBoolean(KEY_ALLOW_COMUNICATION);
         mIsEditingDescription = savedInstanceState.getBoolean(KEY_IS_EDITING_DESCRIPTION);
         fillUI();
     }
@@ -196,6 +227,10 @@ public class UserProfileFragment extends StatedFragment implements
         if (mIsCurrentUser){
             user.setProfilePic(baasUser.getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
         }
+        if(registeredFields.getObject("_social").getObject("facebook") == null)
+            user.setFbID("");
+        else
+            user.setFbID(registeredFields.getObject("_social").getObject("facebook").getString("id"));
         user.setUsername(username);
         user.setDescription(description);
         user.setDocId(docId);
@@ -276,6 +311,30 @@ public class UserProfileFragment extends StatedFragment implements
         mUserDescriptionEditText.setText(mUser.getDescription());
         mUserEmailTextView.setText(mUser.getEmail());
         mUserEmailEditText.setText(mUser.getEmail());
+        Log.d(TAG,"ShowProfile: " + mShowProfile);
+
+        if(mShowProfile){
+            mButton.setVisibility(View.GONE);
+        }
+        if(mAllowComunication){
+            mComunicationButtons.setVisibility(View.VISIBLE);
+        }
+        if(mUser.getFbID().equals(""))
+            mFbButton.setVisibility(View.GONE);
+
+        mFbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchFbIntent(mUser.getFbID());
+            }
+        });
+
+        mEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMailToGeefter(mUser.getEmail());
+            }
+        });
 
         setLinkCountTextView(mUserReceivedTextView, mUser.getLinkReceivedCount());
         setLinkCountTextView(mUserGivenTextView, mUser.getLinkGivenCount());
@@ -301,6 +360,20 @@ public class UserProfileFragment extends StatedFragment implements
                 Log.d(TAG, "onClick is editing = " + mIsEditingDescription);
             }
         });
+    }
+
+    private void sendMailToGeefter(String email) {
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto");
+        getContext().startActivity(Intent.createChooser(emailIntent, "Invia l'e-mail..."));
+    }
+
+    public void launchFbIntent(String userFbId){
+        Intent facebookIntent = GeeftItemAdapter.getOpenFacebookProfileIntent(getContext(), userFbId);
+        startActivity(facebookIntent);
+
     }
 
     private void updateDescription() {
@@ -600,6 +673,11 @@ public class UserProfileFragment extends StatedFragment implements
         mUsernameEditText = (EditText)rootView.findViewById(R.id.username_edit_text);
         mUserEmailTextView = (TextView)rootView.findViewById(R.id.user_email_text_view);
         mUserEmailEditText = (EditText)rootView.findViewById(R.id.user_email_edit_text);
+        mComunicationButtons = (LinearLayout) rootView.findViewById(R.id.comunication_buttons);
+        mFbButton = (LinearLayout) rootView.findViewById(R.id.facebook_button_tab);
+        mGoogleButton = (LinearLayout) rootView.findViewById(R.id.google_button_tab);
+        mEmailButton = (LinearLayout) rootView.findViewById(R.id.email_button_tab);
+
         if(mIsCurrentUser==false){
             mUserEmailCard = rootView.findViewById(R.id.user_email_card);
             mUserEmailCard.setVisibility(View.GONE);

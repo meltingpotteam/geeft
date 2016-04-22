@@ -256,7 +256,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "GEEFT: Richiesta di contatto per '"
                 + mGeeft.getGeeftTitle() + "'");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        WinnerScreenActivity.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        WinnerScreenActivity.this.startActivity(Intent.createChooser(emailIntent, "Invia l'e-mail..."));
     }
 
     private void geeftedCase() {
@@ -514,18 +514,10 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
 
     private void showProgressDialog() {
         mProgressDialog = new ProgressDialog(WinnerScreenActivity.this);
-        try {
-//                    mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Attendere");
-            mProgressDialog.show();
-        } catch (WindowManager.BadTokenException e) {
-            Log.e(TAG,"error: " + e.toString());
-        }/*
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Attendere");*/
+        mProgressDialog.setMessage("Attendere");
+        mProgressDialog.show();
     }
 
     @Override

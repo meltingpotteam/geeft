@@ -204,13 +204,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <LinearLayout
+                    android:id="@+id/comunication_buttons"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:orientation="horizontal">
                     <LinearLayout
-                        android:id="@+id/facebook_button_text"
+                        android:id="@+id/facebook_button_tab"
                         android:background="@drawable/ripple_effect"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -236,20 +237,21 @@
                             />
                     </LinearLayout>
                     <LinearLayout
-                        android:id="@+id/gplus_button_tab"
+                        android:id="@+id/google_button_tab"
                         android:background="@drawable/ripple_effect"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
                         android:padding="@dimen/activity_horizontal_margin"
                         android:gravity="center"
+                        android:visibility="gone"
                         >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Google"/>
                         <ImageButton
-                            android:id="@+id/geeft_share_button"
+                            android:id="@+id/google_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="#00ffffff"
@@ -263,7 +265,7 @@
 
                     </LinearLayout>
                     <LinearLayout
-                        android:id="@+id/geeft_email_button_text"
+                        android:id="@+id/email_button_tab"
                         android:background="@drawable/ripple_effect"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -276,7 +278,7 @@
                             android:layout_height="wrap_content"
                             android:text="E-mail"/>
                         <ImageButton
-                            android:id="@+id/geeft_email_button"
+                            android:id="@+id/email_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_at"

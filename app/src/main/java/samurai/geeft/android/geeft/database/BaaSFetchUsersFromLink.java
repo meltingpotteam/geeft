@@ -79,7 +79,10 @@ public class BaaSFetchUsersFromLink extends AsyncTask<Void,Void,Boolean> {
         String description = registeredFields.getString("user_description");
         String docId = registeredFields.getString("doc_id");
         double userRank = registeredFields.get("feedback");
-
+        if(registeredFields.getObject("_social").getObject("facebook") == null)
+            mUser.setFbID("");
+        else
+            mUser.setFbID(registeredFields.getObject("_social").getObject("facebook").getString("id"));
         mUser.setProfilePic(baasUser.getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
         mUser.setUsername(username);
         mUser.setDescription(description);

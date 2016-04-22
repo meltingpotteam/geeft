@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ import com.baasbox.android.json.JsonObject;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +62,7 @@ import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackDeletion;
 import samurai.geeft.android.geeft.models.Geeft;
+import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
@@ -78,6 +82,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private TextView mGeeftDeadline;
     private TextView mGeeftLocation;
     private TextView mGeeftChooseType;
+    private TextView mGeeftComunicationAllowed;
     private ImageView mGeeftImageView;
     private ImageView mGeefterProfilePicImageView;
     private TextView mGeefterNameTextView;
@@ -214,6 +219,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftDeadline = (TextView) rootView.findViewById(R.id.geeft_deadline);
         mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
         mGeeftChooseType = (TextView) rootView.findViewById(R.id.geeft_choose_type);
+        mGeeftComunicationAllowed = (TextView) rootView.findViewById(R.id.geeft_comunication_allowed);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
         mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
@@ -256,7 +262,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 @Override
                 public void onClick(View v) {
 
-                    initGeefterDialog(mGeeft);
+                    //initGeefterDialog(mGeeft);
+                    showGeefterProfile();
 
                 }
             });
@@ -347,7 +354,6 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 @Override
                 public void onClick(View v) {
                     startAddGeeftActivity(mGeeft);
-                    getActivity().finish();
                 }
             });
 
@@ -355,11 +361,79 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 @Override
                 public void onClick(View v) {
                     startAddStoryActivity();
-                    getActivity().finish();
                 }
             });
         }
     }
+
+    private void showGeefterProfile() {
+        showProgressDialog();
+        BaasUser.fetch(mGeeft.getBaasboxUsername(), new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> baasResult) {
+                if(baasResult.isSuccess()){
+                    User user = fillUser(baasResult.value());
+                    if(mProgressDialog != null)
+                        mProgressDialog.dismiss();
+                    startUserProfileFragment(user,true,mGeeft.isAllowCommunication()); //@Nullable User user,
+                                            // showProfile, allowComunication)
+                }
+                else{
+                    showAlertDialog();
+                }
+            }
+        });
+
+    }
+
+    private User fillUser(BaasUser baasUser) {
+
+        User user = new User(baasUser.getName());
+        JsonObject registeredFields = baasUser.getScope(BaasUser.Scope.REGISTERED);
+
+        String username = registeredFields.getString("username");
+        String description = registeredFields.getString("user_description");
+        String docId = registeredFields.getString("doc_id");
+        String email = registeredFields.getString("email");
+        double userRank = registeredFields.get("feedback");
+        user.setProfilePic(baasUser.getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
+        if(registeredFields.getObject("_social").getObject("facebook") == null)
+            user.setFbID("");
+        else
+            user.setFbID(registeredFields.getObject("_social").getObject("facebook").getString("id"));
+        user.setUsername(username);
+        user.setDescription(description);
+        user.setDocId(docId);
+        user.setRank(userRank);
+        user.setEmail(email == null ? "" : email);
+
+        return user;
+    }
+
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean showProfile) {
+        FragmentTransaction transaction = getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,showProfile);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
+    private void showAlertDialog() {
+        if (mProgressDialog != null)
+            mProgressDialog.dismiss();
+        new AlertDialog.Builder(getContext())
+                .setTitle("Errore")
+                .setMessage("Operazione non possibile. Riprovare più tardi.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startMainActivity();
+                    }
+                }).show();
+    }
+
 
     private void showPrenoteViewIfGeeftReserved() { //It is for GeeftItemAdapter,but not implemented yet
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
@@ -521,11 +595,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void startAddGeeftActivity(Geeft geeft){
         Intent intent = AddGeeftActivity.newIntent(getContext(),geeft, true);
         startActivity(intent);
+        getActivity().finish();
     }
 
     private void startAddStoryActivity(){ //TODO: FILL STORY ACTIVITY WITH GEEFT
         Intent intent = new Intent(getContext(),AddStoryActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     private void deleteGeeft(){
@@ -648,6 +724,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         else{
             mGeeftChooseType.setText("Manuale");
         }
+        if(mGeeft.isAllowCommunication()){
+            mGeeftComunicationAllowed.setText("Si");
+        }
+        else{
+            mGeeftComunicationAllowed.setText("No");
+        }
     }
 
     private String convertTimestamp(long timestamp) {
@@ -761,7 +843,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userFacebookId));
         }
     }
-
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Attendere");
+        mProgressDialog.show();
+    }
     private void sendPush(final String receiverUsername,String message){
 
         BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + receiverUsername
