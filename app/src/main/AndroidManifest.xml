@@ -146,6 +146,9 @@
         <activity android:name=".activities.UsernameMailActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.StatisticsActivity"
+                  android:screenOrientation="portrait"/>
+
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

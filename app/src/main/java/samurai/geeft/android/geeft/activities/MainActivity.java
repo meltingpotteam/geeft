@@ -314,6 +314,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        MenuItem menuStatistics = menu.findItem(R.id.action_get_statistics);
+        if(BaasUser.current().hasRole(TagsValue.ROLE_MODERATOR)){
+            menuStatistics.setVisible(true);
+        }
+        else {
+            menuStatistics.setVisible(false);
+        }
+        return true;
+    }
 
 
     @Override
@@ -370,8 +381,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             startActivity(intent);
         }
 
+        if(id == R.id.action_get_statistics){
+            showStatistics();
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
+    private void showStatistics() {
+        Intent intent = StatisticsActivity.newIntent(getApplicationContext());
+        startActivity(intent);
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

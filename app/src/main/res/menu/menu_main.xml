@@ -18,4 +18,9 @@ tools:context=".activity.MainActivity">
         android:id="@+id/action_reset_tutorial"
         android:orderInCategory="100"
         android:title="@string/action_reset_tutorial_text"/>
+    <item
+        android:id="@+id/action_get_statistics"
+        android:orderInCategory="100"
+        android:title="Statistiche"
+        android:visible="false"/>
 </menu>
