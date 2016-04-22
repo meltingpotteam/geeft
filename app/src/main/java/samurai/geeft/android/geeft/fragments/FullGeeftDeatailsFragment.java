@@ -109,6 +109,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private ImageButton mProfileDialogFbButton;
     private ParallaxImageView mProfileDialogBackground;
     private LayoutInflater inflater;
+    private TextView mGeeftTitleInCard;
 
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
@@ -208,6 +209,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
+        mGeeftTitleInCard = (TextView) rootView.findViewById(R.id.geeft_title);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
         mGeeftDeadline = (TextView) rootView.findViewById(R.id.geeft_deadline);
         mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
@@ -634,7 +636,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         // Converting timestamp into x ago format
         //CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
         //        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
-
+        mGeeftTitleInCard.setText(mGeeft.getGeeftTitle());
         mGeeftTimeAgo.setText(convertTimestamp(mGeeft.getCreationTime()/1000));
         mGeeftDeadline.setText(convertTimestamp(mGeeft.getDeadLine()));
 
