@@ -209,7 +209,7 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
         mGeeftLabels.setText(mGeeft.getGeeftLabels());
 
 
-        expirationDatePos = (int) mGeeft.getDeadLine();
+        //expirationDatePos = (int) mGeeft.getDeadLine(); Don't use this. Is SHIT!!
 
         if(mModify){
             locationPos = getItemPositionLocation(mGeeftLocation,mGeeft.getUserLocation());
