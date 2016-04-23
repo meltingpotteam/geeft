@@ -90,7 +90,7 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
                     if(geeft.getString("location").equals("Roma"))
                         count += 1;
                 }
-                Log.d(TAG,"Values..count:" + count + " size:" + resListGeefts.value().size());
+                //Log.d(TAG,"Values..count:" + count + " size:" + resListGeefts.value().size());
                 double percentual = ((double)count/(double)resListGeefts.value().size());
                 mInfo[9] = Math.floor(percentual * 10000) / 100; //It serves to round to two digits
                 Log.d(TAG,"mInfo:" + mInfo[9] + " percentual: " + percentual);

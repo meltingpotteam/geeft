@@ -376,4 +376,5 @@
     <string name="tutorial_geeftory_behaviordescription">Facendo Swipe a sinistra potrai vedere come l\'oggetto si è trasformato durante la sua vita</string>
     <string name="tutorial_geeftory_details">"Questa è la \'Timeline\' dei Geeft.\nQui puoi vedere come il Geeft era in passato, a chi apparteneva e le vecchie descrizioni "</string>
 
+    <string name="com.appsee.apikey" translatable="false">a613bffa5300413fb4c8d002302a6a51</string>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.Fragment;
 
+import com.appsee.Appsee;
 import com.baasbox.android.BaasBox;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
@@ -33,6 +34,7 @@ public class ApplicationInit extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        Appsee.start(getString(R.string.com_appsee_apikey));
         /**
          * BaasBox initialization
          */
