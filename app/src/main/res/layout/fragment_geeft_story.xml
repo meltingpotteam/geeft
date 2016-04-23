@@ -65,8 +65,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:text="Storia disponibile"/>
+                android:textStyle="bold"
+                android:textColor="#009900"
+                android:text="Storia disponibile,scorri"/>
             </LinearLayout>
 
 

@@ -108,7 +108,7 @@ public class GeeftStoryFragment extends StatedFragment {
         mStoryAvailable = (LinearLayout) rootView.findViewById(R.id.story_available);
         Log.d("mGeeft before create", "mGeeft val: " + mGeeft);
         if (mGeeft != null){
-            if(mList.size() == 1)
+            if(mList.size() < 2)
                 mStoryAvailable.setVisibility(View.GONE);
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
             mGeeftDescriptionTextView.setSingleLine(true);
