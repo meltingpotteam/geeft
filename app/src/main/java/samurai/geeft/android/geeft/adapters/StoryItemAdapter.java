@@ -3,7 +3,6 @@ package samurai.geeft.android.geeft.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -269,10 +268,6 @@ public class StoryItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         " il login", Toast.LENGTH_LONG);
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 toast.show();
-            } else {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
             }
         }
 

@@ -304,10 +304,10 @@
 
 
     <!--Geeft List Fragment-->
-<string name="DonatedActivity_title">Lista geeft regalati</string>
-<string name="ReceivedActivity_title">Lista geeft ricevuti</string>
-<string name="ReservedActivity_title">Lista geeft prenotati</string>
-<string name="AssignedActivity_title">Lista geeft da ritirare</string>
+    <string name="DonatedActivity_title">Lista geeft regalati</string>
+    <string name="ReceivedActivity_title">Lista geeft ricevuti</string>
+    <string name="ReservedActivity_title">Lista geeft prenotati</string>
+    <string name="AssignedActivity_title">Lista geeft da ritirare</string>
 
 
 
@@ -376,4 +376,8 @@
     <string name="tutorial_geeftory_behaviordescription">Facendo Swipe a sinistra potrai vedere come l\'oggetto si è trasformato durante la sua vita</string>
     <string name="tutorial_geeftory_details">"Questa è la \'Timeline\' dei Geeft.\nQui puoi vedere come il Geeft era in passato, a chi apparteneva e le vecchie descrizioni "</string>
 
+    <string name="com.mapbox.mapboxsdk.accessToken" translatable="false">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
+
+    <string name="accessToken">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
+    <string name="map_circle_description">Google Map with circles.</string>
 </resources>

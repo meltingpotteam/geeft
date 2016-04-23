@@ -4,19 +4,27 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,11 +45,17 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestOptions;
 import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +84,7 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
  * Created by ugookeadu on 20/02/16.
  */
 public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCallBackBooleanInt
-        , TaskCallbackBooleanToken,TaskCallbackDeletion {
+        , TaskCallbackBooleanToken,TaskCallbackDeletion, OnMapReadyCallback {
 
     private static final String KEY_CONTEXT = "key_context" ;
     private final String TAG = getClass().getSimpleName();
@@ -100,6 +114,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private View mModifyView;
     private View mAssignView;
     private View mPrenoteView;
+    private View mCardView;
 
     private View mDonateReceivedGeeftView;
     private List<Geeft> mGeeftList = new ArrayList<>();
@@ -116,6 +131,15 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private LayoutInflater inflater;
     private TextView mGeeftTitleInCard;
 
+    private LatLng SYDNEY;
+    List<Address> addresses;
+    private static final double DEFAULT_RADIUS = 2000;
+    private GoogleMap mMap;
+    private int mStrokeColor;
+    private int mFillColor;
+    private List<DraggableCircle> mCircles = new ArrayList<DraggableCircle>(1);
+    private SupportMapFragment mapFragment;
+
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
         FullGeeftDeatailsFragment fragment = new FullGeeftDeatailsFragment();
@@ -130,6 +154,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getChildFragmentManager().beginTransaction().remove(mapFragment);
 
         if (savedInstanceState==null) {
             mGeeft = (Geeft) getArguments().getSerializable(GEEFT_KEY);
@@ -138,10 +163,20 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
 
+    private static View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_geeft_deatails, container, false);
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null)
+                parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.fragment_geeft_deatails, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
         initUI(rootView);
         if (savedInstanceState==null)
             initSupportActionBar(rootView);
@@ -211,6 +246,15 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     }
 
     private void initUI(View rootView) {
+        mapFragment = (SupportMapFragment)getChildFragmentManager()
+                        .findFragmentById(R.id.map);
+        if (mapFragment == null) {
+            mapFragment = new SupportMapFragment();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.add(R.id.map, mapFragment).commit();
+        }
+        mapFragment.getMapAsync(this);
+        manageMapScroll(rootView);
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
@@ -867,4 +911,117 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         });
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        if(isNetworkConnected()) {
+            // Override the default content description on the view, for accessibility mode.
+            map.setContentDescription(getString(R.string.map_circle_description));
+            mFillColor = Color.parseColor("#8dd4d4d4");
+            mStrokeColor = Color.GRAY;
+            addresses = getLocationFromAddress(mGeeft.getUserLocation()+" "+mGeeft.getUserCap());
+            // Move the map so that it is centered on the initial circle
+            if (addresses != null && mMap!=null) {
+                SYDNEY = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                mMap.addCircle(new CircleOptions()
+                        .center(SYDNEY)
+                        .radius(DEFAULT_RADIUS)
+                        .strokeColor(mStrokeColor)
+                        .fillColor(mFillColor));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SYDNEY, 11.0f));
+            }
+        }else{
+            mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+        }
+    }
+
+    private void manageMapScroll(View rootView){
+        final NestedScrollView mainScrollView = (NestedScrollView) rootView.findViewById(R.id.scroll);
+        ImageView transparentImageView = (ImageView) rootView.findViewById(R.id.transparent_image);
+
+        transparentImageView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        });
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
+
+
+    public List<Address> getLocationFromAddress(String strAddress){
+
+        Geocoder coder = new Geocoder(getContext());
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
+                return null;
+            }
+            Address location=address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            return address;
+        } catch (IOException e) {
+            Log.d(TAG,e.getMessage());
+
+
+
+
+
+
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private class DraggableCircle {
+
+        //private final Marker centerMarker;
+
+        //private final Marker radiusMarker;
+
+        private final Circle circle;
+
+        private double radius;
+
+        public DraggableCircle(LatLng center, double radius) {
+            this.radius = radius;
+            circle = mMap.addCircle(new CircleOptions()
+                    .center(center)
+                    .radius(radius)
+                    .strokeColor(mStrokeColor)
+                    .fillColor(mFillColor));
+        }
+    }
 }

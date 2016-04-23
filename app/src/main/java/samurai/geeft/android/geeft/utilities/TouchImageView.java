@@ -74,7 +74,6 @@ public class TouchImageView extends ImageView {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        if (mode == DRAG) {
                             float deltaX = curr.x - last.x;
                             float deltaY = curr.y - last.y;
                             float fixTransX = getFixDragTrans(deltaX, viewWidth,
@@ -84,7 +83,6 @@ public class TouchImageView extends ImageView {
                             matrix.postTranslate(fixTransX, fixTransY);
                             fixTrans();
                             last.set(curr.x, curr.y);
-                        }
                         break;
 
                     case MotionEvent.ACTION_UP:

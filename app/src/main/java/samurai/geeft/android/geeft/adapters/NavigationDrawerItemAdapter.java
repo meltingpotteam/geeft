@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,10 +126,6 @@ public class NavigationDrawerItemAdapter extends
                         " il login", Toast.LENGTH_LONG);
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 toast.show();
-            } else {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
             }
         }
     }

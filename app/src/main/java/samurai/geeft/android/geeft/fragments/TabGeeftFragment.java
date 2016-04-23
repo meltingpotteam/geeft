@@ -425,7 +425,6 @@ public class TabGeeftFragment extends StatedFragment
             }else if(mGeeftList.size()==0){
                 message="Nessun risultato";
             }else if(resultToken == RESULT_FAILED){
-                message="Operazione fallita, riprovare.";
             }
         }
         if(message!=null) {

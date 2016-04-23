@@ -36,7 +36,6 @@ import com.facebook.share.widget.ShareDialog;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +47,7 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.activities.FullGeeftDetailsActivity;
 import samurai.geeft.android.geeft.activities.LoginActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
+import samurai.geeft.android.geeft.activities.MapActivity;
 import samurai.geeft.android.geeft.database.BaaSGetGeefterInformation;
 import samurai.geeft.android.geeft.database.BaaSReserveTask;
 import samurai.geeft.android.geeft.interfaces.TaskCallBackBooleanInt;
@@ -182,6 +182,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
              */
 
             myHolder.mGeeftTitleTextView.setText(item.getGeeftTitle());
+            myHolder.mLocationTextView.setText(item.getUserLocation());
             // - replace the contents of the view with that element
             //holder.mUsernameTextView.setText(item.getUsername());
 
@@ -305,8 +306,8 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             myHolder.mLocationButtonTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    try {
+                    startMapActivity(item);
+                    /*try {
                         if(!isGoogleMapsInstalled()) {
                             Toast.makeText(mContext,
                                     "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
@@ -323,7 +324,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                                     "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
                     }catch (java.io.UnsupportedEncodingException e){
                         Toast.makeText(mContext, "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 }
             });
             //-------------------------- ShareButton implementation
@@ -441,11 +442,6 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 toast.show();
             }
-            else {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
-            }
         }
         else {
             new AlertDialog.Builder(mContext)
@@ -481,10 +477,6 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         " il login", Toast.LENGTH_LONG);
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 toast.show();
-            } else {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Errore")
-                        .setMessage("Operazione non possibile. Riprovare più tardi.").show();
             }
         }
 
@@ -641,6 +633,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         @Bind(R.id.geeft_location_button_tab) LinearLayout mLocationButtonTab;
         @Bind(R.id.geeft_share_button_tab) LinearLayout mShareButtonTab;
         //@Bind(R.id.geeft_signalisation) ImageButton mSignalisationButton;
+        @Bind(R.id.location_text)TextView mLocationTextView;
 
         //-------------------Macros
         private final int RESULT_OK = 1;
@@ -662,6 +655,11 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    private void startMapActivity(Geeft geeft) {
+        final Intent mapIntent = MapActivity.newIntent(mContext,geeft.getUserCap() +
+                " "+geeft.getUserLocation());
+        mContext.startActivity(mapIntent);
+    }
 
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {

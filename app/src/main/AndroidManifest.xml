@@ -32,6 +32,12 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
                    android:value="@string/facebook_app_id"/>
 
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyDk2kOzrO5ExkkOgEoHn3HrKdUIAJ6eSmM"/>
+
+        <meta-data android:name="io.fabric.ApiKey"
+                   android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
+
         <activity android:name=".activities.InitialActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/SplashTheme">
@@ -149,6 +155,8 @@
         <activity android:name=".activities.StatisticsActivity"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.MapActivity"
+                  android:screenOrientation="portrait"/>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -183,9 +191,9 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
+
+        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService"/>
+
     </application>
 
 </manifest>

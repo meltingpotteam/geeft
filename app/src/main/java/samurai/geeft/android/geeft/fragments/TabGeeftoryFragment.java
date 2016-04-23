@@ -316,8 +316,8 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
     private void showSnackbar() {
         final Snackbar snackbar = Snackbar
                 .make(getActivity().findViewById(R.id.main_coordinator_layout),
-                        "No Internet Connection!", Snackbar.LENGTH_SHORT)
-                .setAction("RETRY", new View.OnClickListener() {
+                        "Connessione assente!", Snackbar.LENGTH_SHORT)
+                .setAction("RIPROVA", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getData();
@@ -325,7 +325,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
                 });
         snackbar.show();
     }
-
 
     private void showToast(String message) {
         Toast toast;
@@ -382,7 +381,6 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
             }else if(mGeeftoryList.size()==0){
                 message="Nessun risultato";
             }else if(resultToken == RESULT_FAILED){
-                message="Operazione fallita, riprovare.";
             }
         }
         if(message!=null) {
