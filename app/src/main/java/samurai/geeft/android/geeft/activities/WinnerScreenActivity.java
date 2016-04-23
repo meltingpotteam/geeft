@@ -123,11 +123,11 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
              @Override
              public void onClick(View v) {
                  if (mAction == 1) {
-                     if (!isGoogleMapsInstalled()) {
+                     /*if (!isGoogleMapsInstalled()) {
                          Toast.makeText(mContext,
                                  "Installa Google Maps per usare questa funzionalità", Toast.LENGTH_LONG).show();
-                     } else if (!mLocation.equals("")) {
-                         parseLocation(mLocation);
+                     } else */if (!mLocation.equals("")) {
+                         startMapActivity(mGeeft);
                      } else
                          Toast.makeText(mContext,
                                  "Non ha fornito indirizzo", Toast.LENGTH_LONG).show();
@@ -287,7 +287,8 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mGeeft.setBaasboxUsername(docGeeft.getString("baasboxUsername"));
         mGeeft.setGeeftTitle(docGeeft.getString("title"));
         mGeeft.setUsername(docGeeft.getString("username"));
-
+        mGeeft.setUserLocation(docGeeft.getString("location"));
+        mGeeft.setUserCap(docGeeft.getString("cap"));
         mWinnerScreenGeefterName.setText(docGeeft.getString("name"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
@@ -375,6 +376,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mGeefted = geefted;
         mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
         mGeeft.setGeeftTitle(docGeeft.getString("title"));
+
         mWinnerScreenGeeftedName.setText(BaasUser.current().
                 getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
         //mWinnerScreenGeeftedName.setText("prova");
@@ -424,6 +426,15 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         Intent intent = DonatedActivity.newIntent(mContext,"geeft",false);
         startActivity(intent);
         finish();
+    }
+
+    private void startMapActivity(Geeft geeft) {
+        Log.d(TAG,"maps to: " + geeft.getUserCap() +
+                " "+geeft.getUserLocation());
+        Intent mapIntent = MapActivity.newIntent(getApplicationContext(),geeft.getUserCap() +
+                " "+geeft.getUserLocation());
+        //mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapIntent);
     }
 
 
