@@ -86,7 +86,7 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
                 List<BaasDocument> listGeefts = resListGeefts.value();
                 int count = 0;
                 for(BaasDocument geeft : listGeefts){
-                    Log.d(TAG,"Location: " + geeft.getString("location"));
+                    //Log.d(TAG,"Location: " + geeft.getString("location"));
                     if(geeft.getString("location").equals("Roma"))
                         count += 1;
                 }

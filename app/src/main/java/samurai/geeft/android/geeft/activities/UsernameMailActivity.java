@@ -74,6 +74,14 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         mEmail=(EditText) findViewById(R.id.email_edittext);
         mEmailTextView = (TextView) findViewById(R.id.user_email_text_view);
         mMessageTextView = (TextView) findViewById(R.id.username_mail_message);
+
+        mNickname.setText(BaasUser.current().getScope(BaasUser.Scope.PRIVATE)
+                .getString("name")); //Autofill username with personal name and surname. If user want,
+                                    //he can edit it.
+        if(BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email") != null)
+            mEmail.setText(BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("email"));
+            //Autofill also e-mail,if present (login with Facebook)
+
         if(hasEmail){
             mEmail.setVisibility(View.GONE);
             mEmailTextView.setVisibility(View.GONE);

@@ -469,11 +469,11 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mProgressDialog.dismiss();
         new AlertDialog.Builder(getContext())
                 .setTitle("Errore")
-                .setMessage("Operazione non possibile. Riprovare più tardi.")
+                .setMessage("Operazione non possibile. Riprovare.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startMainActivity();
+                        //startMainActivity();
                     }
                 }).show();
     }

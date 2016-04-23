@@ -146,16 +146,15 @@
                 android:id="@+id/item_user_profile_card"
                 layout="@layout/item_user_profile_and_rating_card"
                 />
-            <include
-                android:id="@+id/item_geeft_details_time_and_selection"
-                layout="@layout/item_geeft_details_time_and_selection"
-                />
-
-            <include
+           <include
                 android:id="@+id/item_geeft_title_and_description"
                 layout="@layout/item_geeft_title_and_description_card"
                 />
 
+            <include
+                android:id="@+id/item_geeft_details_time_and_selection"
+                layout="@layout/item_geeft_details_time_and_selection"
+                />
 
             <include
                 android:id="@+id/prenote_geeft"
