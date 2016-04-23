@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -34,6 +35,7 @@ public class GeeftStoryFragment extends StatedFragment {
     private TextView mUsernameTextView;
     private TextView mGeeftDescriptionTextView;
     private TextView mGeeftTitleTextView;
+    private LinearLayout mStoryAvailable;
     private Boolean mTextIsSingleLine;
 
     private static final String GEEFT_KEY = "samurai.geeft.android.geeft.fragments."+
@@ -103,10 +105,11 @@ public class GeeftStoryFragment extends StatedFragment {
         mUsernameTextView = (TextView) rootView.findViewById(R.id.geefter_name);
         mGeeftDescriptionTextView = (TextView) rootView.findViewById(R.id.geeft_description);
         mGeeftTitleTextView = (TextView) rootView.findViewById(R.id.geeft_name);
-
+        mStoryAvailable = (LinearLayout) rootView.findViewById(R.id.story_available);
         Log.d("mGeeft before create", "mGeeft val: " + mGeeft);
         if (mGeeft != null){
-
+            if(mList.size() == 1)
+                mStoryAvailable.setVisibility(View.GONE);
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
             mGeeftDescriptionTextView.setSingleLine(true);
             mGeeftDescriptionTextView.setEllipsize(TextUtils.TruncateAt.END);

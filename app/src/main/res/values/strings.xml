@@ -364,8 +364,8 @@
     <string name="tutorial_additionalinfo_automaticselection_text">Spuntando \'Selezione automatica del Geefted\' l\'applicazione selezionerà automaticamente un vincitore in maniera intelligente.\n\nIn caso contrario potrai vedere la lista delle persone che si sono prenotate all\'oggetto, selezionandolo dal menu degli oggetti donati, e potrai sceglierne il qualsiasi momento il vincitore.</string>
     <string name="tutorial_additionalinfo_allowContact_text">Spuntando \'Posso essere contattato\' darai la possibilità agli utenti di poterti contattare tramite facebook</string>
     <string name="tutorial_additionalinfo_bigobject_text">Nel caso di oggetti grandi, potrai inserite le loro dimensioni spuntando la relativa casella</string>
-    <string name="tutorial_geeftinfo_text">Geeft è dove puoi vedere gli oggetti presenti sulla piattaforma e prenotare quelli a cui sei interessato</string>
-    <string name="tutorial_geeftoryinfo_text">"Geeftory è la sezione in cui puoi trovare le storie degli oggetti "</string>
+    <string name="tutorial_geeftinfo_text">\"Geeft\" è dove puoi vedere gli oggetti presenti in regalo sulla piattaforma e prenotare gratuitamente quelli a cui sei interessato</string>
+    <string name="tutorial_geeftoryinfo_text">\"Geeftory\" è la sezione vetrina in cui puoi trovare le storie degli oggetti. Questi però non sono prenotabili "</string>
     <string name="tutorial_tabsections_text">Benvenuti in Geeft!\nQueste sono le sezioni dell\'applicazione</string>
     <string name="tutorial_storyinfo_text">Qui potrai aggiornare la storia di un oggetto che hai ricevuto inviando un\'immagine e una descrizione di come lo hai utilizzato</string>
     <string name="tutorial_storycamerabutton_text">Premendo qui, potrai aggiungere una foto del nuovo stato dell\'oggetto</string>
@@ -373,8 +373,8 @@
     <string name="tutorial_storycategory_text">Seleziona la categoria attuale dell\'oggetto (es. una vecchia moka che è stata pulita e decorata. Se era nella categoria \'altro\' ora diventa \'casa e giardino\')</string>
     <string name="tutorial_geeftinfo_welcomedescription">Qui potrai aggiungere nuovi oggetti in geeft!\nPotrai aggiungere oggetti che non utilizzi più e che vuoi donare , semplicemente compilando questi campi</string>
     <string name="action_reset_tutorial_text">Tutorial</string>
-    <string name="tutorial_geeftory_behaviordescription">Facendo Swipe a sinistra potrai vedere come l\'oggetto si è trasformato durante la sua vita</string>
-    <string name="tutorial_geeftory_details">"Questa è la \'Timeline\' dei Geeft.\nQui puoi vedere come il Geeft era in passato, a chi apparteneva e le vecchie descrizioni "</string>
+    <string name="tutorial_geeftory_behaviordescription">Se vedi scritto \"Storia disponibile\" allora vuol dire che facendo Swipe a sinistra potrai vedere come l\'oggetto si è trasformato durante la sua vita</string>
+    <string name="tutorial_geeftory_details">"Questa è la \'Timeline\' dei Geeft.\nQui puoi vedere come un oggetto era in passato, a chi apparteneva e le vecchie descrizioni "</string>
 
     <string name="com.mapbox.mapboxsdk.accessToken" translatable="false">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
 
