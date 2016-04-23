@@ -93,6 +93,7 @@ dependencies {
     compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.0.0@aar') {
         transitive = true;
     }
+
 }
 apply plugin: 'com.google.gms.google-services'//Login with G+
 

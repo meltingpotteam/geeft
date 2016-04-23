@@ -378,6 +378,7 @@
 
     <string name="com.mapbox.mapboxsdk.accessToken" translatable="false">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
 
+
     <string name="accessToken">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
     <string name="map_circle_description">Google Map with circles.</string>
 </resources>

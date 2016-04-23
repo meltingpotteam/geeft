@@ -187,7 +187,6 @@
                 android:id="@+id/item_geeft_story"
                 layout="@layout/item_show_geeft_story"/>
 
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

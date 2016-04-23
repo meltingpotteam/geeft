@@ -383,6 +383,7 @@ public class TabGeeftoryFragment extends StatedFragment implements TaskCallbackB
             }else if(resultToken == RESULT_FAILED){
             }
         }
+
         if(message!=null) {
             showToast(message);
         }

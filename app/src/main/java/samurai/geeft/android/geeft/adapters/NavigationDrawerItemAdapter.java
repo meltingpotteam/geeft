@@ -128,6 +128,7 @@ public class NavigationDrawerItemAdapter extends
                 toast.show();
             }
         }
+
     }
 
 

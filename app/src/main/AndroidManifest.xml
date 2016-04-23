@@ -38,6 +38,7 @@
         <meta-data android:name="io.fabric.ApiKey"
                    android:value="cf18cda6f85b50ea9fd5708a49cc4381861f216c" />
 
+
         <activity android:name=".activities.InitialActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/SplashTheme">

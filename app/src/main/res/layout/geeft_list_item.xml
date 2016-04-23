@@ -16,6 +16,7 @@
         android:orientation="vertical"
         style="@style/CardView.Light"
         >
+
         <LinearLayout
             android:id="@+id/geeft_detail"
             android:layout_width="match_parent"

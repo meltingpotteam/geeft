@@ -484,6 +484,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void done(boolean result,int action,String docId){ //This is for signalisation button!
         // action_i with i={1,2,3}
+
         if(result) {
             switch (action) {
                 case 1:

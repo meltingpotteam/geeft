@@ -431,6 +431,7 @@ public class TabGeeftFragment extends StatedFragment
             showToast(message);
         }
     }
+
     private void showSnackbar(){
         if(getActivity().getClass().equals(MainActivity.class)) {
             Snackbar snackbar = Snackbar
