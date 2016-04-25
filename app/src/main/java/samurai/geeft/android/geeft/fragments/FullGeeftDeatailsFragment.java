@@ -650,8 +650,10 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
     private void deleteGeeft(){
         mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mProgressDialog.setMessage("Operazione in corso...");
         mProgressDialog.show();
-        mProgressDialog.setMessage("Attendere...");
+
         new BaaSDeleteGeeftTask(getContext(),mGeeft,FullGeeftDeatailsFragment.this).execute();
 
     }
