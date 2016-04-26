@@ -996,12 +996,6 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             return address;
         } catch (IOException e) {
             Log.d(TAG,e.getMessage());
-
-
-
-
-
-
             e.printStackTrace();
         }
         return null;
