@@ -49,8 +49,8 @@ public class BaaSMail extends AsyncTask<Void,Void,Boolean> {
                 email.setAuthenticator(new DefaultAuthenticator(mSender, mP));
                 email.setSSLOnConnect(true);
                 email.setFrom(mSender);
-                email.setSubject("Geeft: confirm mail");
-                email.setMsg("Confirm your mail.\nThe code is: " + mCode);
+                email.setSubject("Geeft: Conferma e-mail");
+                email.setMsg("Conferma la tua e-mail.\nIl codice e': " + mCode);
                 email.addTo(mReceiver);
                 email.send();
             }

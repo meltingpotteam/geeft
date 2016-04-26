@@ -78,16 +78,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private FloatingActionButton mActionGeeftStory;
     private int mNumboftabs =2;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-
+    private final static String EXTRA_MESSAGE_TO_SHOW = "extra_message_to_show";
+    private final static String EXTRA_SHOW_MESSAGE = "extra_show_message";
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
     CallbackManager mCallbackManager;
     static ShareDialog mShareDialog;
     private DrawerLayout mDrawerLayout;
+    private String mMessageToShow;
+    private boolean mShowImportantMessageFromPush;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
+        return intent;
+    }
+
+    public static Intent newIntent(Context context,boolean showMessage,String message) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_SHOW_MESSAGE,showMessage);
+        intent.putExtra(EXTRA_MESSAGE_TO_SHOW, message);
         return intent;
     }
 
@@ -118,11 +128,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         /**
          *
          */
-
+            
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar)findViewById(R.id.main_app_bar);
         mViewPager = (ViewPager)findViewById(R.id.pager);
         mToolbar.setTitle("");
+        mShowImportantMessageFromPush = getIntent().getBooleanExtra(EXTRA_SHOW_MESSAGE,false);
+        if(mShowImportantMessageFromPush)
+            mMessageToShow = getIntent().getStringExtra(EXTRA_MESSAGE_TO_SHOW);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar()!=null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -280,7 +293,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 //        }
 //
 //        mDrawerLayout.openDrawer(drawerFragment.getView());
+        
+        if(mShowImportantMessageFromPush){
+            showImportantMessageInDialog();
+            Log.d(TAG,"Entrato in show message con message:" + mMessageToShow);
+        }
 
+    }
+
+    private void showImportantMessageInDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Avviso")
+                .setMessage(mMessageToShow)
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     /**

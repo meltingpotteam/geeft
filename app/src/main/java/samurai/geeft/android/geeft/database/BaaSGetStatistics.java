@@ -37,7 +37,7 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
     public BaaSGetStatistics(Context context,
                              TaskCallbackBooleanArrayToken callback) {
         mContext = context;
-        mInfo = new double[10];
+        mInfo = new double[11];
         mInfo[1] = 0;
         mInfo[2] = 0;
         mCallback = callback;
@@ -74,10 +74,16 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
                 }
             }
 
+            int n_closed = 0;
             BaasQuery.Criteria query1 = BaasQuery.builder().where("assigned = false").criteria();
             BaasResult<List<BaasDocument>> resListGeeftsNotAssigned = BaasDocument.fetchAllSync(TagsValue.COLLECTION_GEEFT,query1);
             if(resListGeeftsNotAssigned.isSuccess()){
                 mInfo[6] = resListGeeftsNotAssigned.value().size();
+                for(BaasDocument geeft : resListGeeftsNotAssigned.value()){
+                    if(!geeft.getBoolean("closed"))
+                        n_closed += 1;
+                }
+                mInfo[10] = n_closed;
             }
 
             BaasResult<List<BaasDocument>> resListGeefts = BaasDocument.fetchAllSync(TagsValue.COLLECTION_GEEFT);

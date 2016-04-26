@@ -573,7 +573,8 @@ public class UserProfileFragment extends StatedFragment implements
                             }
                         }); //Read Update
         builder.setTitle("Successo");
-        builder.setMessage("Oggetto Assegnato. Verrai contattato dall'utente su Facebook.");
+        builder.setMessage("Oggetto Assegnato. Puoi visualizzare ulteriori informazioni andando" +
+                "su 'Geeft che hai regalato' e successivamente 'Info'.");
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

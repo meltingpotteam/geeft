@@ -16,13 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.BreakIterator;
+
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSGetStatistics;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanArrayToken;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 
 /**
- * Created by daniele on 22/04/16.
+ * Created by danybr-dev on 22/04/16.
  */
 public class StatisticsActivity extends AppCompatActivity implements TaskCallbackBooleanArrayToken{
     private Toolbar mToolbar;
@@ -38,6 +40,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
     private TextView mGeeftorysNumber;
     private TextView mGeeftsNotAssigned;
     private TextView mPercentualFromRome;
+    private TextView mGeeftsNotClosed;
 
 
     public static Intent newIntent(@NonNull Context context) {
@@ -61,6 +64,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
         mMenNumber = (TextView) findViewById(R.id.number_females);
         mFemalesNumber = (TextView) findViewById(R.id.number_men);
         mNaGender = (TextView) findViewById(R.id.number_na_gender);
+        mGeeftsNotClosed = (TextView) findViewById(R.id.number_geefts_not_closed);
         mGeeftsNotAssigned = (TextView) findViewById(R.id.number_geefts_not_assigned);
         mGeeftsNumber = (TextView) findViewById(R.id.number_geefts);
         mGeeftorysNumber = (TextView) findViewById(R.id.number_geeftorys);
@@ -99,6 +103,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
             mMenNumber.setText((int)mInfo[3]+"");
             mFemalesNumber.setText((int)mInfo[4]+"");
             mNaGender.setText((int)mInfo[5]+"");
+            mGeeftsNotClosed.setText((int)mInfo[10]+"");
             mGeeftsNotAssigned.setText((int)mInfo[6]+"");
             mGeeftsNumber.setText((int)mInfo[7]+"");
             mGeeftorysNumber.setText((int)mInfo[8]+"");

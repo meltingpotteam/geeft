@@ -19,11 +19,13 @@ package samurai.geeft.android.geeft.utilities;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -100,7 +102,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
             case 2:  intent = donatedCase();
                 break;
-            case 3: intent = contactFromUserCase();
+            case 3:  intent = showImportantMessage(message);
+                break;
+            case 4: intent = contactFromUserCase();
                 break;
             default:  intent = defaultCase();
                 break;
@@ -128,6 +132,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private Intent showImportantMessage(String message) {
+        Intent intent = MainActivity.newIntent(getApplicationContext(),true,message);
+        return intent;
     }
 
 
@@ -164,7 +173,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private Intent contactFromUserCase() { //TODO: Replace this with new activity
         if(!(geeftId== null && docUserId == null)) {
-            Intent intent = new Intent(getApplicationContext(), WinnerScreenActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             return intent;
         }
         else{
