@@ -166,16 +166,25 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
                 input.setHintTextColor(getResources().getColor(R.color.colorHintAccent));
                 input.setTextColor(getResources().getColor(R.color.colorPrimaryText));
+//                input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    public void onFocusChange(View v, boolean hasFocus) {
+//                        if (hasFocus)
+//                            input.setHint("");
+//                        else
+//                            input.setHint("Inserire indirizzo e-mail");
+//                    }
+//                });
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
                 input.setLayoutParams(lp);
                 builder.setView(input);
-                builder.setMessage("Controlla il codice nella tua mail");
+                builder.setMessage("Controlla il codice nella tua mail \n "+email+":\n");
                 //builder.setTitle("Inserire pasword");
                 builder.setNegativeButton("Indietro", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         dialog.dismiss();
                     }
                 });

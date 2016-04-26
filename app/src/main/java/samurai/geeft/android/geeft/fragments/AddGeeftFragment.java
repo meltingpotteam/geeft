@@ -296,6 +296,63 @@ public class AddGeeftFragment extends StatedFragment implements TaskCallbackBool
                 }
             }
         });
+        //Disappear Hints on Click.
+        mGeeftTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftTitle.setHint("");
+                else
+                    mGeeftTitle.setHint(R.string.add_gift_name_hint);
+            }
+        });
+        mGeeftDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftDescription.setHint("");
+                else
+                    mGeeftDescription.setHint(R.string.add_geeft_description_hint);
+            }
+        });
+        mGeeftCAP.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftCAP.setHint("");
+                else
+                    mGeeftCAP.setHint("CAP zona");
+            }
+        });
+        mGeeftLabels.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftLabels.setHint("");
+                else
+                    mGeeftLabels.setHint(R.string.add_geeft_label_hint);
+            }
+        });
+        mGeeftHeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftHeight.setHint("");
+                else
+                    mGeeftHeight.setHint(R.string.geeft_height_text);
+            }
+        });
+        mGeeftWidth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftWidth.setHint("");
+                else
+                    mGeeftWidth.setHint(R.string.geeft_width_text);
+            }
+        });
+        mGeeftDepth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mGeeftDepth.setHint("");
+                else
+                    mGeeftDepth.setHint(R.string.geeft_depth_text);
+            }
+        });
 
         /*//--------------------Check postal code   ------------------
         mGeeftCAP.addTextChangedListener(new TextWatcher(){
