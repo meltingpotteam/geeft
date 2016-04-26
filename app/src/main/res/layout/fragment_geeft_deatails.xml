@@ -160,27 +160,12 @@
                 android:id="@+id/prenote_geeft"
                 layout="@layout/item_prenote_geeft"/>
 
+            <include
+                android:id="@+id/item_google_map"
+                layout="@layout/item_google_map_card"/>
 
-            <RelativeLayout
-                android:id="@+id/map_layout"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_margin="@dimen/card_margin">
 
-                <LinearLayout
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    class="com.google.android.gms.maps.SupportMapFragment"/>
 
-                <ImageView
-                    android:id="@+id/transparent_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@android:color/transparent" />
-
-            </RelativeLayout>
 
             <include
                 android:id="@+id/item_geeft_story"

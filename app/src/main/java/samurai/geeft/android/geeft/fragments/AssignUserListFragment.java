@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +113,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user, mGeeft,isCurrentUser);
+        Fragment fragment = UserProfileFragment.newInstance(user, mGeeft, isCurrentUser);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
@@ -135,8 +136,11 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
     }
 
     public void getData() {
-        mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
-                "Operazione in corso");
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mProgressDialog.show();
+        mProgressDialog.setMessage("Operazione in corso...");
+
         new BaaSFetchUsersFromLink(getContext(), mGeeft, TagsValue.LINK_NAME_RESERVE
                 , mUserList,this).execute();
     }
