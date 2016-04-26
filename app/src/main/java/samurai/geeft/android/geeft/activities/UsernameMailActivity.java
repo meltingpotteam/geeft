@@ -68,13 +68,31 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             }
         }
         initActionBar();
+
         mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
         mEmail=(EditText) findViewById(R.id.email_edittext);
         mEmailTextView = (TextView) findViewById(R.id.user_email_text_view);
         mMessageTextView = (TextView) findViewById(R.id.username_mail_message);
-
+        //Delete hint on touch
+        mNickname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mNickname.setHint("");
+                else
+                    mNickname.setHint("Inserire username");
+            }
+        });
+        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mEmail.setHint("");
+                else
+                    mEmail.setHint("Inserire indirizzo e-mail");
+            }
+        });
+        //End delete hint on touch
         mNickname.setText(BaasUser.current().getScope(BaasUser.Scope.PRIVATE)
                 .getString("name")); //Autofill username with personal name and surname. If user want,
                                     //he can edit it.
@@ -159,6 +177,13 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                 builder.setView(input);
                 builder.setMessage("Controlla il codice nella tua mail");
                 //builder.setTitle("Inserire pasword");
+                builder.setNegativeButton("Indietro", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -195,8 +220,8 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                             });
                         }
                     }
-                    });
-                builder.setNegativeButton("Invia di nuovo", new DialogInterface.OnClickListener() {
+                });
+                builder.setNeutralButton("Invia di nuovo", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         sendMail(mNewEmail);
