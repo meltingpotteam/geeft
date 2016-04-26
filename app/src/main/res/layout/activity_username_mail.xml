@@ -39,7 +39,7 @@
         <EditText
             android:id="@+id/username_edittext"
             android:gravity="center"
-            android:hint="Geeft User"
+            android:hint="Inserire User"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:gravity="center"
-            android:hint="user@geeftapp.com"
+            android:hint="Inserisci la tua mail"
             android:textColor="@color/colorPrimaryText"
             />
         <Button
