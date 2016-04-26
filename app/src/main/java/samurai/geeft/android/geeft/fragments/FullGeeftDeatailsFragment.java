@@ -919,8 +919,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         if(isNetworkConnected()) {
             // Override the default content description on the view, for accessibility mode.
             map.setContentDescription(getString(R.string.map_circle_description));
-            mFillColor = Color.parseColor("#8dd4d4d4");
-            mStrokeColor = Color.GRAY;
+            mFillColor = Color.parseColor("#704879C3");
+            mStrokeColor = Color.parseColor("#FF4879C3");
             addresses = getLocationFromAddress(mGeeft.getUserLocation()+" "+mGeeft.getUserCap());
             // Move the map so that it is centered on the initial circle
             if (addresses != null && mMap!=null) {
