@@ -150,6 +150,10 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 String name =
                         BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
                 boolean isNull;
+                if(mBaasProvider.equals(BaasUser.Social.FACEBOOK)) {
+                    user.getScope(BaasUser.Scope.REGISTERED)
+                            .put("profilePic", getProfilePicFacebook());
+                }
                 if (userDocId == null) {
                     isNull = true;
                     BaasDocument doc = new BaasDocument("linkable_users");
@@ -161,10 +165,6 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                         //TODO: Check this,if doesn't works,replace with grantAllSync
                         if(resGrantDoc.isSuccess()){
                             Log.d(TAG, "Doc ID is: " + doc.getId());
-                            if(mBaasProvider.equals(BaasUser.Social.FACEBOOK)) {
-                                user.getScope(BaasUser.Scope.REGISTERED)
-                                        .put("profilePic", getProfilePicFacebook());
-                            }
                             //Insert in doc_id the id of docUser,linked with geefts
                             user.getScope(BaasUser.Scope.PRIVATE).put("doc_id", doc.getId());
                             //Insert Feedback,first registration is 5

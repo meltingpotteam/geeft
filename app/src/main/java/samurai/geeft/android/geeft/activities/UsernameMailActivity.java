@@ -29,7 +29,6 @@ import java.util.Random;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSMail;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBooleanToken;
-import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
 /**
@@ -41,7 +40,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
     private EditText mNickname,mEmail;
     private String mNewUsername,mNewEmail;
     private Button mButtonDone;
-    private User mUser;
     private Random mRandom;
     private int mCode;
     private Toolbar mToolbar;
@@ -69,7 +67,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         }
         initActionBar();
 
-        mUser =new User(BaasUser.current().getName());
         Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
         mNickname=(EditText) findViewById(R.id.username_edittext);
         mEmail=(EditText) findViewById(R.id.email_edittext);
@@ -135,7 +132,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                     }
                     if (baasResult.isSuccess()) {
                         mRandom = null;
-                        mUser.setUsername(mNewUsername);
                         Log.d(TAG, BaasUser.current()
                                 .getScope(BaasUser.Scope.REGISTERED)
                                 .put("username", mNewUsername).toString());
@@ -207,8 +203,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
                                     }
                                     if (baasResult.isSuccess()) {
                                         mRandom = null;
-                                        mUser.setUsername(mNewUsername);
-                                        mUser.setEmail(mNewEmail);
                                         Log.d(TAG, BaasUser.current()
                                                 .getScope(BaasUser.Scope.REGISTERED)
                                                 .put("username", mNewUsername).toString());

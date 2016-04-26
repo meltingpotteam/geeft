@@ -42,6 +42,7 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
     public static final String KEY_LINK_NAME = "key_link_name";
     public static final String KEY_SHOW_WINNER_DIALOG = "key_show_winner_dialog";
     private static final String KEY_LIST_STATE = "key_list_state";
+    private static final String KEY_LIST ="key_list" ;
     private final String TAG = getClass().getSimpleName();
 
     private final int RESULT_OK = 1;
@@ -198,7 +199,7 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
     @Override
     protected void onSaveState(Bundle outState) {
         super.onSaveState(outState);
-        outState.putSerializable(TAG, (Serializable)mGeeftList);
+        outState.putSerializable(KEY_LIST, (Serializable)mGeeftList);
         // Save list state
         mGeeftListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(KEY_LIST_STATE, mGeeftListState);
@@ -214,8 +215,10 @@ public class GeeftListFragment extends StatedFragment implements TaskCallbackBoo
         if (savedInstanceState != null) {
             mGeeftList = new ArrayList<>();
             mGeeftListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
-            ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable("mGeeftList2");
-            mGeeftList.addAll(array);
+            ArrayList<Geeft> array = (ArrayList) savedInstanceState.getSerializable(KEY_LIST);
+            if(array!=null) {
+                mGeeftList.addAll(array);
+            }
             mGeeftListShowDialog();
             View rootView = getView();
             if (rootView!=null){

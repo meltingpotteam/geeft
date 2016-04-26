@@ -161,6 +161,9 @@ public class BaaSTopListTask extends BaaSCheckTask{
                 if (baasResult.isSuccess()) {
                     try {
                         JsonArray docArray= baasResult.get().getObject("data").getArray("result");
+                        if(docArray==null){
+                            return false;
+                        }
                         Log.d(TAG,"Successo docArray size = "+docArray.size());
                         int size = docArray.size();
 

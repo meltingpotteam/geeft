@@ -790,7 +790,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
         if(result) {
             if (mGeeftList.size()<2){
-                new AlertDialog.Builder(getContext()).setTitle(R.string.ooops)
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.ooops)
                         .setMessage(R.string.no_story_alert_dialog_message).show();
             }
             else {
@@ -830,7 +830,13 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         if(result) {
             switch (action) {
                 case 1:
-                    sendEmail(docId); //I'm registered user
+                    if (docId==null){
+                        Toast.makeText(getContext(),
+                                "C'è stato un errore nella segnalazione", Toast.LENGTH_LONG).show();
+                    }else {
+                        //I'm registered user
+                        sendEmail(docId);
+                    }
                     break;
                 case 2: //document is already deleted by BaaSSignalisationTask, I'm a moderator
                     Toast.makeText(getContext(),"Documento eliminato con successo",Toast.LENGTH_LONG).show();
@@ -986,7 +992,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
+            if (address==null || address.size()==0) {
                 return null;
             }
             Address location=address.get(0);

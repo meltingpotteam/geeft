@@ -326,15 +326,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                 JsonObject extras = user.getScope(BaasUser.Scope.PRIVATE)
                         .put("name", acct.getDisplayName());
 
-                if( acct.getPhotoUrl()!=null){
-                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
-                            acct.getPhotoUrl().toString());
-                }else{
-                    user.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
-                            "");
-                }
-
-
                 user.login(new BaasHandler<BaasUser>() {
                     @Override
                     public void handle(BaasResult<BaasUser> result) {
@@ -351,6 +342,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                     Log.d(TAG, "emial=" + acct.getEmail());
                                     Log.d(TAG, "user ="+ baasUser.toString());
                                 }
+                                putProfilePic(baasUser,acct);
                                 new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                                         acct.getServerAuthCode(), baasUser,
                                         LoginActivity.this).execute();
@@ -376,6 +368,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                                         .put("email",acct.getEmail());
                                                 Log.d(TAG, "emial=" + acct.getEmail());
                                             }
+                                            putProfilePic(baasUser,acct);
                                             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
                                                     acct.getServerAuthCode(), result.get(),
                                                     LoginActivity.this).execute();
@@ -406,6 +399,18 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         }
         else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void putProfilePic(BaasUser baasUser,GoogleSignInAccount acct) {
+        if( acct.getPhotoUrl()!=null){
+            baasUser.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                    acct.getPhotoUrl().toString());
+            Log.d(TAG,"profile pic ="+acct.getPhotoUrl().toString());
+        }else{
+            baasUser.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
+                    "");
+            Log.d(TAG,"profile pic ="+acct.getPhotoUrl().toString());
         }
     }
 
