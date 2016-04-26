@@ -124,6 +124,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private TextView mProfileDialogUserLocation;
     private ImageView mProfileDialogUserImage;
     private TextView mProfileDialogUserRank;
+    private TextView mShowGeefterProfileTextView;
+
     private TextView mProfileDialogUserGiven;
     private TextView mProfileDialogUserReceived;
     private ImageButton mProfileDialogFbButton;
@@ -266,6 +268,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftComunicationAllowed = (TextView) rootView.findViewById(R.id.geeft_comunication_allowed);
         mGeefterNameTextView = (TextView)rootView.findViewById(R.id.geefter_name);
         mGeefterRank = (RatingBar)rootView.findViewById(R.id.ratingBarSmall);
+        mShowGeefterProfileTextView = (TextView) rootView.findViewById(R.id.show_profile);
         mGeeftTitleTextView = (TextView)rootView.findViewById(R.id.geeft_title_textview);
         mGeeftDescriptionTextView = (TextView)rootView
                 .findViewById(R.id.geeft_description_textview);
@@ -329,6 +332,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 }
             });
 
+            if(mGeeft.isAllowCommunication()){
+                mShowGeefterProfileTextView.setText("Contatta utente");
+            }
+            else{
+                mShowGeefterProfileTextView.setText("Visualizza profilo utente");
+            }
             if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
                 mAssignView.setVisibility(View.GONE);
             }

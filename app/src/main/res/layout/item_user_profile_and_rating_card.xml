@@ -49,6 +49,12 @@
                     android:stepSize="1.0"
                     android:rating="4"
                     />
+                <TextView
+                    android:id="@+id/show_profile"
+                    android:textColor="#F57C00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Visualizza profilo"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
