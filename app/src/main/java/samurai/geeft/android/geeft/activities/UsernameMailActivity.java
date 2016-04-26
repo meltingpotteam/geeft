@@ -68,6 +68,13 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             }
         }
         initActionBar();
+
+        mUser =new User(BaasUser.current().getName());
+        Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
+        mNickname=(EditText) findViewById(R.id.username_edittext);
+        mEmail=(EditText) findViewById(R.id.email_edittext);
+        mEmailTextView = (TextView) findViewById(R.id.user_email_text_view);
+        mMessageTextView = (TextView) findViewById(R.id.username_mail_message);
         //Delete hint on touch
         mNickname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
@@ -86,13 +93,6 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
             }
         });
         //End delete hint on touch
-        mUser =new User(BaasUser.current().getName());
-        Log.i("USERNAMEMAIL", "Inside UsernameMailActivity after inflating the layout.");
-        mNickname=(EditText) findViewById(R.id.username_edittext);
-        mEmail=(EditText) findViewById(R.id.email_edittext);
-        mEmailTextView = (TextView) findViewById(R.id.user_email_text_view);
-        mMessageTextView = (TextView) findViewById(R.id.username_mail_message);
-
         mNickname.setText(BaasUser.current().getScope(BaasUser.Scope.PRIVATE)
                 .getString("name")); //Autofill username with personal name and surname. If user want,
                                     //he can edit it.
