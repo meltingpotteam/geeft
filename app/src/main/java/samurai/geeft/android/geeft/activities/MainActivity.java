@@ -47,9 +47,10 @@ import java.io.File;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.utilities.AppRatingAndStats.AppRater;
 import samurai.geeft.android.geeft.utilities.GCM.RegistrationIntentService;
-import samurai.geeft.android.geeft.utilities.graphic.SlidingTabLayout;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import samurai.geeft.android.geeft.utilities.graphic.SlidingTabLayout;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppRater.app_launched(this);
 
         /**
          *
