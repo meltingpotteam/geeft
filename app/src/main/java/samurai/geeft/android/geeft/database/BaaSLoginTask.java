@@ -212,11 +212,11 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                             }
                         }
                         else{
-                            Log.e(TAG, "FATAL ERROR document not GRANTED");
+                            Log.e(TAG, "FATAL ERROR document not GRANTED: " + resGrantDoc.error().toString());
                             return false;
                         }
                     } else {
-                        Log.e(TAG, "FATAL ERROR document not created");
+                        Log.e(TAG, "FATAL ERROR document not created,error:" + resDoc.error().toString());
                         return false;
                     }
                 } else {

@@ -160,7 +160,7 @@ public class BaaSUploadGeeft extends AsyncTask<Void,Void,Boolean> {
                                 return createDonatedLink(doc,docUserId,mModify);
                             }
                             else{
-                                Log.e(TAG,"Error with grant DELETE to MODERATOR");
+                                Log.e(TAG,"Error with grant DELETE to MODERATOR:" + resDocGrantDel.error().toString());
                                 return false;
                             }
                         } else {

@@ -10,14 +10,14 @@ public class TagsValue {
 
     public static final String APPCODE = "1234567890";
 
-    public static final String API_DOMAIN = "geeft1.cloudapp.net";
+    public static final String API_DOMAIN = "geeft-test1.cloudapp.net";
 
     public static final int APP_PORT = 9000;
 
     public static final String DEFAULT_EMAIL = "geeft.app@gmail.com";
 
 
-    public static final String DEFAULT_URL = "http://geeft1.cloudapp.net:9000";
+    public static final String DEFAULT_URL = "http://geeft-test1.cloudapp.net:9000";
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 
