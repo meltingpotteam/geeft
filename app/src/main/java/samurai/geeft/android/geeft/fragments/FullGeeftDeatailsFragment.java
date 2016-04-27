@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasBox;
+import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
@@ -142,6 +143,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private List<DraggableCircle> mCircles = new ArrayList<DraggableCircle>(1);
     private SupportMapFragment mapFragment;
     private TextView mAssignTextView;
+    private TextView mGeeftReservationNumber;
 
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
@@ -262,6 +264,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
         mGeeftTitleInCard = (TextView) rootView.findViewById(R.id.geeft_title);
+        mGeeftReservationNumber = (TextView) rootView.findViewById(R.id.geeft_reservation_number);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
         mGeeftDeadline = (TextView) rootView.findViewById(R.id.geeft_deadline);
         mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
@@ -792,6 +795,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         //CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
         //        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         mGeeftTitleInCard.setText(mGeeft.getGeeftTitle());
+        setNumberOfReservationText(); //this set text in mGeeftReservationNumber
         mGeeftTimeAgo.setText(convertTimestamp(mGeeft.getCreationTime()/1000));
         mGeeftDeadline.setText(convertTimestamp(mGeeft.getDeadLine()));
 
@@ -809,6 +813,24 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         else{
             mGeeftComunicationAllowed.setText("No");
         }
+    }
+
+    private void setNumberOfReservationText() {
+        BaasQuery.Criteria query = BaasQuery.builder().where("out.id like '" + mGeeft.getId() + "'" )
+                .criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_RESERVE, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+            @Override
+            public void handle(BaasResult<List<BaasLink>> resReservationLinks) {
+                if(resReservationLinks.isSuccess()){
+                    List<BaasLink> reservationLinks = resReservationLinks.value();
+                    mGeeftReservationNumber.setText(reservationLinks.size()+"");
+                }
+                else{
+                    showAlertDialog();
+                }
+            }
+        });
+
     }
 
     private String convertTimestamp(long timestamp) {
