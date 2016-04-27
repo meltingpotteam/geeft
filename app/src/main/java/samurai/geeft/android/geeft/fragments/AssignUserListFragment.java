@@ -88,7 +88,10 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                startUserProfileFragment(mUserList.get(position), false);
+                if(!mGeeft.isAutomaticSelection())
+                    startUserProfileFragment(mUserList.get(position), false);
+                else
+                    startUserProfileFragment(mUserList.get(position), true, false); //showProfile,not Contactable
             }
 
             @Override
@@ -117,6 +120,17 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
+
+    private void startUserProfileFragment(User user, boolean showProfile,boolean allowComunication) {
+        FragmentTransaction transaction = getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        Fragment fragment = UserProfileFragment.newInstance(user, showProfile,allowComunication);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
 
 
     @Override

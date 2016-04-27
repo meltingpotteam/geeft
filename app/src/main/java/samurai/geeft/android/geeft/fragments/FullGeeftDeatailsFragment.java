@@ -112,7 +112,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private LinearLayout mReceivedButtonField;
     private View mDeleteView;
     private View mModifyView;
-    private View mAssignView;
+    private TextView mAssignView;
     private View mPrenoteView;
     private View mCardView;
 
@@ -141,6 +141,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private int mFillColor;
     private List<DraggableCircle> mCircles = new ArrayList<DraggableCircle>(1);
     private SupportMapFragment mapFragment;
+    private TextView mAssignTextView;
 
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
@@ -279,7 +280,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mPrenoteView = rootView.findViewById(R.id.prenote_geeft);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
-        mAssignView = rootView.findViewById(R.id.item_assign_geeft);
+        mAssignView = (TextView) rootView.findViewById(R.id.item_assign_geeft);
         mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
         mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
 
@@ -338,9 +339,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             else{
                 mShowGeefterProfileTextView.setText("Visualizza profilo utente");
             }
-            if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
-                mAssignView.setVisibility(View.GONE);
-            }
+            /*if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
+                //mAssignView.setVisibility(View.GONE);
+            }*/
 
             if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
                 mDonatedButtonField.setVisibility(View.GONE);
@@ -358,8 +359,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             if(!getArguments().getSerializable(KEY_CONTEXT)
                     .equals(ReceivedActivity.class.getSimpleName())){//TODO: Check this,and put it up
                 mReceivedButtonField.setVisibility(View.GONE);
-//                mAddStoryView.setVisibility(View.GONE);
-//                mDonateReceivedGeeftView.setVisibility(View.GONE);
+                if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
+                    mAssignView.setText("Lista\nprenotati");
+                }
             }
 
             mPrenoteView.setVisibility(View.GONE);
@@ -400,6 +402,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.commit();
+
                 }
             });
 
