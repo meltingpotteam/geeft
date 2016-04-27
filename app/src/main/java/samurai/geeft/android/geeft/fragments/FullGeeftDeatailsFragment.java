@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -485,7 +486,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void showAlertDialog() {
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
-        new AlertDialog.Builder(getActivity().getApplicationContext())
+        new AlertDialog.Builder(getContext(),
+                R.style.AppCompatAlertDialogStyle)
                 .setTitle("Errore")
                 .setMessage("Operazione non possibile. Riprovare.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
