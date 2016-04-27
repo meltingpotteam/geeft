@@ -37,7 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasBox;
-import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasLink;
 import com.baasbox.android.BaasQuery;
@@ -434,8 +433,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     User user = fillUser(baasResult.value());
                     if(mProgressDialog != null)
                         mProgressDialog.dismiss();
-                    startUserProfileFragment(user,true,mGeeft.isAllowCommunication()); //@Nullable User user,
-                                            // showProfile, allowComunication)
+                    boolean isCurrentUser = false;
+                    if(BaasUser.current()!=null){
+                       isCurrentUser = user.getID().equals(BaasUser.current().getName());
+                    }
+                    startUserProfileFragment(user,isCurrentUser,mGeeft.isAllowCommunication()); //@Nullable User user,
+                    // showProfile, allowComunication)
                 }
                 else{
                     showAlertDialog();
@@ -469,12 +472,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         return user;
     }
 
-    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean showProfile) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,showProfile);
+        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }

@@ -279,6 +279,7 @@ public class AddStoryFragment extends StatedFragment {
             }
         }
     }
+
     public interface OnCheckOkSelectedListener {
         void onCheckSelected(boolean startChooseStory, Geeft mGeeft);
     }

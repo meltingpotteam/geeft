@@ -91,7 +91,7 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 if(!mGeeft.isAutomaticSelection())
                     startUserProfileFragment(mUserList.get(position), false);
                 else
-                    startUserProfileFragment(mUserList.get(position), true, false); //showProfile,not Contactable
+                    startUserProfileFragment(mUserList.get(position), false, false); //showProfile,not Contactable
             }
 
             @Override
@@ -121,12 +121,12 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         transaction.commit();
     }
 
-    private void startUserProfileFragment(User user, boolean showProfile,boolean allowComunication) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user, showProfile,allowComunication);
+        Fragment fragment = UserProfileFragment.newInstance(user, isCurrentUser,allowComunication);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }

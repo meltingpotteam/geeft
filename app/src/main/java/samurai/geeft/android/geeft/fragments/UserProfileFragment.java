@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ import com.baasbox.android.Rest;
 import com.baasbox.android.json.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -51,9 +53,9 @@ import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.User;
-import samurai.geeft.android.geeft.utilities.graphic.CircleTransformation;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import samurai.geeft.android.geeft.utilities.graphic.CircleTransformation;
 
 /**
  * Created by ugookeadu on 31/01/16.
@@ -73,6 +75,11 @@ public class UserProfileFragment extends StatedFragment implements
     private static final String ARG_GEEFT = "arg_geeft";
     private static final String KEY_GEEFT = "key_geeft";
 
+    private static final int SELECT_PICTURE = 1;
+    private static final int REQUEST_CAMERA =2000 ;
+    private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
+            +File.separator+"geeft";
+
 
     private final String TAG = getClass().getSimpleName();
 
@@ -85,7 +92,6 @@ public class UserProfileFragment extends StatedFragment implements
     private ImageView mUserProfileImage;
     private User mUser;
     private boolean mIsCurrentUser;
-    private boolean mShowProfile;
     private boolean mAllowComunication;
     private ProgressDialog mProgressDialog;
     private LinkCountListener mCallback;
@@ -108,6 +114,11 @@ public class UserProfileFragment extends StatedFragment implements
     private LinearLayout mFbButton;
     private LinearLayout mGoogleButton;
     private LinearLayout mEmailButton;
+    private String mGeeftImagePath;
+    private File mGeeftImage;
+    private byte[] streamImage;
+    private int avatarSize;
+    private ImageView mDialogImageView;
 
     public static UserProfileFragment newInstance(@Nullable User user,
                                                   boolean isCUrrentUser) {
@@ -120,23 +131,23 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     public static UserProfileFragment newInstance(@Nullable User user,
-                                                  boolean showProfile,boolean allowComunication) {
+                                                  boolean isCurrentUser,boolean allowComunication) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
-        bundle.putBoolean(ARG_SHOW_PROFILE, showProfile); //if true, hide "Assegna il geeft" button
+        bundle.putBoolean(ARG_SHOW_PROFILE, isCurrentUser); //if true, hide "Assegna il geeft" button
         bundle.putBoolean(ARG_ALLOW_COMUNICATION, allowComunication); //if true,show contact buttons
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public static UserProfileFragment newInstance(@Nullable User user, @Nullable Geeft geeft,
-                                                  boolean isCUrrentUser) {
+                                                  boolean isCurrentUser) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
         bundle.putSerializable(ARG_GEEFT, geeft);
-        bundle.putBoolean(ARG_IS_CURRENT_USER, isCUrrentUser);
+        bundle.putBoolean(ARG_IS_CURRENT_USER, isCurrentUser);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -149,13 +160,11 @@ public class UserProfileFragment extends StatedFragment implements
         if (savedInstanceState != null) {
             mUser = (User) savedInstanceState.getSerializable(KEY_USER);
             mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
-            mShowProfile = savedInstanceState.getBoolean(KEY_SHOW_PROFILE);
             mAllowComunication = savedInstanceState.getBoolean(KEY_ALLOW_COMUNICATION);
             mGeeft = (Geeft) savedInstanceState.getSerializable(KEY_GEEFT);
         } else {
             mUser = (User) getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
-            mShowProfile = getArguments().getBoolean(ARG_SHOW_PROFILE);
             mAllowComunication = getArguments().getBoolean(ARG_ALLOW_COMUNICATION);
             mGeeft = (Geeft) getArguments().getSerializable(ARG_GEEFT);
         }
@@ -189,7 +198,6 @@ public class UserProfileFragment extends StatedFragment implements
         super.onSaveState(outState);
         outState.putSerializable(KEY_USER, mUser);
         outState.putBoolean(KEY_IS_CURRENT_USER, mIsCurrentUser);
-        outState.putBoolean(KEY_SHOW_PROFILE, mShowProfile);
         outState.putBoolean(KEY_ALLOW_COMUNICATION,mAllowComunication);
         outState.putBoolean(KEY_IS_EDITING_DESCRIPTION, mIsEditingDescription);
     }
@@ -200,7 +208,6 @@ public class UserProfileFragment extends StatedFragment implements
         mUser = (User) savedInstanceState.getSerializable(KEY_USER);
         Log.d(TAG, "onRestore " + mUser.getFbID());
         mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
-        mShowProfile = savedInstanceState.getBoolean(KEY_SHOW_PROFILE);
         mAllowComunication = savedInstanceState.getBoolean(KEY_ALLOW_COMUNICATION);
         mIsEditingDescription = savedInstanceState.getBoolean(KEY_IS_EDITING_DESCRIPTION);
         fillUI();
@@ -294,7 +301,7 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void fillUI() {
-        int avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
+        avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         Log.d(TAG, mUser.getProfilePic());
         Picasso.with(getContext())
                 .load(Uri.parse(mUser.getProfilePic()))
@@ -310,11 +317,12 @@ public class UserProfileFragment extends StatedFragment implements
         mUserDescriptionEditText.setText(mUser.getDescription());
         mUserEmailTextView.setText(mUser.getEmail());
         mUserEmailEditText.setText(mUser.getEmail());
-        Log.d(TAG,"ShowProfile: " + mShowProfile);
+        Log.d(TAG,"mIsCurrentUser: " + mIsCurrentUser);
 
-        if(mShowProfile){
+        if(!mIsCurrentUser){
             mButton.setVisibility(View.GONE);
         }
+
         if(mAllowComunication){
             mComunicationButtons.setVisibility(View.VISIBLE);
         }
@@ -677,7 +685,7 @@ public class UserProfileFragment extends StatedFragment implements
         mFbButton = (LinearLayout) rootView.findViewById(R.id.facebook_button_tab);
         mGoogleButton = (LinearLayout) rootView.findViewById(R.id.google_button_tab);
         mEmailButton = (LinearLayout) rootView.findViewById(R.id.email_button_tab);
-
+        mUserProfileImage = (ImageView)rootView.findViewById(R.id.user_profile_photo);
         if(mIsCurrentUser==false){
             mUserEmailCard = rootView.findViewById(R.id.user_email_card);
             mUserEmailCard.setVisibility(View.GONE);
@@ -689,7 +697,12 @@ public class UserProfileFragment extends StatedFragment implements
         mUserFeedbackTextView.setText("...");
 
         mButton = (Button) rootView.findViewById(R.id.user_profile_button);
-
+        mUserProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageDialog();
+            }
+        });
         if (mIsCurrentUser) {
             mLayoutDonatedView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -710,6 +723,34 @@ public class UserProfileFragment extends StatedFragment implements
                 }
             });
         }
+    }
+
+    private void showImageDialog() {
+        android.app.AlertDialog.Builder alertDialog = new android
+                .app.AlertDialog.Builder(getActivity()); //Read Update
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.geeft_image_dialog, null);
+        alertDialog.setView(dialogLayout);
+
+        //On click, the user visualize can visualize some infos about the geefter
+        android.app.AlertDialog dialog = alertDialog.create();
+        //the context i had to use is the context of the dialog! not the context of the app.
+        //"dialog.findVie..." instead "this.findView..."
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        mDialogImageView = (ImageView) dialogLayout.findViewById(R.id.dialogGeeftImage);
+//                mDialogImageView.setImageDrawable(mGeeftImageView.getDrawable());
+
+        Picasso.with(getActivity()).load(Uri.parse(mUser.getProfilePic()))
+                .fit()
+                .centerInside()
+                .into(mDialogImageView);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.scale_up_animation;
+        //dialog.setMessage("Some information that we can take from the facebook shared one");
+        dialog.show();  //<-- See This!
+        //Toast.makeText(getApplicationContext(), "TEST IMAGE", Toast.LENGTH_LONG).show();
     }
 
 
@@ -736,4 +777,145 @@ public class UserProfileFragment extends StatedFragment implements
         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         Log.e(TAG, e.getCause().toString() + " " + e.getMessage().toString());
     }
+
+    /*
+    private void selectImage() {
+        final CharSequence[] items = { "Scatta una foto", "Aggiungi dalla galleria", "Annulla" };
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Scatta una foto")) {
+                    File folder = new File(GEEFT_FOLDER);
+                    boolean success = true;
+                    if (!folder.exists()) {
+                        success = folder.mkdir();
+                    }
+                    mGeeftImage = new File(GEEFT_FOLDER + File.separator + "geeftimg" + ".jpg");
+                    Log.d(TAG, "mGeeftImage = "+mGeeftImage.getAbsolutePath());
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mGeeftImage));
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Aggiungi dalla galleria")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_PICTURE);
+                } else if (items[item].equals("Cancella")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"ON ACTIVITY RESULT");
+        Log.d(TAG,"resultCode == Activity.RESULT_OK ? "+(resultCode == Activity.RESULT_OK));
+        Log.d(TAG,"requestCode == REQUEST_CAMERA ? "+(requestCode == REQUEST_CAMERA));
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                mGeeftImagePath = mGeeftImage.getAbsolutePath();
+            } else if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                CursorLoader cursorLoader = new CursorLoader(getContext(), selectedImageUri,
+                        projection, null, null, null);
+                Cursor cursor = cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+                mGeeftImage = new File(selectedImageUri.getPath());
+                Log.d(TAG, "getAbsolutePath() = " + mGeeftImage.getAbsolutePath());
+                Log.d(TAG,"selectedImagePath() = "+selectedImagePath);
+                Log.d(TAG, "selectedImagePath() = " + selectedImageUri);
+                Log.d(TAG, "mGeeftImage.getAbsolutePath() = "+mGeeftImage.getAbsolutePath());
+                mGeeftImagePath= selectedImagePath;
+            }
+            Picasso.with(getContext())
+                    .load("file://"+mGeeftImagePath)
+                    .placeholder(R.drawable.ic_account_circle)
+                    .error(R.drawable.ic_account_circle)
+                    .centerInside()
+                    .resize(avatarSize, avatarSize)
+                    .transform(new CircleTransformation())
+                    .into(mUserProfileImage);
+            saveProfilePic();
+
+        }
+    }
+
+    private void saveProfilePic() {
+        mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
+                "Operazione in corso");
+        final Uri oldProfilePic = Uri.parse(BaasUser.current()
+                .getScope(BaasUser.Scope.REGISTERED).getString("profilePic"));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        BaasFile image = new BaasFile();
+        image.upload(BaasACL.grantRole(Role.REGISTERED, Grant.READ)
+                , imageToBitmap(mGeeftImagePath), new BaasHandler<BaasFile>() {
+                    @Override
+                    public void handle(BaasResult<BaasFile> baasResult) {
+                        if(baasResult.isSuccess()) {
+                            try {
+                                BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
+                                        .put("profilePic",getImageUrl(baasResult.get()));
+                                Log.d(TAG, "URI="+BaasUser.current().getScope(BaasUser.Scope.REGISTERED)
+                                        .get("profilePic"));
+                                BaasUser.current().save(new BaasHandler<BaasUser>() {
+                                    @Override
+                                    public void handle(BaasResult<BaasUser> baasResult) {
+                                        if(baasResult.isSuccess()){
+                                            if(mProgressDialog!=null){
+                                                mProgressDialog.dismiss();
+                                            }
+                                        }
+                                        if(baasResult.isFailed()){
+                                            showErrorAlert();
+                                            restoreImage(oldProfilePic);
+                                        }
+                                    }
+                                });
+                            } catch (BaasException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (baasResult.isFailed()){
+                            restoreImage(oldProfilePic);
+                            if(baasResult.isFailed()){
+                                showErrorAlert();
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void restoreImage(Uri oldProfilePic) {
+        Picasso.with(getActivity()).load(oldProfilePic)
+                .fit()
+                .centerInside()
+                .into(mUserProfileImage);
+    }
+
+    private String getImageUrl(BaasFile image){
+        String streamUri = image.getStreamUri().toString();
+        String temp[] = streamUri.split("=");
+        StringBuilder stbuild = new StringBuilder("");
+        stbuild.append(temp[0]).append(temp[1]).append("=");
+        return stbuild.toString();
+    }
+
+    private byte[] imageToBitmap(String selectedImagePath){
+        Bitmap bitmap =  BitmapFactory.decodeFile(selectedImagePath);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        streamImage = stream.toByteArray();
+        return streamImage;
+    }
+    */
 }

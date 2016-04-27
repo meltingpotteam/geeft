@@ -1,24 +1,22 @@
 package samurai.geeft.android.geeft.utilities.AppRatingAndStats;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import samurai.geeft.android.geeft.R;
 
 /**
  * Created by ugookeadu on 27/04/16.
  */
 public class AppRater {
     private final static String APP_TITLE = "Geeft";// App Name
-    private final static String APP_PNAME = "com.example.name";// Package Name
+    private final static String APP_PNAME = "samurai.geeft.android.geeft";// Package Name
 
-    private final static int DAYS_UNTIL_PROMPT = 1;//Min number of days
-    private final static int LAUNCHES_UNTIL_PROMPT = 1;//Min number of launches
+    private final static int DAYS_UNTIL_PROMPT = 0;//Min number of days
+    private final static int LAUNCHES_UNTIL_PROMPT = 0;//Min number of launches
 
     public static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
@@ -49,42 +47,33 @@ public class AppRater {
     }
 
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle("Vota " + APP_TITLE);
+        final android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(mContext,
+                        R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Vota " + APP_TITLE);
 
-        LinearLayout ll = new LinearLayout(mContext);
-        ll.setOrientation(LinearLayout.VERTICAL);
+        builder.setMessage("Se ti è piaciuto usare " + APP_TITLE
+                + ", per favore lasciaci un feedback. Grazie!");
 
-        TextView tv = new TextView(mContext);
-        tv.setText("Se ti è piaciuto usare " + APP_TITLE + ", per favore laciaci un feedback. " +
-                "Grazie!");
-        tv.setWidth(240);
-        tv.setPadding(4, 0, 4, 10);
-        ll.addView(tv);
-
-        Button b1 = new Button(mContext);
-        b1.setText("Vota " + APP_TITLE);
-        b1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+        builder.setPositiveButton("Vota " + APP_TITLE, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mContext.startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=" + APP_PNAME)));
                 dialog.dismiss();
             }
         });
-        ll.addView(b1);
 
-        Button b2 = new Button(mContext);
-        b2.setText("Ricordamelo più tardi");
-        b2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        builder.setNeutralButton("Più tardi", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        ll.addView(b2);
 
-        Button b3 = new Button(mContext);
-        b3.setText("No, grazie");
-        b3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        builder.setNegativeButton("No, grazie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 if (editor != null) {
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();
@@ -92,9 +81,8 @@ public class AppRater {
                 dialog.dismiss();
             }
         });
-        ll.addView(b3);
 
-        dialog.setContentView(ll);
-        dialog.show();
+        builder.setCancelable(false);
+        builder.create().show();
     }
 }
