@@ -15,8 +15,8 @@ public class AppRater {
     private final static String APP_TITLE = "Geeft";// App Name
     private final static String APP_PNAME = "samurai.geeft.android.geeft";// Package Name
 
-    private final static int DAYS_UNTIL_PROMPT = 0;//Min number of days
-    private final static int LAUNCHES_UNTIL_PROMPT = 0;//Min number of launches
+    private final static int DAYS_UNTIL_PROMPT = 2;//Min number of days
+    private final static int LAUNCHES_UNTIL_PROMPT = 3;//Min number of launches
 
     public static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
@@ -64,14 +64,14 @@ public class AppRater {
             }
         });
 
-        builder.setNeutralButton("Più tardi", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Non ora", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
 
-        builder.setNegativeButton("No, grazie", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Mai", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (editor != null) {
