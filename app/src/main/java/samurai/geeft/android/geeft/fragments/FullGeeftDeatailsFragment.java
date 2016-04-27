@@ -485,7 +485,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void showAlertDialog() {
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(getActivity().getApplicationContext())
                 .setTitle("Errore")
                 .setMessage("Operazione non possibile. Riprovare.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
