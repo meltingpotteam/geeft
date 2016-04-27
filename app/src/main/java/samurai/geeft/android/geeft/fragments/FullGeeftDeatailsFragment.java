@@ -287,15 +287,15 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         if(mGeeft!=null) {
             Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                     .fit().centerInside().into(mGeeftImageView);
-            Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic()))
+            /*Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic()))
                     .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
-                    .into(mGeefterProfilePicImageView);
+                    .into(mGeefterProfilePicImageView);*/  //Included in asynchrone call,setUserInformations()
 
             mGeefterNameTextView.setText(mGeeft.getUsername());
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
             setGeeftDetails();
-            setUserRaiting();
+            setUserInformations();
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -591,8 +591,29 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 .show();
     }
 
-    private void setUserRaiting() {
-        getUserFeedback(mGeeft.getBaasboxUsername());
+    private void setUserInformations() {
+        BaasUser.fetch(mGeeft.getBaasboxUsername(), new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> res) {
+                if (res.isSuccess()) {
+                    BaasUser user = res.value();
+                    Log.d("LOG", "The user: " + user);
+                    double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    float rankToset = getRoundedRank(rank);
+                    String profilePic = user.getScope(BaasUser.Scope.REGISTERED).getString("profilePic");
+
+                    mGeefterRank.setRating(rankToset);
+                    Picasso.with(getContext()).load(Uri.parse(profilePic))
+                            .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
+                            .into(mGeefterProfilePicImageView);
+
+                    //mGeefterNameTextView.setText(username);
+
+                } else {
+                    Log.e("LOG", "Error", res.error());
+                }
+            }
+        });
     }
 
     private void getUserFeedback(String username){
