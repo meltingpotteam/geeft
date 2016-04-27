@@ -19,7 +19,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.User;
-import samurai.geeft.android.geeft.utilities.RoundedTransformation;
+import samurai.geeft.android.geeft.utilities.graphic.RoundedTransformation;
 
 /**
  * Created by ugookeadu on 07/03/16.

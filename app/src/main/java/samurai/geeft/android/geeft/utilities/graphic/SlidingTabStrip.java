@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.utilities;
+package samurai.geeft.android.geeft.utilities.graphic;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import samurai.geeft.android.geeft.utilities.graphic.SlidingTabLayout;
 
 class SlidingTabStrip extends LinearLayout {
 

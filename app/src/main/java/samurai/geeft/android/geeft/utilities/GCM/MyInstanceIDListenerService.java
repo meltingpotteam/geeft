@@ -1,4 +1,4 @@
-package samurai.geeft.android.geeft.utilities;
+package samurai.geeft.android.geeft.utilities.GCM;
 
 import android.content.Intent;
 

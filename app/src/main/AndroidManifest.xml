@@ -170,7 +170,7 @@
         </receiver>
 
         <service
-            android:name="samurai.geeft.android.geeft.utilities.MyGcmListenerService"
+            android:name=".utilities.GCM.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -178,7 +178,7 @@
         </service>
 
         <service
-            android:name="samurai.geeft.android.geeft.utilities.MyInstanceIDListenerService"
+            android:name=".utilities.GCM.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -186,7 +186,7 @@
         </service>
 
         <service
-            android:name="samurai.geeft.android.geeft.utilities.RegistrationIntentService"
+            android:name=".utilities.GCM.RegistrationIntentService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

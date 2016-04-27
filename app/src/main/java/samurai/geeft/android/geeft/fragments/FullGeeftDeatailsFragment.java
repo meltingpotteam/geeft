@@ -802,7 +802,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
         if(result) {
             if (mGeeftList.size()<2){
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.ooops)
+                new AlertDialog.Builder(getContext()).setTitle(R.string.ooops)
                         .setMessage(R.string.no_story_alert_dialog_message).show();
             }
             else {
@@ -1004,7 +1004,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            if (address==null || address.size()==0) {
+            if (address==null) {
                 return null;
             }
             Address location=address.get(0);

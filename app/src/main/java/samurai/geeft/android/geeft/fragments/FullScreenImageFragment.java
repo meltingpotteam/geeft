@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
-import samurai.geeft.android.geeft.utilities.TouchImageView;
+import samurai.geeft.android.geeft.utilities.graphic.TouchImageView;
 
 /**
  * Created by ugookeadu on 24/02/16.

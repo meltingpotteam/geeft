@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package samurai.geeft.android.geeft.utilities;
+package samurai.geeft.android.geeft.utilities.GCM;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -34,6 +34,7 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.utilities.TagsValue;
 
 public class RegistrationIntentService extends IntentService {
 

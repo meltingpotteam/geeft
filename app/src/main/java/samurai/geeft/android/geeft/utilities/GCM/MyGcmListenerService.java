@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package samurai.geeft.android.geeft.utilities;
+package samurai.geeft.android.geeft.utilities.GCM;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

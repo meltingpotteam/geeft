@@ -6,7 +6,7 @@
     android:background="@android:color/background_dark"
     >
 
-    <samurai.geeft.android.geeft.utilities.TouchImageView
+    <samurai.geeft.android.geeft.utilities.graphic.TouchImageView
         android:id="@+id/touch_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

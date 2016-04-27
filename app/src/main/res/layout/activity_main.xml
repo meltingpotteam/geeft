@@ -37,7 +37,7 @@
                      layout="@layout/tool_bar"/>
 
 
-            <samurai.geeft.android.geeft.utilities.SlidingTabLayout
+            <samurai.geeft.android.geeft.utilities.graphic.SlidingTabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

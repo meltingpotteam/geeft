@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,7 +51,7 @@ import samurai.geeft.android.geeft.interfaces.LinkCountListener;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackBoolean;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.User;
-import samurai.geeft.android.geeft.utilities.CircleTransformation;
+import samurai.geeft.android.geeft.utilities.graphic.CircleTransformation;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
 
