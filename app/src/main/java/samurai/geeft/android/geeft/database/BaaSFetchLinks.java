@@ -68,7 +68,8 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
         if(BaasUser.current()==null)
             return false;
         String docUserId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id");
-        BaasQuery.Criteria query =BaasQuery.builder().where("in.id like '" + docUserId + "'" ).criteria();
+        BaasQuery.Criteria query =BaasQuery.builder()
+                .where("in.id like '" + docUserId + "' and out.deleted = false" ).criteria();
         Log.d(TAG,"doc_id are: " + docUserId);
         // PROBLEMA GRAVE: QUANDO FAI LA QUERY,IN È L'UTENTE (DocUserId) E OUT È IL GEEFT
         //                 QUANDO PRENDI I LINK,OUT() È L'UTENTE, IN() È IL GEEFT

@@ -183,8 +183,19 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mTakenButton.setOnClickListener(new View.OnClickListener() { //ritirato
             @Override
             public void onClick(View v) {
-                setTakenToGeeft();
-                checkConditionForFeedback();
+                final android.support.v7.app.AlertDialog.Builder builder =
+                        new android.support.v7.app.AlertDialog.Builder(CompactDialogActivity.this,
+                                R.style.AppCompatAlertDialogStyle); //Read Update
+                builder.setTitle("Avviso");
+                builder.setMessage("Hai fisicamente ricevuto il regalo?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setTakenToGeeft();
+                        checkConditionForFeedback();
+                    }
+                }).show();
+
             }
         });
         //------------------------
@@ -193,8 +204,18 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mGivenButton.setOnClickListener(new View.OnClickListener() { //Consegnato
             @Override
             public void onClick(View v) {
-                setGivenToGeeft();
-                checkConditionForFeedback();
+                final android.support.v7.app.AlertDialog.Builder builder =
+                        new android.support.v7.app.AlertDialog.Builder(CompactDialogActivity.this,
+                                R.style.AppCompatAlertDialogStyle); //Read Update
+                builder.setTitle("Avviso");
+                builder.setMessage("Hai fisicamente consegnato il regalo?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setGivenToGeeft();
+                        checkConditionForFeedback();
+                    }
+                }).show();
             }
         });
         //------------------------

@@ -219,7 +219,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
                         Toast.makeText(WinnerScreenActivity.this, "Spiacenti,l'e-mail fornito non è valido", Toast.LENGTH_LONG).show();
                     } else {
                         String message = "Gentile " + mGeeft.getUsername() +
-                                " \n\n" + "Mi è stato assegnato l'oggetto: '" + mGeeft.getGeeftTitle() + "' " +
+                                ",\n\n" + "Mi è stato assegnato l'oggetto: '" + mGeeft.getGeeftTitle() + "' " +
                                 "tramite l'applicazione "
                                 + "Android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
 
@@ -240,7 +240,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         } else {
             String geeftedUsername = mGeefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString();
 
-            String message = "Gentile "+ geeftedUsername + "\n\n ti ho assegnato l'oggetto: '"
+            String message = "Gentile "+ geeftedUsername + ",\n\nTi ho assegnato l'oggetto: '"
                     + mGeeft.getGeeftTitle() + "' tramite l'applicazione "
                     + "Android 'Geeft'" +"\n" + "CAMPO DA COMPILARE";
 

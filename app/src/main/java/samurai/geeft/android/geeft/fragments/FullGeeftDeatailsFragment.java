@@ -614,7 +614,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     BaasUser user = res.value();
                     Log.d("LOG", "The user: " + user);
                     float rankToset;
-                    Double l = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    long l = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
                     Object o = l;
                     double rank = (double)l;
                     rankToset = getRoundedRank(rank);

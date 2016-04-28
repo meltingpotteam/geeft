@@ -327,6 +327,16 @@ public class UserProfileFragment extends StatedFragment implements
             mButton.setVisibility(View.GONE);
         }
 
+        if(mGeeft == null){ // TODO: Accrocco,rivedere dov'è il problema
+            mButton.setVisibility(View.GONE);
+        }
+        else{
+            if(mGeeft.isAutomaticSelection()) {
+                mButton.setVisibility(View.GONE);
+            }
+        }
+
+
         if(mAllowComunication){
             mComunicationButtons.setVisibility(View.VISIBLE);
         }

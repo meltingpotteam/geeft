@@ -68,13 +68,17 @@ public class BaaSFillNavigationDrawerCount extends AsyncTask<Void,Void,Boolean> 
                     + " and out.assigned = false").criteria(); this is for segnalate not taken geeft
                     */
                 query = BaasQuery.builder().where("in.id like '" + docUserId + "'"
-                        + " and out.is_feedback_left_by_geefter = false").criteria();
+                        + " and out.is_feedback_left_by_geefter = false and out.deleted = false").criteria();
             }
             else if(mlinkNameQuery.equals(TagsValue.LINK_NAME_ASSIGNED)){
                 /*query = BaasQuery.builder().where("in.id like '" + docUserId + "'"
                         + " and out.taken = false").criteria();*/
                 query = BaasQuery.builder().where("in.id like '" + docUserId + "'"
-                        + " and out.is_feedback_left_by_geefted = false").criteria();
+                        + " and out.is_feedback_left_by_geefted = false and out.deleted = false").criteria();
+            }
+            else if(mlinkNameQuery.equals(TagsValue.LINK_NAME_RESERVE)){
+                query = BaasQuery.builder().where("in.id like '" + docUserId + "'"
+                        + " and out.deleted = false").criteria();
             }
             else{
                 query = BaasQuery.builder().where("in.id like '" + docUserId + "'").criteria();
