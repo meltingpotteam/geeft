@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.baasbox.android.BaasUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,11 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
                 , mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                startUserProfileFragment(mUserList.get(position), false);
+                if(!mGeeft.isAutomaticSelection())
+                    startUserProfileFragment(mUserList.get(position), false);
+                else {
+                    startUserProfileFragment(mUserList.get(position), false, false); //currentUser,not Contactable
+                }
             }
 
             @Override
@@ -117,6 +123,17 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
+
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
+        FragmentTransaction transaction = getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        Fragment fragment = UserProfileFragment.newInstance(user, isCurrentUser,allowComunication,true);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
 
 
     @Override

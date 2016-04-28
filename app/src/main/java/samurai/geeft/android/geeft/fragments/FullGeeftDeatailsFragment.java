@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -112,7 +113,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private LinearLayout mReceivedButtonField;
     private View mDeleteView;
     private View mModifyView;
-    private View mAssignView;
+    private TextView mAssignView;
     private View mPrenoteView;
     private View mCardView;
 
@@ -141,6 +142,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private int mFillColor;
     private List<DraggableCircle> mCircles = new ArrayList<DraggableCircle>(1);
     private SupportMapFragment mapFragment;
+    private TextView mAssignTextView;
+    private TextView mGeeftReservationNumber;
 
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
@@ -261,6 +264,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
         mGeeftTitleInCard = (TextView) rootView.findViewById(R.id.geeft_title);
+        mGeeftReservationNumber = (TextView) rootView.findViewById(R.id.geeft_reservation_number);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
         mGeeftDeadline = (TextView) rootView.findViewById(R.id.geeft_deadline);
         mGeeftLocation = (TextView) rootView.findViewById(R.id.geeft_location);
@@ -279,22 +283,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mPrenoteView = rootView.findViewById(R.id.prenote_geeft);
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
-        mAssignView = rootView.findViewById(R.id.item_assign_geeft);
+        mAssignView = (TextView) rootView.findViewById(R.id.item_assign_geeft);
         mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
         mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
 
         if(mGeeft!=null) {
             Picasso.with(getContext()).load(mGeeft.getGeeftImage())
                     .fit().centerInside().into(mGeeftImageView);
-            Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic()))
+            /*Picasso.with(getContext()).load(Uri.parse(mGeeft.getUserProfilePic()))
                     .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
-                    .into(mGeefterProfilePicImageView);
+                    .into(mGeefterProfilePicImageView);*/  //Included in asynchrone call,setUserInformations()
 
             mGeefterNameTextView.setText(mGeeft.getUsername());
             //mGeeftTitleTextView.setText(mGeeft.getGeeftTitle());
             mGeeftDescriptionTextView.setText(mGeeft.getGeeftDescription());
             setGeeftDetails();
-            setUserRaiting();
+            setUserInformations();
 
             mGeeftImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -338,9 +342,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             else{
                 mShowGeefterProfileTextView.setText("Visualizza profilo utente");
             }
-            if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
-                mAssignView.setVisibility(View.GONE);
-            }
+            /*if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
+                //mAssignView.setVisibility(View.GONE);
+            }*/
 
             if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
                 mDonatedButtonField.setVisibility(View.GONE);
@@ -358,8 +362,9 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             if(!getArguments().getSerializable(KEY_CONTEXT)
                     .equals(ReceivedActivity.class.getSimpleName())){//TODO: Check this,and put it up
                 mReceivedButtonField.setVisibility(View.GONE);
-//                mAddStoryView.setVisibility(View.GONE);
-//                mDonateReceivedGeeftView.setVisibility(View.GONE);
+                if(mGeeft.isAutomaticSelection()){ //if is automatic selection,geefter can't assign
+                    mAssignView.setText("Lista\nprenotati");
+                }
             }
 
             mPrenoteView.setVisibility(View.GONE);
@@ -400,6 +405,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.commit();
+
                 }
             });
 
@@ -428,8 +434,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     User user = fillUser(baasResult.value());
                     if(mProgressDialog != null)
                         mProgressDialog.dismiss();
-                    startUserProfileFragment(user,true,mGeeft.isAllowCommunication()); //@Nullable User user,
-                                            // showProfile, allowComunication)
+                    boolean isCurrentUser = false;
+                    if(BaasUser.current()!=null){
+                       isCurrentUser = user.getID().equals(BaasUser.current().getName());
+                    }
+                    startUserProfileFragment(user,isCurrentUser,mGeeft.isAllowCommunication()); //@Nullable User user,
+                    // showProfile, allowComunication)
                 }
                 else{
                     showAlertDialog();
@@ -463,12 +473,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         return user;
     }
 
-    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean showProfile) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,showProfile);
+        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication,true);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
@@ -476,7 +486,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void showAlertDialog() {
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(getContext(),
+                R.style.AppCompatAlertDialogStyle)
                 .setTitle("Errore")
                 .setMessage("Operazione non possibile. Riprovare.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -588,8 +599,29 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 .show();
     }
 
-    private void setUserRaiting() {
-        getUserFeedback(mGeeft.getBaasboxUsername());
+    private void setUserInformations() {
+        BaasUser.fetch(mGeeft.getBaasboxUsername(), new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> res) {
+                if (res.isSuccess()) {
+                    BaasUser user = res.value();
+                    Log.d("LOG", "The user: " + user);
+                    double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    float rankToset = getRoundedRank(rank);
+                    String profilePic = user.getScope(BaasUser.Scope.REGISTERED).getString("profilePic");
+
+                    mGeefterRank.setRating(rankToset);
+                    Picasso.with(getContext()).load(Uri.parse(profilePic))
+                            .fit().centerInside().placeholder(R.drawable.ic_account_circle_black_24dp)
+                            .into(mGeefterProfilePicImageView);
+
+                    //mGeefterNameTextView.setText(username);
+
+                } else {
+                    Log.e("LOG", "Error" + res.error());
+                }
+            }
+        });
     }
 
     private void getUserFeedback(String username){
@@ -768,6 +800,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         //CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(mGeeft.getCreationTime(),
         //        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         mGeeftTitleInCard.setText(mGeeft.getGeeftTitle());
+        setNumberOfReservationText(); //this set text in mGeeftReservationNumber
         mGeeftTimeAgo.setText(convertTimestamp(mGeeft.getCreationTime()/1000));
         mGeeftDeadline.setText(convertTimestamp(mGeeft.getDeadLine()));
 
@@ -787,6 +820,25 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
     }
 
+    private void setNumberOfReservationText() {
+        BaasQuery.Criteria query = BaasQuery.builder().where("out.id like '" + mGeeft.getId() + "'" )
+                .criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_RESERVE, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
+            @Override
+            public void handle(BaasResult<List<BaasLink>> resReservationLinks) {
+                if(resReservationLinks.isSuccess()){
+                    List<BaasLink> reservationLinks = resReservationLinks.value();
+                    mGeeftReservationNumber.setText(reservationLinks.size()+"");
+                }
+                else{
+                    Log.e(TAG,"Error while counting reservation: " + resReservationLinks.error().toString());
+                    //showAlertDialog();
+                }
+            }
+        });
+
+    }
+
     private String convertTimestamp(long timestamp) {
         String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(timestamp*1000);
         return date;
@@ -799,7 +851,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
         if(result) {
             if (mGeeftList.size()<2){
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.ooops)
+                new AlertDialog.Builder(getContext()).setTitle(R.string.ooops)
                         .setMessage(R.string.no_story_alert_dialog_message).show();
             }
             else {
@@ -1001,7 +1053,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            if (address==null || address.size()==0) {
+            if (address==null) {
                 return null;
             }
             Address location=address.get(0);
