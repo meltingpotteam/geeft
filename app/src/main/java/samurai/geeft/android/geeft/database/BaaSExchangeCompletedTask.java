@@ -13,7 +13,6 @@ import com.baasbox.android.BaasUser;
 
 import java.util.List;
 
-import samurai.geeft.android.geeft.interfaces.TaskCallbackDeletion;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackExchange;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -142,16 +141,35 @@ public class BaaSExchangeCompletedTask extends AsyncTask<Void,Void,Boolean> {
     }
 
     private boolean createLinkReceived(){
-        BaasResult<BaasLink> resCreateLink = BaasLink.createSync(TagsValue.LINK_NAME_RECEIVED, mGeeft.getId(), mDocUserId);
-        if(resCreateLink.isSuccess()){
-            return true;
-        }
-        else {
-            if (resCreateLink.error() instanceof BaasInvalidSessionException) {
+        BaasQuery.Criteria criteria = BaasQuery.builder()
+                .where("in.id ='"+mDocUserId+"' and out.id = '" + mGeeft.getId()+"'").criteria();
+        BaasResult<List<BaasLink>> resExistingLinks = BaasLink
+                .fetchAllSync(TagsValue.LINK_NAME_RECEIVED, criteria);
+        if(resExistingLinks.isSuccess()) {
+            if (resExistingLinks.value().size() > 0) {
+                return true;
+            } else {
+                BaasResult<BaasLink> resCreateLink = BaasLink.createSync(TagsValue.LINK_NAME_RECEIVED, mGeeft.getId(), mDocUserId);
+                if (resCreateLink.isSuccess()) {
+                    return true;
+                } else {
+                    if (resCreateLink.error() instanceof BaasInvalidSessionException) {
+                        mResultToken = RESULT_SESSION_EXPIRED;
+                        return false;
+                    } else {
+                        Log.e(TAG, "Error while creating link received:" + resCreateLink.error());
+                        mResultToken = RESULT_FAILED;
+                        return false;
+                    }
+                }
+            }
+        }else {
+
+            if (resExistingLinks.error() instanceof BaasInvalidSessionException) {
                 mResultToken = RESULT_SESSION_EXPIRED;
                 return false;
             } else {
-                Log.e(TAG, "Error while creating link received:" + resCreateLink.error());
+                Log.e(TAG, "Error while creating link received:" + resExistingLinks.error());
                 mResultToken = RESULT_FAILED;
                 return false;
             }

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -144,6 +143,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private SupportMapFragment mapFragment;
     private TextView mAssignTextView;
     private TextView mGeeftReservationNumber;
+    private boolean mNotShowAssignButton;
 
 
     public static FullGeeftDeatailsFragment newInstance(Geeft geeft, String className) {
@@ -314,8 +314,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 public void onClick(View v) {
 
                     //initGeefterDialog(mGeeft);
+                    mNotShowAssignButton = true;
                     showGeefterProfile();
-
                 }
             });
             mStoryView.setOnClickListener(new View.OnClickListener() {
@@ -438,10 +438,15 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     if(BaasUser.current()!=null){
                        isCurrentUser = user.getID().equals(BaasUser.current().getName());
                     }
-                    startUserProfileFragment(user,isCurrentUser,mGeeft.isAllowCommunication()); //@Nullable User user,
+                    boolean  allowComunication;
+                    if(BaasUser.current()!= null && BaasUser.current().getName().equals(user.getID())){
+                        allowComunication=false;
+                    }else {
+                        allowComunication = mGeeft.isAllowCommunication();
+                    }
+                    startUserProfileFragment(user,isCurrentUser,allowComunication,mNotShowAssignButton); //@Nullable User user,
                     // showProfile, allowComunication)
-                }
-                else{
+                }if (baasResult.isFailed()){
                     showAlertDialog();
                 }
             }
@@ -473,12 +478,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         return user;
     }
 
-    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication, boolean notShowAssignButton) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication);
+        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication, notShowAssignButton);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
@@ -486,16 +491,18 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void showAlertDialog() {
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
-        new AlertDialog.Builder(getContext(),
-                R.style.AppCompatAlertDialogStyle)
-                .setTitle("Errore")
-                .setMessage("Operazione non possibile. Riprovare.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //startMainActivity();
-                    }
-                }).show();
+        if(getContext()!=null) {
+            new AlertDialog.Builder(getContext(),
+                    R.style.AppCompatAlertDialogStyle)
+                    .setTitle("Riprovare")
+                    .setMessage("Connessione lenta.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //startMainActivity();
+                        }
+                    }).show();
+        }
     }
 
 
@@ -606,8 +613,12 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 if (res.isSuccess()) {
                     BaasUser user = res.value();
                     Log.d("LOG", "The user: " + user);
-                    double rank = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
-                    float rankToset = getRoundedRank(rank);
+                    float rankToset;
+                    Double l = user.getScope(BaasUser.Scope.REGISTERED).get("feedback");
+                    Object o = l;
+                    double rank = (double)l;
+                    rankToset = getRoundedRank(rank);
+
                     String profilePic = user.getScope(BaasUser.Scope.REGISTERED).getString("profilePic");
 
                     mGeefterRank.setRating(rankToset);
@@ -829,9 +840,6 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 if(resReservationLinks.isSuccess()){
                     List<BaasLink> reservationLinks = resReservationLinks.value();
                     mGeeftReservationNumber.setText(reservationLinks.size()+"");
-                }
-                else{
-                    showAlertDialog();
                 }
             }
         });

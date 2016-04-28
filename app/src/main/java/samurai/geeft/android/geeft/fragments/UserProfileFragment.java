@@ -77,6 +77,7 @@ public class UserProfileFragment extends StatedFragment implements
 
     private static final int SELECT_PICTURE = 1;
     private static final int REQUEST_CAMERA =2000 ;
+    private static final String ARG_NOT_SHOW_ASSIGN_BUTTON = "arg_not_show_assign_button";
     private final String GEEFT_FOLDER = Environment.getExternalStorageDirectory()
             +File.separator+"geeft";
 
@@ -119,6 +120,7 @@ public class UserProfileFragment extends StatedFragment implements
     private byte[] streamImage;
     private int avatarSize;
     private ImageView mDialogImageView;
+    private boolean mNotShowAssignBUtton;
 
     public static UserProfileFragment newInstance(@Nullable User user,
                                                   boolean isCUrrentUser) {
@@ -131,12 +133,13 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     public static UserProfileFragment newInstance(@Nullable User user,
-                                                  boolean isCurrentUser,boolean allowComunication) {
+                                                  boolean isCurrentUser,boolean allowComunication, boolean notShowAssignButton) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
         bundle.putBoolean(ARG_SHOW_PROFILE, isCurrentUser); //if true, hide "Assegna il geeft" button
         bundle.putBoolean(ARG_ALLOW_COMUNICATION, allowComunication); //if true,show contact buttons
+        bundle.putBoolean(ARG_NOT_SHOW_ASSIGN_BUTTON, notShowAssignButton);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -166,6 +169,7 @@ public class UserProfileFragment extends StatedFragment implements
             mUser = (User) getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
             mAllowComunication = getArguments().getBoolean(ARG_ALLOW_COMUNICATION);
+            mNotShowAssignBUtton = getArguments().getBoolean(ARG_NOT_SHOW_ASSIGN_BUTTON);
             mGeeft = (Geeft) getArguments().getSerializable(ARG_GEEFT);
         }
     }
@@ -319,7 +323,7 @@ public class UserProfileFragment extends StatedFragment implements
         mUserEmailEditText.setText(mUser.getEmail());
         Log.d(TAG,"mIsCurrentUser: " + mIsCurrentUser);
 
-        if(!mIsCurrentUser){
+        if(mNotShowAssignBUtton){
             mButton.setVisibility(View.GONE);
         }
 
@@ -580,7 +584,7 @@ public class UserProfileFragment extends StatedFragment implements
                             }
                         }); //Read Update
         builder.setTitle("Successo");
-        builder.setMessage("Oggetto Assegnato. Puoi visualizzare ulteriori informazioni andando" +
+        builder.setMessage("Oggetto Assegnato. Puoi visualizzare ulteriori informazioni andando " +
                 "su 'Geeft che hai regalato' e successivamente 'Info'.");
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
