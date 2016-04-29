@@ -91,7 +91,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 ==============
 ###Final Submission
-######Work in progress
 
-- Application release
-- Promoting the product
+- [Public APK] (https://app.edo.io/preview?id=57237506b8099166a57d444f&k=x4ew6T8xF4lrxIK8mSDL0W_q4V_VgwOhacU4auuZIX0=)
+- [Download from Play Store] (http://bit.do/Geeft)
+- [Video Presentation]
+- [Documentation]
