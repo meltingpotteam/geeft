@@ -94,6 +94,17 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 - [Public APK] (https://app.edo.io/preview?id=57237506b8099166a57d444f&k=x4ew6T8xF4lrxIK8mSDL0W_q4V_VgwOhacU4auuZIX0=)
 - [Download from Play Store] (http://bit.do/Geeft)
-- [Video Presentation]
-- [Documentation]
+- [Video Presentation] (https://app.edo.io/preview?id=5723c910f7047686b5a270ff&k=SgPD1gzDNkVNCuXoVVEBIB2AZe8tC0532i-ovFoK5YY=)
+- [Documentation] (https://app.edo.io/preview?id=5724c8496fc9f10bbe5bdd77&k=SrtVj6f3s0o7TKYk10pKbvM5NgEEwgV4vIVEVaYfT4w=)
 - Backend data (refer to the zip folder on the Master) 
+- [Official Page] (https://www.facebook.com/MeltingPotGeeft/)
+- [Official Facebook Group] (https://www.facebook.com/groups/1774727389423654/)
+
+==============
+###Geeft Team
+
+- [Daniele Bracciani] (https://it.linkedin.com/in/daniele-bracciani-74a64a36)
+- [Ugo Nnanna Okeadu] (https://it.linkedin.com/in/ugo-nnanna-okeadu-620165b8)
+- [Joseph Aguilar Feener] (https://it.linkedin.com/in/joseph-aguilar-feener-78677b83/it)
+- [Gabriele Vecchia]
+- [Fabiola Amaya]
