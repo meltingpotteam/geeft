@@ -55,8 +55,13 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
         if(resListUsers.isSuccess()){
             List<BaasUser> listUsers = resListUsers.value();
             mInfo[0] = listUsers.size();
+            Log.d(TAG,"Users without profilePic are: ");
             for(BaasUser user : listUsers){
                 JsonObject scopeRegistered = user.getScope(BaasUser.Scope.REGISTERED);
+                if(scopeRegistered.getString("profilePic") == null){
+                    Log.d(TAG,user.getName() + "   -----   "
+                            + scopeRegistered.getString("username"));
+                }
                 if(scopeRegistered.getObject("_social").getObject("facebook") != null){
                     mInfo[1] += 1;
                 }
