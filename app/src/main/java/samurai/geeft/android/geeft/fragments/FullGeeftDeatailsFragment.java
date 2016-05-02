@@ -1060,7 +1060,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
+            if (address==null || address.size() == 0) {
                 return null;
             }
             Address location=address.get(0);

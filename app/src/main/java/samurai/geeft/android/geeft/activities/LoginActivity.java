@@ -370,7 +370,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
                                             }
                                             putProfilePic(baasUser,acct);
                                             new BaaSLoginTask(LoginActivity.this, "GOOGLE",
-                                                    acct.getServerAuthCode(), result.get(),
+                                                    acct.getServerAuthCode(), baasUser,
                                                     LoginActivity.this).execute();
                                         } catch (BaasException e) {
                                             e.printStackTrace();
