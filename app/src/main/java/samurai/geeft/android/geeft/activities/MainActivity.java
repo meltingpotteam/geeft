@@ -47,6 +47,8 @@ import java.io.File;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
 import samurai.geeft.android.geeft.fragments.NavigationDrawerFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftFragment;
+import samurai.geeft.android.geeft.fragments.TabGeeftoryFragment;
 import samurai.geeft.android.geeft.utilities.AppRatingAndStats.AppRater;
 import samurai.geeft.android.geeft.utilities.GCM.RegistrationIntentService;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -410,9 +412,32 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         }
 
         if(id == R.id.action_search){
-            Intent intent = new Intent(MainActivity.this, SearchGeeftActivity.class);
+            android.app.AlertDialog.Builder searchDialogBuilder = new android.app.AlertDialog.Builder(MainActivity.this,
+                    R.style.AppCompatAlertDialogStyle); //Read Update
 
-            startActivity(intent);
+            searchDialogBuilder.setTitle("Cerca");
+            searchDialogBuilder.setMessage("In quale sezione desideri effettuare la ricerca?");
+            searchDialogBuilder.setPositiveButton("Geeft", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = SearchGeeftActivity.newIntent(MainActivity.this, mViewPagerAdapter, "Geeft");
+
+                    startActivity(intent);
+                }
+            });
+            searchDialogBuilder.setNegativeButton("Geeftory", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = SearchGeeftActivity.newIntent(MainActivity.this, mViewPagerAdapter, "Geeftory");
+
+                    startActivity(intent);
+                }
+            });
+//                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
+            android.app.AlertDialog searchDialog = searchDialogBuilder.create();
+            //the context i had to use is the context of the dialog! not the context of the
+            searchDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+            searchDialog.show();
         }
 
         if(id == R.id.action_get_statistics){

@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.adapters.ViewPagerAdapter;
@@ -31,13 +32,15 @@ public class SearchGeeftActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Fragment mFragment;
+    private static String mSearchSection;
 
     //for the search activity
     private SearchView searchView;
     private MenuItem searchMenuItem;
 
-    public static Intent newIntent(@NonNull Context context, ViewPagerAdapter viewPagerAdapter) {
+    public static Intent newIntent(@NonNull Context context, ViewPagerAdapter viewPagerAdapter, String searchSection) {
         Intent intent = new Intent(context, SearchGeeftActivity.class);
+        mSearchSection = searchSection;
         return intent;
     }
 
@@ -59,6 +62,8 @@ public class SearchGeeftActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         Log.d(TAG, "ON_CREATE_SEARCH_CALLED");
+
+        Toast.makeText(SearchGeeftActivity.this, mSearchSection, Toast.LENGTH_SHORT ).show();
 
 //
 //        FragmentManager fm = getSupportFragmentManager();
@@ -127,50 +132,35 @@ public class SearchGeeftActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(final String query) {
                 Log.d(TAG, "ON_QUERY_TEXT_SUBMIT_CALLED");
-                AlertDialog.Builder searchDialogBuilder = new AlertDialog.Builder(SearchGeeftActivity.this,
-                        R.style.AppCompatAlertDialogStyle); //Read Update
 
-                searchDialogBuilder.setTitle("Cerca");
-                searchDialogBuilder.setMessage("In quale sezione desideri effettuare la ricerca?");
-                searchDialogBuilder.setPositiveButton("Geeft", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        /**
-                         * Start a fragment
-                         */
-                        Log.d(TAG, "FRAGMENT_CALLED");
-                        mFragment = TabGeeftFragment.newInstance(true, query);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
-                                .commit();
-                    }
-                });
-                searchDialogBuilder.setNegativeButton("Geeftory", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        /**
-                         * Start a fragment
-                         */
-                        //MAGHEGGIO PER EVITARE QUERY DOPPIE
-                        //searchView.clearFocus();
-                        Log.d(TAG, "FRAGMENT_CALLED");
-                        mFragment = TabGeeftoryFragment.newInstance(true, query);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
-                                .commit();
-                    }
-                });
-//                Toast.makeText(SearchGeeftActivity.this, query, Toast.LENGTH_SHORT).show();
-                AlertDialog searchDialog = searchDialogBuilder.create();
-                //the context i had to use is the context of the dialog! not the context of the
-                searchDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-                searchDialog.show();
+                if (mSearchSection.equals("Geeft")){
+                    mFragment = TabGeeftFragment.newInstance(true, query);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+                            .commit();
+                }
+                if (mSearchSection.equals("Geeftory")){
+                    mFragment = TabGeeftoryFragment.newInstance(true, query);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+                            .commit();
+                }
+
                 searchView.clearFocus();    //clear the focus on the search tool
                 return true;
             }
 
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-//                friendListAdapter.getFilter().filter(newText);
+            public boolean onQueryTextChange(String query) {
+//                //removes the previous called fragment to avoid the time waiting
+//                if (query.length() > 3) {
+//                    Toast.makeText(SearchGeeftActivity.this, "fragment removed", Toast.LENGTH_SHORT ).show();
+//                    getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+//                }
+//                if (query.length() >= 3) {
+//                    mFragment = TabGeeftFragment.newInstance(true, query);
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment)
+//                            .commit();
+//                }
                 return true;
             }
         });
