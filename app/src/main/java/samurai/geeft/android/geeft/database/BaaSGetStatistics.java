@@ -62,6 +62,14 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
                     Log.d(TAG,user.getName() + "   -----   "
                             + scopeRegistered.getString("username"));
                 }
+                if(scopeRegistered.getDouble("feedback") == null){
+                    Log.d(TAG," and he has no feedback!");
+                }
+                else{
+                    if(scopeRegistered.getDouble("feedback") == 5)
+                        Log.d(TAG,user.getName() + "   -----   "
+                                + scopeRegistered.getString("username") + " and he has 5 for feedback!");
+                }
                 if(scopeRegistered.getObject("_social").getObject("facebook") != null){
                     mInfo[1] += 1;
                 }

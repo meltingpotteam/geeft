@@ -410,7 +410,6 @@ public class LoginActivity extends AppCompatActivity implements TaskCallbackBool
         }else{
             baasUser.getScope(BaasUser.Scope.REGISTERED).put("profilePic",
                     "");
-            Log.d(TAG,"profile pic ="+acct.getPhotoUrl().toString());
         }
     }
 
