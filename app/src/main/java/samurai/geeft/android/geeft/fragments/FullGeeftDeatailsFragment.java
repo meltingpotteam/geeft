@@ -132,6 +132,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private ParallaxImageView mProfileDialogBackground;
     private LayoutInflater inflater;
     private TextView mGeeftTitleInCard;
+    private TextView mGeeftSize;
 
     private LatLng SYDNEY;
     List<Address> addresses;
@@ -284,6 +285,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mModifyView = rootView.findViewById(R.id.item_modify_geeft);
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
         mAssignView = (TextView) rootView.findViewById(R.id.item_assign_geeft);
+        mGeeftSize = (TextView) rootView.findViewById(R.id.geeft_size) ;
         mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
         mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
 
@@ -844,6 +846,10 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         }
         else{
             mGeeftComunicationAllowed.setText("No");
+        }
+        if (mGeeft.isDimensionRead()){
+            mGeeftSize.setText(mGeeft.getGeeftHeight()
+                    +" x "+mGeeft.getGeeftWidth()+" x "+mGeeft.getGeeftDepth());
         }
     }
 

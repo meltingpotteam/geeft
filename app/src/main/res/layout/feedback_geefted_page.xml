@@ -139,6 +139,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
         android:text="@string/feedback_button"
         />
 
