@@ -390,7 +390,22 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
             mDeleteView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteGeeft();
+                    new AlertDialog.Builder(getContext(),
+                            R.style.AppCompatAlertDialogStyle)
+                            .setTitle("Attenzione")
+                            .setMessage("Sei sicuro di voler cancellare l'annuncio?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteGeeft();
+                                }
+                            })
+                            .setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
                 }
             });
 
@@ -703,7 +718,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private void deleteGeeft(){
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mProgressDialog.setMessage("Operazione in corso...");
+        mProgressDialog.setMessage("Eliminazione in corso...");
         mProgressDialog.show();
 
         new BaaSDeleteGeeftTask(getContext(),mGeeft,FullGeeftDeatailsFragment.this).execute();

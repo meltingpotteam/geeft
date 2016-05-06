@@ -2,7 +2,6 @@ package samurai.geeft.android.geeft.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -88,6 +87,7 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
         GeeftListFragment fragment =
                 GeeftListFragment.newInstance("received", false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
         Log.d("ADDGEEFT2", getFragmentManager().getBackStackEntryCount() + "");
@@ -152,37 +152,10 @@ public class AddGeeftActivity extends AppCompatActivity implements TaskCallbackB
                 if(getSupportFragmentManager().getBackStackEntryCount()>0){
                     getSupportFragmentManager().popBackStack();
                 }else {
-                    onBackPressed();
+                    super.onBackPressed();
                 }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount()>0){
-            super.onBackPressed();
-        }else {
-            final android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(AddGeeftActivity.this,
-                            R.style.AppCompatAlertDialogStyle);
-            builder.setTitle("Attenzione!");
-            builder.setMessage("Sei sicuro di voler uscire?");
-            builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    AddGeeftActivity.super.onBackPressed();
-                }
-            });
-            builder.setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.show();
-        }
     }
 
     @Override

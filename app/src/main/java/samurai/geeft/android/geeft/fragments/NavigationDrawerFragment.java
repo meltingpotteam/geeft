@@ -139,7 +139,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         mListOfValuesInDrawer = getData();
         // Set adapter data
-        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter(getActivity(), mListOfValuesInDrawer);
+        mNavigationDrawerItemAdapter = new NavigationDrawerItemAdapter
+                (getActivity(), mListOfValuesInDrawer);
 
         //set manager and adapter dor recycleview
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -186,6 +187,8 @@ public class NavigationDrawerFragment extends Fragment {
         }));
     }
 
+
+
     //set up the Recyclerview on creation
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
         this.mDrawerLayout = drawerLayout;
@@ -198,6 +201,7 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 // if is the first time user is opening the app,then he learned it exists
+                initUI(getView());
                 getActivity().supportInvalidateOptionsMenu();
 
             }

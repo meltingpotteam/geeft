@@ -3,7 +3,6 @@ package samurai.geeft.android.geeft.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,9 +14,6 @@ import android.view.MenuItem;
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.fragments.FullGeeftDeatailsFragment;
 import samurai.geeft.android.geeft.models.Geeft;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by ugookeadu on 20/02/16.
