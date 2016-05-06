@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private final static String EXTRA_MESSAGE_TO_SHOW = "extra_message_to_show";
     private final static String EXTRA_SHOW_MESSAGE = "extra_show_message";
+    private static final String EXTRA_IS_LOGOUT = "extra_is_logout";
     /**
      * Facebook share button implementation..... If you make this better,make it!
      */
@@ -89,9 +90,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private DrawerLayout mDrawerLayout;
     private String mMessageToShow;
     private boolean mShowImportantMessageFromPush;
+    private boolean mIsLogOut;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
+        return intent;
+    }
+
+    public static Intent newIntent(Context context,boolean showMessage,String message,
+                                   boolean isLogOut) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_SHOW_MESSAGE,showMessage);
+        intent.putExtra(EXTRA_MESSAGE_TO_SHOW, message);
+        intent.putExtra(EXTRA_IS_LOGOUT, true);
         return intent;
     }
 
@@ -136,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         mViewPager = (ViewPager)findViewById(R.id.pager);
         mToolbar.setTitle("");
         mShowImportantMessageFromPush = getIntent().getBooleanExtra(EXTRA_SHOW_MESSAGE,false);
+        mIsLogOut = getIntent().getBooleanExtra(EXTRA_IS_LOGOUT,false);
         if(mShowImportantMessageFromPush)
             mMessageToShow = getIntent().getStringExtra(EXTRA_MESSAGE_TO_SHOW);
         setSupportActionBar(mToolbar);
@@ -297,19 +309,22 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 //        mDrawerLayout.openDrawer(drawerFragment.getView());
         
         if(mShowImportantMessageFromPush){
-            showImportantMessageInDialog();
+            showImportantMessageInDialog(mIsLogOut);
             Log.d(TAG,"Entrato in show message con message:" + mMessageToShow);
         }
 
     }
 
-    private void showImportantMessageInDialog() {
+    private void showImportantMessageInDialog(final boolean isLogout) {
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Avviso")
                 .setMessage(mMessageToShow)
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (isLogout){
+                            startLoginActivity();
+                        }
                         dialog.dismiss();
                     }
                 })

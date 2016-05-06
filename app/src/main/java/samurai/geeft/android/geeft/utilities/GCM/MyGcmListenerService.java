@@ -19,13 +19,11 @@ package samurai.geeft.android.geeft.utilities.GCM;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -98,13 +96,20 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Intent intent;
         switch(key){
-            case 1:  intent = assignedCase();
+            case 1:
+                intent = assignedCase();
                 break;
-            case 2:  intent = donatedCase();
+            case 2:
+                intent = donatedCase();
                 break;
-            case 3:  intent = showImportantMessage(message);
+            case 3:
+                intent = showImportantMessage(message);
                 break;
-            case 4: intent = contactFromUserCase();
+            case 4:
+                intent = contactFromUserCase();
+                break;
+            case 5:
+                intent = logOutUser(message);
                 break;
             default:  intent = defaultCase();
                 break;
@@ -132,6 +137,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private Intent logOutUser(String message) {
+        Intent intent = MainActivity.newIntent(getApplicationContext(),true,message,true);
+        return intent;
     }
 
     private Intent showImportantMessage(String message) {

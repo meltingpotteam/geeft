@@ -19,10 +19,10 @@ public class AppRater {
     private final static int LAUNCHES_UNTIL_PROMPT = 3;//Min number of launches
 
     public static void app_launched(Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
+        SharedPreferences prefs = mContext.getSharedPreferences("apprater",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
         if (prefs.getBoolean("dontshowagain", false)) { return ; }
 
-        SharedPreferences.Editor editor = prefs.edit();
 
         // Increment launch counter
         long launch_count = prefs.getLong("launch_count", 0) + 1;
@@ -60,6 +60,10 @@ public class AppRater {
             public void onClick(DialogInterface dialog, int which) {
                 mContext.startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("market://details?id=" + APP_PNAME)));
+                if (editor != null) {
+                    editor.putBoolean("dontshowagain", true);
+                    editor.commit();
+                }
                 dialog.dismiss();
             }
         });
@@ -67,6 +71,17 @@ public class AppRater {
         builder.setNeutralButton("Non ora", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences prefs = mContext.getSharedPreferences
+                        ("apprater",Context.MODE_PRIVATE);
+                Long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
+                if (date_firstLaunch == 0) {
+                    date_firstLaunch = System.currentTimeMillis();
+                }
+                if (editor != null) {
+                    editor.putLong("launch_count", 0);
+                    editor.putLong("date_firstlaunch", date_firstLaunch);
+                    editor.commit();
+                }
                 dialog.dismiss();
             }
         });

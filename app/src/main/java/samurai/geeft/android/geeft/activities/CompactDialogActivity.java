@@ -194,8 +194,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         setTakenToGeeft();
                         checkConditionForFeedback();
                     }
-                }).show();
-
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
             }
         });
         //------------------------
@@ -215,7 +221,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         setGivenToGeeft();
                         checkConditionForFeedback();
                     }
-                }).show();
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
             }
         });
         //------------------------
@@ -776,7 +789,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private void showDialogError(){
         new AlertDialog.Builder(CompactDialogActivity.this)
                 .setTitle("Errore")
-                .setMessage("Operazione non possibile. Riprovare più tardi.").show();
+                .setMessage("Operazione non possibile. Riprovare più tardi.")
+                .show();
     }
 
     private void showDialogLeftFeedback(){
