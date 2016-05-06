@@ -82,6 +82,17 @@
                     android:text="Info"
                     android:layout_weight="0.3"/>
                 <Button
+                    android:id="@+id/received_dialog_reassignButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ripple_effect"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorAccent"
+                    android:text="Riassegna"
+                    android:layout_weight="0.7"/>
+                <Button
                     android:id="@+id/received_dialog_givenButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

@@ -78,7 +78,7 @@ public class BaaSFillNavigationDrawerCount extends AsyncTask<Void,Void,Boolean> 
             }
             else if(mlinkNameQuery.equals(TagsValue.LINK_NAME_RESERVE)){
                 query = BaasQuery.builder().where("in.id like '" + docUserId + "'"
-                        + " and out.deleted = false").criteria();
+                        + " and out.deleted = false and out.assigned = false").criteria();
             }
             else{
                 query = BaasQuery.builder().where("in.id like '" + docUserId + "'").criteria();

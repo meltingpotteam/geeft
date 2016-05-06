@@ -498,7 +498,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication, notShowAssignButton);
+        Fragment fragment = UserProfileFragment.newInstance(user,isCurrentUser,allowComunication,
+                notShowAssignButton,false); //false is for reassign
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }

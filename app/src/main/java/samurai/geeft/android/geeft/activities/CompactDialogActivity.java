@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +43,7 @@ import java.util.List;
 
 import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSExchangeCompletedTask;
+import samurai.geeft.android.geeft.fragments.AssignUserListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackExchange;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
@@ -61,6 +64,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private ParallaxImageView mReceivedDialogBackground;
     private Button mTakenButton;
     private Button mGivenButton;
+    private Button mReAssignButton;
     private Button mInfoButton;
     private LayoutInflater inflater;
     private Toolbar mToolbar;
@@ -232,6 +236,30 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
             }
         });
         //------------------------
+        mReAssignButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final android.support.v7.app.AlertDialog.Builder builder =
+                        new android.support.v7.app.AlertDialog.Builder(CompactDialogActivity.this,
+                                R.style.AppCompatAlertDialogStyle); //Read Update
+                builder.setTitle("Avviso");
+                builder.setMessage("Vuoi veramente riassegnare il regalo?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reassignGeeft();
+                        mDialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
 
         mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,6 +321,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mDialog.show();  //<-- See This!
 
     }
+
     private void initUI(){
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(CompactDialogActivity.this); //Read Update
         View dialogLayout = inflater.inflate(R.layout.received_geeft_dialog, null);
@@ -309,6 +338,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mReceivedDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
         mTakenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_takenButton);
         mGivenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_givenButton);
+        mReAssignButton = (Button) dialogLayout.findViewById(R.id.received_dialog_reassignButton);
         mInfoButton = (Button) dialogLayout.findViewById(R.id.received_dialog_showWinnerScreenButton);
     }
 
@@ -573,6 +603,9 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     .setPositiveButton("Procedi", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if(mIamGeefter){
+                                deleteAllReserveLinksAndPush();
+                            }
                             getHisBaasboxNameAndStartFeedbackActivity(mIamGeefter); //getHisBaasboxName from his doc_id,side effect on mHisBaasboxName
 
                         }
@@ -608,6 +641,21 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         .show();
             }
         }
+    }
+
+    private void deleteAllReserveLinksAndPush() {
+        BaasBox.rest().async(Rest.Method.GET, "plugin/delete.allReserveLinksAndPush?s_id="
+                + mGeeft.getId(), new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if(baasResult.isSuccess()){
+                    Log.d(TAG,"Push notification sended to: " + mHisBaasboxName);
+                }
+                else{
+                    Log.e(TAG,"Error while sending push notification:" + baasResult.error());
+                }
+            }
+        });
     }
 
     private void showProgressDialog() {
@@ -784,6 +832,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 }
             });
         }
+    }
+
+    private void reassignGeeft(){
+        Fragment fragment = AssignUserListFragment.newInstance(mGeeft,true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
     private void showDialogError(){

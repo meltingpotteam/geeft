@@ -224,7 +224,7 @@ public class GeeftItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                 myHolder.mExpireTime.setText("Prenota entro: "+remainingHours +"ore");
             }
             else {
-                myHolder.mExpireTime.setText("Non più preontabile");
+                myHolder.mExpireTime.setText("Non più prenotabile");
                 myHolder.mPrenoteButtonTab.setVisibility(View.GONE);
             }
 

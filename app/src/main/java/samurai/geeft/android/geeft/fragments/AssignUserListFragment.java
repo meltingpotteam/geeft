@@ -37,12 +37,14 @@ import samurai.geeft.android.geeft.utilities.TagsValue;
 public class AssignUserListFragment extends StatedFragment implements TaskCallbackBoolean{
     private static final String ARG_BAAS_USER = "arg_baas_user";
     private static final String ARG_GEEFT = "arg_geeft";
+    private static final String ARG_IS_REASSIGNED = "arg_is_reassigned";
     private final String TAG = getClass().getSimpleName();
 
     private List<User> mUserList;
     private RecyclerView mRecyclerView;
     private AssignUserListAdapter mAdapter;
     private Geeft mGeeft;
+    private boolean mIsReassigned;
     private ProgressDialog mProgressDialog;
     private Toolbar mToolbar;
 
@@ -55,10 +57,20 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         return fragment;
     }
 
+    public static AssignUserListFragment newInstance(Geeft geeft,boolean isReassigned) {
+        AssignUserListFragment fragment = new AssignUserListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_GEEFT, geeft);
+        bundle.putBoolean(ARG_IS_REASSIGNED,isReassigned);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGeeft = (Geeft)getArguments().getSerializable(ARG_GEEFT);
+        mIsReassigned = getArguments().getBoolean(ARG_IS_REASSIGNED,false);
         mUserList = new ArrayList<>();
         Log.d(TAG, "IN ASSIGN");
     }
@@ -89,10 +101,11 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
             @Override
             public void onClick(View view, int position) {
                 if(!mGeeft.isAutomaticSelection()) {
-                    startUserProfileFragment(mUserList.get(position), false);
+                    startUserProfileFragment(mUserList.get(position), false, mIsReassigned);
                 }
                 else {
-                    startUserProfileFragment(mUserList.get(position), false, false); //showProfile,not Contactable
+                    startUserProfileFragment(mUserList.get(position), false, false, mIsReassigned);
+                    //showProfile,not Contactable,isReassigned
                 }
             }
 
@@ -113,22 +126,23 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
 
     }
 
-    private void startUserProfileFragment(User user, boolean isCurrentUser) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean isReassigned) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user, mGeeft, isCurrentUser);
+        Fragment fragment = UserProfileFragment.newInstance(user, mGeeft, isCurrentUser,isReassigned);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 
-    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication) {
+    private void startUserProfileFragment(User user, boolean isCurrentUser,boolean allowComunication
+            ,boolean isReassigned) {
         FragmentTransaction transaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        Fragment fragment = UserProfileFragment.newInstance(user, isCurrentUser,allowComunication,false);
+        Fragment fragment = UserProfileFragment.newInstance(user, isCurrentUser,allowComunication,false,isReassigned);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
@@ -156,9 +170,15 @@ public class AssignUserListFragment extends StatedFragment implements TaskCallba
         mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mProgressDialog.show();
         mProgressDialog.setMessage("Operazione in corso...");
+        /*if(mIsReassigned){
+            new BaaSFetchUsersFromLink(getContext(), mGeeft, TagsValue.LINK_NAME_WAS_RESERVE
+                    , mUserList,this).execute();
+        }*/
 
         new BaaSFetchUsersFromLink(getContext(), mGeeft, TagsValue.LINK_NAME_RESERVE
                 , mUserList,this).execute();
+
+
     }
 
     @Override

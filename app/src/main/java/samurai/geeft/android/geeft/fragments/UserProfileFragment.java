@@ -66,7 +66,7 @@ public class UserProfileFragment extends StatedFragment implements
     private static final String KEY_USER = "key_user";
     private static final String ARG_USER = "arg_user";
     private static final String KEY_IS_CURRENT_USER = "key_is_current_user";
-    private static final java.lang.String ARG_IS_CURRENT_USER = "arg_is_current_user";
+    private static final String ARG_IS_CURRENT_USER = "arg_is_current_user";
     private static final String KEY_IS_EDITING_DESCRIPTION = "key_is_editing_description";
     private static final String ARG_SHOW_PROFILE = "arg_show_profile";
     private static final String KEY_SHOW_PROFILE = "key_show_profile";
@@ -74,6 +74,9 @@ public class UserProfileFragment extends StatedFragment implements
     private static final String ARG_ALLOW_COMUNICATION = "arg_allow_comunication";
     private static final String ARG_GEEFT = "arg_geeft";
     private static final String KEY_GEEFT = "key_geeft";
+    private static final String ARG_IS_REASSIGNED = "arg_is_reassigned";
+    private static final String KEY_IS_REASSIGNED = "key_is_reassigned";
+
 
     private static final int SELECT_PICTURE = 1;
     private static final int REQUEST_CAMERA =2000 ;
@@ -94,6 +97,7 @@ public class UserProfileFragment extends StatedFragment implements
     private User mUser;
     private boolean mIsCurrentUser;
     private boolean mAllowComunication;
+    private boolean mIsReassigned;
     private ProgressDialog mProgressDialog;
     private LinkCountListener mCallback;
     private Button mButton;
@@ -133,24 +137,28 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     public static UserProfileFragment newInstance(@Nullable User user,
-                                                  boolean isCurrentUser,boolean allowComunication, boolean notShowAssignButton) {
+                                                  boolean isCurrentUser,boolean allowComunication,
+                                                  boolean notShowAssignButton, boolean isReassigned) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
         bundle.putBoolean(ARG_SHOW_PROFILE, isCurrentUser); //if true, hide "Assegna il geeft" button
         bundle.putBoolean(ARG_ALLOW_COMUNICATION, allowComunication); //if true,show contact buttons
         bundle.putBoolean(ARG_NOT_SHOW_ASSIGN_BUTTON, notShowAssignButton);
+        bundle.putBoolean(ARG_IS_REASSIGNED, isReassigned);
+
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public static UserProfileFragment newInstance(@Nullable User user, @Nullable Geeft geeft,
-                                                  boolean isCurrentUser) {
+                                                  boolean isCurrentUser,boolean isReassigned) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_USER, user);
         bundle.putSerializable(ARG_GEEFT, geeft);
         bundle.putBoolean(ARG_IS_CURRENT_USER, isCurrentUser);
+        bundle.putBoolean(ARG_IS_REASSIGNED, isReassigned);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -165,12 +173,14 @@ public class UserProfileFragment extends StatedFragment implements
             mIsCurrentUser = savedInstanceState.getBoolean(KEY_IS_CURRENT_USER);
             mAllowComunication = savedInstanceState.getBoolean(KEY_ALLOW_COMUNICATION);
             mGeeft = (Geeft) savedInstanceState.getSerializable(KEY_GEEFT);
+            mIsReassigned = savedInstanceState.getBoolean(KEY_IS_REASSIGNED);
         } else {
             mUser = (User) getArguments().getSerializable(ARG_USER);
             mIsCurrentUser = getArguments().getBoolean(ARG_IS_CURRENT_USER);
             mAllowComunication = getArguments().getBoolean(ARG_ALLOW_COMUNICATION);
             mNotShowAssignBUtton = getArguments().getBoolean(ARG_NOT_SHOW_ASSIGN_BUTTON);
             mGeeft = (Geeft) getArguments().getSerializable(ARG_GEEFT);
+            mIsReassigned = getArguments().getBoolean(ARG_IS_REASSIGNED);
         }
     }
 
@@ -371,11 +381,7 @@ public class UserProfileFragment extends StatedFragment implements
                 } else if (mIsCurrentUser && mIsEditingDescription) {
                     updateDescription();
                 } else {
-                    try {
-                        assignCurrentGeeft();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
+                    assignCurrentGeeft();
                 }
                 changeButtonAdDescriptionState();
                 Log.d(TAG, "onClick is editing = " + mIsEditingDescription);
@@ -550,7 +556,60 @@ public class UserProfileFragment extends StatedFragment implements
                 });
     }
 
-    private void assignCurrentGeeft() throws MalformedURLException {
+    private void assignCurrentGeeft(){
+        if(mIsReassigned){
+            deleteAndReassign();
+        }
+        else{
+            try {
+                assignGeeft();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void deleteAndReassign(){
+        String docId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("docId");
+
+        BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '" + mGeeft.getId()+
+                "' and in.id = '" + docId + "'").criteria();
+        BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, query, RequestOptions.PRIORITY_HIGH,
+                new BaasHandler<List<BaasLink>>() {
+            @Override
+            public void handle(BaasResult<List<BaasLink>> baasResult) {
+                if(baasResult.isSuccess()){
+                    List<BaasLink> resAssignLink = baasResult.value();
+                    if(resAssignLink.size() == 1){
+                        BaasLink.withId(resAssignLink.get(0).getId())
+                                .delete(RequestOptions.PRIORITY_HIGH, new BaasHandler<Void>() {
+                            @Override
+                            public void handle(BaasResult<Void> baasResult) {
+                                Log.d(TAG,"Previous Assigned link is delete,go to reassign");
+                                try {
+                                    assignGeeft();
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        showFailureAlert();
+                        Log.e(TAG,"Data incoerent. Link assigned size is != 1");
+                    }
+                }
+                else{
+                    showFailureAlert();
+                }
+            }
+        });
+
+
+    }
+
+
+    private void assignGeeft() throws MalformedURLException {
         if (BaasUser.current() != null) {
 
             mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
@@ -641,11 +700,9 @@ public class UserProfileFragment extends StatedFragment implements
         builder.setPositiveButton("Riprova", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try {
-                    assignCurrentGeeft();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+
+                assignCurrentGeeft();
+
             }
         });
         builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
@@ -782,7 +839,7 @@ public class UserProfileFragment extends StatedFragment implements
     public void getData() {
 
         BaasQuery.Criteria query = BaasQuery.builder()
-                .where("in.id like '" + mUser.getDocId() + "'").criteria();
+                .where("in.id like '" + mUser.getDocId() + "' and out.delete = false").criteria();
         countLinks(query, TagsValue.LINK_NAME_RECEIVED);
         countLinks(query, TagsValue.LINK_NAME_DONATED);
     }

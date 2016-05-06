@@ -2,6 +2,8 @@ package samurai.geeft.android.geeft.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -63,7 +65,9 @@ public class InitialActivity extends Activity  {
                                 if ((mail == null) || (mail.isEmpty()) || (username == null) || (username.isEmpty())) {
                                     Log.d(TAG, "user " + user);
                                     startActivity(new Intent(InitialActivity.this, UsernameMailActivity.class));
+                                    //VersionCode and VersionName is already set by BaaSLoginTask
                                 } else {
+                                    checkVersionCodeInUserScope();
                                     startMainActivity();
                                 }
                             }else{
@@ -79,6 +83,43 @@ public class InitialActivity extends Activity  {
             }
         }, SPLASH_DISPLAY_LENGTH);
     }
+
+    private void checkVersionCodeInUserScope() {
+        BaasUser user = BaasUser.current();
+        String userVersionName = user.getScope(BaasUser.Scope.PRIVATE).getString("versionName");
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String localVersionName = pInfo.versionName;
+
+            if(userVersionName == null || !userVersionName.equals(localVersionName))
+                setPackageInfoToUser(pInfo);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setPackageInfoToUser(PackageInfo pInfo) {
+        String localVersionName = pInfo.versionName;
+        int localVersionCode = pInfo.versionCode;
+
+        BaasUser.current().getScope(BaasUser.Scope.PRIVATE).put("versionName",localVersionName);
+        BaasUser.current().getScope(BaasUser.Scope.PRIVATE).put("versionCode",localVersionCode);
+
+        BaasUser.current().save(new BaasHandler<BaasUser>() {
+            @Override
+            public void handle(BaasResult<BaasUser> baasResult) {
+                if(baasResult.isSuccess()){
+                    Log.d(TAG,"VersionCode updated with success");
+                }
+                else{
+                    Log.e(TAG,"Error while updating VersionCode");
+                }
+            }
+        });
+    }
+
 
     private void startMainActivity() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

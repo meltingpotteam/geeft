@@ -1,6 +1,8 @@
 package samurai.geeft.android.geeft.database;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -150,6 +152,8 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
                 String name =
                         BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("name");
                 boolean isNull;
+                setPackageInfoToUser();
+
                 if(mBaasProvider.equals(BaasUser.Social.FACEBOOK)) {
                     user.getScope(BaasUser.Scope.REGISTERED)
                             .put("profilePic", getProfilePicFacebook());
@@ -286,6 +290,28 @@ public class BaaSLoginTask extends AsyncTask<Void,Integer,Boolean> {
         Log.d(TAG, "FB_id is: " + id);
         return "https://graph.facebook.com/" + id + "/picture?type=large";
     }
+
+    private PackageInfo getAppPackageInfo(){
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pInfo;
+    }
+
+    private void setPackageInfoToUser() {
+        PackageInfo pInfo = getAppPackageInfo();
+        String versionName = pInfo.versionName;
+        int versionCode = pInfo.versionCode;
+
+        BaasUser.current().getScope(BaasUser.Scope.PRIVATE).put("versionName",versionName);
+        BaasUser.current().getScope(BaasUser.Scope.PRIVATE).put("versionCode",versionCode);
+        Log.d(TAG,"setted package info");
+    }
+
 
     /**
      * Displays String for toast sent by doInBackground.
