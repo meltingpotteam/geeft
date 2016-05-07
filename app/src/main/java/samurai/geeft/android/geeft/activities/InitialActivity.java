@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
@@ -26,12 +27,16 @@ public class InitialActivity extends Activity  {
     private final String TAG = getClass().getSimpleName();
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1000;
+    private TextView mVersionTextView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+
+        mVersionTextView = (TextView) findViewById(R.id.display_version_name);
+        mVersionTextView.setText("V." + getLocalVersion());
         /*BaasResult<BaasUser> temp = null;
         try{
             temp = BaasUser.current().followSync();
@@ -82,6 +87,17 @@ public class InitialActivity extends Activity  {
                 }
             }
         }, SPLASH_DISPLAY_LENGTH);
+    }
+
+    private String getLocalVersion(){
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pInfo.versionName;
     }
 
     private void checkVersionCodeInUserScope() {
