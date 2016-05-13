@@ -73,10 +73,8 @@ public class AppRater {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences prefs = mContext.getSharedPreferences
                         ("apprater",Context.MODE_PRIVATE);
-                Long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
-                if (date_firstLaunch == 0) {
-                    date_firstLaunch = System.currentTimeMillis();
-                }
+                Long date_firstLaunch = System.currentTimeMillis();
+
                 if (editor != null) {
                     editor.putLong("launch_count", 0);
                     editor.putLong("date_firstlaunch", date_firstLaunch);
