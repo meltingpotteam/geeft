@@ -55,6 +55,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -114,6 +116,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private View mModifyView;
     private TextView mAssignView;
     private View mPrenoteView;
+    private View mAssignedToView;
     private View mCardView;
 
     private View mDonateReceivedGeeftView;
@@ -133,6 +136,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
     private LayoutInflater inflater;
     private TextView mGeeftTitleInCard;
     private TextView mGeeftSize;
+    private TextView mGeeftAssignedTo;
 
     private LatLng SYDNEY;
     List<Address> addresses;
@@ -264,6 +268,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mGeeftImageView = (ImageView)rootView.findViewById(R.id.collapsing_toolbar_image);
         mGeefterProfilePicImageView = (ImageView)rootView.findViewById(R.id.geefter_profile_image);
         mGeefterProfileCard = (LinearLayout)rootView.findViewById(R.id.geeft_item_profile_card);
+        mAssignedToView = (LinearLayout) rootView.findViewById(R.id.geeft_assigned_to_view);
         mGeeftTitleInCard = (TextView) rootView.findViewById(R.id.geeft_title);
         mGeeftReservationNumber = (TextView) rootView.findViewById(R.id.geeft_reservation_number);
         mGeeftTimeAgo = (TextView) rootView.findViewById(R.id.geeft_time_ago);
@@ -286,6 +291,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
         mDeleteView = rootView.findViewById(R.id.item_delete_geeft);
         mAssignView = (TextView) rootView.findViewById(R.id.item_assign_geeft);
         mGeeftSize = (TextView) rootView.findViewById(R.id.geeft_size) ;
+        mGeeftAssignedTo = (TextView) rootView.findViewById(R.id.geeft_assigned_to);
         mAddStoryView = rootView.findViewById(R.id.item_add_geeft_story);
         mDonateReceivedGeeftView = rootView.findViewById(R.id.item_donate_received_geeft);
 
@@ -348,6 +354,8 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                 //mAssignView.setVisibility(View.GONE);
             }*/
 
+
+
             if(mGeeft.isAssigned()){ //If Geeft is assigned,is not possible to modify or delete it
                 mDonatedButtonField.setVisibility(View.GONE);
 //                mModifyView.setVisibility(View.GONE);
@@ -381,11 +389,39 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                     }
                 });
             }
+
+            if(getArguments().getSerializable(KEY_CONTEXT)
+                    .equals(DonatedActivity.class.getSimpleName())){
+                if(mGeeft.isAssigned()) {
+                    mAssignedToView.setVisibility(View.VISIBLE);
+                    //TODO:FILL AssignedTo TextView
+                    //mGeeftAssignedTo.setText(getAssignedNameUser);
+
+                }
+            }
             mModifyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startAddGeeftActivity(mGeeft);
-                    getActivity().finish();
+                    final android.support.v7.app.AlertDialog.Builder builder =
+                            new android.support.v7.app.AlertDialog.Builder(getContext(),
+                                    R.style.AppCompatAlertDialogStyle); //Read Update
+                    builder.setTitle("Avviso");
+                    builder.setMessage("Vuoi veramente eliminare il geeft?");
+                    builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startAddGeeftActivity(mGeeft);
+                            getActivity().finish();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+
 
                 }
             });

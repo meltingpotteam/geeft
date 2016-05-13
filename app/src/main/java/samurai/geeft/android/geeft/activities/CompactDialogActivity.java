@@ -96,7 +96,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.container_for_fragment);
+        setContentView(R.layout.received_geeft_dialog);
         inflater = LayoutInflater.from(CompactDialogActivity.this);
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -166,20 +166,22 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         mReceivedDialogBackground.setTiltSensitivity(5);
         mReceivedDialogBackground.registerSensorManager();
 
-        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 finish();
             }
-        });
+        });*/
 
         Log.d(TAG,"geefter flag is:" +geefter);
         if(geefter){ //Geefter can see "consegnato" (given) button
             mTakenButton.setVisibility(View.GONE);
+            mReAssignButton.setVisibility(View.VISIBLE);
             mGivenButton.setVisibility(View.VISIBLE); // prova
         }
         else{ //Geefted can see "ritirato" (taken) button
             mGivenButton.setVisibility(View.GONE);
+            mReAssignButton.setVisibility(View.GONE);
             mTakenButton.setVisibility(View.VISIBLE); // prova
         }
 
@@ -248,7 +250,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         reassignGeeft();
-                        mDialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -313,33 +315,33 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 startImageGallery(geeftList);
             }
         });
-
+        /*
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.getWindow().getAttributes().windowAnimations = R.style.profile_info_dialog_animation;
         //                dialog.setMessage("Some information that we can take from the facebook shared one");
         //Log.d(TAG,"Show!");
-        mDialog.show();  //<-- See This!
+        mDialog.show();  //<-- See This!*/
 
     }
 
     private void initUI(){
-        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(CompactDialogActivity.this); //Read Update
+       /* android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(CompactDialogActivity.this); //Read Update
         View dialogLayout = inflater.inflate(R.layout.received_geeft_dialog, null);
         alertDialog.setView(dialogLayout);
         //On click, the user visualize can visualize some infos about the geefter
-        mDialog = alertDialog.create();
+        mDialog = alertDialog.create();*/
 
         //profile dialog fields-----------------------
-        mReceivedDialogUsername = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_name);
-        mReceivedDialogUserLocation = (TextView) dialogLayout.findViewById(R.id.dialog_geefter_location);
-        mReceivedDialogUserImage = (ImageView) dialogLayout.findViewById(R.id.dialog_geefter_profile_image);
+        mReceivedDialogUsername = (TextView) this.findViewById(R.id.dialog_geefter_name);
+        mReceivedDialogUserLocation = (TextView) this.findViewById(R.id.dialog_geefter_location);
+        mReceivedDialogUserImage = (ImageView) this.findViewById(R.id.dialog_geefter_profile_image);
         //Lasciamo gli stessi?!
 
-        mReceivedDialogBackground = (ParallaxImageView) dialogLayout.findViewById(R.id.dialog_geefter_background);
-        mTakenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_takenButton);
-        mGivenButton = (Button) dialogLayout.findViewById(R.id.received_dialog_givenButton);
-        mReAssignButton = (Button) dialogLayout.findViewById(R.id.received_dialog_reassignButton);
-        mInfoButton = (Button) dialogLayout.findViewById(R.id.received_dialog_showWinnerScreenButton);
+        mReceivedDialogBackground = (ParallaxImageView) this.findViewById(R.id.dialog_geefter_background);
+        mTakenButton = (Button) this.findViewById(R.id.received_dialog_takenButton);
+        mGivenButton = (Button) this.findViewById(R.id.received_dialog_givenButton);
+        mReAssignButton = (Button) this.findViewById(R.id.received_dialog_reassignButton);
+        mInfoButton = (Button) this.findViewById(R.id.received_dialog_showWinnerScreenButton);
     }
 
     private void showPicture(){
@@ -841,6 +843,8 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
+
+
 
     private void showDialogError(){
         new AlertDialog.Builder(CompactDialogActivity.this)
