@@ -837,6 +837,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     }
 
     private void reassignGeeft(){
+        findViewById(R.id.profile_dialog).setVisibility(View.GONE);
         Fragment fragment = AssignUserListFragment.newInstance(mGeeft,true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
