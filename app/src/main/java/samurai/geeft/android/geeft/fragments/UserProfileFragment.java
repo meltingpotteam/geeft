@@ -570,16 +570,18 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void deleteAndReassign(){
-        String docId = BaasUser.current().getScope(BaasUser.Scope.REGISTERED).getString("docId");
 
-        BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '" + mGeeft.getId()+
-                "' and in.id = '" + docId + "'").criteria();
+        Log.d(TAG,"mGeeftId is: " + mGeeft.getId());
+
+        BaasQuery.Criteria query = BaasQuery.builder().where("out.id = '" + mGeeft.getId()+ "'")
+                .criteria();
         BaasLink.fetchAll(TagsValue.LINK_NAME_ASSIGNED, query, RequestOptions.PRIORITY_HIGH,
                 new BaasHandler<List<BaasLink>>() {
             @Override
             public void handle(BaasResult<List<BaasLink>> baasResult) {
                 if(baasResult.isSuccess()){
                     List<BaasLink> resAssignLink = baasResult.value();
+                    Log.d(TAG,"Size of assigned link:" + resAssignLink.size());
                     if(resAssignLink.size() == 1){
                         BaasLink.withId(resAssignLink.get(0).getId())
                                 .delete(RequestOptions.PRIORITY_HIGH, new BaasHandler<Void>() {

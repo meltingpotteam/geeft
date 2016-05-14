@@ -37,7 +37,7 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
     public BaaSGetStatistics(Context context,
                              TaskCallbackBooleanArrayToken callback) {
         mContext = context;
-        mInfo = new double[11];
+        mInfo = new double[12];
         mInfo[1] = 0;
         mInfo[2] = 0;
         mCallback = callback;
@@ -103,16 +103,21 @@ public class BaaSGetStatistics extends AsyncTask<Void,Void,Boolean> {
             if(resListGeefts.isSuccess()){
                 mInfo[7] = resListGeefts.value().size();
                 List<BaasDocument> listGeefts = resListGeefts.value();
-                int count = 0;
+                int countLocationRome = 0;
+                int countAssigned = 0;
                 for(BaasDocument geeft : listGeefts){
                     //Log.d(TAG,"Location: " + geeft.getString("location"));
                     if(geeft.getString("location").equals("Roma"))
-                        count += 1;
+                        countLocationRome += 1;
+                    if(!geeft.getBoolean("deleted") && geeft.getBoolean("assigned")
+                            && geeft.getBoolean("taken") && geeft.getBoolean("given"))
+                        countAssigned++;
                 }
-                Log.d(TAG,"Values..count:" + count + " size:" + resListGeefts.value().size());
-                double percentual = ((double)count/(double)resListGeefts.value().size());
+                Log.d(TAG,"Values..count:" + countLocationRome + " size:" + resListGeefts.value().size());
+                double percentual = ((double)countLocationRome/(double)resListGeefts.value().size());
                 mInfo[9] = Math.floor(percentual * 10000) / 100; //It serves to round to two digits
                 Log.d(TAG,"mInfo:" + mInfo[9] + " percentual: " + percentual);
+                mInfo[11] = countAssigned;
             }
 
             BaasResult<List<BaasDocument>> resListGeeftorys = BaasDocument.fetchAllSync("story");

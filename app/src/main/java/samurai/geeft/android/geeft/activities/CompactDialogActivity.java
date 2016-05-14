@@ -837,12 +837,18 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     }
 
     private void reassignGeeft(){
-        findViewById(R.id.profile_dialog).setVisibility(View.GONE);
-        Fragment fragment = AssignUserListFragment.newInstance(mGeeft,true);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
+        if(!mGeeft.isAutomaticSelection()) { //Is Manual Choose
+            findViewById(R.id.profile_dialog).setVisibility(View.GONE);
+            Fragment fragment = AssignUserListFragment.newInstance(mGeeft, true);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+        }
+        else{
+            //TODO: if booked users are > 1,reassign (rechoose automatic),else reopen geeft
+            // with 2 days for deadline
+        }
     }
 
 

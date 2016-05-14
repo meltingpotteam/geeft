@@ -38,6 +38,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
     private TextView mNaGender;
     private TextView mGeeftsNumber;
     private TextView mGeeftorysNumber;
+    private TextView mGeeftAssigned;
     private TextView mGeeftsNotAssigned;
     private TextView mPercentualFromRome;
     private TextView mGeeftsNotClosed;
@@ -65,6 +66,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
         mFemalesNumber = (TextView) findViewById(R.id.number_men);
         mNaGender = (TextView) findViewById(R.id.number_na_gender);
         mGeeftsNotClosed = (TextView) findViewById(R.id.number_geefts_not_closed);
+        mGeeftAssigned = (TextView) findViewById(R.id.number_geefts_assigned);
         mGeeftsNotAssigned = (TextView) findViewById(R.id.number_geefts_not_assigned);
         mGeeftsNumber = (TextView) findViewById(R.id.number_geefts);
         mGeeftorysNumber = (TextView) findViewById(R.id.number_geeftorys);
@@ -104,6 +106,7 @@ public class StatisticsActivity extends AppCompatActivity implements TaskCallbac
             mFemalesNumber.setText((int)mInfo[4]+"");
             mNaGender.setText((int)mInfo[5]+"");
             mGeeftsNotClosed.setText((int)mInfo[10]+"");
+            mGeeftAssigned.setText((int) mInfo[11]+"");
             mGeeftsNotAssigned.setText((int)mInfo[6]+"");
             mGeeftsNumber.setText((int)mInfo[7]+"");
             mGeeftorysNumber.setText((int)mInfo[8]+"");
