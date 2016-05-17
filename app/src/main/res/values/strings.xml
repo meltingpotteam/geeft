@@ -381,4 +381,5 @@
 
     <string name="accessToken">pk.eyJ1IjoidW5vYWx0ZXJlZ28iLCJhIjoiY2luYnJ1ZDU0MDAzcHZrbHg4dTRxbHFrayJ9.UBBtzEKsCB4pq5X1txt5iA</string>
     <string name="map_circle_description">Google Map with circles.</string>
+    <string name="tutorial_searchbuttoninfo_text">Premendo questo tasto potrai cercare un oggetto che ti interessa nella sezione Geeft o Geeftory (es. libro, sedia, etc.)</string>
 </resources>

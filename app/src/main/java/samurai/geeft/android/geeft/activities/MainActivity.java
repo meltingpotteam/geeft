@@ -580,7 +580,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(mSlidingTabLayoutTabs.getChildAt(0))
-                        .setDismissText("HO CAPITO")
+                        .setDismissText("OK")
                         .setMaskColour(Color.parseColor("#f11d5e88"))
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_geeftinfo_text))
@@ -596,6 +596,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                         .setDismissTextColor(Color.parseColor("#F57C00"))
                         .setContentText(getString(R.string.tutorial_geeftoryinfo_text))
                         .withRectangleShape()
+                        .build()
+        );
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(findViewById(R.id.action_search))
+                        .setDismissText("HO CAPITO")
+                        .setMaskColour(Color.parseColor("#f11d5e88"))
+                        .setDismissTextColor(Color.parseColor("#F57C00"))
+                        .setContentText(getString(R.string.tutorial_searchbuttoninfo_text))
                         .build()
         );
 
