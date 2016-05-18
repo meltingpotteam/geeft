@@ -166,7 +166,11 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         Log.d(TAG, "Geefter name: " + mGeeft.getUsername());
 
         Log.d(TAG, "iAmGeefter flag is:" + mIamGeefter);
-        if(mIamGeefter && !mGeeft.isGiven()){ // if I'm the Geefter and Geeft isn't given,show
+
+        if(mGeeft.isFeedbackLeftByGeefter() && mGeeft.isFeedbackLeftByGeefted())
+            showAlertDialogFeedbacksLeft();
+
+        else if(mIamGeefter && !mGeeft.isGiven()){ // if I'm the Geefter and Geeft isn't given,show
             // dialog to set given
             showDialogTakenGiven(mGeeft, true); // I'm the Geefter,so I send "true"
 
@@ -860,6 +864,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                                     " Ricordati di confermare il ritiro";
                                             sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
                                         }
+                                        else if(!mGeeft.isFeedbackLeftByGeefter()){
+                                            String message = "Sono stati abilitati i feedback per l'oggetto '" +
+                                                    mGeeft.getGeeftTitle() + "'." +
+                                                    " Ricordati di lasciarlo.";
+                                            sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                                        }
                                     }
                                     else {
                                         Log.d(TAG,"Error while fetching link");
@@ -883,6 +893,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                                         " Ricordati di confermare il ritiro";
                                 sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
                             }
+                            else if(!mGeeft.isFeedbackLeftByGeefter()){
+                                String message = "Sono stati abilitati i feedback per l'oggetto '" +
+                                        mGeeft.getGeeftTitle() + "'." +
+                                        " Ricordati di lasciarlo.";
+                                sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                            }
                         }
                     }else {
                         Log.d(TAG,"Error while fetching link");
@@ -904,6 +920,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             String message = "il geefted ha confermato il ritiro dell'oggetto '" +
                                     mGeeft.getGeeftTitle() + "'." +
                                     " Ricordati di confermare la consegna";
+                            sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                        }
+                        else if(!mGeeft.isFeedbackLeftByGeefted()){
+                            String message = "Sono stati abilitati i feedback per l'oggetto '" +
+                                    mGeeft.getGeeftTitle() + "'." +
+                                    " Ricordati di lasciarlo.";
                             sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
                         }
                     } else {
