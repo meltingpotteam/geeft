@@ -260,7 +260,8 @@ public class FeedbackPageActivity extends AppCompatActivity implements TaskCallb
 
     private void sendPush(final String receiverUsername,String message){
 
-        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + receiverUsername + "&message=" + message.replace(" ", "%20"), new BaasHandler<JsonObject>() {
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.sendSelective?receiverName=" + receiverUsername
+                +"&geeftId=" + mGeeft.getId() + "&message=" + message.replace(" ","%20"), new BaasHandler<JsonObject>() {
             @Override
             public void handle(BaasResult<JsonObject> baasResult) {
                 if (baasResult.isSuccess()) {

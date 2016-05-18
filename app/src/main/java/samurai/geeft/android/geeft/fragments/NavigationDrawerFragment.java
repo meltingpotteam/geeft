@@ -201,7 +201,8 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 // if is the first time user is opening the app,then he learned it exists
-                initUI(getView());
+                //initUI(getView()); //Questo crea un bug,apre tante finestre quante sono le volte
+                //                  che si è aperto il menu. Da risolvere in altro modo
                 getActivity().supportInvalidateOptionsMenu();
 
             }

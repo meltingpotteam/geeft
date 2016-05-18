@@ -31,7 +31,10 @@ import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 import samurai.geeft.android.geeft.R;
+import samurai.geeft.android.geeft.activities.CompactDialogActivity;
 import samurai.geeft.android.geeft.activities.MainActivity;
 import samurai.geeft.android.geeft.activities.WinnerScreenActivity;
 
@@ -111,12 +114,16 @@ public class MyGcmListenerService extends GcmListenerService {
             case 5:
                 intent = logOutUser(message);
                 break;
+            case 6:
+                intent = openCompactDialog();
+                break;
             default:  intent = defaultCase();
                 break;
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+               // PendingIntent.FLAG_UPDATE_CURRENT);
+                0);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Vibrate for 500 milliseconds
 
@@ -124,7 +131,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setSmallIcon(R.drawable.gift)
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setVibrate(new long[] {1, 1, 1})
+                .setVibrate(new long[] {100, 200, 100, 200})
                 .setContentTitle("Geeft")
                 .setContentText(message)
                 .setAutoCancel(true)
@@ -136,7 +143,14 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        //notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(getUniqueNumber(), notificationBuilder.build());
+    }
+
+    private int getUniqueNumber() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(9999 - 1000) + 1000;
+        return randomNumber;
     }
 
     private Intent logOutUser(String message) {
@@ -179,6 +193,17 @@ public class MyGcmListenerService extends GcmListenerService {
             return intent;
         }
 
+    }
+    private Intent openCompactDialog(){
+        if((geeftId == null)) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Log.e(TAG, "An error occurred,DEBUG: geeftId is: " + geeftId + " and docUserId is: " + docUserId);
+            return intent;
+        }
+        else{
+            Intent intent = CompactDialogActivity.newIntent(getApplicationContext(),geeftId,true);
+            return intent;
+        }
     }
 
     private Intent contactFromUserCase() { //TODO: Replace this with new activity

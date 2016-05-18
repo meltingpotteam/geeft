@@ -124,7 +124,32 @@ public class BaaSFetchLinks extends AsyncTask<Void,Void,Boolean> {
                             geeft.setIsFeedbackLeftByGeefted(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
                             geeft.setIsFeedbackLeftByGeefter(document.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
                             geeft.setCreationTime(getCreationTimestamp(document));
-                            mGeeftList.add(0,geeft);
+
+                            //This is for list in order to assign. Change in LinkedList to use addFirst,addLast
+                            if(mlinkNameQuery.equals(TagsValue.LINK_NAME_DONATED)) {
+                                if (geeft.isAssigned() && geeft.isFeedbackLeftByGeefter()) {
+                                    if (mGeeftList.size() == 0) {
+                                        mGeeftList.add(0, geeft);
+                                    } else {
+                                        mGeeftList.add(mGeeftList.size() - 1, geeft); //addLast
+                                    }
+                                }
+                                else
+                                    mGeeftList.add(0,geeft);
+                            }
+                            else if(mlinkNameQuery.equals(TagsValue.LINK_NAME_RECEIVED)){
+                                if (geeft.isAssigned() && geeft.isFeedbackLeftByGeefter()) {
+                                    if (mGeeftList.size() == 0) {
+                                        mGeeftList.add(0, geeft);
+                                    } else {
+                                        mGeeftList.add(mGeeftList.size() - 1, geeft); //addLast
+                                    }
+                                }
+                                else
+                                    mGeeftList.add(0,geeft);
+                            }
+                            else
+                                mGeeftList.add(0,geeft);
                         }catch (BaasInvalidSessionException ise){
                             mResultToken = RESULT_SESSION_EXPIRED;
                             return false;

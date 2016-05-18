@@ -113,6 +113,8 @@ public class TagsValue {
 
     public static final String CATEGORY_HOUSE = "casa e giardino";
 
+    public static final String GIVEN_LIST = "given_list";
+
     public static final int USER_LINK_COUNT_NOT_FINESHED = -2;
     public static final int USER_LINK_COUNT_FINESHED_WITH_ERROR = -1;
 

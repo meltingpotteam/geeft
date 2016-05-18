@@ -94,7 +94,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
         Log.d(TAG, BaasUser.current().toString());
         String docId = BaasUser.current().getScope(BaasUser.Scope.PRIVATE).getString("doc_id"); //retrieve doc_is attached at user
         //find all links with the doc_id (User id <--> doc id )
-        Log.d(TAG, "Doc_id is: " + docId);
+        //Log.d(TAG, "Doc_id is: " + docId);
         //TODO: change when baasbox fix issue with BaasLink.create
         BaasQuery.Criteria query = BaasQuery.builder().where("in.id like '" + docId + "'").criteria();
         BaasResult<List<BaasLink>> resLinks = BaasLink.fetchAllSync("reserve", query);
@@ -126,7 +126,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
             }else{
                 collection = "story";
             }
-            Log.d(TAG,"collection = "+collection+" getContext ="+ mContext);
+            //Log.d(TAG,"collection = "+collection+" getContext ="+ mContext);
             if (resUser.isSuccess()) {
                 isEmpty = mGeeftList.size()==0? true:false;
                 BaasResult<JsonObject> baasResult;
@@ -143,10 +143,10 @@ public class BaaSTopListTask extends BaaSCheckTask{
                     if(mIsButtomRefresh) {
                         rid = mButtomRid;
                         mListSize = mGeeftList.size();
-                        Log.d(TAG, "mIsButtomRefresh rid= "+rid);
+                        //Log.d(TAG, "mIsButtomRefresh rid= "+rid);
                     }else {
                         rid = mTopRid;
-                        Log.d(TAG, "NOT mIsButtomRefresh rid= "+rid);
+                        //Log.d(TAG, "NOT mIsButtomRefresh rid= "+rid);
                     }
                     baasResult = BaasBox.rest().sync(Rest.Method.GET,
                             "plugin/query.tabs?" +
@@ -164,11 +164,11 @@ public class BaaSTopListTask extends BaaSCheckTask{
                         if(docArray==null){
                             return false;
                         }
-                        Log.d(TAG,"Successo docArray size = "+docArray.size());
+                       // Log.d(TAG,"Successo docArray size = "+docArray.size());
                         int size = docArray.size();
 
                         if(size>0) {
-                            Log.d(TAG,("@rid"));
+                            //Log.d(TAG,("@rid"));
                             if (isEmpty) {
                                 mTopRid = docArray.getObject(0)
                                         .getString("@rid")
@@ -178,25 +178,25 @@ public class BaaSTopListTask extends BaaSCheckTask{
                                         .getString("@rid")
                                         .replace("#", "%23")
                                         .replace(":", "%3A");
-                                Log.d(TAG, "mButtomRid= " + docArray.getObject(0)
-                                        .getString("@rid"));
-                                Log.d(TAG, "mTopRid= " + docArray.getObject(docArray.size() - 1)
-                                        .getString("@rid"));
+                               // Log.d(TAG, "mButtomRid= " + docArray.getObject(0)
+                                 //       .getString("@rid"));
+                                //Log.d(TAG, "mTopRid= " + docArray.getObject(docArray.size() - 1)
+                                 //       .getString("@rid"));
                             } else {
                                 if (mIsButtomRefresh) {
                                     mButtomRid = docArray.getObject(0)
                                             .getString("@rid")
                                             .replace("#", "%23")
                                             .replace(":", "%3A");
-                                    Log.d(TAG, "mButtomRid= " + docArray.getObject(0)
-                                            .getString("@rid"));
+                                    //Log.d(TAG, "mButtomRid= " + docArray.getObject(0)
+                                     //       .getString("@rid"));
                                 } else {
                                     mTopRid = docArray.getObject(docArray.size() - 1)
                                             .getString("@rid")
                                             .replace("#", "%23")
                                             .replace(":", "%3A");
-                                    Log.d(TAG, "mTopRid= " + docArray.getObject(docArray.size() - 1)
-                                            .getString("@rid"));
+                                    //Log.d(TAG, "mTopRid= " + docArray.getObject(docArray.size() - 1)
+                                    //        .getString("@rid"));
                                 }
                             }
                             if(!mCollection.equals("story")){
@@ -206,12 +206,12 @@ public class BaaSTopListTask extends BaaSCheckTask{
 
                         for (int i =0;i<docArray.size();i++) {
                             JsonObject e = docArray.getObject(i);
-                            Log.d(TAG, e.toString());
+                            //Log.d(TAG, e.toString());
                             mGeeft = new Geeft();
                             mGeeft.fillGeeft(e,links);
                             for (BaasLink l : links) {
                                 //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-                                Log.d(TAG, "e id: " + e.getString("id") + " inId: " + l.in().getId());
+                                //Log.d(TAG, "e id: " + e.getString("id") + " inId: " + l.in().getId());
                                 //if(l.out().getId().equals(e.getId())){
                                 // TODO: LOGIC IS THIS,but BaasLink.create have a bug
                                 if (l.in().getId().equals(e.getString("id"))) {
@@ -219,7 +219,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
                                     // set prenoteButton selected (I'm already
                                     // reserved)
                                     mGeeft.setReservedLinkId(l.getId());
-                                    Log.d(TAG, "link id is: " + l.getId());
+                                    //Log.d(TAG, "link id is: " + l.getId());
                                 }
                             }
                             if(!isEmpty ){
@@ -274,8 +274,8 @@ public class BaaSTopListTask extends BaaSCheckTask{
 
         JsonObject tmp;
 
-        Log.d(TAG,"(left + right) / 2 ="+(left + right) / 2);
-        Log.d(TAG, "arr.getObject((left + right) / 2) = "+ arr.getObject((left + right) / 2));
+        //Log.d(TAG,"(left + right) / 2 ="+(left + right) / 2);
+        //Log.d(TAG, "arr.getObject((left + right) / 2) = "+ arr.getObject((left + right) / 2));
         long pivot = arr.getObject((left + right) / 2).getLong("deadline");
 
 
@@ -302,7 +302,7 @@ public class BaaSTopListTask extends BaaSCheckTask{
 
 
     void quickSort(JsonArray arr, int left, int right) {
-        Log.d(TAG, "IN QUICKSORT");
+        //Log.d(TAG, "IN QUICKSORT");
 
         int index = partition(arr, left, right);
 

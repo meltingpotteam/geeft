@@ -557,6 +557,8 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     private void assignCurrentGeeft(){
+        mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
+                "Operazione in corso");
         if(mIsReassigned){
             deleteAndReassign();
         }
@@ -614,8 +616,8 @@ public class UserProfileFragment extends StatedFragment implements
     private void assignGeeft() throws MalformedURLException {
         if (BaasUser.current() != null) {
 
-            mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
-                    "Operazione in corso");
+            /*mProgressDialog = ProgressDialog.show(getContext(), "Attendere",
+                    "Operazione in corso");*/
 
             mLinkCreateRequest = BaasBox.rest().async(Rest.Method.GET, "plugin/manual" +
                     ".geeftedChoose?" +
@@ -839,9 +841,9 @@ public class UserProfileFragment extends StatedFragment implements
     }
 
     public void getData() {
-
+        Log.d(TAG,"getdata() and docId: " + mUser.getDocId());
         BaasQuery.Criteria query = BaasQuery.builder()
-                .where("in.id like '" + mUser.getDocId() + "' and out.delete = false").criteria();
+                .where("in.id like '" + mUser.getDocId() + "' and out.deleted = false").criteria();
         countLinks(query, TagsValue.LINK_NAME_RECEIVED);
         countLinks(query, TagsValue.LINK_NAME_DONATED);
     }

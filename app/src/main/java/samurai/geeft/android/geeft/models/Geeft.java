@@ -379,13 +379,13 @@ public class Geeft implements Serializable {
         }
         for (BaasLink l : links) {
             //Log.d(TAG,"out: " + l.out().getId() + " in: " + l.in().getId());
-            Log.d(TAG, "e id: " + doc.getString("id") + " inId: " + l.in().getId());
+            //Log.d(TAG, "e id: " + doc.getString("id") + " inId: " + l.in().getId());
             //if(l.out().getId().equals(e.getId())){ //TODO: LOGIC IS THIS,but BaasLink.create have a bug
             if (l.in().getId().equals(doc.getString("id"))) {
                 this.setIsSelected(true);// set prenoteButton selected (I'm already
                 // reserved)
                 this.setReservedLinkId(l.getId());
-                Log.d(TAG, "link id is: " + l.getId());
+                //Log.d(TAG, "link id is: " + l.getId());
             }
         }
 

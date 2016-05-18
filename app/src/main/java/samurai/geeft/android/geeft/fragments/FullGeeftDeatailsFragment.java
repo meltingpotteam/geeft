@@ -406,7 +406,7 @@ public class FullGeeftDeatailsFragment extends StatedFragment implements TaskCal
                             new android.support.v7.app.AlertDialog.Builder(getContext(),
                                     R.style.AppCompatAlertDialogStyle); //Read Update
                     builder.setTitle("Avviso");
-                    builder.setMessage("Vuoi veramente eliminare il geeft?");
+                    builder.setMessage("Vuoi veramente modificare il geeft?");
                     builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

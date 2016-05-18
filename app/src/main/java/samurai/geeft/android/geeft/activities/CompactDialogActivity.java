@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -45,13 +46,16 @@ import samurai.geeft.android.geeft.R;
 import samurai.geeft.android.geeft.database.BaaSExchangeCompletedTask;
 import samurai.geeft.android.geeft.fragments.AssignUserListFragment;
 import samurai.geeft.android.geeft.interfaces.TaskCallbackExchange;
+import samurai.geeft.android.geeft.interfaces.TaskCallbackFillGeeftFromDocument;
 import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import samurai.geeft.android.geeft.utilities.Utils;
 
 /**
  * Created by daniele on 05/03/16.
  */
-public class CompactDialogActivity extends AppCompatActivity implements TaskCallbackExchange {
+public class CompactDialogActivity extends AppCompatActivity implements TaskCallbackExchange,
+        TaskCallbackFillGeeftFromDocument {
 
     private static final String KEY_TAKEN = "taken";
     private static final String KEY_GIVEN = "given";
@@ -68,11 +72,14 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private Button mInfoButton;
     private LayoutInflater inflater;
     private Toolbar mToolbar;
+    private TaskCallbackFillGeeftFromDocument mCallback;
     private android.app.AlertDialog mDialog;
     private ProgressDialog mProgressDialog;
 
     //-------------------------------------------
     private final static String EXTRA_GEFFT = "geeft";
+    private static final String EXTRA_GEEFT_ID = "extra_geeft_id";
+    private static final String EXTRA_OPEN_FROM_NOTIFICATION = "extra_open_from_notification";
     private static final String EXTRA_CONTEXT = "extra_context";
     //-------------------Macros
     private final int RESULT_OK = 1;
@@ -91,6 +98,15 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
         return intent;
     }
 
+    public static Intent newIntent(@NonNull Context context, @NonNull String geeftId,
+                                   boolean openFromNotification){
+        Intent intent = new Intent(context, CompactDialogActivity.class);
+        intent.putExtra(EXTRA_GEEFT_ID,geeftId);
+        intent.putExtra(EXTRA_OPEN_FROM_NOTIFICATION,openFromNotification);
+        return intent;
+
+    }
+
 
 
     @Override
@@ -102,27 +118,61 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 mGeeft = new Geeft();
+                onGeeftFilled();
             } else {
-                mGeeft = (Geeft)extras.getSerializable(EXTRA_GEFFT);
+                boolean openFromNotification = extras.getBoolean(EXTRA_OPEN_FROM_NOTIFICATION,false);
+                Log.d(TAG,"openFromNotification is:" + openFromNotification);
+                if(openFromNotification){
+                    mProgressDialog = new ProgressDialog(CompactDialogActivity.this);
+                    mProgressDialog.show();
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.setIndeterminate(true);
+                    mGeeft = new Geeft();
+                    mCallback = CompactDialogActivity.this;
+                    String geeftId = extras.getString(EXTRA_GEEFT_ID);
+                    BaasDocument.fetch(TagsValue.COLLECTION_GEEFT, geeftId, new BaasHandler<BaasDocument>() {
+                        @Override
+                        public void handle(BaasResult<BaasDocument> baasResult) {
+                            if(baasResult.isSuccess()) {
+                                Utils.fillGeeftFromDocument(mGeeft,baasResult.value());
+                                if(mProgressDialog != null)
+                                    mProgressDialog.dismiss();
+                                mCallback.onGeeftFilled();
+                            }
+                            else{
+                                Log.e(TAG,"Error while fetching document of Geeft");
+                            }
+                        }
+                    });
+                }
+
+                else {
+                    mGeeft = (Geeft) extras.getSerializable(EXTRA_GEFFT);
+                    onGeeftFilled();
+                }
             }
         } else {
             mGeeft = (Geeft) savedInstanceState.getSerializable(EXTRA_GEFFT);
+            onGeeftFilled();
         }
 
+    }
+
+    public void onGeeftFilled(){
         BaasUser currentUser = BaasUser.current();
         mIamGeefter = currentUser.getScope(BaasUser.Scope.PRIVATE).get("name").equals(mGeeft.getFullname());
-                //TODO: && get("username").equals(mGeeft.getUsername);
+        //TODO: && get("username").equals(mGeeft.getUsername);
         Log.d(TAG,"currentUser name: " + currentUser.getScope(BaasUser.Scope.PRIVATE).get("name") );
         Log.d(TAG, "Geefter name: " + mGeeft.getUsername());
 
         Log.d(TAG, "iAmGeefter flag is:" + mIamGeefter);
         if(mIamGeefter && !mGeeft.isGiven()){ // if I'm the Geefter and Geeft isn't given,show
-                            // dialog to set given
+            // dialog to set given
             showDialogTakenGiven(mGeeft, true); // I'm the Geefter,so I send "true"
 
         }
         else if(!mIamGeefter && !mGeeft.isTaken()){ //if I'm the Geefted and Geeft isn't taken,show
-                            //dialog to set taken
+            //dialog to set taken
             showDialogTakenGiven(mGeeft, false);
         }
 
@@ -547,8 +597,31 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
     }
 
+    private void showAlertDialogFeedbacksLeft(){
+        new AlertDialog.Builder(CompactDialogActivity.this)
+                .setTitle("Attenzione")
+                .setMessage("I feedbacks per questo oggetto sono già stati lasciati")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startMainActivity();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dialog.dismiss();
+                        startMainActivity();
+                    }
+                })
+                .show();
+    }
+
     private void checkConditionForFeedback(){
-        if(mIamGeefter && mGeeft.isFeedbackLeftByGeefter()){
+        if(mGeeft.isFeedbackLeftByGeefter() && mGeeft.isFeedbackLeftByGeefted())
+            showAlertDialogFeedbacksLeft();
+        else if(mIamGeefter && mGeeft.isFeedbackLeftByGeefter()){
             Log.d(TAG, "Show dialog left feedback for geefter");
             showDialogLeftFeedback();
         }
@@ -580,9 +653,10 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
 
     }
 
-    private void sendPush(String receiverUsername,String message){
+    private void sendPush(String receiverUsername, String geeftId, String message){
 
-        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + mHisBaasboxName + "&message=" + message.replace(" ","%20"), new BaasHandler<JsonObject>() {
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.sendSelective?receiverName=" + mHisBaasboxName
+                +"&geeftId=" + geeftId + "&message=" + message.replace(" ","%20"), new BaasHandler<JsonObject>() {
             @Override
             public void handle(BaasResult<JsonObject> baasResult) {
                 if(baasResult.isSuccess()){
@@ -776,14 +850,16 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             BaasLink.fetchAll(TagsValue.LINK_NAME_RECEIVED, query, RequestOptions.DEFAULT, new BaasHandler<List<BaasLink>>() {
                                 @Override
                                 public void handle(BaasResult<List<BaasLink>> resLinkBis) {
-                                    if(resLinkBis.isSuccess()){
+                                    if(resLinkBis.isSuccess()) {
                                         List<BaasLink> linksBis = resLinkBis.value();
                                         mHisBaasboxName = linksBis.get(0).out().getAuthor();//Get doc_id of user from get(0)
                                         //so, get baasboxName from getAuthor
-                                        String message = "Il geefter ha confermato la consegna dell'oggetto '" +
-                                                mGeeft.getGeeftTitle() +"'." +
-                                                " Ricordati di confermare il ritiro";
-                                        sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
+                                        if (!mGeeft.isTaken()) {//send push to geefted if geeft is not already taken
+                                            String message = "Il geefter ha confermato la consegna dell'oggetto '" +
+                                                    mGeeft.getGeeftTitle() + "'." +
+                                                    " Ricordati di confermare il ritiro";
+                                            sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                                        }
                                     }
                                     else {
                                         Log.d(TAG,"Error while fetching link");
@@ -801,10 +877,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                             }
                             mHisBaasboxName = links.get(0).out().getAuthor();//Get doc_id of user from get(0)
                             //so, get baasboxName from getAuthor
-                            String message = "Il geefter ha confermato la consegna dell'oggetto '" +
-                                    mGeeft.getGeeftTitle() +"'." +
-                                    " Ricordati di confermare il ritiro";
-                            sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
+                            if(!mGeeft.isTaken()) { //send push to geefter if geeft is not already taken
+                                String message = "Il geefter ha confermato la consegna dell'oggetto '" +
+                                        mGeeft.getGeeftTitle() + "'." +
+                                        " Ricordati di confermare il ritiro";
+                                sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                            }
                         }
                     }else {
                         Log.d(TAG,"Error while fetching link");
@@ -822,11 +900,12 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                         Log.d(TAG,"link: " + links.get(0).toString());
                         mHisBaasboxName = links.get(0).out().getAuthor(); //Get doc_id of user from get(0)
                         //so, get baasboxName from getAuthor
-                        String message = "il geefted ha confermato il ritiro dell'oggetto '" +
-                                mGeeft.getGeeftTitle() +"'." +
-                                " Ricordati di confermare la consegna";
-                        sendPush(mHisBaasboxName, message.replaceAll(" ","%20"));
-
+                        if(!mGeeft.isGiven()) {//send push to geefted if geeft is not already given
+                            String message = "il geefted ha confermato il ritiro dell'oggetto '" +
+                                    mGeeft.getGeeftTitle() + "'." +
+                                    " Ricordati di confermare la consegna";
+                            sendPush(mHisBaasboxName,mGeeft.getId(), message.replaceAll(" ", "%20"));
+                        }
                     } else {
                         Log.d(TAG,"Error while fetching link");
                         showDialogError();
@@ -867,7 +946,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 })
                 .show();
