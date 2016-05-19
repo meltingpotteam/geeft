@@ -121,9 +121,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        final int u_id = getUniqueNumber();
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, u_id, intent,
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                // PendingIntent.FLAG_UPDATE_CURRENT);
-                0);
+                PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Vibrate for 500 milliseconds
 
@@ -144,7 +146,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         //notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-        notificationManager.notify(getUniqueNumber(), notificationBuilder.build());
+        notificationManager.notify(u_id, notificationBuilder.build());
     }
 
     private int getUniqueNumber() {
