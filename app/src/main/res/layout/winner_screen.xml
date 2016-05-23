@@ -33,10 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_horizontal_margin_x2"
-            android:layout_marginTop="25dp"
             android:orientation="vertical">
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_margin_x2"
                 android:paddingStart="@dimen/activity_horizontal_margin_x2"
@@ -50,7 +49,7 @@
                     android:text="Ciao "
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="italic"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     />
                 <TextView
                     android:id="@+id/winner_screen_geefted_name"
@@ -62,28 +61,33 @@
                     android:textStyle="bold|italic"
                     android:textSize="20sp"
                     />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="!"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textStyle="bold|italic"
+                    android:textSize="20sp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin_x2"
-                android:paddingStart="@dimen/activity_horizontal_margin_x2"
-                android:paddingEnd="@dimen/activity_horizontal_margin_x2"
-                android:paddingRight="@dimen/activity_horizontal_margin_x2">
-                <!--TextView
+                android:paddingTop="20dp">
+                <TextView
                     android:id="@+id/geefter_name_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Il Geefter "
+                    android:text="L'utente "
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="italic"
                     android:textSize="18sp"
-                    /-->
+                    />
                 <TextView
                     android:id="@+id/winner_screen_geefter_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="#Geefted"
+                    android:hint="#Geefter"
                     android:textColorHint="@android:color/darker_gray"
                     android:textColor="@color/colorPrimaryText"
                     android:textStyle="bold|italic"
@@ -93,13 +97,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin_x2"
-                android:paddingStart="@dimen/activity_horizontal_margin_x2"
-                android:paddingEnd="@dimen/activity_horizontal_margin_x2"
-                android:paddingRight="@dimen/activity_horizontal_margin_x2">
+                >
                 <TextView
                     android:id="@+id/winner_screen_message_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/winner_screen_message"
                     android:textColor="@color/colorPrimaryText"
@@ -109,62 +110,64 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-                <ImageButton
-                    android:id="@+id/winner_screen_facebook_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:tint="@android:color/holo_blue_dark"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_facebook_box"
-                    android:scaleType="fitCenter"
-                    android:background="#00ffffff"/>
-            </LinearLayout>
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:layout_gravity="bottom">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+                    <ImageButton
+                        android:id="@+id/winner_screen_facebook_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:tint="@android:color/holo_blue_dark"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_facebook_box"
+                        android:scaleType="fitCenter"
+                        android:background="#00ffffff"/>
+                </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                >
-                <ImageButton
-                    android:id="@+id/winner_screen_email_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:tint="@android:color/holo_blue_dark"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_arrow_white_24dp"
-                    android:scaleType="fitCenter"
-                    android:background="#00ffffff"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    >
+                    <ImageButton
+                        android:id="@+id/winner_screen_email_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:tint="@android:color/holo_blue_dark"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_arrow_white_24dp"
+                        android:scaleType="fitCenter"
+                        android:background="#00ffffff"/>
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-                <ImageButton
-                    android:id="@+id/winner_screen_location_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:tint="@android:color/holo_blue_dark"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_location_on_white_24dp"
-                    android:scaleType="fitCenter"
-                    android:background="#00ffffff"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+                    <ImageButton
+                        android:id="@+id/winner_screen_location_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:tint="@android:color/holo_blue_dark"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_location_on_white_24dp"
+                        android:scaleType="fitCenter"
+                        android:background="#00ffffff"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </FrameLayout>
 
     <!--<TextView-->
