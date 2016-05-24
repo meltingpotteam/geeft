@@ -105,9 +105,14 @@ public class UsernameMailActivity extends AppCompatActivity implements TaskCallb
         mButtonDone=(Button) findViewById(R.id.username_request_button);
         mButtonDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.i("USERNAMEMAIL", "Nickname" + mNickname.getText().toString() + "!");
-                Log.i("USERNAMEMAIL", "Email" + mEmail.getText().toString() + "!");
-                addNicknameEmail();
+                // Controllo aggiunto per preveire lunghezza nulla per username ed email
+                if (mNickname.getText().toString().length() != 0 || mEmail.getText().toString().length() != 0){
+                    Toast.makeText(UsernameMailActivity.this, "Devi compilare correttamente i campi", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i("USERNAMEMAIL", "Nickname" + mNickname.getText().toString() + "!");
+                    Log.i("USERNAMEMAIL", "Email" + mEmail.getText().toString() + "!");
+                    addNicknameEmail();
+                }
             }
         });
     }
