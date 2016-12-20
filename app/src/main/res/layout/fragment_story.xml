@@ -112,7 +112,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:inputType="textCapSentences"
                     android:paddingTop="@dimen/activity_vertical_margin"
                     >
 
@@ -137,7 +136,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/add_geeft_description_hint"
-                        android:inputType="textCapSentences"
+                        android:inputType="text|textMultiLine|textCapSentences"
                         android:textColorHint="@color/colorHintAccent"
                         />
                 </LinearLayout>

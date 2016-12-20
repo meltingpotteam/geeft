@@ -4,8 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.Rest;
+import com.baasbox.android.json.JsonObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,6 +61,8 @@ public class Utils {
             geeft.setAssigned(documentFetched.getBoolean("assigned"));
             geeft.setTaken(documentFetched.getBoolean("taken"));
             geeft.setGiven(documentFetched.getBoolean("given"));
+            geeft.setIsFeedbackLeftByGeefter(documentFetched.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTER));
+            geeft.setIsFeedbackLeftByGeefted(documentFetched.getBoolean(TagsValue.FLAG_IS_FEEDBACK_LEFT_BY_GEEFTED));
         }
         else{
             Log.e(TAG,"Error! DocumentFetched is null!");
@@ -74,5 +81,20 @@ public class Utils {
         }
         return -1;
 
+    }
+
+    public static void sendAlertPush(final String receiverUsername,String message){
+
+        BaasBox.rest().async(Rest.Method.GET, "plugin/push.send?receiverName=" + receiverUsername
+                + "&message=" + message.replace(" ","%20"), new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if (baasResult.isSuccess()) {
+                    Log.d(TAG, "Push notification sended to: " + receiverUsername);
+                } else {
+                    Log.e(TAG, "Error while sending push notification:" + baasResult.error());
+                }
+            }
+        });
     }
 }

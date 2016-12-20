@@ -55,6 +55,7 @@ import samurai.geeft.android.geeft.models.Geeft;
 import samurai.geeft.android.geeft.models.User;
 import samurai.geeft.android.geeft.utilities.StatedFragment;
 import samurai.geeft.android.geeft.utilities.TagsValue;
+import samurai.geeft.android.geeft.utilities.Utils;
 import samurai.geeft.android.geeft.utilities.graphic.CircleTransformation;
 
 /**
@@ -585,12 +586,17 @@ public class UserProfileFragment extends StatedFragment implements
                     List<BaasLink> resAssignLink = baasResult.value();
                     Log.d(TAG,"Size of assigned link:" + resAssignLink.size());
                     if(resAssignLink.size() == 1){
+                        final String oldAssignedUser = resAssignLink.get(0).out().getAuthor();
+                        Log.d(TAG,"OldAssignedUser is: " + oldAssignedUser);
                         BaasLink.withId(resAssignLink.get(0).getId())
                                 .delete(RequestOptions.PRIORITY_HIGH, new BaasHandler<Void>() {
                             @Override
                             public void handle(BaasResult<Void> baasResult) {
                                 Log.d(TAG,"Previous Assigned link is delete,go to reassign");
                                 try {
+                                    String message = "Ci dispiace. Il proprietario di '" + mGeeft.getGeeftTitle()
+                                            +"' ha deciso di riassegnare l'oggetto";
+                                    Utils.sendAlertPush(oldAssignedUser,message);
                                     assignGeeft();
                                 } catch (MalformedURLException e) {
                                     e.printStackTrace();

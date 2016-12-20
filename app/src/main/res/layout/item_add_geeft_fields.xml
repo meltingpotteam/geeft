@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/add_geeft_description_hint"
                     android:textColorHint="@color/colorHintAccent"
-                    android:inputType="textCapSentences"
+                    android:inputType="text|textMultiLine|textCapSentences"
                     />
             </LinearLayout>
             <LinearLayout

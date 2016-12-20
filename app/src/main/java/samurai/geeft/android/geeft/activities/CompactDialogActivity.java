@@ -604,7 +604,7 @@ public class CompactDialogActivity extends AppCompatActivity implements TaskCall
     private void showAlertDialogFeedbacksLeft(){
         new AlertDialog.Builder(CompactDialogActivity.this)
                 .setTitle("Attenzione")
-                .setMessage("I feedbacks per questo oggetto sono già stati lasciati")
+                .setMessage("I feedback per questo oggetto sono già stati lasciati")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

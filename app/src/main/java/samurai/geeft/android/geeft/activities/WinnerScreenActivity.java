@@ -291,7 +291,7 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mGeeft.setUserCap(docGeeft.getString("cap"));
         mWinnerScreenGeefterName.setText(docGeeft.getString("name"));
         mWinnerScreenGeeftedName.setText(BaasUser.current().
-                getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
+                getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         Picasso.with(mContext).load(docGeeft.getString("image")+ BaasUser.current().getToken())
                 .fit().centerCrop().into(mWinnerScreenGeeftBackground);
         mLocation = docGeeft.getString("location").concat("," + docGeeft.getString("cap"));
@@ -377,8 +377,9 @@ public class WinnerScreenActivity extends AppCompatActivity implements TaskCallb
         mGeeft.setGeeftImage(docGeeft.getString("image") + BaasUser.current().getToken());
         mGeeft.setGeeftTitle(docGeeft.getString("title"));
 
+        Log.d("CONTROLLO USERNAME: ", mGeeft.getUsername());
         mWinnerScreenGeeftedName.setText(BaasUser.current().
-                getScope(BaasUser.Scope.PRIVATE).get("name").toString() + ",");
+                getScope(BaasUser.Scope.PRIVATE).get("name").toString());
         //mWinnerScreenGeeftedName.setText("prova");
         Log.d(TAG, "informations: " + geefted.getName() + " ," + geefted.getStatus() + " ," + docGeeft.getId());
         mWinnerScreenGeefterName.setText(geefted.getScope(BaasUser.Scope.REGISTERED).get("username").toString());
