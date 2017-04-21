@@ -33,8 +33,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Implementing the back-end to support signup with facebook and manage data stored (for UI and UX testing )
 - Pre-alpha version release for getting feedbacks by pre-alpha testers
 - Getting real users feedbacks by creating and maintaining pages on social networks
-- [APK] (http://meltingpotteam.altervista.org/apk/geeft.apk)
-- [Presentation] (http://meltingpotteam.altervista.org/mil1/milestone1.zip)
+- [APK](http://meltingpotteam.altervista.org/apk/geeft.apk)
+- [Presentation](http://meltingpotteam.altervista.org/mil1/milestone1.zip)
 
 
 
@@ -50,9 +50,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Possibly developing users prefered features based on surveys and feedbacks pages on social networks
 - Possibly sperimenting the alpha version UI and UX with real users
 - Promoting the product
-- [APK] (https://app.edo.io/preview?id=56cb0f3cb80991bc29d7798d&k=WKBdR3tHrj_bBSD3h-wtacj2MSA70vhr1cP5euTB7os=)
-- [Presentation] (https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
-- [Demo Video] (https://app.edo.io/preview?id=56c684cedd9264cfcb17dd02&k=Dl6yFPkxvR2B4o-qwM4DPdoUgpputn0S2qA7en5tWa4=)
+- [APK](https://app.edo.io/preview?id=56cb0f3cb80991bc29d7798d&k=WKBdR3tHrj_bBSD3h-wtacj2MSA70vhr1cP5euTB7os=)
+- [Presentation](https://app.edo.io/preview?id=56c8d2e9b3a54aa1cf846b51&k=lq26RTfk7pMhyio2pgMC3T77VxUW_68vRtUlgfIvuP8=)
+- [Demo Video](https://app.edo.io/preview?id=56c684cedd9264cfcb17dd02&k=Dl6yFPkxvR2B4o-qwM4DPdoUgpputn0S2qA7en5tWa4=)
  
 
 
@@ -69,14 +69,14 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - Push notifications
 - Eventually correction of bugs
 - Beta version release, testing and promoting
-- [APK] (https://app.edo.io/preview?id=56fe93e808b5edbbdef1f78e&k=BrMboHEWw6Z0BrBwFAScIO0A27U4vq2zVu0fvzJsmNQ=)
-- [Presentation (PDF)] (https://app.edo.io/preview?id=56ec71a1d47cae352af8cbe1&k=AcHVPTRAFoWNV7RlZTqIKlBTN9zi6thnwdc5ku4lhhE=)
-- [Demo video] (https://app.edo.io/preview?id=56eb6c524eeaef2e4222e861&k=KLQ32TTQuavJtxHUnLdtmgA9_AqMnFnvkv-N7AUxwxY=)
-- [Video interviews] (https://app.edo.io/preview?id=56e97d22d47caefc79a5d442&k=ItcNgJ4o3ixveL4n2jioIr4tZkx9kd8XYIgNeOztKkA=)
-- [Presentation Video HQ] (https://app.edo.io/preview?id=56ec262bdbe3e807c7a38dcf&k=xHkp1Ev34BTHMxqjzJ4eNNrub5Yls9xv_WG9m2E7C1w=)
-- [Presentation Video LQ] (https://app.edo.io/preview?id=56ec24ff162be19e9c8c5410&k=MMcQuEG7cWxZHZeaTCa4VYGosP28tmvrBWIs55ciCyc=)
-- [Instructions for APK installation] (https://app.edo.io/preview?id=56eb4bdf6fc9f12414711869&k=BbNjrtsrNm8ywmIhctWGFvoReGt8TUHK9qKLxg5vDPw=)
-- [Videotutorial ITA] (https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
+- [APK](https://app.edo.io/preview?id=56fe93e808b5edbbdef1f78e&k=BrMboHEWw6Z0BrBwFAScIO0A27U4vq2zVu0fvzJsmNQ=)
+- [Presentation (PDF)](https://app.edo.io/preview?id=56ec71a1d47cae352af8cbe1&k=AcHVPTRAFoWNV7RlZTqIKlBTN9zi6thnwdc5ku4lhhE=)
+- [Demo video](https://app.edo.io/preview?id=56eb6c524eeaef2e4222e861&k=KLQ32TTQuavJtxHUnLdtmgA9_AqMnFnvkv-N7AUxwxY=)
+- [Video interviews](https://app.edo.io/preview?id=56e97d22d47caefc79a5d442&k=ItcNgJ4o3ixveL4n2jioIr4tZkx9kd8XYIgNeOztKkA=)
+- [Presentation Video HQ](https://app.edo.io/preview?id=56ec262bdbe3e807c7a38dcf&k=xHkp1Ev34BTHMxqjzJ4eNNrub5Yls9xv_WG9m2E7C1w=)
+- [Presentation Video LQ](https://app.edo.io/preview?id=56ec24ff162be19e9c8c5410&k=MMcQuEG7cWxZHZeaTCa4VYGosP28tmvrBWIs55ciCyc=)
+- [Instructions for APK installation](https://app.edo.io/preview?id=56eb4bdf6fc9f12414711869&k=BbNjrtsrNm8ywmIhctWGFvoReGt8TUHK9qKLxg5vDPw=)
+- [Videotutorial ITA](https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
 
  ![](http://geeftapp.com/onlyshare/Milestone3_login.jpg)
  ![](http://geeftapp.com/site/img/eco/screens/Pannello_navigazione.jpg)
@@ -92,19 +92,19 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 ==============
 ###Final Submission
 
-- [Public APK] (https://app.edo.io/preview?id=57237506b8099166a57d444f&k=x4ew6T8xF4lrxIK8mSDL0W_q4V_VgwOhacU4auuZIX0=)
-- [Download from Play Store] (http://bit.do/Geeft)
-- [Video Presentation] (https://app.edo.io/preview?id=5723c910f7047686b5a270ff&k=SgPD1gzDNkVNCuXoVVEBIB2AZe8tC0532i-ovFoK5YY=)
-- [Documentation] (https://app.edo.io/preview?id=5724c8496fc9f10bbe5bdd77&k=SrtVj6f3s0o7TKYk10pKbvM5NgEEwgV4vIVEVaYfT4w=)
+- [Public APK](https://app.edo.io/preview?id=57237506b8099166a57d444f&k=x4ew6T8xF4lrxIK8mSDL0W_q4V_VgwOhacU4auuZIX0=)
+- [Download from Play Store](http://bit.do/Geeft)
+- [Video Presentation](https://app.edo.io/preview?id=5723c910f7047686b5a270ff&k=SgPD1gzDNkVNCuXoVVEBIB2AZe8tC0532i-ovFoK5YY=)
+- [Documentation](https://app.edo.io/preview?id=5724c8496fc9f10bbe5bdd77&k=SrtVj6f3s0o7TKYk10pKbvM5NgEEwgV4vIVEVaYfT4w=)
 - Backend data (refer to the zip folder on the Master) 
-- [Official Facebook Page] (https://www.facebook.com/MeltingPotGeeft/)
-- [Official Facebook Group] (https://www.facebook.com/groups/1774727389423654/)
+- [Official Facebook Page](https://www.facebook.com/MeltingPotGeeft/)
+- [Official Facebook Group](https://www.facebook.com/groups/1774727389423654/)
 
 ==============
 ###Geeft Team
 
-- [Daniele Bracciani] (https://it.linkedin.com/in/daniele-bracciani-74a64a36)
-- [Ugo Nnanna Okeadu] (https://it.linkedin.com/in/ugo-nnanna-okeadu-620165b8)
-- [Joseph Aguilar Feener] (https://it.linkedin.com/in/joseph-aguilar-feener-78677b83/it)
+- [Daniele Bracciani](https://it.linkedin.com/in/daniele-bracciani-74a64a36)
+- [Ugo Nnanna Okeadu](https://it.linkedin.com/in/ugo-nnanna-okeadu-620165b8)
+- [Joseph Aguilar Feener](https://it.linkedin.com/in/joseph-aguilar-feener-78677b83/it)
 - [Gabriele Vecchia]
 - [Fabiola Amaya]
