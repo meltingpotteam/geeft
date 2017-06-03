@@ -1,4 +1,4 @@
- ![](http://geeftapp.com/Logo.png)
+ ![](http://geeftapp.com/logo_small.png)
 ==============
 
 **Geeft** is a social platform project started in December 2015 for the Google technologies for cloud and web development 2015 workshop.<br />
