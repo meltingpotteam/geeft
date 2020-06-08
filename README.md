@@ -1,4 +1,4 @@
- ![](http://geeftapp.com/img/eco/logo_small.png)
+ ![](./img/eco/logo_small.png)
 ==============
 
 **Geeft** is a social platform project started in December 2015 for the Google technologies for cloud and web development 2015 workshop.<br />
@@ -38,8 +38,8 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 
 
 
- ![](http://geeftapp.com/onlyshare/Presentation_login.jpg)
- ![](http://geeftapp.com/onlyshare/Presentation_main.jpg)
+ ![](./img/onlyshare/Presentation_login.jpg)
+ ![](./img/onlyshare/Presentation_main.jpg)
 
 ==============
 ###Milestone 2 - Release Candidate
@@ -56,10 +56,9 @@ Beside the existing features we will provide the possibility, is not mandatory, 
  
 
 
-
- ![](http://geeftapp.com/onlyshare/Mileston1_login.jpg)
- ![](http://geeftapp.com/onlyshare/Milestone1_main.jpg)
- ![](http://geeftapp.com/onlyshare/Milestone1_mainbis.jpg)
+ ![](./img/onlyshare/Mileston1_login.jpg)
+ ![](./img/onlyshare/Milestone1_main.jpg)
+ ![](./img/onlyshare/Milestone1_mainbis.jpg)
 
 ==============
 ###Milestone 3 - Final
@@ -78,16 +77,16 @@ Beside the existing features we will provide the possibility, is not mandatory, 
 - [Instructions for APK installation](https://app.edo.io/preview?id=56eb4bdf6fc9f12414711869&k=BbNjrtsrNm8ywmIhctWGFvoReGt8TUHK9qKLxg5vDPw=)
 - [Videotutorial ITA](https://www.youtube.com/watch?v=vcksLzyYVB4&feature=youtu.be)
 
- ![](http://geeftapp.com/onlyshare/Milestone3_login.jpg)
- ![](http://geeftapp.com/site/img/eco/screens/Pannello_navigazione.jpg)
- ![](http://geeftapp.com/site/img/eco/screens/Geeftory.jpg)
- ![](http://geeftapp.com/site/img/eco/screens/Aggiungi_storia.jpg)
- ![](http://geeftapp.com/site/img/eco/screens/Geeft.jpg)
- ![](http://geeftapp.com/onlyshare/Screenshot1.jpg)
- ![](http://geeftapp.com/onlyshare/Screenshot2.jpg)
- ![](http://geeftapp.com/onlyshare/Screenshot3.jpg)
- ![](http://geeftapp.com/onlyshare/Screenshot4.jpg)
- ![](http://geeftapp.com/onlyshare/Screenshot5.jpg)
+ ![](./img/onlyshare/Milestone3_login.jpg)
+ ![](./img/eco/screens/Pannello_navigazione.jpg)
+ ![](./img/eco/screens/Geeftory.jpg)
+ ![](./img/eco/screens/Aggiungi_storia.jpg)
+ ![](./img/eco/screens/Geeft.jpg)
+ ![](./img/onlyshare/Screenshot1.jpg)
+ ![](./img/onlyshare/Screenshot2.jpg)
+ ![](./img/onlyshare/Screenshot3.jpg)
+ ![](./img/onlyshare/Screenshot4.jpg)
+ ![](./img/onlyshare/Screenshot5.jpg)
 
 ==============
 ###Final Submission
